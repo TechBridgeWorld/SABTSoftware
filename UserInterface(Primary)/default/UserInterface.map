@@ -1,0 +1,561 @@
+Archive member included because of file (symbol)
+
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                              AnalogInputs.o (__udivmodhi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o (exit)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                              UserInterface.o (__do_clear_bss)
+
+Allocating common symbols
+Common symbol       size              file
+
+Enter2State         0x1               UserInterface.o
+SendMsgPayLoad      0x5               UserInterface.o
+TempBytes           0x14              USART_MCU.o
+TMR1_INT            0x1               UserInterface.o
+USART_MCU_Received_Data
+                    0x1               UserInterface.o
+valADCH             0x1               AnalogInputs.o
+ProcessedCellValue  0x1               ProcessInput.o
+ADC_COMPLETE        0x1               UserInterface.o
+PI_LastDotPressed   0x1               ProcessInput.o
+ADC_LastVal         0xc               UserInterface.o
+InterfaceType       0x1               UserInterface.o
+LED_STAT            0x1               Timer.o
+VolDownState        0x1               UserInterface.o
+iPktSize            0x2               UserInterface.o
+DotsPressed         0x6               UserInterface.o
+MCU_Packet          0x14              UserInterface.o
+valADCL             0x1               AnalogInputs.o
+Mode1State          0x1               UserInterface.o
+Mode2State          0x1               UserInterface.o
+VolUpState          0x1               UserInterface.o
+LED_ONOFF           0x1               AnalogInputs.o
+valADC              0x2               AnalogInputs.o
+Enter1State         0x1               UserInterface.o
+iADC                0x1               AnalogInputs.o
+USART_MCU_DATA_RDY  0x1               UserInterface.o
+TmrCntADC           0x2               Timer.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+LOAD UserInterface.o
+LOAD DigitalIO.o
+LOAD AnalogInputs.o
+LOAD USART_MCU.o
+LOAD Timer.o
+LOAD CommPacket.o
+LOAD ProcessInput.o
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000      0x87c
+ *(.vectors)
+ .vectors       0x00000000       0x8c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x0000008c                . = ALIGN (0x2)
+                0x0000008c                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x0000008c        0x0 linker stubs
+ *(.trampolines*)
+                0x0000008c                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000008c                __ctors_start = .
+ *(.ctors)
+                0x0000008c                __ctors_end = .
+                0x0000008c                __dtors_start = .
+ *(.dtors)
+                0x0000008c                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x0000008c        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x0000008c                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000008c        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00000098       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x00000098                __do_copy_data
+ .init4         0x000000b2       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x000000b2                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000000c2        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ *(.init9)
+ *(.text)
+ .text          0x000000ca        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x000000ca                __vector_22
+                0x000000ca                __vector_28
+                0x000000ca                __vector_1
+                0x000000ca                __vector_32
+                0x000000ca                __vector_34
+                0x000000ca                __vector_12
+                0x000000ca                __bad_interrupt
+                0x000000ca                __vector_6
+                0x000000ca                __vector_31
+                0x000000ca                __vector_3
+                0x000000ca                __vector_23
+                0x000000ca                __vector_30
+                0x000000ca                __vector_25
+                0x000000ca                __vector_11
+                0x000000ca                __vector_17
+                0x000000ca                __vector_19
+                0x000000ca                __vector_7
+                0x000000ca                __vector_27
+                0x000000ca                __vector_5
+                0x000000ca                __vector_33
+                0x000000ca                __vector_4
+                0x000000ca                __vector_9
+                0x000000ca                __vector_2
+                0x000000ca                __vector_21
+                0x000000ca                __vector_15
+                0x000000ca                __vector_29
+                0x000000ca                __vector_8
+                0x000000ca                __vector_26
+                0x000000ca                __vector_14
+                0x000000ca                __vector_10
+                0x000000ca                __vector_16
+                0x000000ca                __vector_18
+                0x000000ca                __vector_20
+ .text          0x000000ce       0x2e UserInterface.o
+                0x000000ce                InitializeUI
+                0x000000e4                main
+ .text          0x000000fc      0x238 DigitalIO.o
+                0x000002a2                RunCommandTasks
+                0x00000286                Enter1Task
+                0x00000238                Mode2Task
+                0x00000250                Mode1Task
+                0x0000020c                VolDownTask
+                0x000001f4                SetStatLED1
+                0x00000200                SetStatLED2
+                0x00000268                Enter2Task
+                0x000000fc                Initialize_Digital_IO
+                0x00000138                CheckCommandButtons
+                0x00000222                VolUpTask
+ .text          0x00000334      0x1e2 AnalogInputs.o
+                0x000003f0                analog10
+                0x0000045c                DetectTheDot
+                0x00000448                __vector_24
+                0x0000038e                MeasureInput
+                0x0000038c                StopMeasurement
+                0x00000334                InitializeAnalogPorts
+                0x00000384                StartMeasurement
+ .text          0x00000516       0x90 USART_MCU.o
+                0x00000572                USART_transmitStringToMCUFromFlash
+                0x00000536                USART_RX_vect
+                0x0000058c                USART_transmitStringToMCU
+                0x0000055c                USART_PC_ReceiveAction
+                0x00000516                init_USART_MCU
+                0x00000562                USART_transmitByteToMCU
+ .text          0x000005a6       0x80 Timer.o
+                0x000005f2                TimerRoutine
+                0x000005d4                __vector_13
+                0x000005a6                initTimer
+ .text          0x00000626      0x116 CommPacket.o
+                0x00000626                Calculate_CRC
+                0x00000708                SendPacket
+                0x00000692                MCU_PKT_CompilePacket
+ .text          0x0000073c      0x114 ProcessInput.o
+                0x0000073c                ResetCellState
+                0x0000075a                CaptureCellValue
+                0x000007c4                ProcessTheDot
+ .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x00000850                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00000850       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                0x00000850                __udivmodhi4
+ .text.libgcc   0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text.libgcc   0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x00000878                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00000878                exit
+                0x00000878                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00000878        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ *(.fini0)
+                0x0000087c                _etext = .
+
+.data           0x00800100        0x0 load address 0x0000087c
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ .data          0x00800100        0x0 UserInterface.o
+ .data          0x00800100        0x0 DigitalIO.o
+ .data          0x00800100        0x0 AnalogInputs.o
+ .data          0x00800100        0x0 USART_MCU.o
+ .data          0x00800100        0x0 Timer.o
+ .data          0x00800100        0x0 CommPacket.o
+ .data          0x00800100        0x0 ProcessInput.o
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800100                . = ALIGN (0x2)
+                0x00800100                _edata = .
+                0x00800100                PROVIDE (__data_end, .)
+
+.bss            0x00800100       0x57
+                0x00800100                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ .bss           0x00800100        0x0 UserInterface.o
+ .bss           0x00800100        0x0 DigitalIO.o
+ .bss           0x00800100        0x0 AnalogInputs.o
+ .bss           0x00800100        0x0 USART_MCU.o
+ .bss           0x00800100        0x0 Timer.o
+ .bss           0x00800100        0x0 CommPacket.o
+ .bss           0x00800100        0x0 ProcessInput.o
+ .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x00800100       0x38 UserInterface.o
+                0x00800100                Enter2State
+                0x00800101                SendMsgPayLoad
+                0x00800106                TMR1_INT
+                0x00800107                USART_MCU_Received_Data
+                0x00800108                ADC_COMPLETE
+                0x00800109                ADC_LastVal
+                0x00800115                InterfaceType
+                0x00800116                VolDownState
+                0x00800117                iPktSize
+                0x00800119                DotsPressed
+                0x0080011f                MCU_Packet
+                0x00800133                Mode1State
+                0x00800134                Mode2State
+                0x00800135                VolUpState
+                0x00800136                Enter1State
+                0x00800137                USART_MCU_DATA_RDY
+ COMMON         0x00800138        0x6 AnalogInputs.o
+                0x00800138                valADCH
+                0x00800139                valADCL
+                0x0080013a                LED_ONOFF
+                0x0080013b                valADC
+                0x0080013d                iADC
+ COMMON         0x0080013e       0x14 USART_MCU.o
+                0x0080013e                TempBytes
+ COMMON         0x00800152        0x3 Timer.o
+                0x00800152                LED_STAT
+                0x00800153                TmrCntADC
+ COMMON         0x00800155        0x2 ProcessInput.o
+                0x00800155                ProcessedCellValue
+                0x00800156                PI_LastDotPressed
+                0x00800157                PROVIDE (__bss_end, .)
+                0x0000087c                __data_load_start = LOADADDR (.data)
+                0x0000087c                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800157        0x0
+                0x00800157                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x00800157                PROVIDE (__noinit_end, .)
+                0x00800157                _end = .
+                0x00800157                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xe0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 UserInterface.o
+ .debug_aranges
+                0x00000020       0x20 DigitalIO.o
+ .debug_aranges
+                0x00000040       0x20 AnalogInputs.o
+ .debug_aranges
+                0x00000060       0x20 USART_MCU.o
+ .debug_aranges
+                0x00000080       0x20 Timer.o
+ .debug_aranges
+                0x000000a0       0x20 CommPacket.o
+ .debug_aranges
+                0x000000c0       0x20 ProcessInput.o
+
+.debug_pubnames
+                0x00000000      0xb1d
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000      0x13c UserInterface.o
+ .debug_pubnames
+                0x0000013c      0x1e0 DigitalIO.o
+ .debug_pubnames
+                0x0000031c      0x1de AnalogInputs.o
+ .debug_pubnames
+                0x000004fa      0x1d1 USART_MCU.o
+ .debug_pubnames
+                0x000006cb      0x16c Timer.o
+ .debug_pubnames
+                0x00000837      0x15d CommPacket.o
+ .debug_pubnames
+                0x00000994      0x189 ProcessInput.o
+
+.debug_info     0x00000000     0x1777
+ *(.debug_info)
+ .debug_info    0x00000000      0x22c UserInterface.o
+ .debug_info    0x0000022c      0x45b DigitalIO.o
+ .debug_info    0x00000687      0x533 AnalogInputs.o
+ .debug_info    0x00000bba      0x369 USART_MCU.o
+ .debug_info    0x00000f23      0x260 Timer.o
+ .debug_info    0x00001183      0x30c CommPacket.o
+ .debug_info    0x0000148f      0x2e8 ProcessInput.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0x718
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x96 UserInterface.o
+ .debug_abbrev  0x00000096      0x147 DigitalIO.o
+ .debug_abbrev  0x000001dd      0x19b AnalogInputs.o
+ .debug_abbrev  0x00000378      0x139 USART_MCU.o
+ .debug_abbrev  0x000004b1       0x7f Timer.o
+ .debug_abbrev  0x00000530       0xee CommPacket.o
+ .debug_abbrev  0x0000061e       0xfa ProcessInput.o
+
+.debug_line     0x00000000     0x10ad
+ *(.debug_line)
+ .debug_line    0x00000000      0x14c UserInterface.o
+ .debug_line    0x0000014c      0x514 DigitalIO.o
+ .debug_line    0x00000660      0x313 AnalogInputs.o
+ .debug_line    0x00000973      0x1e2 USART_MCU.o
+ .debug_line    0x00000b55      0x17a Timer.o
+ .debug_line    0x00000ccf      0x1d7 CommPacket.o
+ .debug_line    0x00000ea6      0x207 ProcessInput.o
+
+.debug_frame    0x00000000      0x2a0
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x30 UserInterface.o
+ .debug_frame   0x00000030       0xc0 DigitalIO.o
+ .debug_frame   0x000000f0       0x80 AnalogInputs.o
+ .debug_frame   0x00000170       0x70 USART_MCU.o
+ .debug_frame   0x000001e0       0x40 Timer.o
+ .debug_frame   0x00000220       0x40 CommPacket.o
+ .debug_frame   0x00000260       0x40 ProcessInput.o
+
+.debug_str      0x00000000      0x52e
+ *(.debug_str)
+ .debug_str     0x00000000      0x18e UserInterface.o
+                                0x1c7 (size before relaxing)
+ .debug_str     0x0000018e       0xe2 DigitalIO.o
+                                0x284 (size before relaxing)
+ .debug_str     0x00000270       0xd1 AnalogInputs.o
+                                0x2b2 (size before relaxing)
+ .debug_str     0x00000341       0xc2 USART_MCU.o
+                                0x26c (size before relaxing)
+ .debug_str     0x00000403       0x41 Timer.o
+                                0x1e3 (size before relaxing)
+ .debug_str     0x00000444       0x63 CommPacket.o
+                                0x205 (size before relaxing)
+ .debug_str     0x000004a7       0x87 ProcessInput.o
+                                0x231 (size before relaxing)
+
+.debug_loc      0x00000000      0x40a
+ *(.debug_loc)
+ .debug_loc     0x00000000       0x90 DigitalIO.o
+ .debug_loc     0x00000090      0x11e AnalogInputs.o
+ .debug_loc     0x000001ae       0x6e USART_MCU.o
+ .debug_loc     0x0000021c      0x164 CommPacket.o
+ .debug_loc     0x00000380       0x8a ProcessInput.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(UserInterface.elf elf32-avr)
+LOAD linker stubs
+
+.debug_ranges   0x00000000      0x108
+ .debug_ranges  0x00000000       0xd8 AnalogInputs.o
+ .debug_ranges  0x000000d8       0x30 USART_MCU.o

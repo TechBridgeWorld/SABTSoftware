@@ -1,0 +1,861 @@
+Archive member included because of file (symbol)
+
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+                              FAT32.o (__mulsi3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+                              FAT32.o (__udivmodsi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o (exit)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                              SABT_MainUnit.o (__do_clear_bss)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o)
+                              UI_Handle.o (atoi)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(mul10.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o) (__mulhi_const_10)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o)
+                              UI_Handle.o (sprintf)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o) (vfprintf)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o) (strnlen_P)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o) (strnlen)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(fputc.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o) (fputc)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o) (__ultoa_invert)
+
+Allocating common symbols
+Common symbol       size              file
+
+Last_Dot            0x1               MD1.o
+USART_PC_Message_ready
+                    0x1               SABT_MainUnit.o
+gFileToPlay         0x2               SABT_MainUnit.o
+UI_MP3_file_Pending
+                    0x1               SABT_MainUnit.o
+tempAddr            0x1               VS1053.o
+appendFileLocation  0x4               SABT_MainUnit.o
+USART_PC_length_reveived
+                    0x1               USART_PC.o
+USART_Keypad_DATA_RDY
+                    0x1               SABT_MainUnit.o
+fileName            0xd               SABT_MainUnit.o
+Last_Cell           0x1               MD2.o
+firstDataSector     0x4               SABT_MainUnit.o
+fileSize            0x4               SABT_MainUnit.o
+bytesPerSector      0x2               SABT_MainUnit.o
+totalClusters       0x4               SABT_MainUnit.o
+USART_PC_prefix     0x3               USART_PC.o
+USART_UI_receive_msgcnt
+                    0x1               USART_Keypad.o
+TMR1_INT            0x1               SABT_MainUnit.o
+UI_MODE_SELECTED    0x1               SABT_MainUnit.o
+USART_PC_ReceivedPacket
+                    0x14              SABT_MainUnit.o
+UI_Modes            0xa               SABT_MainUnit.o
+temp5               0x1               VS1053.o
+rootCluster         0x4               SABT_MainUnit.o
+Number_of_modes     0x1               SABT_MainUnit.o
+MD2_Last_Dot        0x1               MD2.o
+USART_UI_prefix     0x3               USART_Keypad.o
+startBlock          0x4               SABT_MainUnit.o
+UI_Selected_Mode    0x1               SABT_MainUnit.o
+USART_UI_Message_ready
+                    0x1               SABT_MainUnit.o
+USART_UI_length_reveived
+                    0x1               USART_Keypad.o
+buffer              0x200             SABT_MainUnit.o
+UI_Current_Mode     0x1               SABT_MainUnit.o
+sectorPerCluster    0x2               SABT_MainUnit.o
+temp4               0x1               VS1053.o
+USART_UI_ReceivedPacket
+                    0x14              SABT_MainUnit.o
+unusedSectors       0x4               SABT_MainUnit.o
+SDHC_flag           0x1               SABT_MainUnit.o
+USART_PC_Received_Data
+                    0x1               SABT_MainUnit.o
+VS1053_Vol          0x2               VS1053.o
+totalBlocks         0x4               SABT_MainUnit.o
+LED_STAT            0x1               SABT_MainUnit.o
+reservedSectorCount
+                    0x2               SABT_MainUnit.o
+MD3_Last_Dot        0x1               MD3.o
+appendStartCluster  0x4               SABT_MainUnit.o
+tempCnt             0x1               SABT_MainUnit.o
+cardType            0x1               SABT_MainUnit.o
+VS1053_SKIP_PLAY    0x1               SABT_MainUnit.o
+USART_PC_DATA_RDY   0x1               SABT_MainUnit.o
+USART_Keypad_Data_To_Transmit
+                    0x1               SABT_MainUnit.o
+USART_PC_receive_msgcnt
+                    0x1               USART_PC.o
+USART_UI_header_received
+                    0x1               USART_Keypad.o
+USART_PC_received_playload_len
+                    0x1               SABT_MainUnit.o
+Current_State       0x2               MD1.o
+freeClusterCountUpdated
+                    0x1               SABT_MainUnit.o
+USART_Keypad_Received_Data
+                    0x1               SABT_MainUnit.o
+appendFileSector    0x4               SABT_MainUnit.o
+USART_UI_received_playload_len
+                    0x1               USART_Keypad.o
+USART_PC_Data_To_Transmit
+                    0x1               SABT_MainUnit.o
+USART_PC_header_received
+                    0x1               USART_PC.o
+MD3_Current_State   0x2               MD3.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+LOAD SABT_MainUnit.o
+LOAD USART_Keypad.o
+LOAD USART_PC.o
+LOAD VS1053.o
+LOAD SPI.o
+LOAD SD_routines.o
+LOAD FAT32.o
+LOAD UI_Handle.o
+LOAD MD1.o
+LOAD MD2.o
+LOAD MD3.o
+LOAD PC_Handle.o
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x3808
+ *(.vectors)
+ .vectors       0x00000000       0x8c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ .progmem.gcc_sw_table
+                0x0000008c       0x34 MD2.o
+ *(.progmem*)
+ .progmem.data  0x000000c0       0x34 SABT_MainUnit.o
+ .progmem.data  0x000000f4      0x21b FAT32.o
+ .progmem.data  0x0000030f       0xac UI_Handle.o
+ .progmem.data  0x000003bb       0x1c PC_Handle.o
+                0x000003d8                . = ALIGN (0x2)
+ *fill*         0x000003d7        0x1 00
+                0x000003d8                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000003d8        0x0 linker stubs
+ *(.trampolines*)
+                0x000003d8                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000003d8                __ctors_start = .
+ *(.ctors)
+                0x000003d8                __ctors_end = .
+                0x000003d8                __dtors_start = .
+ *(.dtors)
+                0x000003d8                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000003d8        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x000003d8                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000003d8        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000003e4       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x000003e4                __do_copy_data
+ .init4         0x000003fe       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x000003fe                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x0000040e        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ *(.init9)
+ *(.text)
+ .text          0x00000416        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+                0x00000416                __vector_22
+                0x00000416                __vector_1
+                0x00000416                __vector_32
+                0x00000416                __vector_34
+                0x00000416                __vector_24
+                0x00000416                __vector_12
+                0x00000416                __bad_interrupt
+                0x00000416                __vector_6
+                0x00000416                __vector_31
+                0x00000416                __vector_3
+                0x00000416                __vector_23
+                0x00000416                __vector_30
+                0x00000416                __vector_25
+                0x00000416                __vector_11
+                0x00000416                __vector_17
+                0x00000416                __vector_19
+                0x00000416                __vector_7
+                0x00000416                __vector_27
+                0x00000416                __vector_5
+                0x00000416                __vector_33
+                0x00000416                __vector_4
+                0x00000416                __vector_9
+                0x00000416                __vector_2
+                0x00000416                __vector_21
+                0x00000416                __vector_15
+                0x00000416                __vector_29
+                0x00000416                __vector_8
+                0x00000416                __vector_26
+                0x00000416                __vector_14
+                0x00000416                __vector_10
+                0x00000416                __vector_16
+                0x00000416                __vector_18
+ .text          0x0000041a      0x1a6 SABT_MainUnit.o
+                0x0000045a                __vector_28
+                0x000004a6                InitializeSystem
+                0x0000041a                TimeRoutine
+                0x0000043c                __vector_13
+                0x0000053c                main
+                0x00000480                __vector_20
+ .text          0x000005c0      0x112 USART_Keypad.o
+                0x0000069e                USART_transmitStringToKeypadFromFlash
+                0x000006b8                USART_transmitStringToKeypad
+                0x0000068e                USART_transmitByteToKeypad
+                0x000005c0                init_USART_Keypad
+                0x000005ec                USART_Keypad_ReceiveAction
+ .text          0x000006d2       0xd4 USART_PC.o
+                0x00000762                USART_transmitByteToPC
+                0x00000772                USART_transmitStringToPCFromFlash
+                0x000006f2                USART_PC_ReceiveAction
+                0x000006d2                init_USART_PC
+                0x0000078c                USART_transmitStringToPC
+ .text          0x000007a6      0x2e6 VS1053.o
+                0x000007a6                RequestToPlayMP3file
+                0x00000992                VS1053_WriteData
+                0x0000089e                VS1053_DecreaseVol
+                0x00000866                VS1053_WriteCmd
+                0x0000097e                VS1053_SoftwareReset
+                0x0000090e                VS1053_IncreaseVol
+                0x000009a8                VS1053_Initialize
+                0x00000800                VS1053_ReadCmd
+ .text          0x00000a8c       0x78 SPI.o
+                0x00000a8c                SPI_DeselectAll
+                0x00000aea                SPI_transmit
+                0x00000aa8                SPI_Select_MP3_Cmd
+                0x00000a94                SPI_Select_SD
+                0x00000ac6                SPI_Initialize
+                0x00000a9e                SPI_Select_MP3_Data
+                0x00000af6                SPI_receive
+                0x00000adc                SPI_1X
+                0x00000ab2                SPI_2X
+ .text          0x00000b04      0x324 SD_routines.o
+                0x00000bdc                SD_erase
+                0x00000d2a                SD_writeSingleBlock
+                0x00000b04                SD_sendCommand
+                0x00000dc6                SD_readSingleBlock
+                0x00000c42                SD_init
+ .text          0x00000e28     0x197e FAT32.o
+                0x0000182c                getSetNextCluster
+                0x00001ee4                readFile
+                0x00001334                memoryStatistics
+                0x00000e72                convertFileName
+                0x00001164                getSetFreeCluster
+                0x00001d1c                readAndRetreiveFileContents
+                0x00001d00                deleteFile
+                0x00001050                searchNextFreeCluster
+                0x00002078                writeFile
+                0x00001272                freeMemoryUpdate
+                0x00002388                ReplaceTheContentOfThisFileWith
+                0x0000172c                InitSDCard
+                0x00001560                getBootSectorData
+                0x00001926                findFiles
+                0x00000e28                getFirstSector
+                0x0000257c                PlayMP3file
+                0x00000f82                displayMemory
+ .text          0x000027a6      0x626 UI_Handle.o
+                0x00002816                UI_ResetTheCurrentMode
+                0x000028d0                UI_CallModeYesAnswer
+                0x00002a90                UI_parse_message
+                0x00002812                UI_buildMessage
+                0x0000286a                UI_InputCellToCurrentMode
+                0x000028f2                UI_Play_Intro_Currentmode
+                0x00002840                UI_RunMainOfCurrentMode
+                0x0000291c                UI_ControlKeyPressed
+                0x000027a6                UI_calculate_CRC
+                0x000028ae                UI_CallModeNoAnswer
+                0x0000288c                UI_InputDotToCurrentMode
+                0x00002be6                UI_CheckModes
+ .text          0x00002dcc       0xac MD1.o
+                0x00002dec                MD1_InputCell
+                0x00002dd8                MD1_CallModeNoAnswer
+                0x00002dee                PlayRequestedDot
+                0x00002dcc                MD1_Reset
+                0x00002dda                MD1_InputDot
+                0x00002e3e                MD1_Main
+                0x00002dd6                MD1_CallModeYesAnswer
+ .text          0x00002e78      0x1a0 MD2.o
+                0x00002eb8                MD2_PlayRequestedDot
+                0x00002e88                MD2_CallModeNoAnswer
+                0x00002fd2                MD2_Main
+                0x00002e8a                MD2_InputDot
+                0x00002e78                MD2_Reset
+                0x00002f08                PlayRequestedCell
+                0x00002e86                MD2_CallModeYesAnswer
+                0x00002e9c                MD2_InputCell
+ .text          0x00003018       0xac MD3.o
+                0x00003022                MD3_CallModeYesAnswer
+                0x00003024                MD3_CallModeNoAnswer
+                0x0000308a                MD3_Main
+                0x00003038                MD3_InputCell
+                0x00003026                MD3_InputDot
+                0x0000303a                MD3_PlayRequestedDot
+                0x00003018                MD3_Reset
+ .text          0x000030c4       0xc4 PC_Handle.o
+                0x0000315c                PC_parse_message
+                0x000030c4                PC_RequestsToModifyModesFile
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(mul10.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(fputc.o)
+ .text          0x00003188        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+                0x00003188                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00003188       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+                0x00003188                __mulsi3
+ .text.libgcc   0x000031c6       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+                0x000031c6                __udivmodsi4
+ .text.libgcc   0x0000320a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text.libgcc   0x0000320a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x0000320a       0x3c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o)
+                0x0000320a                atoi
+ .text.avr-libc
+                0x00003246       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(mul10.o)
+                0x00003246                __mulhi_const_10
+ .text.avr-libc
+                0x00003256       0x62 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o)
+                0x00003256                sprintf
+ .text.avr-libc
+                0x000032b8      0x40c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+                0x000032b8                vfprintf
+ .text.avr-libc
+                0x000036c4       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+                0x000036c4                strnlen_P
+ .text.avr-libc
+                0x000036da       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen.o)
+                0x000036da                strnlen
+ .text.avr-libc
+                0x000036f0       0x58 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(fputc.o)
+                0x000036f0                fputc
+ .text.avr-libc
+                0x00003748       0xbc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+                0x00003748                __ultoa_invert
+                0x00003804                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00003804        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00003804                exit
+                0x00003804                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00003804        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00003808                _etext = .
+
+.data           0x00800100      0x244 load address 0x00003808
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ .data          0x00800100        0x8 SABT_MainUnit.o
+ .data          0x00800108        0x0 USART_Keypad.o
+ .data          0x00800108        0x0 USART_PC.o
+ .data          0x00800108        0x0 VS1053.o
+ .data          0x00800108        0x0 SPI.o
+ .data          0x00800108        0x0 SD_routines.o
+ .data          0x00800108       0x14 FAT32.o
+ .data          0x0080011c       0x3a UI_Handle.o
+ .data          0x00800156       0x47 MD1.o
+ .data          0x0080019d      0x156 MD2.o
+ .data          0x008002f3       0x47 MD3.o
+ .data          0x0080033a        0xa PC_Handle.o
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(mul10.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(fputc.o)
+ .data          0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800344                . = ALIGN (0x2)
+                0x00800344                _edata = .
+                0x00800344                PROVIDE (__data_end, .)
+
+.bss            0x00800344      0x2a5
+                0x00800344                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800344        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
+ .bss           0x00800344        0x1 SABT_MainUnit.o
+                0x00800344                temp
+ .bss           0x00800345        0x0 USART_Keypad.o
+ .bss           0x00800345        0x0 USART_PC.o
+ .bss           0x00800345        0x6 VS1053.o
+                0x00800347                temp2
+                0x00800345                temp1
+                0x00800349                temp3
+ .bss           0x0080034b        0x0 SPI.o
+ .bss           0x0080034b        0x0 SD_routines.o
+ .bss           0x0080034b        0x0 FAT32.o
+ .bss           0x0080034b        0x0 UI_Handle.o
+ .bss           0x0080034b        0x0 MD1.o
+ .bss           0x0080034b        0x0 MD2.o
+ .bss           0x0080034b        0x0 MD3.o
+ .bss           0x0080034b        0x0 PC_Handle.o
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(atoi.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(mul10.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(sprintf.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(strnlen.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(fputc.o)
+ .bss           0x0080034b        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x0080034b      0x284 SABT_MainUnit.o
+                0x0080034b                USART_PC_Message_ready
+                0x0080034c                gFileToPlay
+                0x0080034e                UI_MP3_file_Pending
+                0x0080034f                appendFileLocation
+                0x00800353                USART_Keypad_DATA_RDY
+                0x00800354                fileName
+                0x00800361                firstDataSector
+                0x00800365                fileSize
+                0x00800369                bytesPerSector
+                0x0080036b                totalClusters
+                0x0080036f                TMR1_INT
+                0x00800370                UI_MODE_SELECTED
+                0x00800371                USART_PC_ReceivedPacket
+                0x00800385                UI_Modes
+                0x0080038f                rootCluster
+                0x00800393                Number_of_modes
+                0x00800394                startBlock
+                0x00800398                UI_Selected_Mode
+                0x00800399                USART_UI_Message_ready
+                0x0080039a                buffer
+                0x0080059a                UI_Current_Mode
+                0x0080059b                sectorPerCluster
+                0x0080059d                USART_UI_ReceivedPacket
+                0x008005b1                unusedSectors
+                0x008005b5                SDHC_flag
+                0x008005b6                USART_PC_Received_Data
+                0x008005b7                totalBlocks
+                0x008005bb                LED_STAT
+                0x008005bc                reservedSectorCount
+                0x008005be                appendStartCluster
+                0x008005c2                tempCnt
+                0x008005c3                cardType
+                0x008005c4                VS1053_SKIP_PLAY
+                0x008005c5                USART_PC_DATA_RDY
+                0x008005c6                USART_Keypad_Data_To_Transmit
+                0x008005c7                USART_PC_received_playload_len
+                0x008005c8                freeClusterCountUpdated
+                0x008005c9                USART_Keypad_Received_Data
+                0x008005ca                appendFileSector
+                0x008005ce                USART_PC_Data_To_Transmit
+ COMMON         0x008005cf        0x7 USART_Keypad.o
+                0x008005cf                USART_UI_receive_msgcnt
+                0x008005d0                USART_UI_prefix
+                0x008005d3                USART_UI_length_reveived
+                0x008005d4                USART_UI_header_received
+                0x008005d5                USART_UI_received_playload_len
+ COMMON         0x008005d6        0x6 USART_PC.o
+                0x008005d6                USART_PC_length_reveived
+                0x008005d7                USART_PC_prefix
+                0x008005da                USART_PC_receive_msgcnt
+                0x008005db                USART_PC_header_received
+ COMMON         0x008005dc        0x5 VS1053.o
+                0x008005dc                tempAddr
+                0x008005dd                temp5
+                0x008005de                temp4
+                0x008005df                VS1053_Vol
+ COMMON         0x008005e1        0x3 MD1.o
+                0x008005e1                Last_Dot
+                0x008005e2                Current_State
+ COMMON         0x008005e4        0x2 MD2.o
+                0x008005e4                Last_Cell
+                0x008005e5                MD2_Last_Dot
+ COMMON         0x008005e6        0x3 MD3.o
+                0x008005e6                MD3_Last_Dot
+                0x008005e7                MD3_Current_State
+                0x008005e9                PROVIDE (__bss_end, .)
+                0x00003808                __data_load_start = LOADADDR (.data)
+                0x00003a4c                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x008005e9        0x0
+                0x008005e9                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x008005e9                PROVIDE (__noinit_end, .)
+                0x008005e9                _end = .
+                0x008005e9                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x180
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 SABT_MainUnit.o
+ .debug_aranges
+                0x00000020       0x20 USART_Keypad.o
+ .debug_aranges
+                0x00000040       0x20 USART_PC.o
+ .debug_aranges
+                0x00000060       0x20 VS1053.o
+ .debug_aranges
+                0x00000080       0x20 SPI.o
+ .debug_aranges
+                0x000000a0       0x20 SD_routines.o
+ .debug_aranges
+                0x000000c0       0x20 FAT32.o
+ .debug_aranges
+                0x000000e0       0x20 UI_Handle.o
+ .debug_aranges
+                0x00000100       0x20 MD1.o
+ .debug_aranges
+                0x00000120       0x20 MD2.o
+ .debug_aranges
+                0x00000140       0x20 MD3.o
+ .debug_aranges
+                0x00000160       0x20 PC_Handle.o
+
+.debug_pubnames
+                0x00000000     0x3041
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000      0x3bc SABT_MainUnit.o
+ .debug_pubnames
+                0x000003bc      0x467 USART_Keypad.o
+ .debug_pubnames
+                0x00000823      0x430 USART_PC.o
+ .debug_pubnames
+                0x00000c53      0x43b VS1053.o
+ .debug_pubnames
+                0x0000108e      0x3da SPI.o
+ .debug_pubnames
+                0x00001468      0x396 SD_routines.o
+ .debug_pubnames
+                0x000017fe      0x495 FAT32.o
+ .debug_pubnames
+                0x00001c93      0x465 UI_Handle.o
+ .debug_pubnames
+                0x000020f8      0x3e0 MD1.o
+ .debug_pubnames
+                0x000024d8      0x40c MD2.o
+ .debug_pubnames
+                0x000028e4      0x3ec MD3.o
+ .debug_pubnames
+                0x00002cd0      0x371 PC_Handle.o
+
+.debug_info     0x00000000     0x4f47
+ *(.debug_info)
+ .debug_info    0x00000000      0x4ab SABT_MainUnit.o
+ .debug_info    0x000004ab      0x53a USART_Keypad.o
+ .debug_info    0x000009e5      0x52c USART_PC.o
+ .debug_info    0x00000f11      0x6e7 VS1053.o
+ .debug_info    0x000015f8      0x476 SPI.o
+ .debug_info    0x00001a6e      0x53d SD_routines.o
+ .debug_info    0x00001fab     0x1692 FAT32.o
+ .debug_info    0x0000363d      0x73f UI_Handle.o
+ .debug_info    0x00003d7c      0x468 MD1.o
+ .debug_info    0x000041e4      0x490 MD2.o
+ .debug_info    0x00004674      0x468 MD3.o
+ .debug_info    0x00004adc      0x46b PC_Handle.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0xd16
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xc8 SABT_MainUnit.o
+ .debug_abbrev  0x000000c8      0x142 USART_Keypad.o
+ .debug_abbrev  0x0000020a      0x159 USART_PC.o
+ .debug_abbrev  0x00000363      0x15a VS1053.o
+ .debug_abbrev  0x000004bd       0xbb SPI.o
+ .debug_abbrev  0x00000578       0xd1 SD_routines.o
+ .debug_abbrev  0x00000649      0x26d FAT32.o
+ .debug_abbrev  0x000008b6      0x155 UI_Handle.o
+ .debug_abbrev  0x00000a0b       0xb9 MD1.o
+ .debug_abbrev  0x00000ac4       0xaa MD2.o
+ .debug_abbrev  0x00000b6e       0xb9 MD3.o
+ .debug_abbrev  0x00000c27       0xef PC_Handle.o
+
+.debug_line     0x00000000     0x2b20
+ *(.debug_line)
+ .debug_line    0x00000000      0x2c3 SABT_MainUnit.o
+ .debug_line    0x000002c3      0x28c USART_Keypad.o
+ .debug_line    0x0000054f      0x238 USART_PC.o
+ .debug_line    0x00000787      0x408 VS1053.o
+ .debug_line    0x00000b8f      0x1f8 SPI.o
+ .debug_line    0x00000d87      0x3e4 SD_routines.o
+ .debug_line    0x0000116b      0xd10 FAT32.o
+ .debug_line    0x00001e7b      0x5a1 UI_Handle.o
+ .debug_line    0x0000241c      0x189 MD1.o
+ .debug_line    0x000025a5      0x294 MD2.o
+ .debug_line    0x00002839      0x189 MD3.o
+ .debug_line    0x000029c2      0x15e PC_Handle.o
+
+.debug_frame    0x00000000      0x670
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x70 SABT_MainUnit.o
+ .debug_frame   0x00000070       0x60 USART_Keypad.o
+ .debug_frame   0x000000d0       0x60 USART_PC.o
+ .debug_frame   0x00000130       0x90 VS1053.o
+ .debug_frame   0x000001c0       0xa0 SPI.o
+ .debug_frame   0x00000260       0x60 SD_routines.o
+ .debug_frame   0x000002c0      0x120 FAT32.o
+ .debug_frame   0x000003e0       0xd0 UI_Handle.o
+ .debug_frame   0x000004b0       0x80 MD1.o
+ .debug_frame   0x00000530       0x90 MD2.o
+ .debug_frame   0x000005c0       0x80 MD3.o
+ .debug_frame   0x00000640       0x30 PC_Handle.o
+
+.debug_str      0x00000000     0x1125
+ *(.debug_str)
+ .debug_str     0x00000000      0x388 SABT_MainUnit.o
+                                0x3c1 (size before relaxing)
+ .debug_str     0x00000388      0x145 USART_Keypad.o
+                                0x496 (size before relaxing)
+ .debug_str     0x000004cd       0xed USART_PC.o
+                                0x461 (size before relaxing)
+ .debug_str     0x000005ba      0x11e VS1053.o
+                                0x47d (size before relaxing)
+ .debug_str     0x000006d8       0x84 SPI.o
+                                0x3da (size before relaxing)
+ .debug_str     0x0000075c       0x73 SD_routines.o
+                                0x3ca (size before relaxing)
+ .debug_str     0x000007cf      0x5d4 FAT32.o
+                                0x999 (size before relaxing)
+ .debug_str     0x00000da3      0x19a UI_Handle.o
+                                0x50a (size before relaxing)
+ .debug_str     0x00000f3d       0x62 MD1.o
+                                0x3ec (size before relaxing)
+ .debug_str     0x00000f9f       0xa0 MD2.o
+                                0x410 (size before relaxing)
+ .debug_str     0x0000103f       0x96 MD3.o
+                                0x3f8 (size before relaxing)
+ .debug_str     0x000010d5       0x50 PC_Handle.o
+                                0x3b7 (size before relaxing)
+
+.debug_loc      0x00000000     0x1c1a
+ *(.debug_loc)
+ .debug_loc     0x00000000       0x6e USART_Keypad.o
+ .debug_loc     0x0000006e       0x6e USART_PC.o
+ .debug_loc     0x000000dc      0x205 VS1053.o
+ .debug_loc     0x000002e1       0x26 SPI.o
+ .debug_loc     0x00000307      0x2e7 SD_routines.o
+ .debug_loc     0x000005ee     0x13a7 FAT32.o
+ .debug_loc     0x00001995      0x1ed UI_Handle.o
+ .debug_loc     0x00001b82       0x13 MD1.o
+ .debug_loc     0x00001b95       0x31 MD2.o
+ .debug_loc     0x00001bc6       0x13 MD3.o
+ .debug_loc     0x00001bd9       0x41 PC_Handle.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(SABT_MainUnit.elf elf32-avr)
+LOAD linker stubs
+
+.debug_ranges   0x00000000       0x60
+ .debug_ranges  0x00000000       0x30 USART_Keypad.o
+ .debug_ranges  0x00000030       0x30 USART_PC.o
