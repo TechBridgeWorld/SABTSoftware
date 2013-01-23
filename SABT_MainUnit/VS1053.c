@@ -1,3 +1,9 @@
+/**
+ * @file VX1053.c
+ * @brief code for the SABT audio codec
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "Globals.h"
 
 volatile unsigned int temp1=0;
@@ -9,6 +15,10 @@ volatile unsigned char tempAddr;
 
 volatile uint16_t VS1053_Vol;
 
+/**
+ * @brief initialize the audio codec
+ * @return ?
+ */
 unsigned char VS1053_Initialize(void)
 {
 	unsigned char retry;
@@ -136,16 +146,27 @@ unsigned int VS1053_ReadCmd(unsigned char addr)
 	return temp3;
 }
 
+/**
+ * @brief queues an MP3 file to be played
+ * Only one file can be queued to be played at a time (picked up by the main
+ * loop)
+ * @param thisFile  the name of the MP3 file to be played
+ * @return Void
+ */
 void RequestToPlayMP3file(const char* thisFile)
 {
-	int i=0;
-	while(*thisFile!='.')
+	int i = 0;
+	
+  // copy the file name to the global variable
+  while(*thisFile != '.')
 	{
-		fileName[i++]=*(thisFile++);
+		fileName[i++] = *(thisFile++);
 	}
-	fileName[i++]=*(thisFile++);
-	fileName[i++]=*(thisFile++);
-	fileName[i++]=*(thisFile++);
-	fileName[i++]=*(thisFile++);
-	UI_MP3_file_Pending=true;
+	fileName[i++] = *(thisFile++);
+	fileName[i++] = *(thisFile++);
+	fileName[i++] = *(thisFile++);
+	fileName[i++] = *(thisFile++);
+
+  // Mark that a file is queued to be played
+	UI_MP3_file_Pending = true;
 }

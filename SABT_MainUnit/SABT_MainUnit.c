@@ -1,3 +1,9 @@
+/**
+ * @file SABT_MainUnit.c
+ * @brief contains the main routine for the SABT main unit
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #define F_CPU 8000000UL
 
 #include "Globals.h"
@@ -29,6 +35,10 @@ void TimeRoutine(void){
 	}
 }
 
+/**
+ * @brief the main routine
+ * @return Void
+ */
 int main(void){	
 	InitializeSystem();
 /*
@@ -117,13 +127,15 @@ ISR(USART0_RX_vect){
 };
 
 
-
+/**
+ * @brief Initialize the system and interrupts
+ * @return Void
+ */
 void InitializeSystem(void){
-	//Initialize the system and interrupts
-	TMR1_INT=false;
-	PORTA=0x00;
-	DDRA=0xFF;	
-	PORTA=0x00;	
+	TMR1_INT = false;   // clear the timer interrupt flag
+	PORTA = 0x00;
+	DDRA = 0xFF;	
+	PORTA = 0x00;	
 
 	DDRD |= _BV(5)|_BV(6)|_BV(7);
 	
@@ -135,9 +147,9 @@ void InitializeSystem(void){
 	init_USART_Keypad();
 	init_USART_PC();
 	SPI_Initialize();
-	sei();
+	sei();  // sets the interrupt flag (enables interrupts)
 
-	UI_Current_Mode=0;//No mode selected
+	UI_Current_Mode=0;  //No mode selected
 	TX_NEWLINE_PC;
 	USART_transmitStringToPCFromFlash (PSTR("SABT testing..."));
 	TX_NEWLINE_PC;
@@ -154,5 +166,6 @@ void InitializeSystem(void){
 		USART_transmitStringToPCFromFlash (PSTR("Mode file found"));
 		TX_NEWLINE_PC;
 	}
-	RequestToPlayMP3file("INT.MP3");
+
+	RequestToPlayMP3file("INT.MP3");  // Play the welcome message
 }
