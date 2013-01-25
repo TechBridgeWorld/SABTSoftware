@@ -1,5 +1,19 @@
+/**
+ * @file SPI.C
+ * @brief Sets up the Seriel Peripheral Interface
+ * @ref AtATmega1284P(Preferred).pdf
+ *  This says that The Serial Peripheral Interface (SPI) allows high
+ *  speedsynchronous data transfer between the ATmega1284P and 
+ *  peripheral devices or between several AVR devices.
+ * @author Alex Etling (petling)
+ */
+
 #include "Globals.h"
 
+/**
+ * @brief Initilizes variables for SPI
+ * @return Void
+ */
 void SPI_Initialize(void){
 	DDRB |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD)|_BV(MP3_RESET);
 	DDRB &= ~_BV(MP3_DREQ);

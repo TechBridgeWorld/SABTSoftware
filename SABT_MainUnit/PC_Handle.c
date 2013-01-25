@@ -1,5 +1,18 @@
+/**
+ * @file PC_Handle.c
+ * @brief  This file deals with interacting with the PC, send/ receive messages.  It
+ *         also allows you to overwrite the modes used in the function
+ * @author Alex Etling(petling)
+ */
+
 #include "Globals.h"
 
+
+/**
+ * @brief This fucntion reads the message in USART_PC_RecievedPacket. It determines
+ *        its type and sends the appropriate message to PC
+ * @return bool    but does not seem to ever return, so it will return false?
+ */
 bool PC_parse_message()
 {
 	unsigned char MessageType;
@@ -17,6 +30,11 @@ bool PC_parse_message()
 	}
 }
 
+/**
+ * @brief This function will replace the MODES.DAT file with new modes from the 
+ *        message variable USART_PC_RecievedPacket
+ * @return Void
+ */
 void PC_RequestsToModifyModesFile(void)
 {
 	const char* ModesFile="MODES.DAT";

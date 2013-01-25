@@ -1,7 +1,19 @@
+/**
+ * @file UI_Handle.c
+ * @brief This file controls both User interface to Main control and
+ *        computer ineractions
+ * @ref   tech_report.pdf
+ * @author Alex Etling (petling)
+
 #include "Globals.h"
 #include "Modes.h"
 
-
+/**
+ * @breif  reads modes from MODES.DAT file and tells computer how many modes and 
+ *         what they are
+ * @return bool  - return true on succesful completion of transmission, false on 
+ *         failure
+ */
 bool UI_CheckModes(void)
 {
 	/*

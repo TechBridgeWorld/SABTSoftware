@@ -1,10 +1,19 @@
+/**
+ * @file USART_PC.c
+ * @brief Deals with USART communication with main board - please update
+ * @author Alex Etling (petling)
+ */
+
 #include "Globals.h"
 
 bool USART_PC_header_received,USART_PC_length_reveived;
 unsigned char USART_PC_prefix[3];
 unsigned char USART_PC_receive_msgcnt;
 
-
+/**
+ * @brief Initializes the buad communication over USART.
+ * @return Void
+ */
 void init_USART_PC(void)
 {
  UCSR0B = 0x00; //disable while setting baud rate
@@ -15,6 +24,13 @@ void init_USART_PC(void)
  UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
 }
 
+/**
+ * @brief   Receives message stored in globabl USART_PC_Received_Data
+ *          Then proceeds to decode message, use its value, and allow for more
+ *          messages to be sent
+ * @ref  tech_report.pdf
+ * @return Void
+ */
 unsigned char USART_PC_ReceiveAction(void){
 	USART_PC_DATA_RDY=false;
 
@@ -83,6 +99,12 @@ unsigned char USART_PC_ReceiveAction(void){
 	return 0;
 }
 
+
+/**
+ * @brief Waits till available to send message and puts data in Global value
+ * @param bData unsigned Char    contains the byte that needs to be sent
+ * return Void
+ */
 void USART_transmitByteToPC( unsigned char bData )
 {
 ///*	Disabled PC TX temp
@@ -91,6 +113,11 @@ void USART_transmitByteToPC( unsigned char bData )
 //	*/
 }
 
+/** 
+ * @brief reads each byte of data and sends it to the Flash individually
+ * @param strData   String     Contains message to be sent to PC
+ * @return Void
+ */
 void USART_transmitStringToPCFromFlash(char* strData)
 {
   while (pgm_read_byte(&(*strData)))

@@ -1,7 +1,7 @@
 /**
  * @file SABT_MainUnit.c
  * @brief contains the main routine for the SABT main unit
- * @author Nick LaGrow (nlagrow)
+ * @author Nick LaGrow (nlagrow), Alex Etling (petling)
  */
 
 #define F_CPU 8000000UL
@@ -21,6 +21,12 @@ unsigned int i;
 
 void InitializeSystem(void);
 
+
+/**
+ *@brief NOT SURE WHAT IT IS Doing
+ *    IT seems like the PORTD is a data register. @ref AtATmega1284P(Preferred).pdf
+ * @return Void
+ */
 void TimeRoutine(void){
 	if(!LED_STAT){
 		PORTD &= ~_BV(5);

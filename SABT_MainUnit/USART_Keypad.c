@@ -1,3 +1,10 @@
+/** 
+ * @file USART_Keypad.c
+ * @brief Deals with USART communication from the main board - please update 
+ * @author Alex Etling (petling)
+ */
+
+
 #include "Globals.h"
 
 bool USART_UI_header_received,USART_UI_length_reveived;
@@ -5,6 +12,11 @@ unsigned char USART_UI_prefix[3];
 unsigned char USART_UI_receive_msgcnt;
 unsigned char USART_UI_received_playload_len;
 
+
+/**
+ * @brief Initializes the buad communication over USART.
+ * @return Void
+ */
 void init_USART_Keypad(void)
 {
 	UCSR1B = 0x00; //disable while setting baud rate
@@ -18,6 +30,14 @@ void init_USART_Keypad(void)
 	USART_UI_Message_ready=false;
 }
 
+
+/**
+ * @brief   Receives message stored in globabl USART_Keypad_Received_Data
+ *          Then proceeds to decode message, use its value, and allow for more 
+ *          messages to be sent
+ * @ref  tech_report.pdf
+ * @return Void
+ */
 void USART_Keypad_ReceiveAction(void){
 	USART_Keypad_DATA_RDY=false;
 

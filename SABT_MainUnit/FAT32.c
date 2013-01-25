@@ -1,3 +1,10 @@
+/**
+ * @file FAT32.c
+ * @brief    Reads data from File Allocation Table 32 (FAT 32) format.  
+ *           This system defines clusters, which are contiguous regions of memory.
+ * @author Alex Etling (petling)
+ */
+
 #include "Globals.h"
 
 
@@ -308,7 +315,12 @@ unsigned char readFile (unsigned char flag, unsigned char *fileName)
 	return 0;
 }
 
-
+/**
+ * @brief
+ * @param fileName    char *   That contains the file name of what you want to read
+          dataString  char *   Where the data is put, can store 100 bytes
+ * @return unsigned char - number where zero means success
+ */
 unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned char *dataString)
 {
 	struct dir_Structure *dir;
@@ -992,7 +1004,14 @@ void freeMemoryUpdate (unsigned char flag, unsigned long size)
   }
 }
 
-//******** END ****** www.dharmanitech.com *****
+/**
+ * @brief Checks the SD card, communicates with computer to let know what type of 
+ *        card and sets up the rest of the SD card.
+ * @param bVerb  bool   Determines whether of not you are communicating found data
+ *        to the computer
+ * @ref   www.dharmanitech.com
+ * @return Void
+ */
 void InitSDCard(bool bVerb)
 {
 	unsigned char iInit=0;
