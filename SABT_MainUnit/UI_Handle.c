@@ -4,6 +4,7 @@
  *        computer ineractions
  * @ref   tech_report.pdf
  * @author Alex Etling (petling)
+ */
 
 #include "Globals.h"
 #include "Modes.h"

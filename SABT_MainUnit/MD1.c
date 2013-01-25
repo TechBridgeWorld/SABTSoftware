@@ -1,3 +1,9 @@
+/**
+ * @file MD1.c
+ * @brief code for the Primary User Interface Mode
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "Globals.h"
 
 int Current_State;
@@ -45,14 +51,15 @@ void MD1_Main(void)
 	switch(Current_State)
 	{
 		case 0:
+      // Play the inrtoductory message for Mode 1
 			RequestToPlayMP3file("MD1INT.MP3");
-			Current_State=1;
+			Current_State = 1;
 			break;
 		case 1:
 			break;
 		case 2:
 			PlayRequestedDot();
-			Current_State=1;
+			Current_State = 1;
 			break;
 	}
 }

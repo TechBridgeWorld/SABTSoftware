@@ -167,6 +167,6 @@ void RequestToPlayMP3file(const char* thisFile)
 	fileName[i++] = *(thisFile++);
 	fileName[i++] = *(thisFile++);
 
-  // Mark that a file is queued to be played
+  // Mark that a file is queued to be played by the user interface
 	UI_MP3_file_Pending = true;
 }
