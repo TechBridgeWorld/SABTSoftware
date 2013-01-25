@@ -112,6 +112,14 @@ bool UI_buildMessage(char MessageType)
 	return true;
 }
 
+
+/**
+ * @brief  Reads a message in USART_UI_RecievedPacket. Then determines what type of
+ *         message it has recieved. It then interacts with the mode accordingly and
+ *         sends a message of recieval at the end. 
+ * @param  IsPlaying -  bool    determines whether or not an MP3 Files is playing
+ * @return  bool - returns true if succesfully parsed, understood, and used message
+ */
 bool UI_parse_message(bool IsPlaying)
 {
 	//include code to interpret the UI string
@@ -381,6 +389,10 @@ void UI_InputCellToCurrentMode(char thisCell)
 	}
 }
 
+/**
+ * @brief   Decides which of the three UI modes to go into based on UI_Current_Mode
+ * @return  Void
+ */
 void UI_RunMainOfCurrentMode(void)
 {
 	if(UI_MODE_SELECTED){
