@@ -12,6 +12,8 @@ SABT_MainUnit.o: ../SABT_MainUnit.c ../Globals.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/pgmspace.h \
   c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stddef.h \
   c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdbool.h \
+  c:/winavr-20100110/lib/gcc/../../avr/include/stdio.h \
+  c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdarg.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/interrupt.h ../FAT32.h \
@@ -45,6 +47,10 @@ c:/winavr-20100110/lib/gcc/../../avr/include/avr/pgmspace.h:
 c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stddef.h:
 
 c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdbool.h:
+
+c:/winavr-20100110/lib/gcc/../../avr/include/stdio.h:
+
+c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
 
 c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:
 

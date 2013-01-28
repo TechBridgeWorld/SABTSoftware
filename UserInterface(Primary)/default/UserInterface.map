@@ -154,7 +154,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x87c
+.text           0x00000000      0x872
  *(.vectors)
  .vectors       0x00000000       0x8c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vectors
@@ -243,62 +243,62 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
                 0x000000ca                __vector_16
                 0x000000ca                __vector_18
                 0x000000ca                __vector_20
- .text          0x000000ce       0x2e UserInterface.o
+ .text          0x000000ce       0x24 UserInterface.o
                 0x000000ce                InitializeUI
                 0x000000e4                main
- .text          0x000000fc      0x238 DigitalIO.o
-                0x000002a2                RunCommandTasks
-                0x00000286                Enter1Task
-                0x00000238                Mode2Task
-                0x00000250                Mode1Task
-                0x0000020c                VolDownTask
-                0x000001f4                SetStatLED1
-                0x00000200                SetStatLED2
-                0x00000268                Enter2Task
-                0x000000fc                Initialize_Digital_IO
-                0x00000138                CheckCommandButtons
-                0x00000222                VolUpTask
- .text          0x00000334      0x1e2 AnalogInputs.o
-                0x000003f0                analog10
-                0x0000045c                DetectTheDot
-                0x00000448                __vector_24
-                0x0000038e                MeasureInput
-                0x0000038c                StopMeasurement
-                0x00000334                InitializeAnalogPorts
-                0x00000384                StartMeasurement
- .text          0x00000516       0x90 USART_MCU.o
-                0x00000572                USART_transmitStringToMCUFromFlash
-                0x00000536                USART_RX_vect
-                0x0000058c                USART_transmitStringToMCU
-                0x0000055c                USART_PC_ReceiveAction
-                0x00000516                init_USART_MCU
-                0x00000562                USART_transmitByteToMCU
- .text          0x000005a6       0x80 Timer.o
-                0x000005f2                TimerRoutine
-                0x000005d4                __vector_13
-                0x000005a6                initTimer
- .text          0x00000626      0x116 CommPacket.o
-                0x00000626                Calculate_CRC
-                0x00000708                SendPacket
-                0x00000692                MCU_PKT_CompilePacket
- .text          0x0000073c      0x114 ProcessInput.o
-                0x0000073c                ResetCellState
-                0x0000075a                CaptureCellValue
-                0x000007c4                ProcessTheDot
- .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
- .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
- .text          0x00000850        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
-                0x00000850                . = ALIGN (0x2)
+ .text          0x000000f2      0x238 DigitalIO.o
+                0x00000298                RunCommandTasks
+                0x0000027c                Enter1Task
+                0x0000022e                Mode2Task
+                0x00000246                Mode1Task
+                0x00000202                VolDownTask
+                0x000001ea                SetStatLED1
+                0x000001f6                SetStatLED2
+                0x0000025e                Enter2Task
+                0x000000f2                Initialize_Digital_IO
+                0x0000012e                CheckCommandButtons
+                0x00000218                VolUpTask
+ .text          0x0000032a      0x1e2 AnalogInputs.o
+                0x000003e6                analog10
+                0x00000452                DetectTheDot
+                0x0000043e                __vector_24
+                0x00000384                MeasureInput
+                0x00000382                StopMeasurement
+                0x0000032a                InitializeAnalogPorts
+                0x0000037a                StartMeasurement
+ .text          0x0000050c       0x90 USART_MCU.o
+                0x00000568                USART_transmitStringToMCUFromFlash
+                0x0000052c                USART_RX_vect
+                0x00000582                USART_transmitStringToMCU
+                0x00000552                USART_PC_ReceiveAction
+                0x0000050c                init_USART_MCU
+                0x00000558                USART_transmitByteToMCU
+ .text          0x0000059c       0x80 Timer.o
+                0x000005e8                TimerRoutine
+                0x000005ca                __vector_13
+                0x0000059c                initTimer
+ .text          0x0000061c      0x116 CommPacket.o
+                0x0000061c                Calculate_CRC
+                0x000006fe                SendPacket
+                0x00000688                MCU_PKT_CompilePacket
+ .text          0x00000732      0x114 ProcessInput.o
+                0x00000732                ResetCellState
+                0x00000750                CaptureCellValue
+                0x000007ba                ProcessTheDot
+ .text          0x00000846        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .text          0x00000846        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text          0x00000846        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x00000846                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00000850       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
-                0x00000850                __udivmodhi4
- .text.libgcc   0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
- .text.libgcc   0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
-                0x00000878                . = ALIGN (0x2)
+ .text.libgcc   0x00000846       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                0x00000846                __udivmodhi4
+ .text.libgcc   0x0000086e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .text.libgcc   0x0000086e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x0000086e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000878        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x00000878                exit
-                0x00000878                _exit
+ .fini9         0x0000086e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x0000086e                exit
+                0x0000086e                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -317,11 +317,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000878        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000086e        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000087c                _etext = .
+                0x00000872                _etext = .
 
-.data           0x00800100        0x0 load address 0x0000087c
+.data           0x00800100        0x0 load address 0x00000872
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm1284p.o
@@ -391,8 +391,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
                 0x00800155                ProcessedCellValue
                 0x00800156                PI_LastDotPressed
                 0x00800157                PROVIDE (__bss_end, .)
-                0x0000087c                __data_load_start = LOADADDR (.data)
-                0x0000087c                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000872                __data_load_start = LOADADDR (.data)
+                0x00000872                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800157        0x0
                 0x00800157                PROVIDE (__noinit_start, .)
@@ -506,15 +506,15 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  .debug_abbrev  0x00000530       0xee CommPacket.o
  .debug_abbrev  0x0000061e       0xfa ProcessInput.o
 
-.debug_line     0x00000000     0x10ad
+.debug_line     0x00000000     0x109d
  *(.debug_line)
- .debug_line    0x00000000      0x14c UserInterface.o
- .debug_line    0x0000014c      0x514 DigitalIO.o
- .debug_line    0x00000660      0x313 AnalogInputs.o
- .debug_line    0x00000973      0x1e2 USART_MCU.o
- .debug_line    0x00000b55      0x17a Timer.o
- .debug_line    0x00000ccf      0x1d7 CommPacket.o
- .debug_line    0x00000ea6      0x207 ProcessInput.o
+ .debug_line    0x00000000      0x13c UserInterface.o
+ .debug_line    0x0000013c      0x514 DigitalIO.o
+ .debug_line    0x00000650      0x313 AnalogInputs.o
+ .debug_line    0x00000963      0x1e2 USART_MCU.o
+ .debug_line    0x00000b45      0x17a Timer.o
+ .debug_line    0x00000cbf      0x1d7 CommPacket.o
+ .debug_line    0x00000e96      0x207 ProcessInput.o
 
 .debug_frame    0x00000000      0x2a0
  *(.debug_frame)

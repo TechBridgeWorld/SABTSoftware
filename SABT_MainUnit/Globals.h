@@ -5,6 +5,7 @@
 #include <avr/pgmspace.h>
 #include <stdint.h>
 #include <stdbool.h> 
+#include <stdio.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
@@ -43,5 +44,12 @@ MD1\6.MP3
 
 
 */
+
+// vars for print statements
+unsigned char debug_buffer[256];
+// debug print statement
+#define DPRINTF(msg, ...) \
+	sprintf(debug_buffer, msg, ##__VA_ARGS__); \
+	USART_transmitStringToPC(&debug_buffer);
 
 #endif

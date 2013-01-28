@@ -14,12 +14,17 @@ int main(void)
 	This loop will take care of all the signal handling from the 
 	*/
  	{
+		// TODO:  remove these
+
+		//SetStatLED1(true);
+		//SetStatLED2(true); 
 		if(TMR1_INT)
 		{
 			TimerRoutine();
 		}
 	}
 
+return 0;
 }
 
 void InitializeUI(void)
@@ -30,7 +35,9 @@ void InitializeUI(void)
 	//InitializeAnalogPorts();
 	//Initialize the digital input/output pins
 	Initialize_Digital_IO();
+	// Initialize the timer
 	initTimer();
+	// Enable interrupts
 	sei();
 	InterfaceType=1;
 }

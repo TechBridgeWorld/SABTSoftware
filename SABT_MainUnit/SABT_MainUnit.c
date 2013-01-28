@@ -75,6 +75,9 @@ End of test code
 	//USART_transmitStringToPCFromFlash (PSTR("Press a key and see it returns."));
 	TX_NEWLINE_PC;
 	while(1){
+		//printf("Small waves crashing against the sand.");
+		DPRINTF("Small waves crashing against the sand%d.", 42);
+		//fprintf(stderr, "HELLO HELLO HELLO HELLO");
 		if(temp++>100){
 			temp=0;
 		}
@@ -106,7 +109,13 @@ End of test code
 		}
 		if(UI_MP3_file_Pending)	//If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
 		{
+
 			PlayMP3file(fileName);  //WHERE IS THIS FUNCTION?
+
+			PlayMP3file(fileName);
+			RequestToPlayMP3file("INT.MP3");
+			PlayMP3file(fileName);
+			
 		}
 		UI_RunMainOfCurrentMode();
 	}
@@ -172,6 +181,6 @@ void InitializeSystem(void){
 		USART_transmitStringToPCFromFlash (PSTR("Mode file found"));
 		TX_NEWLINE_PC;
 	}
-
+	
 	RequestToPlayMP3file("INT.MP3");  // Play the welcome message
 }
