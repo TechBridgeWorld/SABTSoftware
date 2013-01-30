@@ -22,12 +22,25 @@ void USART_PC_ReceiveAction(void){
 	//USART_transmitByteToMCU(USART_PC_Received_Data);
 }
 
+/**
+ * @brief transmit a single byte to the data register
+ * @param bData the data to transmit
+ * UCSR0A : register
+ * UDRE0 : USART Data register empty (bit 5 of UCSR0A
+ * UDR0 : Data register
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
 	while ( !(UCSR0A & (1<<UDRE0)) );
-	UDR0=bData;
+	UDR0 = bData;
 }
 
+/**
+ * @brief transmit a string from flash memory
+ * @param strData pointer to the beginnning of the string in flash mem
+ * @return Void
+ */
 void USART_transmitStringToMCUFromFlash(char* strData)
 {
   while (pgm_read_byte(&(*strData)))
@@ -35,9 +48,13 @@ void USART_transmitStringToMCUFromFlash(char* strData)
 }
 
 
+/**
+ * @brief transmit a string to the data register
+ * @param strData pointer to the beginning of the string
+ * @return Void
+ */
 void USART_transmitStringToMCU(unsigned char* strData)
 {
   while (*strData)
    USART_transmitByteToMCU(*strData++);
-
 }
