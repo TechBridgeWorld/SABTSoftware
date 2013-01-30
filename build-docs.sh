@@ -11,6 +11,11 @@ if [ ! -d documentation ]; then
     cd ..
 fi
 
+# Get the latest changes
+cd documentation
+git pull origin gh-pages
+cd ..
+
 # Build docs
 doxygen Doxyfile
 
@@ -18,5 +23,4 @@ doxygen Doxyfile
 cd documentation
 git add .
 git commit -m "Updated documentation"
-git pull origin gh-pages
 git push origin gh-pages
