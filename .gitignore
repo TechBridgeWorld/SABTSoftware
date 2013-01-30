@@ -8,4 +8,5 @@
 *.aws
 SABT/
 .DS_Store
-documentation/
+documentation/*
+!.gitkeep
