@@ -1,3 +1,9 @@
+/**
+ * @file GlobalsUI.h
+ * @brief contains global includes and definitions
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H
 
@@ -15,5 +21,4 @@
 #include "CommPacket.h"
 #include "ProcessInput.h"
 
-
-#endif
+#endif /* _GLOBALS_H_ */

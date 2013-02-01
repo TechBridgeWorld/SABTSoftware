@@ -4,13 +4,14 @@
  *        computer ineractions
  * @ref   tech_report.pdf
  * @author Alex Etling (petling)
+ * @author Nick LaGrow (nlagrow)
  */
 
 #include "Globals.h"
 #include "Modes.h"
 
 /**
- * @breif  reads modes from MODES.DAT file and tells computer how many modes and 
+ * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
  *         what they are
  * @return bool  - return true on succesful completion of transmission, false on 
  *         failure
@@ -30,6 +31,7 @@ bool UI_CheckModes(void)
 	int iMoN;
 	bool bBoNFound;
 	const char* ModesFile="MODES.DAT";
+
 	Number_of_modes=0;
 	for(i=0;i<100;i++)
 		FileContent[i]=0;
@@ -88,10 +90,16 @@ bool UI_CheckModes(void)
 	return true; 
 }
 
+/**
+ * @brief calculate CRC (cyclic redundancy check)
+ * @param pstrMsg message (?)
+ * @return CRC value
+ */
 uint16_t UI_calculate_CRC(unsigned char* pstrMsg)
 {
 	unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
 	uint16_t chksum=0;
+
 	pstrMsg+=3;
 	while(msglen > 1)
 	{
@@ -104,12 +112,12 @@ uint16_t UI_calculate_CRC(unsigned char* pstrMsg)
 	{
 		chksum = chksum^ (int)*(pstrMsg++);
 	}
-	return(chksum);
+	return (chksum);
 }
 
+//TODO this seems pointless?
 bool UI_buildMessage(char MessageType)
 {
-	
 	return true;
 }
 
@@ -118,28 +126,30 @@ bool UI_buildMessage(char MessageType)
  * @brief  Reads a message in USART_UI_RecievedPacket. Then determines what type of
  *         message it has recieved. It then interacts with the mode accordingly and
  *         sends a message of recieval at the end. 
+ *
+ * UI string: [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
+ * msgtypes: 
  * @param  IsPlaying -  bool    determines whether or not an MP3 Files is playing
  * @return  bool - returns true if succesfully parsed, understood, and used message
  */
 bool UI_parse_message(bool IsPlaying)
 {
-	//include code to interpret the UI string
-	/*
-		UI string 	: [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
-		msgtypes	: 
-	*/
 	//First things first, check the CRC
 
-	unsigned char message_len=USART_UI_ReceivedPacket[2];
+	unsigned char message_len = USART_UI_ReceivedPacket[2];
 	unsigned char message_number;
 	unsigned char message_type;
 
 	unsigned char ADCmsg[10];
 	//unsigned char message_payload[20];
-//	unsigned char i=0;
+  //unsigned char i=0;
 
 	uint16_t chksum=UI_calculate_CRC(&USART_UI_ReceivedPacket);
-	if ( chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 | USART_UI_ReceivedPacket[message_len-1]))
+	
+  // TODO test this
+  DPRINTF("[UI_parse_message] Entering function");
+  
+  if ( chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 | USART_UI_ReceivedPacket[message_len-1]))
 	{
 		//If correct, store the message elements
 		message_number=USART_UI_ReceivedPacket[3];
@@ -187,7 +197,6 @@ bool UI_parse_message(bool IsPlaying)
 				TX_NEWLINE_PC;				
 				break;
 			default:
-				
 				break;
 		}
 		//In the end: send the acknowledgement to the sender (with the message number, of course !!!)
@@ -201,12 +210,15 @@ bool UI_parse_message(bool IsPlaying)
 	return true;
 }
 
+/**
+ * @brief (?) 
+ * @return Void
+ */
 void UI_ControlKeyPressed(void)
 {
 	switch(USART_UI_ReceivedPacket[5])
 	{
 		case UI_CMD_NONE:
-			
 			break;
 		case UI_CMD_ENT1: //Enter into a mode
 			USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
@@ -220,6 +232,7 @@ void UI_ControlKeyPressed(void)
 				}
 				else
 				{
+          // TODO commented (?)
 					//RequestToPlayMP3file("ERR1.MP3");
 				}
 			}
@@ -294,11 +307,14 @@ void UI_ControlKeyPressed(void)
 			VS1053_DecreaseVol();
 			break;
 		default:
-			
 			break;
 	}
 }
 
+/**
+ * @brief play the MP3 associated with the current mode
+ * @return Void
+ */
 void UI_Play_Intro_Currentmode(void)
 {
 	switch(UI_Current_Mode)
@@ -318,6 +334,10 @@ void UI_Play_Intro_Currentmode(void)
 	}
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_CallModeYesAnswer(void)
 {
 	switch(UI_Current_Mode)
@@ -336,6 +356,10 @@ void UI_CallModeYesAnswer(void)
 	}
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_CallModeNoAnswer(void)
 {
 	switch(UI_Current_Mode)

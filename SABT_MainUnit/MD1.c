@@ -5,19 +5,18 @@
  */
 
 #include "Globals.h"
+#include "MD1.h"
 
-int Current_State;
-char Last_Dot;
-//Current_State - Defines the status of the mode
-/* Vales and meanings
-0 - Just started (in the begining, play the Welcome message)
-1 - Waiting for user input
-2 - Last user input processed
+int Current_State;  // current state of the mode
+char Last_Dot;      // char representing last big dot pressed
 
-*/
-
+/**
+ * @brief echo the number of the dot pressed
+ * @return Void
+ */
 void PlayRequestedDot(void)
 {
+  // TODO default case?
 	switch(Last_Dot)
 	{
 		case '1':
@@ -41,25 +40,37 @@ void PlayRequestedDot(void)
 	}
 }
 
+/**
+ * @brief Reset mode 1 to starting state
+ * Should be useful for error handling
+ * @return Void
+ */
 void MD1_Reset(void)
 {
-	Current_State=0;
+	Current_State = STATE_INITIAL;
 }
 
+/**
+ * @brief main code for Mode 1
+ * @return Void
+ */
 void MD1_Main(void)
 {
 	switch(Current_State)
 	{
-		case 0:
-      // Play the inrtoductory message for Mode 1
+		case STATE_INITIAL:
+      DPRINTF("[MD1] Entering MD1\n");
+      // Play the introductory message for Mode 1
 			RequestToPlayMP3file("MD1INT.MP3");
-			Current_State = 1;
+			Current_State = STATE_WAIT_INPUT;
 			break;
-		case 1:
+		case STATE_WAIT_INPUT:
+      DPRINTF("[MD1] State 1\n");
 			break;
-		case 2:
+		case STATE_PROC_INPUT:
+      DPRINTF("[MD1] State 2 >> 1: playing dot name\n");
 			PlayRequestedDot();
-			Current_State = 1;
+			Current_State = STATE_WAIT_INPUT;
 			break;
 	}
 }
@@ -74,10 +85,16 @@ void MD1_CallModeNoAnswer(void)
 
 }
 
+/**
+ * @brief register dot input
+ * Sets the program to STATE_PROC_INPUT
+ * @param thisDot the dot being input
+ * @return Void
+ */
 void MD1_InputDot(char thisDot)
 {
 	Last_Dot=thisDot;
-	Current_State=2;
+	Current_State = STATE_PROC_INPUT;
 }
 
 void MD1_InputCell(char thisCell)

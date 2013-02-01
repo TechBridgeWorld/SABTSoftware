@@ -2,6 +2,7 @@
  * @file USART_PC.c
  * @brief Deals with USART communication with main board - please update
  * @author Alex Etling (petling)
+ * @author Nick LaGrow (nlagrow)
  */
 
 #include "Globals.h"
@@ -25,11 +26,11 @@ void init_USART_PC(void)
 }
 
 /**
- * @brief   Receives message stored in globabl USART_PC_Received_Data
+ * @brief   Receives message stored in global USART_PC_Received_Data
  *          Then proceeds to decode message, use its value, and allow for more
  *          messages to be sent
  * @ref  tech_report.pdf
- * @return Void
+ * @return always 0?
  */
 unsigned char USART_PC_ReceiveAction(void){
 	USART_PC_DATA_RDY=false;
