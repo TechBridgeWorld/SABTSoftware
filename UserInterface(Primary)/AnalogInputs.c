@@ -97,8 +97,8 @@ void DetectTheDot(void)
 			/*
 			---------------------------------------------------------
 			This section is used only for debugging the UI.
-			Once a change is detected, the analog value is send directly to the 
-			main unit with the message type 'E'. This will be send to the terminal window
+			Once a change is detected, the analog value is sent directly to the 
+			main unit with the message type 'E'. This will be sent to the terminal window
 			by the main unit in the format [ADC channel,MSB,LSB].			
 			*/
 			SendMsgPayLoad[0]=iADC;

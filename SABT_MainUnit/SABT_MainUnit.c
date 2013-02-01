@@ -76,7 +76,7 @@ End of test code
 	TX_NEWLINE_PC;
 	while(1){
 		//printf("Small waves crashing against the sand.");
-		DPRINTF("Small waves crashing against the sand%d.", 42);
+		//DPRINTF("Small waves crashing against the sand%d.", 42);
 		//fprintf(stderr, "HELLO HELLO HELLO HELLO");
 		if(temp++>100){
 			temp=0;
@@ -111,8 +111,6 @@ End of test code
 		{
 
 			PlayMP3file(fileName);  //WHERE IS THIS FUNCTION?
-
-			PlayMP3file(fileName);
 			RequestToPlayMP3file("INT.MP3");
 			PlayMP3file(fileName);
 			
@@ -151,7 +149,7 @@ ISR(USART1_RX_vect){
 /**
  * @brief ISR is an interrupt handler that will be called when its argument
  *        corresponds to the interupt called
- * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ * @param Interrupt vector.  Compared to interrupt that is fired to see if correct
  *        function to call
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void

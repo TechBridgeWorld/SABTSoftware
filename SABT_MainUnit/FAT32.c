@@ -3,6 +3,7 @@
  * @brief    Reads data from File Allocation Table 32 (FAT 32) format.  
  *           This system defines clusters, which are contiguous regions of memory.
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"
@@ -474,15 +475,41 @@ unsigned char PlayMP3file (unsigned char *fileName)
 //Arguments: pointer to the file name
 //return: 0, if successful else 1.
 //***************************************************************************
+
+/**
+ * @brief Converts the input fileName (which is in FAT format) in the following fashion:
+ * <filename.ext> -----> <filename[padding to 8 chars]ext>
+ * filename must be <= 8 chars and ext must be <= 3 chars.
+ * Thus, INT.MP3 becomes [INT     MP3]. Also, capitalizes lowercase files.
+ * @param fileName unsigned char* string which contains the file name that needs to be converted
+ * @return unsigned char 1 for failure 0 for victory
+ * @TODO Currently overwrites the passed in buffer so if you pass in the same buffer twice, it 
+ * will have already converted the fileName (specifically removed the '.' which is what the invalid
+ * file check is done off of)
+*/ 
 unsigned char convertFileName (unsigned char *fileName)
 {
 	unsigned char fileNameFAT[11];
 	unsigned char j, k;
 
-	for(j=0; j<12; j++)
-	if(fileName[j] == '.') break;
+	DPRINTF("|%s |\n\r", fileName);
 
-	if(j>8) {USART_transmitStringToPCFromFlash(PSTR("Invalid fileName..")); return 1;}
+	for(j=0; j<12; j++) {
+		DPRINTF("%c", fileName[j]);
+		if(fileName[j] == '.') 
+			break;
+	}
+	DPRINTF("\n\r");
+
+	
+	if (j == 12)
+		// assume that a string without any dots is already converted
+		return 0;
+
+	if(j>8) {
+		USART_transmitStringToPCFromFlash(PSTR("Invalid fileName.")); 
+		return 1;
+	}
 
 	for(k=0; k<j; k++) //setting file name
 	  fileNameFAT[k] = fileName[k];
@@ -514,8 +541,12 @@ unsigned char convertFileName (unsigned char *fileName)
 		}
 	}
 
+
 	for(j=0; j<11; j++)
-	  fileName[j] = fileNameFAT[j];
+		fileName[j] = fileNameFAT[j];
+
+
+	DPRINTF("[%s]\n\r", fileName);
 
 	return 0;
 }
