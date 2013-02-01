@@ -85,6 +85,12 @@ void MD1_CallModeNoAnswer(void)
 
 }
 
+/**
+ * @brief register dot input
+ * Sets the program to STATE_PROC_INPUT
+ * @param thisDot the dot being input
+ * @return Void
+ */
 void MD1_InputDot(char thisDot)
 {
 	Last_Dot=thisDot;
