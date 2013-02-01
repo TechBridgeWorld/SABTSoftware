@@ -23,7 +23,7 @@ void InitializeSystem(void);
 
 
 /**
- *@brief NOT SURE WHAT IT IS Doing
+ * @brief NOT SURE WHAT IT IS Doing
  *    IT seems like the PORTD is a data register. @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
