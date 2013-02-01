@@ -14,7 +14,7 @@ unsigned char USART_UI_received_playload_len;
 
 
 /**
- * @brief Initializes the buad communication over USART.
+ * @brief Initializes the baud communication over USART.
  * @return Void
  */
 void init_USART_Keypad(void)

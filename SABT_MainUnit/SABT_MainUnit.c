@@ -1,8 +1,7 @@
 /**
  * @file SABT_MainUnit.c
  * @brief contains the main routine for the SABT main unit
- * @author Nick LaGrow (nlagrow)
- * @author Alex Etling (petling)
+ * @author Nick LaGrow (nlagrow), Alex Etling (petling)
  */
 
 #define F_CPU 8000000UL
@@ -13,6 +12,7 @@ volatile bool TMR1_INT;
 volatile bool LED_STAT;
 volatile char temp=0;
 
+
 /*
 volatile unsigned char iInit=0;
 unsigned char option, error, data, FAT32_active;
@@ -21,8 +21,9 @@ unsigned int i;
 
 void InitializeSystem(void);
 
+
 /**
- *@brief NOT SURE WHAT IT IS Doing
+ * @brief NOT SURE WHAT IT IS Doing
  *    IT seems like the PORTD is a data register. @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
@@ -32,7 +33,7 @@ void TimeRoutine(void){
 		PORTD &= ~_BV(6);
 		PORTD &= ~_BV(7);
 		LED_STAT=true;
-	} else {
+	}else{
 		PORTD |= _BV(5);
 		PORTD |= _BV(6);
 		PORTD |= _BV(7);
@@ -121,22 +122,47 @@ End of test code
 	return 1;
 }
 
+
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(TIMER1_COMPA_vect){
 	TMR1_INT=true;
 };
 
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(USART1_RX_vect){
 	USART_Keypad_Received_Data=UDR1;
 	USART_Keypad_DATA_RDY=true; 
 };
 
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(USART0_RX_vect){
 //Temporarly using the PC as the UI
 //	USART_Keypad_Received_Data=UDR0;
 //	USART_Keypad_DATA_RDY=true; 
 ///*	Temporaraly disabled the PC communications since we are simulating the UI with PC
-	USART_PC_Received_Data = UDR0;
-	USART_PC_DATA_RDY = true;
+	USART_PC_Received_Data=UDR0;
+	USART_PC_DATA_RDY=true;
 //*/
 };
 
