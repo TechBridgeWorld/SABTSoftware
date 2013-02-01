@@ -90,10 +90,16 @@ bool UI_CheckModes(void)
 	return true; 
 }
 
+/**
+ * @brief calculate CRC (cyclic redundancy check)
+ * @param pstrMsg message (?)
+ * @return CRC value
+ */
 uint16_t UI_calculate_CRC(unsigned char* pstrMsg)
 {
 	unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
 	uint16_t chksum=0;
+
 	pstrMsg+=3;
 	while(msglen > 1)
 	{
@@ -106,9 +112,10 @@ uint16_t UI_calculate_CRC(unsigned char* pstrMsg)
 	{
 		chksum = chksum^ (int)*(pstrMsg++);
 	}
-	return(chksum);
+	return (chksum);
 }
 
+//TODO this seems pointless?
 bool UI_buildMessage(char MessageType)
 {
 	return true;
@@ -190,7 +197,6 @@ bool UI_parse_message(bool IsPlaying)
 				TX_NEWLINE_PC;				
 				break;
 			default:
-				
 				break;
 		}
 		//In the end: send the acknowledgement to the sender (with the message number, of course !!!)
@@ -204,12 +210,15 @@ bool UI_parse_message(bool IsPlaying)
 	return true;
 }
 
+/**
+ * @brief (?) 
+ * @return Void
+ */
 void UI_ControlKeyPressed(void)
 {
 	switch(USART_UI_ReceivedPacket[5])
 	{
 		case UI_CMD_NONE:
-			
 			break;
 		case UI_CMD_ENT1: //Enter into a mode
 			USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
@@ -223,6 +232,7 @@ void UI_ControlKeyPressed(void)
 				}
 				else
 				{
+          // TODO commented (?)
 					//RequestToPlayMP3file("ERR1.MP3");
 				}
 			}
@@ -297,11 +307,14 @@ void UI_ControlKeyPressed(void)
 			VS1053_DecreaseVol();
 			break;
 		default:
-			
 			break;
 	}
 }
 
+/**
+ * @brief play the MP3 associated with the current mode
+ * @return Void
+ */
 void UI_Play_Intro_Currentmode(void)
 {
 	switch(UI_Current_Mode)
@@ -321,6 +334,10 @@ void UI_Play_Intro_Currentmode(void)
 	}
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_CallModeYesAnswer(void)
 {
 	switch(UI_Current_Mode)
@@ -339,6 +356,10 @@ void UI_CallModeYesAnswer(void)
 	}
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_CallModeNoAnswer(void)
 {
 	switch(UI_Current_Mode)
