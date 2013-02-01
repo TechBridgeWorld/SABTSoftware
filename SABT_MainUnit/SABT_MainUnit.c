@@ -122,15 +122,40 @@ End of test code
 	return 1;
 }
 
+
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(TIMER1_COMPA_vect){
 	TMR1_INT=true;
 };
 
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(USART1_RX_vect){
 	USART_Keypad_Received_Data=UDR1;
 	USART_Keypad_DATA_RDY=true; 
 };
 
+/**
+ * @brief ISR is an interrupt handler that will be called when its argument
+ *        corresponds to the interupt called
+ * @param Interrupt vector.  Compared to interupt that is fired to see if correct
+ *        function to call
+ * @ref   http://www.nongnu.org/avr-libc/
+ * @return  Void
+ */
 ISR(USART0_RX_vect){
 //Temporarly using the PC as the UI
 //	USART_Keypad_Received_Data=UDR0;
