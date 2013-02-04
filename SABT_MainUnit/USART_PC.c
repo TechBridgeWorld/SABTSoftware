@@ -100,17 +100,16 @@ unsigned char USART_PC_ReceiveAction(void){
 	return 0;
 }
 
-
 /**
- * @brief Waits till available to send message and puts data in Global value
- * @param bData unsigned Char    contains the byte that needs to be sent
+ * @brief transmit one byte to UDR0 (PC connection) 
+ * @param bData contains the byte that needs to be sent
  * return Void
  */
 void USART_transmitByteToPC( unsigned char bData )
 {
 ///*	Disabled PC TX temp
-	while ( !(UCSR0A & (1<<UDRE0)) );
-	UDR0=bData;
+	while ( !(UCSR0A & (1<<UDRE0)) ); // Loop until the data register is empty
+	UDR0 = bData;                     // Transmit one byte of data
 //	*/
 }
 
@@ -125,7 +124,12 @@ void USART_transmitStringToPCFromFlash(char* strData)
    USART_transmitByteToPC(pgm_read_byte(&(*strData++)));
 }
 
-
+/**
+ * @brief transmit a string to UDR0 (PC connection)
+ * @param strData string to transmit
+ * @return Void
+ * TODO: does this method send null terminator?
+ */
 void USART_transmitStringToPC(unsigned char* strData)
 {
   while (*strData)

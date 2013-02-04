@@ -1,9 +1,19 @@
+/**
+ * @file Timer.c
+ * @brief handles timer interrupts for the user interface
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "GlobalsUI.h"
 
 volatile bool LED_STAT;
 
 int TmrCntADC;
 
+/**
+ * @brief Initialize the timer
+ * @return Void
+ */
 void initTimer(void)
 {
 	TMR1_INT=false;
@@ -14,6 +24,9 @@ void initTimer(void)
 	TmrCntADC=0;
 }
 
+/**
+ * @brief interrupt handler for TIMER1_COMPA_vect
+ */
 ISR(TIMER1_COMPA_vect){
 	TMR1_INT=true;
 };
@@ -21,6 +34,7 @@ ISR(TIMER1_COMPA_vect){
 void TimerRoutine(void)
 {
 	TMR1_INT=false;
+	USART_transmitStringToMCU("hello small waves");
 	/*
 	if(!LED_STAT){
 		SetStatLED2(true);
@@ -31,7 +45,7 @@ void TimerRoutine(void)
 		SetStatLED1(true);
 		LED_STAT=false;
 	}
-	*/
+	/*/
 	CheckCommandButtons();
 	RunCommandTasks();
 	if(TmrCntADC<2)
@@ -39,7 +53,7 @@ void TimerRoutine(void)
 		TmrCntADC++;
 	}else
 	{
-		//DetectTheDot();
+		DetectTheDot();
 		ProcessTheDot();
 		TmrCntADC=0;
 	}
