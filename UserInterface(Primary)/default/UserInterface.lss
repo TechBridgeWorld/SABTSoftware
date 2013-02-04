@@ -3,27 +3,29 @@ UserInterface.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000872  00000000  00000000  00000074  2**1
+  0 .data         00000012  00800100  00000888  0000091c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000888  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000057  00800100  00800100  000008e6  2**0
+  2 .bss          00000057  00800112  00800112  0000092e  2**0
                   ALLOC
-  2 .debug_aranges 000000e0  00000000  00000000  000008e6  2**0
+  3 .debug_aranges 000000e0  00000000  00000000  0000092e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_pubnames 00000b1d  00000000  00000000  000009c6  2**0
+  4 .debug_pubnames 00000b1d  00000000  00000000  00000a0e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00001777  00000000  00000000  000014e3  2**0
+  5 .debug_info   00001777  00000000  00000000  0000152b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000718  00000000  00000000  00002c5a  2**0
+  6 .debug_abbrev 00000718  00000000  00000000  00002ca2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   0000109d  00000000  00000000  00003372  2**0
+  7 .debug_line   000010bf  00000000  00000000  000033ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000002a0  00000000  00000000  00004410  2**2
+  8 .debug_frame  000002a0  00000000  00000000  0000447c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    0000052e  00000000  00000000  000046b0  2**0
+  9 .debug_str    0000052e  00000000  00000000  0000471c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000040a  00000000  00000000  00004bde  2**0
+ 10 .debug_loc    0000040a  00000000  00000000  00004c4a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000108  00000000  00000000  00004fe8  2**0
+ 11 .debug_ranges 00000108  00000000  00000000  00005054  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +44,7 @@ Disassembly of section .text:
   28:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   2c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   30:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
-  34:	0c 94 e5 02 	jmp	0x5ca	; 0x5ca <__vector_13>
+  34:	0c 94 ea 02 	jmp	0x5d4	; 0x5d4 <__vector_13>
   38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   40:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
@@ -53,7 +55,7 @@ Disassembly of section .text:
   54:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   58:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   5c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
-  60:	0c 94 1f 02 	jmp	0x43e	; 0x43e <__vector_24>
+  60:	0c 94 24 02 	jmp	0x448	; 0x448 <__vector_24>
   64:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   68:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   6c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
@@ -77,20 +79,20 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e2 e7       	ldi	r30, 0x72	; 114
+  9e:	e8 e8       	ldi	r30, 0x88	; 136
   a0:	f8 e0       	ldi	r31, 0x08	; 8
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
   a8:	07 90       	elpm	r0, Z+
   aa:	0d 92       	st	X+, r0
-  ac:	a0 30       	cpi	r26, 0x00	; 0
+  ac:	a2 31       	cpi	r26, 0x12	; 18
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
 
 000000b2 <__do_clear_bss>:
   b2:	11 e0       	ldi	r17, 0x01	; 1
-  b4:	a0 e0       	ldi	r26, 0x00	; 0
+  b4:	a2 e1       	ldi	r26, 0x12	; 18
   b6:	b1 e0       	ldi	r27, 0x01	; 1
   b8:	01 c0       	rjmp	.+2      	; 0xbc <.do_clear_bss_start>
 
@@ -98,11 +100,11 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	a7 35       	cpi	r26, 0x57	; 87
+  bc:	a9 36       	cpi	r26, 0x69	; 105
   be:	b1 07       	cpc	r27, r17
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
   c2:	0e 94 72 00 	call	0xe4	; 0xe4 <main>
-  c6:	0c 94 37 04 	jmp	0x86e	; 0x86e <_exit>
+  c6:	0c 94 42 04 	jmp	0x884	; 0x884 <_exit>
 
 000000ca <__bad_interrupt>:
   ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -114,1646 +116,1669 @@ void InitializeUI(void)
 {
 	//Initialize the Serial comm with the main module
 	init_USART_MCU();
-  ce:	0e 94 86 02 	call	0x50c	; 0x50c <init_USART_MCU>
+  ce:	0e 94 8b 02 	call	0x516	; 0x516 <init_USART_MCU>
 	//Initialize the analog ports
 	//InitializeAnalogPorts();
 	//Initialize the digital input/output pins
 	Initialize_Digital_IO();
-  d2:	0e 94 79 00 	call	0xf2	; 0xf2 <Initialize_Digital_IO>
+  d2:	0e 94 7e 00 	call	0xfc	; 0xfc <Initialize_Digital_IO>
 	// Initialize the timer
 	initTimer();
-  d6:	0e 94 ce 02 	call	0x59c	; 0x59c <initTimer>
+  d6:	0e 94 d3 02 	call	0x5a6	; 0x5a6 <initTimer>
 	// Enable interrupts
 	sei();
   da:	78 94       	sei
 	InterfaceType=1;
   dc:	81 e0       	ldi	r24, 0x01	; 1
-  de:	80 93 15 01 	sts	0x0115, r24
+  de:	80 93 27 01 	sts	0x0127, r24
 }
   e2:	08 95       	ret
 
 000000e4 <main>:
+
+void InitializeUI(void);
+
+int main(void)
+{
+	InitializeUI();
+  e4:	0e 94 67 00 	call	0xce	; 0xce <InitializeUI>
+	SendMsgPayLoad[0]=0x01;
+  e8:	81 e0       	ldi	r24, 0x01	; 1
+  ea:	80 93 13 01 	sts	0x0113, r24
+ 	{
 		// TODO:  remove these
 
-		
 		//SetStatLED1(true);
 		//SetStatLED2(true); 
 		if(TMR1_INT)
-  e4:	80 91 06 01 	lds	r24, 0x0106
-  e8:	88 23       	and	r24, r24
-  ea:	e1 f3       	breq	.-8      	; 0xe4 <main>
+  ee:	80 91 18 01 	lds	r24, 0x0118
+  f2:	88 23       	and	r24, r24
+  f4:	e1 f3       	breq	.-8      	; 0xee <main+0xa>
 		{
 			TimerRoutine();
-  ec:	0e 94 f4 02 	call	0x5e8	; 0x5e8 <TimerRoutine>
-  f0:	f9 cf       	rjmp	.-14     	; 0xe4 <main>
+  f6:	0e 94 f9 02 	call	0x5f2	; 0x5f2 <TimerRoutine>
+  fa:	f9 cf       	rjmp	.-14     	; 0xee <main+0xa>
 
-000000f2 <Initialize_Digital_IO>:
+000000fc <Initialize_Digital_IO>:
 #include "GlobalsUI.h"
 
 void Initialize_Digital_IO(void)
 {
 	Enter1State=0;
-  f2:	10 92 36 01 	sts	0x0136, r1
+  fc:	10 92 48 01 	sts	0x0148, r1
 	Enter2State=0;
-  f6:	10 92 00 01 	sts	0x0100, r1
+ 100:	10 92 12 01 	sts	0x0112, r1
 	Mode1State=0;
-  fa:	10 92 33 01 	sts	0x0133, r1
+ 104:	10 92 45 01 	sts	0x0145, r1
 	Mode2State=0;
-  fe:	10 92 34 01 	sts	0x0134, r1
+ 108:	10 92 46 01 	sts	0x0146, r1
 	VolUpState=0;
- 102:	10 92 35 01 	sts	0x0135, r1
+ 10c:	10 92 47 01 	sts	0x0147, r1
 	VolDownState=0;
- 106:	10 92 16 01 	sts	0x0116, r1
+ 110:	10 92 28 01 	sts	0x0128, r1
 		
 	DDRC &= ~_BV(UI_BR1);	
- 10a:	3c 98       	cbi	0x07, 4	; 7
+ 114:	3c 98       	cbi	0x07, 4	; 7
 	DDRC &= ~_BV(UI_BR2);
- 10c:	39 98       	cbi	0x07, 1	; 7
+ 116:	39 98       	cbi	0x07, 1	; 7
 	DDRC &= ~_BV(UI_BR3);
- 10e:	3d 98       	cbi	0x07, 5	; 7
+ 118:	3d 98       	cbi	0x07, 5	; 7
 	DDRC &= ~_BV(UI_BR4);
- 110:	3a 98       	cbi	0x07, 2	; 7
+ 11a:	3a 98       	cbi	0x07, 2	; 7
 	DDRC &= ~_BV(UI_BR5);
- 112:	3b 98       	cbi	0x07, 3	; 7
+ 11c:	3b 98       	cbi	0x07, 3	; 7
 	DDRC &= ~_BV(UI_BR6);
- 114:	38 98       	cbi	0x07, 0	; 7
+ 11e:	38 98       	cbi	0x07, 0	; 7
 
 	DDRB &= ~_BV(UI_ENTER1);
- 116:	27 98       	cbi	0x04, 7	; 4
+ 120:	27 98       	cbi	0x04, 7	; 4
 	DDRB &= ~_BV(UI_ENTER2);
- 118:	26 98       	cbi	0x04, 6	; 4
+ 122:	26 98       	cbi	0x04, 6	; 4
 	DDRB &= ~_BV(UI_MODE1);
- 11a:	21 98       	cbi	0x04, 1	; 4
+ 124:	21 98       	cbi	0x04, 1	; 4
 	DDRB &= ~_BV(UI_MODE2);
- 11c:	20 98       	cbi	0x04, 0	; 4
+ 126:	20 98       	cbi	0x04, 0	; 4
 
 	DDRD &= ~_BV(UI_VOLUP);
- 11e:	53 98       	cbi	0x0a, 3	; 10
+ 128:	53 98       	cbi	0x0a, 3	; 10
 	DDRD &= ~_BV(UI_VOLDOWN);
- 120:	52 98       	cbi	0x0a, 2	; 10
+ 12a:	52 98       	cbi	0x0a, 2	; 10
 	DDRD |= _BV(UI_STAT1)|_BV(UI_STAT2);
- 122:	8a b1       	in	r24, 0x0a	; 10
- 124:	80 6c       	ori	r24, 0xC0	; 192
- 126:	8a b9       	out	0x0a, r24	; 10
+ 12c:	8a b1       	in	r24, 0x0a	; 10
+ 12e:	80 6c       	ori	r24, 0xC0	; 192
+ 130:	8a b9       	out	0x0a, r24	; 10
 
 void SetStatLED1(bool bState)
 {
 	if(!bState)
 	{
 		PORTD &= ~_BV(UI_STAT1);
- 128:	5e 98       	cbi	0x0b, 6	; 11
+ 132:	5e 98       	cbi	0x0b, 6	; 11
 
 void SetStatLED2(bool bState)
 {
 	if(!bState)
 	{
 		PORTD &= ~_BV(UI_STAT2);
- 12a:	5f 98       	cbi	0x0b, 7	; 11
+ 134:	5f 98       	cbi	0x0b, 7	; 11
 	DDRD &= ~_BV(UI_VOLDOWN);
 	DDRD |= _BV(UI_STAT1)|_BV(UI_STAT2);
 	//switch off stat LEDs
 	SetStatLED1(false);
 	SetStatLED2(false); 
 }
- 12c:	08 95       	ret
+ 136:	08 95       	ret
 
-0000012e <CheckCommandButtons>:
+00000138 <CheckCommandButtons>:
 
 void CheckCommandButtons(void)
 {
 	if(!(PINB & (1<<UI_ENTER1)))
- 12e:	1f 99       	sbic	0x03, 7	; 3
- 130:	0a c0       	rjmp	.+20     	; 0x146 <CheckCommandButtons+0x18>
+ 138:	1f 99       	sbic	0x03, 7	; 3
+ 13a:	0a c0       	rjmp	.+20     	; 0x150 <CheckCommandButtons+0x18>
 	{
 		if(Enter1State==0)
- 132:	80 91 36 01 	lds	r24, 0x0136
- 136:	88 23       	and	r24, r24
- 138:	41 f4       	brne	.+16     	; 0x14a <CheckCommandButtons+0x1c>
+ 13c:	80 91 48 01 	lds	r24, 0x0148
+ 140:	88 23       	and	r24, r24
+ 142:	41 f4       	brne	.+16     	; 0x154 <CheckCommandButtons+0x1c>
 		{
 			//_delay_ms(100);
 			if(!(PINB & (1<<UI_ENTER1)))
- 13a:	1f 99       	sbic	0x03, 7	; 3
- 13c:	06 c0       	rjmp	.+12     	; 0x14a <CheckCommandButtons+0x1c>
+ 144:	1f 99       	sbic	0x03, 7	; 3
+ 146:	06 c0       	rjmp	.+12     	; 0x154 <CheckCommandButtons+0x1c>
 			{
 				Enter1State=1;
- 13e:	81 e0       	ldi	r24, 0x01	; 1
- 140:	80 93 36 01 	sts	0x0136, r24
- 144:	02 c0       	rjmp	.+4      	; 0x14a <CheckCommandButtons+0x1c>
+ 148:	81 e0       	ldi	r24, 0x01	; 1
+ 14a:	80 93 48 01 	sts	0x0148, r24
+ 14e:	02 c0       	rjmp	.+4      	; 0x154 <CheckCommandButtons+0x1c>
 			}
 		}
 	}
 	else
 	{
 		Enter1State=0;
- 146:	10 92 36 01 	sts	0x0136, r1
+ 150:	10 92 48 01 	sts	0x0148, r1
 	}
 
 	if(!(PINB & (1<<UI_ENTER2)))
- 14a:	1e 99       	sbic	0x03, 6	; 3
- 14c:	13 c0       	rjmp	.+38     	; 0x174 <CheckCommandButtons+0x46>
+ 154:	1e 99       	sbic	0x03, 6	; 3
+ 156:	13 c0       	rjmp	.+38     	; 0x17e <CheckCommandButtons+0x46>
 	{
 		if(Enter2State==0)
- 14e:	80 91 00 01 	lds	r24, 0x0100
- 152:	88 23       	and	r24, r24
- 154:	89 f4       	brne	.+34     	; 0x178 <CheckCommandButtons+0x4a>
- 156:	88 ee       	ldi	r24, 0xE8	; 232
- 158:	93 e0       	ldi	r25, 0x03	; 3
+ 158:	80 91 12 01 	lds	r24, 0x0112
+ 15c:	88 23       	and	r24, r24
+ 15e:	89 f4       	brne	.+34     	; 0x182 <CheckCommandButtons+0x4a>
+ 160:	88 ee       	ldi	r24, 0xE8	; 232
+ 162:	93 e0       	ldi	r25, 0x03	; 3
     milliseconds can be achieved.
  */
 void
 _delay_loop_2(uint16_t __count)
 {
 	__asm__ volatile (
- 15a:	28 ec       	ldi	r18, 0xC8	; 200
- 15c:	30 e0       	ldi	r19, 0x00	; 0
- 15e:	f9 01       	movw	r30, r18
- 160:	31 97       	sbiw	r30, 0x01	; 1
- 162:	f1 f7       	brne	.-4      	; 0x160 <CheckCommandButtons+0x32>
+ 164:	28 ec       	ldi	r18, 0xC8	; 200
+ 166:	30 e0       	ldi	r19, 0x00	; 0
+ 168:	f9 01       	movw	r30, r18
+ 16a:	31 97       	sbiw	r30, 0x01	; 1
+ 16c:	f1 f7       	brne	.-4      	; 0x16a <CheckCommandButtons+0x32>
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
 		{
 			// wait 1/10 ms
 			_delay_loop_2(((F_CPU) / 4e3) / 10);
 			__ticks --;
- 164:	01 97       	sbiw	r24, 0x01	; 1
+ 16e:	01 97       	sbiw	r24, 0x01	; 1
 		__ticks = 1;
 	else if (__tmp > 65535)
 	{
 		//	__ticks = requested delay in 1/10 ms
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
- 166:	d9 f7       	brne	.-10     	; 0x15e <CheckCommandButtons+0x30>
+ 170:	d9 f7       	brne	.-10     	; 0x168 <CheckCommandButtons+0x30>
 		{
 			_delay_ms(100);
 			if(!(PINB & (1<<UI_ENTER2)))
- 168:	1e 99       	sbic	0x03, 6	; 3
- 16a:	06 c0       	rjmp	.+12     	; 0x178 <CheckCommandButtons+0x4a>
+ 172:	1e 99       	sbic	0x03, 6	; 3
+ 174:	06 c0       	rjmp	.+12     	; 0x182 <CheckCommandButtons+0x4a>
 			{
 				Enter2State=1;
- 16c:	81 e0       	ldi	r24, 0x01	; 1
- 16e:	80 93 00 01 	sts	0x0100, r24
- 172:	02 c0       	rjmp	.+4      	; 0x178 <CheckCommandButtons+0x4a>
+ 176:	81 e0       	ldi	r24, 0x01	; 1
+ 178:	80 93 12 01 	sts	0x0112, r24
+ 17c:	02 c0       	rjmp	.+4      	; 0x182 <CheckCommandButtons+0x4a>
 			}
 		}
 	}
 	else
 	{
 		Enter2State=0;
- 174:	10 92 00 01 	sts	0x0100, r1
+ 17e:	10 92 12 01 	sts	0x0112, r1
 	}
 
 	if(!(PINB & (1<<UI_MODE1)))
- 178:	19 99       	sbic	0x03, 1	; 3
- 17a:	0a c0       	rjmp	.+20     	; 0x190 <CheckCommandButtons+0x62>
+ 182:	19 99       	sbic	0x03, 1	; 3
+ 184:	0a c0       	rjmp	.+20     	; 0x19a <CheckCommandButtons+0x62>
 	{
 		if(Mode1State==0)
- 17c:	80 91 33 01 	lds	r24, 0x0133
- 180:	88 23       	and	r24, r24
- 182:	41 f4       	brne	.+16     	; 0x194 <CheckCommandButtons+0x66>
+ 186:	80 91 45 01 	lds	r24, 0x0145
+ 18a:	88 23       	and	r24, r24
+ 18c:	41 f4       	brne	.+16     	; 0x19e <CheckCommandButtons+0x66>
 		{
 			//_delay_ms(100);
 			if(!(PINB & (1<<UI_MODE1)))
- 184:	19 99       	sbic	0x03, 1	; 3
- 186:	06 c0       	rjmp	.+12     	; 0x194 <CheckCommandButtons+0x66>
+ 18e:	19 99       	sbic	0x03, 1	; 3
+ 190:	06 c0       	rjmp	.+12     	; 0x19e <CheckCommandButtons+0x66>
 			{
 				Mode1State=1;
- 188:	81 e0       	ldi	r24, 0x01	; 1
- 18a:	80 93 33 01 	sts	0x0133, r24
- 18e:	02 c0       	rjmp	.+4      	; 0x194 <CheckCommandButtons+0x66>
+ 192:	81 e0       	ldi	r24, 0x01	; 1
+ 194:	80 93 45 01 	sts	0x0145, r24
+ 198:	02 c0       	rjmp	.+4      	; 0x19e <CheckCommandButtons+0x66>
 			}
 		}
 	}
 	else
 	{
 		Mode1State=0;
- 190:	10 92 33 01 	sts	0x0133, r1
+ 19a:	10 92 45 01 	sts	0x0145, r1
 	}
 
 	if(!(PINB & (1<<UI_MODE2)))
- 194:	18 99       	sbic	0x03, 0	; 3
- 196:	0a c0       	rjmp	.+20     	; 0x1ac <CheckCommandButtons+0x7e>
+ 19e:	18 99       	sbic	0x03, 0	; 3
+ 1a0:	0a c0       	rjmp	.+20     	; 0x1b6 <CheckCommandButtons+0x7e>
 	{
 		if(Mode2State==0)
- 198:	80 91 34 01 	lds	r24, 0x0134
- 19c:	88 23       	and	r24, r24
- 19e:	41 f4       	brne	.+16     	; 0x1b0 <CheckCommandButtons+0x82>
+ 1a2:	80 91 46 01 	lds	r24, 0x0146
+ 1a6:	88 23       	and	r24, r24
+ 1a8:	41 f4       	brne	.+16     	; 0x1ba <CheckCommandButtons+0x82>
 		{
 			//_delay_ms(100);
 			if(!(PINB & (1<<UI_MODE2)))
- 1a0:	18 99       	sbic	0x03, 0	; 3
- 1a2:	06 c0       	rjmp	.+12     	; 0x1b0 <CheckCommandButtons+0x82>
+ 1aa:	18 99       	sbic	0x03, 0	; 3
+ 1ac:	06 c0       	rjmp	.+12     	; 0x1ba <CheckCommandButtons+0x82>
 			{
 				Mode2State=1;
- 1a4:	81 e0       	ldi	r24, 0x01	; 1
- 1a6:	80 93 34 01 	sts	0x0134, r24
- 1aa:	02 c0       	rjmp	.+4      	; 0x1b0 <CheckCommandButtons+0x82>
+ 1ae:	81 e0       	ldi	r24, 0x01	; 1
+ 1b0:	80 93 46 01 	sts	0x0146, r24
+ 1b4:	02 c0       	rjmp	.+4      	; 0x1ba <CheckCommandButtons+0x82>
 			}
 		}
 	}
 	else
 	{
 		Mode2State=0;
- 1ac:	10 92 34 01 	sts	0x0134, r1
+ 1b6:	10 92 46 01 	sts	0x0146, r1
 	}
 
 	if(!(PIND & (1<<UI_VOLUP)))
- 1b0:	4b 99       	sbic	0x09, 3	; 9
- 1b2:	0a c0       	rjmp	.+20     	; 0x1c8 <CheckCommandButtons+0x9a>
+ 1ba:	4b 99       	sbic	0x09, 3	; 9
+ 1bc:	0a c0       	rjmp	.+20     	; 0x1d2 <CheckCommandButtons+0x9a>
 	{
 		if(VolUpState==0)
- 1b4:	80 91 35 01 	lds	r24, 0x0135
- 1b8:	88 23       	and	r24, r24
- 1ba:	41 f4       	brne	.+16     	; 0x1cc <CheckCommandButtons+0x9e>
+ 1be:	80 91 47 01 	lds	r24, 0x0147
+ 1c2:	88 23       	and	r24, r24
+ 1c4:	41 f4       	brne	.+16     	; 0x1d6 <CheckCommandButtons+0x9e>
 		{
 			//_delay_ms(100);
 			if(!(PIND & (1<<UI_VOLUP)))
- 1bc:	4b 99       	sbic	0x09, 3	; 9
- 1be:	06 c0       	rjmp	.+12     	; 0x1cc <CheckCommandButtons+0x9e>
+ 1c6:	4b 99       	sbic	0x09, 3	; 9
+ 1c8:	06 c0       	rjmp	.+12     	; 0x1d6 <CheckCommandButtons+0x9e>
 			{
 				VolUpState=1;
- 1c0:	81 e0       	ldi	r24, 0x01	; 1
- 1c2:	80 93 35 01 	sts	0x0135, r24
- 1c6:	02 c0       	rjmp	.+4      	; 0x1cc <CheckCommandButtons+0x9e>
+ 1ca:	81 e0       	ldi	r24, 0x01	; 1
+ 1cc:	80 93 47 01 	sts	0x0147, r24
+ 1d0:	02 c0       	rjmp	.+4      	; 0x1d6 <CheckCommandButtons+0x9e>
 			}
 		}
 	}
 	else
 	{
 		VolUpState=0;
- 1c8:	10 92 35 01 	sts	0x0135, r1
+ 1d2:	10 92 47 01 	sts	0x0147, r1
 	}
 
 	if(!(PIND & (1<<UI_VOLDOWN)))
- 1cc:	4a 99       	sbic	0x09, 2	; 9
- 1ce:	0a c0       	rjmp	.+20     	; 0x1e4 <CheckCommandButtons+0xb6>
+ 1d6:	4a 99       	sbic	0x09, 2	; 9
+ 1d8:	0a c0       	rjmp	.+20     	; 0x1ee <CheckCommandButtons+0xb6>
 	{
 		if(VolDownState==0)
- 1d0:	80 91 16 01 	lds	r24, 0x0116
- 1d4:	88 23       	and	r24, r24
- 1d6:	41 f4       	brne	.+16     	; 0x1e8 <CheckCommandButtons+0xba>
+ 1da:	80 91 28 01 	lds	r24, 0x0128
+ 1de:	88 23       	and	r24, r24
+ 1e0:	41 f4       	brne	.+16     	; 0x1f2 <CheckCommandButtons+0xba>
 		{
 			//_delay_ms(100);
 			if(!(PIND & (1<<UI_VOLDOWN)))
- 1d8:	4a 99       	sbic	0x09, 2	; 9
- 1da:	06 c0       	rjmp	.+12     	; 0x1e8 <CheckCommandButtons+0xba>
+ 1e2:	4a 99       	sbic	0x09, 2	; 9
+ 1e4:	06 c0       	rjmp	.+12     	; 0x1f2 <CheckCommandButtons+0xba>
 			{
 				VolDownState=1;
- 1dc:	81 e0       	ldi	r24, 0x01	; 1
- 1de:	80 93 16 01 	sts	0x0116, r24
- 1e2:	08 95       	ret
+ 1e6:	81 e0       	ldi	r24, 0x01	; 1
+ 1e8:	80 93 28 01 	sts	0x0128, r24
+ 1ec:	08 95       	ret
 			}
 		}
 	}
 	else
 	{
 		VolDownState=0;
- 1e4:	10 92 16 01 	sts	0x0116, r1
- 1e8:	08 95       	ret
+ 1ee:	10 92 28 01 	sts	0x0128, r1
+ 1f2:	08 95       	ret
 
-000001ea <SetStatLED1>:
+000001f4 <SetStatLED1>:
 }
 */
 
 void SetStatLED1(bool bState)
 {
 	if(!bState)
- 1ea:	88 23       	and	r24, r24
- 1ec:	11 f4       	brne	.+4      	; 0x1f2 <SetStatLED1+0x8>
+ 1f4:	88 23       	and	r24, r24
+ 1f6:	11 f4       	brne	.+4      	; 0x1fc <SetStatLED1+0x8>
 	{
 		PORTD &= ~_BV(UI_STAT1);
- 1ee:	5e 98       	cbi	0x0b, 6	; 11
- 1f0:	08 95       	ret
+ 1f8:	5e 98       	cbi	0x0b, 6	; 11
+ 1fa:	08 95       	ret
 	}
 	else
 	{
 		PORTD |= _BV(UI_STAT1);
- 1f2:	5e 9a       	sbi	0x0b, 6	; 11
- 1f4:	08 95       	ret
+ 1fc:	5e 9a       	sbi	0x0b, 6	; 11
+ 1fe:	08 95       	ret
 
-000001f6 <SetStatLED2>:
+00000200 <SetStatLED2>:
 	}
 }
 
 void SetStatLED2(bool bState)
 {
 	if(!bState)
- 1f6:	88 23       	and	r24, r24
- 1f8:	11 f4       	brne	.+4      	; 0x1fe <SetStatLED2+0x8>
+ 200:	88 23       	and	r24, r24
+ 202:	11 f4       	brne	.+4      	; 0x208 <SetStatLED2+0x8>
 	{
 		PORTD &= ~_BV(UI_STAT2);
- 1fa:	5f 98       	cbi	0x0b, 7	; 11
- 1fc:	08 95       	ret
+ 204:	5f 98       	cbi	0x0b, 7	; 11
+ 206:	08 95       	ret
 	}
 	else
 	{
 		PORTD |= _BV(UI_STAT2);
- 1fe:	5f 9a       	sbi	0x0b, 7	; 11
- 200:	08 95       	ret
+ 208:	5f 9a       	sbi	0x0b, 7	; 11
+ 20a:	08 95       	ret
 
-00000202 <VolDownTask>:
+0000020c <VolDownTask>:
 	SendPacket('D',&SendMsgPayLoad,1);
 }
 
 void VolDownTask(void)
 {
 	SendMsgPayLoad[0]=0x05;
- 202:	85 e0       	ldi	r24, 0x05	; 5
- 204:	80 93 01 01 	sts	0x0101, r24
+ 20c:	85 e0       	ldi	r24, 0x05	; 5
+ 20e:	80 93 13 01 	sts	0x0113, r24
 	SendPacket('D',&SendMsgPayLoad,1);
- 208:	84 e4       	ldi	r24, 0x44	; 68
- 20a:	61 e0       	ldi	r22, 0x01	; 1
- 20c:	71 e0       	ldi	r23, 0x01	; 1
- 20e:	41 e0       	ldi	r20, 0x01	; 1
- 210:	50 e0       	ldi	r21, 0x00	; 0
- 212:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 212:	84 e4       	ldi	r24, 0x44	; 68
+ 214:	63 e1       	ldi	r22, 0x13	; 19
+ 216:	71 e0       	ldi	r23, 0x01	; 1
+ 218:	41 e0       	ldi	r20, 0x01	; 1
+ 21a:	50 e0       	ldi	r21, 0x00	; 0
+ 21c:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 }
- 216:	08 95       	ret
+ 220:	08 95       	ret
 
-00000218 <VolUpTask>:
+00000222 <VolUpTask>:
 	SendPacket('D',&SendMsgPayLoad,1);
 }
 
 void VolUpTask(void)
 {
 	SendMsgPayLoad[0]=0x06;
- 218:	86 e0       	ldi	r24, 0x06	; 6
- 21a:	80 93 01 01 	sts	0x0101, r24
+ 222:	86 e0       	ldi	r24, 0x06	; 6
+ 224:	80 93 13 01 	sts	0x0113, r24
 	SendPacket('D',&SendMsgPayLoad,1);
- 21e:	84 e4       	ldi	r24, 0x44	; 68
- 220:	61 e0       	ldi	r22, 0x01	; 1
- 222:	71 e0       	ldi	r23, 0x01	; 1
- 224:	41 e0       	ldi	r20, 0x01	; 1
- 226:	50 e0       	ldi	r21, 0x00	; 0
- 228:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 228:	84 e4       	ldi	r24, 0x44	; 68
+ 22a:	63 e1       	ldi	r22, 0x13	; 19
+ 22c:	71 e0       	ldi	r23, 0x01	; 1
+ 22e:	41 e0       	ldi	r20, 0x01	; 1
+ 230:	50 e0       	ldi	r21, 0x00	; 0
+ 232:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 }
- 22c:	08 95       	ret
+ 236:	08 95       	ret
 
-0000022e <Mode2Task>:
+00000238 <Mode2Task>:
 
 void SetStatLED1(bool bState)
 {
 	if(!bState)
 	{
 		PORTD &= ~_BV(UI_STAT1);
- 22e:	5e 98       	cbi	0x0b, 6	; 11
+ 238:	5e 98       	cbi	0x0b, 6	; 11
 }
 
 void Mode2Task(void)
 {
 	SetStatLED1(false);
 	SendMsgPayLoad[0]=0x04;
- 230:	84 e0       	ldi	r24, 0x04	; 4
- 232:	80 93 01 01 	sts	0x0101, r24
+ 23a:	84 e0       	ldi	r24, 0x04	; 4
+ 23c:	80 93 13 01 	sts	0x0113, r24
 	SendPacket('D',&SendMsgPayLoad,1);
- 236:	84 e4       	ldi	r24, 0x44	; 68
- 238:	61 e0       	ldi	r22, 0x01	; 1
- 23a:	71 e0       	ldi	r23, 0x01	; 1
- 23c:	41 e0       	ldi	r20, 0x01	; 1
- 23e:	50 e0       	ldi	r21, 0x00	; 0
- 240:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 240:	84 e4       	ldi	r24, 0x44	; 68
+ 242:	63 e1       	ldi	r22, 0x13	; 19
+ 244:	71 e0       	ldi	r23, 0x01	; 1
+ 246:	41 e0       	ldi	r20, 0x01	; 1
+ 248:	50 e0       	ldi	r21, 0x00	; 0
+ 24a:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 }
- 244:	08 95       	ret
+ 24e:	08 95       	ret
 
-00000246 <Mode1Task>:
+00000250 <Mode1Task>:
 	{
 		PORTD &= ~_BV(UI_STAT1);
 	}
 	else
 	{
 		PORTD |= _BV(UI_STAT1);
- 246:	5e 9a       	sbi	0x0b, 6	; 11
+ 250:	5e 9a       	sbi	0x0b, 6	; 11
 }
 
 void Mode1Task(void)
 {
 	SetStatLED1(true);
 	SendMsgPayLoad[0]=0x03;
- 248:	83 e0       	ldi	r24, 0x03	; 3
- 24a:	80 93 01 01 	sts	0x0101, r24
+ 252:	83 e0       	ldi	r24, 0x03	; 3
+ 254:	80 93 13 01 	sts	0x0113, r24
 	SendPacket('D',&SendMsgPayLoad,1);
- 24e:	84 e4       	ldi	r24, 0x44	; 68
- 250:	61 e0       	ldi	r22, 0x01	; 1
- 252:	71 e0       	ldi	r23, 0x01	; 1
- 254:	41 e0       	ldi	r20, 0x01	; 1
- 256:	50 e0       	ldi	r21, 0x00	; 0
- 258:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 258:	84 e4       	ldi	r24, 0x44	; 68
+ 25a:	63 e1       	ldi	r22, 0x13	; 19
+ 25c:	71 e0       	ldi	r23, 0x01	; 1
+ 25e:	41 e0       	ldi	r20, 0x01	; 1
+ 260:	50 e0       	ldi	r21, 0x00	; 0
+ 262:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 }
- 25c:	08 95       	ret
+ 266:	08 95       	ret
 
-0000025e <Enter2Task>:
+00000268 <Enter2Task>:
 
 void SetStatLED2(bool bState)
 {
 	if(!bState)
 	{
 		PORTD &= ~_BV(UI_STAT2);
- 25e:	5f 98       	cbi	0x0b, 7	; 11
+ 268:	5f 98       	cbi	0x0b, 7	; 11
 }
 
 void Enter2Task(void)
 {
 	SetStatLED2(false);
 	SendMsgPayLoad[0]=0x02;
- 260:	82 e0       	ldi	r24, 0x02	; 2
- 262:	80 93 01 01 	sts	0x0101, r24
+ 26a:	82 e0       	ldi	r24, 0x02	; 2
+ 26c:	80 93 13 01 	sts	0x0113, r24
 	SendMsgPayLoad[1]='E';
- 266:	85 e4       	ldi	r24, 0x45	; 69
- 268:	80 93 02 01 	sts	0x0102, r24
+ 270:	85 e4       	ldi	r24, 0x45	; 69
+ 272:	80 93 14 01 	sts	0x0114, r24
 	SendPacket('D',&SendMsgPayLoad,2);
- 26c:	84 e4       	ldi	r24, 0x44	; 68
- 26e:	61 e0       	ldi	r22, 0x01	; 1
- 270:	71 e0       	ldi	r23, 0x01	; 1
- 272:	42 e0       	ldi	r20, 0x02	; 2
- 274:	50 e0       	ldi	r21, 0x00	; 0
- 276:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 276:	84 e4       	ldi	r24, 0x44	; 68
+ 278:	63 e1       	ldi	r22, 0x13	; 19
+ 27a:	71 e0       	ldi	r23, 0x01	; 1
+ 27c:	42 e0       	ldi	r20, 0x02	; 2
+ 27e:	50 e0       	ldi	r21, 0x00	; 0
+ 280:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 }
- 27a:	08 95       	ret
+ 284:	08 95       	ret
 
-0000027c <Enter1Task>:
+00000286 <Enter1Task>:
 	{
 		PORTD &= ~_BV(UI_STAT2);
 	}
 	else
 	{
 		PORTD |= _BV(UI_STAT2);
- 27c:	5f 9a       	sbi	0x0b, 7	; 11
+ 286:	5f 9a       	sbi	0x0b, 7	; 11
 }
 
 void Enter1Task(void)
 {
 	SetStatLED2(true);
 	SendMsgPayLoad[0]=0x01;
- 27e:	81 e0       	ldi	r24, 0x01	; 1
- 280:	80 93 01 01 	sts	0x0101, r24
+ 288:	81 e0       	ldi	r24, 0x01	; 1
+ 28a:	80 93 13 01 	sts	0x0113, r24
 	SendPacket('D',&SendMsgPayLoad,1);
- 284:	84 e4       	ldi	r24, 0x44	; 68
- 286:	61 e0       	ldi	r22, 0x01	; 1
- 288:	71 e0       	ldi	r23, 0x01	; 1
- 28a:	41 e0       	ldi	r20, 0x01	; 1
- 28c:	50 e0       	ldi	r21, 0x00	; 0
- 28e:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 28e:	84 e4       	ldi	r24, 0x44	; 68
+ 290:	63 e1       	ldi	r22, 0x13	; 19
+ 292:	71 e0       	ldi	r23, 0x01	; 1
+ 294:	41 e0       	ldi	r20, 0x01	; 1
+ 296:	50 e0       	ldi	r21, 0x00	; 0
+ 298:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 	CaptureCellValue();
- 292:	0e 94 a8 03 	call	0x750	; 0x750 <CaptureCellValue>
+ 29c:	0e 94 b3 03 	call	0x766	; 0x766 <CaptureCellValue>
 }
- 296:	08 95       	ret
+ 2a0:	08 95       	ret
 
-00000298 <RunCommandTasks>:
+000002a2 <RunCommandTasks>:
 	}
 }
 
 void RunCommandTasks(void)
 {
 	if(Enter1State==1)
- 298:	80 91 36 01 	lds	r24, 0x0136
- 29c:	81 30       	cpi	r24, 0x01	; 1
- 29e:	29 f4       	brne	.+10     	; 0x2aa <RunCommandTasks+0x12>
+ 2a2:	80 91 48 01 	lds	r24, 0x0148
+ 2a6:	81 30       	cpi	r24, 0x01	; 1
+ 2a8:	29 f4       	brne	.+10     	; 0x2b4 <RunCommandTasks+0x12>
 	{
 		Enter1Task();
- 2a0:	0e 94 3e 01 	call	0x27c	; 0x27c <Enter1Task>
+ 2aa:	0e 94 43 01 	call	0x286	; 0x286 <Enter1Task>
 		Enter1State=2;	//Set it as used
- 2a4:	82 e0       	ldi	r24, 0x02	; 2
- 2a6:	80 93 36 01 	sts	0x0136, r24
+ 2ae:	82 e0       	ldi	r24, 0x02	; 2
+ 2b0:	80 93 48 01 	sts	0x0148, r24
 	}
 	if(Enter2State==1)
- 2aa:	80 91 00 01 	lds	r24, 0x0100
- 2ae:	81 30       	cpi	r24, 0x01	; 1
- 2b0:	29 f4       	brne	.+10     	; 0x2bc <RunCommandTasks+0x24>
+ 2b4:	80 91 12 01 	lds	r24, 0x0112
+ 2b8:	81 30       	cpi	r24, 0x01	; 1
+ 2ba:	29 f4       	brne	.+10     	; 0x2c6 <RunCommandTasks+0x24>
 	{
 		Enter2Task();
- 2b2:	0e 94 2f 01 	call	0x25e	; 0x25e <Enter2Task>
+ 2bc:	0e 94 34 01 	call	0x268	; 0x268 <Enter2Task>
 		Enter2State=2;	//Set it as used
- 2b6:	82 e0       	ldi	r24, 0x02	; 2
- 2b8:	80 93 00 01 	sts	0x0100, r24
+ 2c0:	82 e0       	ldi	r24, 0x02	; 2
+ 2c2:	80 93 12 01 	sts	0x0112, r24
 	}
 	if(Mode1State==1)
- 2bc:	80 91 33 01 	lds	r24, 0x0133
- 2c0:	81 30       	cpi	r24, 0x01	; 1
- 2c2:	29 f4       	brne	.+10     	; 0x2ce <RunCommandTasks+0x36>
+ 2c6:	80 91 45 01 	lds	r24, 0x0145
+ 2ca:	81 30       	cpi	r24, 0x01	; 1
+ 2cc:	29 f4       	brne	.+10     	; 0x2d8 <RunCommandTasks+0x36>
 	{
 		Mode1Task();
- 2c4:	0e 94 23 01 	call	0x246	; 0x246 <Mode1Task>
+ 2ce:	0e 94 28 01 	call	0x250	; 0x250 <Mode1Task>
 		Mode1State=2;	//Set it as used
- 2c8:	82 e0       	ldi	r24, 0x02	; 2
- 2ca:	80 93 33 01 	sts	0x0133, r24
+ 2d2:	82 e0       	ldi	r24, 0x02	; 2
+ 2d4:	80 93 45 01 	sts	0x0145, r24
 	}
 	if(Mode2State==1)
- 2ce:	80 91 34 01 	lds	r24, 0x0134
- 2d2:	81 30       	cpi	r24, 0x01	; 1
- 2d4:	29 f4       	brne	.+10     	; 0x2e0 <RunCommandTasks+0x48>
+ 2d8:	80 91 46 01 	lds	r24, 0x0146
+ 2dc:	81 30       	cpi	r24, 0x01	; 1
+ 2de:	29 f4       	brne	.+10     	; 0x2ea <RunCommandTasks+0x48>
 	{
 		Mode2Task();
- 2d6:	0e 94 17 01 	call	0x22e	; 0x22e <Mode2Task>
+ 2e0:	0e 94 1c 01 	call	0x238	; 0x238 <Mode2Task>
 		Mode2State=2;	//Set it as used
- 2da:	82 e0       	ldi	r24, 0x02	; 2
- 2dc:	80 93 34 01 	sts	0x0134, r24
+ 2e4:	82 e0       	ldi	r24, 0x02	; 2
+ 2e6:	80 93 46 01 	sts	0x0146, r24
 	}
 	if((VolDownState>=1)&&(VolUpState>=1)) //Flip the keyboard
- 2e0:	80 91 16 01 	lds	r24, 0x0116
- 2e4:	88 23       	and	r24, r24
- 2e6:	71 f0       	breq	.+28     	; 0x304 <RunCommandTasks+0x6c>
- 2e8:	80 91 35 01 	lds	r24, 0x0135
- 2ec:	88 23       	and	r24, r24
- 2ee:	51 f0       	breq	.+20     	; 0x304 <RunCommandTasks+0x6c>
+ 2ea:	80 91 28 01 	lds	r24, 0x0128
+ 2ee:	88 23       	and	r24, r24
+ 2f0:	71 f0       	breq	.+28     	; 0x30e <RunCommandTasks+0x6c>
+ 2f2:	80 91 47 01 	lds	r24, 0x0147
+ 2f6:	88 23       	and	r24, r24
+ 2f8:	51 f0       	breq	.+20     	; 0x30e <RunCommandTasks+0x6c>
 	{
 		if(InterfaceType==1)
- 2f0:	80 91 15 01 	lds	r24, 0x0115
- 2f4:	81 30       	cpi	r24, 0x01	; 1
- 2f6:	11 f4       	brne	.+4      	; 0x2fc <RunCommandTasks+0x64>
+ 2fa:	80 91 27 01 	lds	r24, 0x0127
+ 2fe:	81 30       	cpi	r24, 0x01	; 1
+ 300:	11 f4       	brne	.+4      	; 0x306 <RunCommandTasks+0x64>
 		{
 			InterfaceType=2;
- 2f8:	82 e0       	ldi	r24, 0x02	; 2
- 2fa:	01 c0       	rjmp	.+2      	; 0x2fe <RunCommandTasks+0x66>
+ 302:	82 e0       	ldi	r24, 0x02	; 2
+ 304:	01 c0       	rjmp	.+2      	; 0x308 <RunCommandTasks+0x66>
 		}
 		else
 		{
 			InterfaceType=1;
- 2fc:	81 e0       	ldi	r24, 0x01	; 1
- 2fe:	80 93 15 01 	sts	0x0115, r24
- 302:	08 95       	ret
+ 306:	81 e0       	ldi	r24, 0x01	; 1
+ 308:	80 93 27 01 	sts	0x0127, r24
+ 30c:	08 95       	ret
 		}
 		return 0;
 	}
 	if(VolUpState==1)
- 304:	80 91 35 01 	lds	r24, 0x0135
- 308:	81 30       	cpi	r24, 0x01	; 1
- 30a:	29 f4       	brne	.+10     	; 0x316 <RunCommandTasks+0x7e>
+ 30e:	80 91 47 01 	lds	r24, 0x0147
+ 312:	81 30       	cpi	r24, 0x01	; 1
+ 314:	29 f4       	brne	.+10     	; 0x320 <RunCommandTasks+0x7e>
 	{
 		VolUpTask();
- 30c:	0e 94 0c 01 	call	0x218	; 0x218 <VolUpTask>
+ 316:	0e 94 11 01 	call	0x222	; 0x222 <VolUpTask>
 		VolUpState=2;	//Set it as used
- 310:	82 e0       	ldi	r24, 0x02	; 2
- 312:	80 93 35 01 	sts	0x0135, r24
+ 31a:	82 e0       	ldi	r24, 0x02	; 2
+ 31c:	80 93 47 01 	sts	0x0147, r24
 	}
 	if(VolDownState==1)
- 316:	80 91 16 01 	lds	r24, 0x0116
- 31a:	81 30       	cpi	r24, 0x01	; 1
- 31c:	29 f4       	brne	.+10     	; 0x328 <RunCommandTasks+0x90>
+ 320:	80 91 28 01 	lds	r24, 0x0128
+ 324:	81 30       	cpi	r24, 0x01	; 1
+ 326:	29 f4       	brne	.+10     	; 0x332 <RunCommandTasks+0x90>
 	{
 		VolDownTask();
- 31e:	0e 94 01 01 	call	0x202	; 0x202 <VolDownTask>
+ 328:	0e 94 06 01 	call	0x20c	; 0x20c <VolDownTask>
 		VolDownState=2;	//Set it as used
- 322:	82 e0       	ldi	r24, 0x02	; 2
- 324:	80 93 16 01 	sts	0x0116, r24
- 328:	08 95       	ret
+ 32c:	82 e0       	ldi	r24, 0x02	; 2
+ 32e:	80 93 28 01 	sts	0x0128, r24
+ 332:	08 95       	ret
 
-0000032a <InitializeAnalogPorts>:
+00000334 <InitializeAnalogPorts>:
 bool LED_ONOFF;
 
 void InitializeAnalogPorts()
 {
 
 	ADCSRA |= 0xEF;
- 32a:	ea e7       	ldi	r30, 0x7A	; 122
- 32c:	f0 e0       	ldi	r31, 0x00	; 0
- 32e:	80 81       	ld	r24, Z
- 330:	8f 6e       	ori	r24, 0xEF	; 239
- 332:	80 83       	st	Z, r24
+ 334:	ea e7       	ldi	r30, 0x7A	; 122
+ 336:	f0 e0       	ldi	r31, 0x00	; 0
+ 338:	80 81       	ld	r24, Z
+ 33a:	8f 6e       	ori	r24, 0xEF	; 239
+ 33c:	80 83       	st	Z, r24
 	ADCSRB=0x00;
- 334:	10 92 7b 00 	sts	0x007B, r1
+ 33e:	10 92 7b 00 	sts	0x007B, r1
 	ADMUX = 0x67;
- 338:	87 e6       	ldi	r24, 0x67	; 103
- 33a:	80 93 7c 00 	sts	0x007C, r24
+ 342:	87 e6       	ldi	r24, 0x67	; 103
+ 344:	80 93 7c 00 	sts	0x007C, r24
 	DIDR0=0x3F;
- 33e:	8f e3       	ldi	r24, 0x3F	; 63
- 340:	80 93 7e 00 	sts	0x007E, r24
+ 348:	8f e3       	ldi	r24, 0x3F	; 63
+ 34a:	80 93 7e 00 	sts	0x007E, r24
 	int i=0;
 	for(i=0;i<6;i++)
 	{
 		ADC_LastVal[i]=0;
- 344:	10 92 0a 01 	sts	0x010A, r1
- 348:	10 92 09 01 	sts	0x0109, r1
- 34c:	10 92 0c 01 	sts	0x010C, r1
- 350:	10 92 0b 01 	sts	0x010B, r1
- 354:	10 92 0e 01 	sts	0x010E, r1
- 358:	10 92 0d 01 	sts	0x010D, r1
- 35c:	10 92 10 01 	sts	0x0110, r1
- 360:	10 92 0f 01 	sts	0x010F, r1
- 364:	10 92 12 01 	sts	0x0112, r1
- 368:	10 92 11 01 	sts	0x0111, r1
- 36c:	10 92 14 01 	sts	0x0114, r1
- 370:	10 92 13 01 	sts	0x0113, r1
+ 34e:	10 92 1c 01 	sts	0x011C, r1
+ 352:	10 92 1b 01 	sts	0x011B, r1
+ 356:	10 92 1e 01 	sts	0x011E, r1
+ 35a:	10 92 1d 01 	sts	0x011D, r1
+ 35e:	10 92 20 01 	sts	0x0120, r1
+ 362:	10 92 1f 01 	sts	0x011F, r1
+ 366:	10 92 22 01 	sts	0x0122, r1
+ 36a:	10 92 21 01 	sts	0x0121, r1
+ 36e:	10 92 24 01 	sts	0x0124, r1
+ 372:	10 92 23 01 	sts	0x0123, r1
+ 376:	10 92 26 01 	sts	0x0126, r1
+ 37a:	10 92 25 01 	sts	0x0125, r1
 	}
 	LED_ONOFF=false;
- 374:	10 92 3a 01 	sts	0x013A, r1
+ 37e:	10 92 4c 01 	sts	0x014C, r1
 }
- 378:	08 95       	ret
+ 382:	08 95       	ret
 
-0000037a <StartMeasurement>:
+00000384 <StartMeasurement>:
 ----------------------------------------------------------
 THESE ARE NOT BEING USED
 */
 void StartMeasurement(void)
 {
 	ADCSRA =0xCE;
- 37a:	8e ec       	ldi	r24, 0xCE	; 206
- 37c:	80 93 7a 00 	sts	0x007A, r24
+ 384:	8e ec       	ldi	r24, 0xCE	; 206
+ 386:	80 93 7a 00 	sts	0x007A, r24
 }
- 380:	08 95       	ret
+ 38a:	08 95       	ret
 
-00000382 <StopMeasurement>:
+0000038c <StopMeasurement>:
 
 void StopMeasurement(void)
 {
 
 }
- 382:	08 95       	ret
+ 38c:	08 95       	ret
 
-00000384 <MeasureInput>:
- 384:	80 e1       	ldi	r24, 0x10	; 16
- 386:	97 e2       	ldi	r25, 0x27	; 39
- 388:	01 97       	sbiw	r24, 0x01	; 1
- 38a:	f1 f7       	brne	.-4      	; 0x388 <MeasureInput+0x4>
- 38c:	e0 e0       	ldi	r30, 0x00	; 0
- 38e:	f0 e0       	ldi	r31, 0x00	; 0
- 390:	60 e0       	ldi	r22, 0x00	; 0
- 392:	70 e0       	ldi	r23, 0x00	; 0
+0000038e <MeasureInput>:
+ 38e:	80 e1       	ldi	r24, 0x10	; 16
+ 390:	97 e2       	ldi	r25, 0x27	; 39
+ 392:	01 97       	sbiw	r24, 0x01	; 1
+ 394:	f1 f7       	brne	.-4      	; 0x392 <MeasureInput+0x4>
+ 396:	e0 e0       	ldi	r30, 0x00	; 0
+ 398:	f0 e0       	ldi	r31, 0x00	; 0
+ 39a:	60 e0       	ldi	r22, 0x00	; 0
+ 39c:	70 e0       	ldi	r23, 0x00	; 0
 	_delay_ms(5);
 	uint16_t iVal=0;
 	int i=0;
 	for(i=0;i<10;i++)
 	{
 		ADC_COMPLETE=false;
- 394:	a0 e1       	ldi	r26, 0x10	; 16
- 396:	b7 e2       	ldi	r27, 0x27	; 39
- 398:	10 92 08 01 	sts	0x0108, r1
- 39c:	cd 01       	movw	r24, r26
- 39e:	01 97       	sbiw	r24, 0x01	; 1
- 3a0:	f1 f7       	brne	.-4      	; 0x39e <MeasureInput+0x1a>
+ 39e:	a0 e1       	ldi	r26, 0x10	; 16
+ 3a0:	b7 e2       	ldi	r27, 0x27	; 39
+ 3a2:	10 92 1a 01 	sts	0x011A, r1
+ 3a6:	cd 01       	movw	r24, r26
+ 3a8:	01 97       	sbiw	r24, 0x01	; 1
+ 3aa:	f1 f7       	brne	.-4      	; 0x3a8 <MeasureInput+0x1a>
 		//StartMeasurement();
 		_delay_ms(5);
 		valADC=((ADCH<<8) | ADCL);
- 3a2:	80 91 79 00 	lds	r24, 0x0079
- 3a6:	20 91 78 00 	lds	r18, 0x0078
- 3aa:	58 2f       	mov	r21, r24
- 3ac:	40 e0       	ldi	r20, 0x00	; 0
- 3ae:	30 e0       	ldi	r19, 0x00	; 0
- 3b0:	24 2b       	or	r18, r20
- 3b2:	35 2b       	or	r19, r21
- 3b4:	30 93 3c 01 	sts	0x013C, r19
- 3b8:	20 93 3b 01 	sts	0x013B, r18
+ 3ac:	80 91 79 00 	lds	r24, 0x0079
+ 3b0:	20 91 78 00 	lds	r18, 0x0078
+ 3b4:	58 2f       	mov	r21, r24
+ 3b6:	40 e0       	ldi	r20, 0x00	; 0
+ 3b8:	30 e0       	ldi	r19, 0x00	; 0
+ 3ba:	24 2b       	or	r18, r20
+ 3bc:	35 2b       	or	r19, r21
+ 3be:	30 93 4e 01 	sts	0x014E, r19
+ 3c2:	20 93 4d 01 	sts	0x014D, r18
 		//while(!ADC_COMPLETE);
 		iVal+=valADC;
- 3bc:	80 91 3b 01 	lds	r24, 0x013B
- 3c0:	90 91 3c 01 	lds	r25, 0x013C
- 3c4:	e8 0f       	add	r30, r24
- 3c6:	f9 1f       	adc	r31, r25
- 3c8:	cd 01       	movw	r24, r26
- 3ca:	01 97       	sbiw	r24, 0x01	; 1
- 3cc:	f1 f7       	brne	.-4      	; 0x3ca <MeasureInput+0x46>
+ 3c6:	80 91 4d 01 	lds	r24, 0x014D
+ 3ca:	90 91 4e 01 	lds	r25, 0x014E
+ 3ce:	e8 0f       	add	r30, r24
+ 3d0:	f9 1f       	adc	r31, r25
+ 3d2:	cd 01       	movw	r24, r26
+ 3d4:	01 97       	sbiw	r24, 0x01	; 1
+ 3d6:	f1 f7       	brne	.-4      	; 0x3d4 <MeasureInput+0x46>
 {
 	//ADMUX = 0x40 + whichADC;
 	_delay_ms(5);
 	uint16_t iVal=0;
 	int i=0;
 	for(i=0;i<10;i++)
- 3ce:	6f 5f       	subi	r22, 0xFF	; 255
- 3d0:	7f 4f       	sbci	r23, 0xFF	; 255
- 3d2:	6a 30       	cpi	r22, 0x0A	; 10
- 3d4:	71 05       	cpc	r23, r1
- 3d6:	01 f7       	brne	.-64     	; 0x398 <MeasureInput+0x14>
- 3d8:	cf 01       	movw	r24, r30
- 3da:	6a e0       	ldi	r22, 0x0A	; 10
- 3dc:	70 e0       	ldi	r23, 0x00	; 0
- 3de:	0e 94 23 04 	call	0x846	; 0x846 <__udivmodhi4>
- 3e2:	cb 01       	movw	r24, r22
+ 3d8:	6f 5f       	subi	r22, 0xFF	; 255
+ 3da:	7f 4f       	sbci	r23, 0xFF	; 255
+ 3dc:	6a 30       	cpi	r22, 0x0A	; 10
+ 3de:	71 05       	cpc	r23, r1
+ 3e0:	01 f7       	brne	.-64     	; 0x3a2 <MeasureInput+0x14>
+ 3e2:	cf 01       	movw	r24, r30
+ 3e4:	6a e0       	ldi	r22, 0x0A	; 10
+ 3e6:	70 e0       	ldi	r23, 0x00	; 0
+ 3e8:	0e 94 2e 04 	call	0x85c	; 0x85c <__udivmodhi4>
+ 3ec:	cb 01       	movw	r24, r22
 		iVal+=valADC;
 		_delay_ms(5);
 	}
 	iVal=iVal/10;
 	return iVal;
 }
- 3e4:	08 95       	ret
+ 3ee:	08 95       	ret
 
-000003e6 <analog10>:
+000003f0 <analog10>:
 	uint16_t tADC0=0;
 	uint16_t tADC[10];
 	uint16_t eADC;
 	uint16_t iVal=0;
 	//bool ADC_STABLE=false;
 	ADMUX = 0x40 + which;
- 3e6:	80 5c       	subi	r24, 0xC0	; 192
- 3e8:	80 93 7c 00 	sts	0x007C, r24
- 3ec:	80 ea       	ldi	r24, 0xA0	; 160
- 3ee:	9f e0       	ldi	r25, 0x0F	; 15
- 3f0:	01 97       	sbiw	r24, 0x01	; 1
- 3f2:	f1 f7       	brne	.-4      	; 0x3f0 <analog10+0xa>
- 3f4:	60 e0       	ldi	r22, 0x00	; 0
- 3f6:	70 e0       	ldi	r23, 0x00	; 0
- 3f8:	40 e0       	ldi	r20, 0x00	; 0
- 3fa:	50 e0       	ldi	r21, 0x00	; 0
+ 3f0:	80 5c       	subi	r24, 0xC0	; 192
+ 3f2:	80 93 7c 00 	sts	0x007C, r24
+ 3f6:	80 ea       	ldi	r24, 0xA0	; 160
+ 3f8:	9f e0       	ldi	r25, 0x0F	; 15
+ 3fa:	01 97       	sbiw	r24, 0x01	; 1
+ 3fc:	f1 f7       	brne	.-4      	; 0x3fa <analog10+0xa>
+ 3fe:	60 e0       	ldi	r22, 0x00	; 0
+ 400:	70 e0       	ldi	r23, 0x00	; 0
+ 402:	40 e0       	ldi	r20, 0x00	; 0
+ 404:	50 e0       	ldi	r21, 0x00	; 0
 	_delay_ms(2); // need at least 130 us between conversions
 	for(i=0;i<10;i++)
 	{
 		tADCH=ADCH;
- 3fc:	a0 ed       	ldi	r26, 0xD0	; 208
- 3fe:	b7 e0       	ldi	r27, 0x07	; 7
- 400:	20 91 79 00 	lds	r18, 0x0079
+ 406:	a0 ed       	ldi	r26, 0xD0	; 208
+ 408:	b7 e0       	ldi	r27, 0x07	; 7
+ 40a:	20 91 79 00 	lds	r18, 0x0079
 		tADCL=ADCL;	
- 404:	80 91 78 00 	lds	r24, 0x0078
- 408:	fd 01       	movw	r30, r26
- 40a:	31 97       	sbiw	r30, 0x01	; 1
- 40c:	f1 f7       	brne	.-4      	; 0x40a <analog10+0x24>
+ 40e:	80 91 78 00 	lds	r24, 0x0078
+ 412:	fd 01       	movw	r30, r26
+ 414:	31 97       	sbiw	r30, 0x01	; 1
+ 416:	f1 f7       	brne	.-4      	; 0x414 <analog10+0x24>
 		_delay_ms(1);
 		tADC[i]=((tADCH<<8) | tADCL);
 		iVal+=tADC[i];
- 40e:	32 2f       	mov	r19, r18
- 410:	20 e0       	ldi	r18, 0x00	; 0
- 412:	90 e0       	ldi	r25, 0x00	; 0
- 414:	82 2b       	or	r24, r18
- 416:	93 2b       	or	r25, r19
- 418:	48 0f       	add	r20, r24
- 41a:	59 1f       	adc	r21, r25
+ 418:	32 2f       	mov	r19, r18
+ 41a:	20 e0       	ldi	r18, 0x00	; 0
+ 41c:	90 e0       	ldi	r25, 0x00	; 0
+ 41e:	82 2b       	or	r24, r18
+ 420:	93 2b       	or	r25, r19
+ 422:	48 0f       	add	r20, r24
+ 424:	59 1f       	adc	r21, r25
 	uint16_t eADC;
 	uint16_t iVal=0;
 	//bool ADC_STABLE=false;
 	ADMUX = 0x40 + which;
 	_delay_ms(2); // need at least 130 us between conversions
 	for(i=0;i<10;i++)
- 41c:	6f 5f       	subi	r22, 0xFF	; 255
- 41e:	7f 4f       	sbci	r23, 0xFF	; 255
- 420:	6a 30       	cpi	r22, 0x0A	; 10
- 422:	71 05       	cpc	r23, r1
- 424:	69 f7       	brne	.-38     	; 0x400 <analog10+0x1a>
+ 426:	6f 5f       	subi	r22, 0xFF	; 255
+ 428:	7f 4f       	sbci	r23, 0xFF	; 255
+ 42a:	6a 30       	cpi	r22, 0x0A	; 10
+ 42c:	71 05       	cpc	r23, r1
+ 42e:	69 f7       	brne	.-38     	; 0x40a <analog10+0x1a>
 		tADCL=ADCL;	
 		_delay_ms(1);
 		tADC[i]=((tADCH<<8) | tADCL);
 		iVal+=tADC[i];
 	}
 	valADC=iVal/10;
- 426:	ca 01       	movw	r24, r20
- 428:	6a e0       	ldi	r22, 0x0A	; 10
- 42a:	70 e0       	ldi	r23, 0x00	; 0
- 42c:	0e 94 23 04 	call	0x846	; 0x846 <__udivmodhi4>
- 430:	70 93 3c 01 	sts	0x013C, r23
- 434:	60 93 3b 01 	sts	0x013B, r22
+ 430:	ca 01       	movw	r24, r20
+ 432:	6a e0       	ldi	r22, 0x0A	; 10
+ 434:	70 e0       	ldi	r23, 0x00	; 0
+ 436:	0e 94 2e 04 	call	0x85c	; 0x85c <__udivmodhi4>
+ 43a:	70 93 4e 01 	sts	0x014E, r23
+ 43e:	60 93 4d 01 	sts	0x014D, r22
 	return ADCH;
- 438:	80 91 79 00 	lds	r24, 0x0079
+ 442:	80 91 79 00 	lds	r24, 0x0079
 }
- 43c:	08 95       	ret
+ 446:	08 95       	ret
 
-0000043e <__vector_24>:
+00000448 <__vector_24>:
 
 ISR(ADC_vect){
- 43e:	1f 92       	push	r1
- 440:	0f 92       	push	r0
- 442:	0f b6       	in	r0, 0x3f	; 63
- 444:	0f 92       	push	r0
- 446:	11 24       	eor	r1, r1
+ 448:	1f 92       	push	r1
+ 44a:	0f 92       	push	r0
+ 44c:	0f b6       	in	r0, 0x3f	; 63
+ 44e:	0f 92       	push	r0
+ 450:	11 24       	eor	r1, r1
 	//valADC=((ADCH<<8) | ADCL);
 	//ADC_COMPLETE=true;
 }
- 448:	0f 90       	pop	r0
- 44a:	0f be       	out	0x3f, r0	; 63
- 44c:	0f 90       	pop	r0
- 44e:	1f 90       	pop	r1
- 450:	18 95       	reti
+ 452:	0f 90       	pop	r0
+ 454:	0f be       	out	0x3f, r0	; 63
+ 456:	0f 90       	pop	r0
+ 458:	1f 90       	pop	r1
+ 45a:	18 95       	reti
 
-00000452 <DetectTheDot>:
+0000045c <DetectTheDot>:
 
 void DetectTheDot(void)
 {	
- 452:	cf 93       	push	r28
- 454:	df 93       	push	r29
+ 45c:	cf 93       	push	r28
+ 45e:	df 93       	push	r29
 	for(iADC=0;iADC<6;iADC++)
- 456:	10 92 3d 01 	sts	0x013D, r1
- 45a:	c0 e4       	ldi	r28, 0x40	; 64
- 45c:	dc e9       	ldi	r29, 0x9C	; 156
- 45e:	4e c0       	rjmp	.+156    	; 0x4fc <DetectTheDot+0xaa>
+ 460:	10 92 4f 01 	sts	0x014F, r1
+ 464:	c0 e4       	ldi	r28, 0x40	; 64
+ 466:	dc e9       	ldi	r29, 0x9C	; 156
+ 468:	4e c0       	rjmp	.+156    	; 0x506 <DetectTheDot+0xaa>
 	{
 		analog10(iADC);
- 460:	90 e0       	ldi	r25, 0x00	; 0
- 462:	0e 94 f3 01 	call	0x3e6	; 0x3e6 <analog10>
- 466:	ce 01       	movw	r24, r28
- 468:	01 97       	sbiw	r24, 0x01	; 1
- 46a:	f1 f7       	brne	.-4      	; 0x468 <DetectTheDot+0x16>
+ 46a:	90 e0       	ldi	r25, 0x00	; 0
+ 46c:	0e 94 f8 01 	call	0x3f0	; 0x3f0 <analog10>
+ 470:	ce 01       	movw	r24, r28
+ 472:	01 97       	sbiw	r24, 0x01	; 1
+ 474:	f1 f7       	brne	.-4      	; 0x472 <DetectTheDot+0x16>
 		_delay_ms(20);
 		if(valADC!=ADC_LastVal[iADC])//If the value has changed
- 46c:	80 91 3b 01 	lds	r24, 0x013B
- 470:	90 91 3c 01 	lds	r25, 0x013C
- 474:	40 91 3d 01 	lds	r20, 0x013D
- 478:	e4 2f       	mov	r30, r20
- 47a:	f0 e0       	ldi	r31, 0x00	; 0
- 47c:	ee 0f       	add	r30, r30
- 47e:	ff 1f       	adc	r31, r31
- 480:	e7 5f       	subi	r30, 0xF7	; 247
- 482:	fe 4f       	sbci	r31, 0xFE	; 254
- 484:	20 81       	ld	r18, Z
- 486:	31 81       	ldd	r19, Z+1	; 0x01
- 488:	82 17       	cp	r24, r18
- 48a:	93 07       	cpc	r25, r19
- 48c:	91 f1       	breq	.+100    	; 0x4f2 <DetectTheDot+0xa0>
+ 476:	80 91 4d 01 	lds	r24, 0x014D
+ 47a:	90 91 4e 01 	lds	r25, 0x014E
+ 47e:	40 91 4f 01 	lds	r20, 0x014F
+ 482:	e4 2f       	mov	r30, r20
+ 484:	f0 e0       	ldi	r31, 0x00	; 0
+ 486:	ee 0f       	add	r30, r30
+ 488:	ff 1f       	adc	r31, r31
+ 48a:	e5 5e       	subi	r30, 0xE5	; 229
+ 48c:	fe 4f       	sbci	r31, 0xFE	; 254
+ 48e:	20 81       	ld	r18, Z
+ 490:	31 81       	ldd	r19, Z+1	; 0x01
+ 492:	82 17       	cp	r24, r18
+ 494:	93 07       	cpc	r25, r19
+ 496:	91 f1       	breq	.+100    	; 0x4fc <DetectTheDot+0xa0>
 			This section is used only for debugging the UI.
-			Once a change is detected, the analog value is send directly to the 
-			main unit with the message type 'E'. This will be send to the terminal window
+			Once a change is detected, the analog value is sent directly to the 
+			main unit with the message type 'E'. This will be sent to the terminal window
 			by the main unit in the format [ADC channel,MSB,LSB].			
 			*/
 			SendMsgPayLoad[0]=iADC;
- 48e:	40 93 01 01 	sts	0x0101, r20
+ 498:	40 93 13 01 	sts	0x0113, r20
 			SendMsgPayLoad[2]=(char)(valADC & 0x00ff);
- 492:	80 91 3b 01 	lds	r24, 0x013B
- 496:	90 91 3c 01 	lds	r25, 0x013C
- 49a:	80 93 03 01 	sts	0x0103, r24
+ 49c:	80 91 4d 01 	lds	r24, 0x014D
+ 4a0:	90 91 4e 01 	lds	r25, 0x014E
+ 4a4:	80 93 15 01 	sts	0x0115, r24
 			SendMsgPayLoad[1]=(char)((valADC >> 8) & 0x00ff);
- 49e:	80 91 3b 01 	lds	r24, 0x013B
- 4a2:	90 91 3c 01 	lds	r25, 0x013C
- 4a6:	90 93 02 01 	sts	0x0102, r25
+ 4a8:	80 91 4d 01 	lds	r24, 0x014D
+ 4ac:	90 91 4e 01 	lds	r25, 0x014E
+ 4b0:	90 93 14 01 	sts	0x0114, r25
 			SendPacket('E',&SendMsgPayLoad,3);
- 4aa:	85 e4       	ldi	r24, 0x45	; 69
- 4ac:	61 e0       	ldi	r22, 0x01	; 1
- 4ae:	71 e0       	ldi	r23, 0x01	; 1
- 4b0:	43 e0       	ldi	r20, 0x03	; 3
- 4b2:	50 e0       	ldi	r21, 0x00	; 0
- 4b4:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 4b4:	85 e4       	ldi	r24, 0x45	; 69
+ 4b6:	63 e1       	ldi	r22, 0x13	; 19
+ 4b8:	71 e0       	ldi	r23, 0x01	; 1
+ 4ba:	43 e0       	ldi	r20, 0x03	; 3
+ 4bc:	50 e0       	ldi	r21, 0x00	; 0
+ 4be:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 			/*
 			---------------------------------------------------------
 			*/
 			ADC_LastVal[iADC]=valADC;
- 4b8:	e0 91 3d 01 	lds	r30, 0x013D
- 4bc:	f0 e0       	ldi	r31, 0x00	; 0
- 4be:	80 91 3b 01 	lds	r24, 0x013B
- 4c2:	90 91 3c 01 	lds	r25, 0x013C
- 4c6:	ee 0f       	add	r30, r30
- 4c8:	ff 1f       	adc	r31, r31
- 4ca:	e7 5f       	subi	r30, 0xF7	; 247
- 4cc:	fe 4f       	sbci	r31, 0xFE	; 254
- 4ce:	91 83       	std	Z+1, r25	; 0x01
- 4d0:	80 83       	st	Z, r24
+ 4c2:	e0 91 4f 01 	lds	r30, 0x014F
+ 4c6:	f0 e0       	ldi	r31, 0x00	; 0
+ 4c8:	80 91 4d 01 	lds	r24, 0x014D
+ 4cc:	90 91 4e 01 	lds	r25, 0x014E
+ 4d0:	ee 0f       	add	r30, r30
+ 4d2:	ff 1f       	adc	r31, r31
+ 4d4:	e5 5e       	subi	r30, 0xE5	; 229
+ 4d6:	fe 4f       	sbci	r31, 0xFE	; 254
+ 4d8:	91 83       	std	Z+1, r25	; 0x01
+ 4da:	80 83       	st	Z, r24
 			if(LED_ONOFF)
- 4d2:	80 91 3a 01 	lds	r24, 0x013A
- 4d6:	88 23       	and	r24, r24
- 4d8:	31 f0       	breq	.+12     	; 0x4e6 <DetectTheDot+0x94>
+ 4dc:	80 91 4c 01 	lds	r24, 0x014C
+ 4e0:	88 23       	and	r24, r24
+ 4e2:	31 f0       	breq	.+12     	; 0x4f0 <DetectTheDot+0x94>
 			{
 				SetStatLED1(false);
- 4da:	80 e0       	ldi	r24, 0x00	; 0
- 4dc:	0e 94 f5 00 	call	0x1ea	; 0x1ea <SetStatLED1>
+ 4e4:	80 e0       	ldi	r24, 0x00	; 0
+ 4e6:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <SetStatLED1>
 				LED_ONOFF=false;
- 4e0:	10 92 3a 01 	sts	0x013A, r1
- 4e4:	06 c0       	rjmp	.+12     	; 0x4f2 <DetectTheDot+0xa0>
+ 4ea:	10 92 4c 01 	sts	0x014C, r1
+ 4ee:	06 c0       	rjmp	.+12     	; 0x4fc <DetectTheDot+0xa0>
 			}else
 			{
 				SetStatLED1(true);
- 4e6:	81 e0       	ldi	r24, 0x01	; 1
- 4e8:	0e 94 f5 00 	call	0x1ea	; 0x1ea <SetStatLED1>
+ 4f0:	81 e0       	ldi	r24, 0x01	; 1
+ 4f2:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <SetStatLED1>
 				LED_ONOFF=true;
- 4ec:	81 e0       	ldi	r24, 0x01	; 1
- 4ee:	80 93 3a 01 	sts	0x013A, r24
+ 4f6:	81 e0       	ldi	r24, 0x01	; 1
+ 4f8:	80 93 4c 01 	sts	0x014C, r24
 	//ADC_COMPLETE=true;
 }
 
 void DetectTheDot(void)
 {	
 	for(iADC=0;iADC<6;iADC++)
- 4f2:	80 91 3d 01 	lds	r24, 0x013D
- 4f6:	8f 5f       	subi	r24, 0xFF	; 255
- 4f8:	80 93 3d 01 	sts	0x013D, r24
- 4fc:	80 91 3d 01 	lds	r24, 0x013D
- 500:	86 30       	cpi	r24, 0x06	; 6
- 502:	08 f4       	brcc	.+2      	; 0x506 <DetectTheDot+0xb4>
- 504:	ad cf       	rjmp	.-166    	; 0x460 <DetectTheDot+0xe>
+ 4fc:	80 91 4f 01 	lds	r24, 0x014F
+ 500:	8f 5f       	subi	r24, 0xFF	; 255
+ 502:	80 93 4f 01 	sts	0x014F, r24
+ 506:	80 91 4f 01 	lds	r24, 0x014F
+ 50a:	86 30       	cpi	r24, 0x06	; 6
+ 50c:	08 f4       	brcc	.+2      	; 0x510 <DetectTheDot+0xb4>
+ 50e:	ad cf       	rjmp	.-166    	; 0x46a <DetectTheDot+0xe>
 				SetStatLED1(true);
 				LED_ONOFF=true;
 			}
 		}
 	}
 }
- 506:	df 91       	pop	r29
- 508:	cf 91       	pop	r28
- 50a:	08 95       	ret
+ 510:	df 91       	pop	r29
+ 512:	cf 91       	pop	r28
+ 514:	08 95       	ret
 
-0000050c <init_USART_MCU>:
+00000516 <init_USART_MCU>:
 
 char TempBytes[20];
 
 void init_USART_MCU(void)
 {
 	UCSR0B = 0x00; //disable while setting baud rate
- 50c:	e1 ec       	ldi	r30, 0xC1	; 193
- 50e:	f0 e0       	ldi	r31, 0x00	; 0
- 510:	10 82       	st	Z, r1
+ 516:	e1 ec       	ldi	r30, 0xC1	; 193
+ 518:	f0 e0       	ldi	r31, 0x00	; 0
+ 51a:	10 82       	st	Z, r1
 	UCSR0A = 0x00;
- 512:	10 92 c0 00 	sts	0x00C0, r1
+ 51c:	10 92 c0 00 	sts	0x00C0, r1
 	UCSR0C = 0x06;
- 516:	86 e0       	ldi	r24, 0x06	; 6
- 518:	80 93 c2 00 	sts	0x00C2, r24
+ 520:	86 e0       	ldi	r24, 0x06	; 6
+ 522:	80 93 c2 00 	sts	0x00C2, r24
 	UBRR0L = 0x19;
- 51c:	89 e1       	ldi	r24, 0x19	; 25
- 51e:	80 93 c4 00 	sts	0x00C4, r24
+ 526:	89 e1       	ldi	r24, 0x19	; 25
+ 528:	80 93 c4 00 	sts	0x00C4, r24
 	UBRR0H = 0x00; //set baud rate to 19,200 with 8MHz clock
- 522:	10 92 c5 00 	sts	0x00C5, r1
+ 52c:	10 92 c5 00 	sts	0x00C5, r1
 	UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
- 526:	88 e9       	ldi	r24, 0x98	; 152
- 528:	80 83       	st	Z, r24
+ 530:	88 e9       	ldi	r24, 0x98	; 152
+ 532:	80 83       	st	Z, r24
 }
- 52a:	08 95       	ret
+ 534:	08 95       	ret
 
-0000052c <USART_RX_vect>:
+00000536 <USART_RX_vect>:
 
 ISR(USART_RX_vect){
- 52c:	1f 92       	push	r1
- 52e:	0f 92       	push	r0
- 530:	0f b6       	in	r0, 0x3f	; 63
- 532:	0f 92       	push	r0
- 534:	11 24       	eor	r1, r1
- 536:	8f 93       	push	r24
+ 536:	1f 92       	push	r1
+ 538:	0f 92       	push	r0
+ 53a:	0f b6       	in	r0, 0x3f	; 63
+ 53c:	0f 92       	push	r0
+ 53e:	11 24       	eor	r1, r1
+ 540:	8f 93       	push	r24
 	USART_MCU_Received_Data=UDR0;
- 538:	80 91 c6 00 	lds	r24, 0x00C6
- 53c:	80 93 07 01 	sts	0x0107, r24
+ 542:	80 91 c6 00 	lds	r24, 0x00C6
+ 546:	80 93 19 01 	sts	0x0119, r24
 	USART_MCU_DATA_RDY=true;	
- 540:	81 e0       	ldi	r24, 0x01	; 1
- 542:	80 93 37 01 	sts	0x0137, r24
+ 54a:	81 e0       	ldi	r24, 0x01	; 1
+ 54c:	80 93 49 01 	sts	0x0149, r24
 };
- 546:	8f 91       	pop	r24
- 548:	0f 90       	pop	r0
- 54a:	0f be       	out	0x3f, r0	; 63
- 54c:	0f 90       	pop	r0
- 54e:	1f 90       	pop	r1
- 550:	18 95       	reti
+ 550:	8f 91       	pop	r24
+ 552:	0f 90       	pop	r0
+ 554:	0f be       	out	0x3f, r0	; 63
+ 556:	0f 90       	pop	r0
+ 558:	1f 90       	pop	r1
+ 55a:	18 95       	reti
 
-00000552 <USART_PC_ReceiveAction>:
+0000055c <USART_PC_ReceiveAction>:
 
 void USART_PC_ReceiveAction(void){
 	USART_MCU_DATA_RDY=false;
- 552:	10 92 37 01 	sts	0x0137, r1
+ 55c:	10 92 49 01 	sts	0x0149, r1
 	//USART_transmitByteToMCU(USART_PC_Received_Data);
 }
- 556:	08 95       	ret
+ 560:	08 95       	ret
 
-00000558 <USART_transmitByteToMCU>:
-
+00000562 <USART_transmitByteToMCU>:
+ * UDRE0 : USART Data register empty (bit 5 of UCSR0A
+ * UDR0 : Data register
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
- 558:	98 2f       	mov	r25, r24
+ 562:	98 2f       	mov	r25, r24
 	while ( !(UCSR0A & (1<<UDRE0)) );
- 55a:	80 91 c0 00 	lds	r24, 0x00C0
- 55e:	85 ff       	sbrs	r24, 5
- 560:	fc cf       	rjmp	.-8      	; 0x55a <USART_transmitByteToMCU+0x2>
-	UDR0=bData;
- 562:	90 93 c6 00 	sts	0x00C6, r25
+ 564:	80 91 c0 00 	lds	r24, 0x00C0
+ 568:	85 ff       	sbrs	r24, 5
+ 56a:	fc cf       	rjmp	.-8      	; 0x564 <USART_transmitByteToMCU+0x2>
+	UDR0 = bData;
+ 56c:	90 93 c6 00 	sts	0x00C6, r25
 }
- 566:	08 95       	ret
+ 570:	08 95       	ret
 
-00000568 <USART_transmitStringToMCUFromFlash>:
-
+00000572 <USART_transmitStringToMCUFromFlash>:
+ * @brief transmit a string from flash memory
+ * @param strData pointer to the beginnning of the string in flash mem
+ * @return Void
+ */
 void USART_transmitStringToMCUFromFlash(char* strData)
 {
- 568:	fc 01       	movw	r30, r24
- 56a:	07 c0       	rjmp	.+14     	; 0x57a <USART_transmitStringToMCUFromFlash+0x12>
-	//USART_transmitByteToMCU(USART_PC_Received_Data);
-}
-
+ 572:	fc 01       	movw	r30, r24
+ 574:	07 c0       	rjmp	.+14     	; 0x584 <USART_transmitStringToMCUFromFlash+0x12>
+ * UDR0 : Data register
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
 	while ( !(UCSR0A & (1<<UDRE0)) );
- 56c:	80 91 c0 00 	lds	r24, 0x00C0
- 570:	85 ff       	sbrs	r24, 5
- 572:	fc cf       	rjmp	.-8      	; 0x56c <USART_transmitStringToMCUFromFlash+0x4>
-}
-
+ 576:	80 91 c0 00 	lds	r24, 0x00C0
+ 57a:	85 ff       	sbrs	r24, 5
+ 57c:	fc cf       	rjmp	.-8      	; 0x576 <USART_transmitStringToMCUFromFlash+0x4>
+ * @return Void
+ */
 void USART_transmitStringToMCUFromFlash(char* strData)
 {
   while (pgm_read_byte(&(*strData)))
    USART_transmitByteToMCU(pgm_read_byte(&(*strData++)));
- 574:	31 96       	adiw	r30, 0x01	; 1
-}
-
+ 57e:	31 96       	adiw	r30, 0x01	; 1
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
 	while ( !(UCSR0A & (1<<UDRE0)) );
-	UDR0=bData;
- 576:	90 93 c6 00 	sts	0x00C6, r25
-}
-
+	UDR0 = bData;
+ 580:	90 93 c6 00 	sts	0x00C6, r25
+ * @param strData pointer to the beginnning of the string in flash mem
+ * @return Void
+ */
 void USART_transmitStringToMCUFromFlash(char* strData)
 {
   while (pgm_read_byte(&(*strData)))
- 57a:	94 91       	lpm	r25, Z+
- 57c:	99 23       	and	r25, r25
- 57e:	b1 f7       	brne	.-20     	; 0x56c <USART_transmitStringToMCUFromFlash+0x4>
+ 584:	94 91       	lpm	r25, Z+
+ 586:	99 23       	and	r25, r25
+ 588:	b1 f7       	brne	.-20     	; 0x576 <USART_transmitStringToMCUFromFlash+0x4>
    USART_transmitByteToMCU(pgm_read_byte(&(*strData++)));
 }
- 580:	08 95       	ret
+ 58a:	08 95       	ret
 
-00000582 <USART_transmitStringToMCU>:
-
-
+0000058c <USART_transmitStringToMCU>:
+ * @brief transmit a string to the data register
+ * @param strData pointer to the beginning of the string
+ * @return Void
+ */
 void USART_transmitStringToMCU(unsigned char* strData)
 {
- 582:	fc 01       	movw	r30, r24
- 584:	07 c0       	rjmp	.+14     	; 0x594 <USART_transmitStringToMCU+0x12>
-	//USART_transmitByteToMCU(USART_PC_Received_Data);
-}
-
+ 58c:	fc 01       	movw	r30, r24
+ 58e:	07 c0       	rjmp	.+14     	; 0x59e <USART_transmitStringToMCU+0x12>
+ * UDR0 : Data register
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
 	while ( !(UCSR0A & (1<<UDRE0)) );
- 586:	80 91 c0 00 	lds	r24, 0x00C0
- 58a:	85 ff       	sbrs	r24, 5
- 58c:	fc cf       	rjmp	.-8      	; 0x586 <USART_transmitStringToMCU+0x4>
-
-
+ 590:	80 91 c0 00 	lds	r24, 0x00C0
+ 594:	85 ff       	sbrs	r24, 5
+ 596:	fc cf       	rjmp	.-8      	; 0x590 <USART_transmitStringToMCU+0x4>
+ * @return Void
+ */
 void USART_transmitStringToMCU(unsigned char* strData)
 {
   while (*strData)
    USART_transmitByteToMCU(*strData++);
- 58e:	31 96       	adiw	r30, 0x01	; 1
-}
-
+ 598:	31 96       	adiw	r30, 0x01	; 1
+ * @return Void (transmits data)
+ */
 void USART_transmitByteToMCU( unsigned char bData )
 {
 	while ( !(UCSR0A & (1<<UDRE0)) );
-	UDR0=bData;
- 590:	90 93 c6 00 	sts	0x00C6, r25
-}
-
-
+	UDR0 = bData;
+ 59a:	90 93 c6 00 	sts	0x00C6, r25
+ * @param strData pointer to the beginning of the string
+ * @return Void
+ */
 void USART_transmitStringToMCU(unsigned char* strData)
 {
   while (*strData)
- 594:	90 81       	ld	r25, Z
- 596:	99 23       	and	r25, r25
- 598:	b1 f7       	brne	.-20     	; 0x586 <USART_transmitStringToMCU+0x4>
+ 59e:	90 81       	ld	r25, Z
+ 5a0:	99 23       	and	r25, r25
+ 5a2:	b1 f7       	brne	.-20     	; 0x590 <USART_transmitStringToMCU+0x4>
    USART_transmitByteToMCU(*strData++);
-
 }
- 59a:	08 95       	ret
+ 5a4:	08 95       	ret
 
-0000059c <initTimer>:
+000005a6 <initTimer>:
 
 int TmrCntADC;
 
 void initTimer(void)
 {
 	TMR1_INT=false;
- 59c:	10 92 06 01 	sts	0x0106, r1
+ 5a6:	10 92 18 01 	sts	0x0118, r1
 	TCCR1A=0x00;
- 5a0:	10 92 80 00 	sts	0x0080, r1
+ 5aa:	10 92 80 00 	sts	0x0080, r1
 	TCCR1B=0x0D;
- 5a4:	8d e0       	ldi	r24, 0x0D	; 13
- 5a6:	80 93 81 00 	sts	0x0081, r24
+ 5ae:	8d e0       	ldi	r24, 0x0D	; 13
+ 5b0:	80 93 81 00 	sts	0x0081, r24
 	OCR1A=780; //1s interval
- 5aa:	8c e0       	ldi	r24, 0x0C	; 12
- 5ac:	93 e0       	ldi	r25, 0x03	; 3
- 5ae:	90 93 89 00 	sts	0x0089, r25
- 5b2:	80 93 88 00 	sts	0x0088, r24
+ 5b4:	8c e0       	ldi	r24, 0x0C	; 12
+ 5b6:	93 e0       	ldi	r25, 0x03	; 3
+ 5b8:	90 93 89 00 	sts	0x0089, r25
+ 5bc:	80 93 88 00 	sts	0x0088, r24
 	TIMSK1 |= (1<<OCIE1A); //Enable interrupt
- 5b6:	ef e6       	ldi	r30, 0x6F	; 111
- 5b8:	f0 e0       	ldi	r31, 0x00	; 0
- 5ba:	80 81       	ld	r24, Z
- 5bc:	82 60       	ori	r24, 0x02	; 2
- 5be:	80 83       	st	Z, r24
+ 5c0:	ef e6       	ldi	r30, 0x6F	; 111
+ 5c2:	f0 e0       	ldi	r31, 0x00	; 0
+ 5c4:	80 81       	ld	r24, Z
+ 5c6:	82 60       	ori	r24, 0x02	; 2
+ 5c8:	80 83       	st	Z, r24
 	TmrCntADC=0;
- 5c0:	10 92 54 01 	sts	0x0154, r1
- 5c4:	10 92 53 01 	sts	0x0153, r1
+ 5ca:	10 92 66 01 	sts	0x0166, r1
+ 5ce:	10 92 65 01 	sts	0x0165, r1
 }
- 5c8:	08 95       	ret
+ 5d2:	08 95       	ret
 
-000005ca <__vector_13>:
+000005d4 <__vector_13>:
 
 ISR(TIMER1_COMPA_vect){
- 5ca:	1f 92       	push	r1
- 5cc:	0f 92       	push	r0
- 5ce:	0f b6       	in	r0, 0x3f	; 63
- 5d0:	0f 92       	push	r0
- 5d2:	11 24       	eor	r1, r1
- 5d4:	8f 93       	push	r24
+ 5d4:	1f 92       	push	r1
+ 5d6:	0f 92       	push	r0
+ 5d8:	0f b6       	in	r0, 0x3f	; 63
+ 5da:	0f 92       	push	r0
+ 5dc:	11 24       	eor	r1, r1
+ 5de:	8f 93       	push	r24
 	TMR1_INT=true;
- 5d6:	81 e0       	ldi	r24, 0x01	; 1
- 5d8:	80 93 06 01 	sts	0x0106, r24
+ 5e0:	81 e0       	ldi	r24, 0x01	; 1
+ 5e2:	80 93 18 01 	sts	0x0118, r24
 };
- 5dc:	8f 91       	pop	r24
- 5de:	0f 90       	pop	r0
- 5e0:	0f be       	out	0x3f, r0	; 63
- 5e2:	0f 90       	pop	r0
- 5e4:	1f 90       	pop	r1
- 5e6:	18 95       	reti
+ 5e6:	8f 91       	pop	r24
+ 5e8:	0f 90       	pop	r0
+ 5ea:	0f be       	out	0x3f, r0	; 63
+ 5ec:	0f 90       	pop	r0
+ 5ee:	1f 90       	pop	r1
+ 5f0:	18 95       	reti
 
-000005e8 <TimerRoutine>:
+000005f2 <TimerRoutine>:
 
 void TimerRoutine(void)
 {
 	TMR1_INT=false;
- 5e8:	10 92 06 01 	sts	0x0106, r1
+ 5f2:	10 92 18 01 	sts	0x0118, r1
+	USART_transmitStringToMCU("hello small waves");
+ 5f6:	80 e0       	ldi	r24, 0x00	; 0
+ 5f8:	91 e0       	ldi	r25, 0x01	; 1
+ 5fa:	0e 94 c6 02 	call	0x58c	; 0x58c <USART_transmitStringToMCU>
 		SetStatLED2(false);
 		SetStatLED1(true);
 		LED_STAT=false;
 	}
-	*/
+	/*/
 	CheckCommandButtons();
- 5ec:	0e 94 97 00 	call	0x12e	; 0x12e <CheckCommandButtons>
+ 5fe:	0e 94 9c 00 	call	0x138	; 0x138 <CheckCommandButtons>
 	RunCommandTasks();
- 5f0:	0e 94 4c 01 	call	0x298	; 0x298 <RunCommandTasks>
+ 602:	0e 94 51 01 	call	0x2a2	; 0x2a2 <RunCommandTasks>
 	if(TmrCntADC<2)
- 5f4:	80 91 53 01 	lds	r24, 0x0153
- 5f8:	90 91 54 01 	lds	r25, 0x0154
- 5fc:	82 30       	cpi	r24, 0x02	; 2
- 5fe:	91 05       	cpc	r25, r1
- 600:	34 f4       	brge	.+12     	; 0x60e <TimerRoutine+0x26>
+ 606:	80 91 65 01 	lds	r24, 0x0165
+ 60a:	90 91 66 01 	lds	r25, 0x0166
+ 60e:	82 30       	cpi	r24, 0x02	; 2
+ 610:	91 05       	cpc	r25, r1
+ 612:	34 f4       	brge	.+12     	; 0x620 <TimerRoutine+0x2e>
 	{
 		TmrCntADC++;
- 602:	01 96       	adiw	r24, 0x01	; 1
- 604:	90 93 54 01 	sts	0x0154, r25
- 608:	80 93 53 01 	sts	0x0153, r24
- 60c:	08 95       	ret
+ 614:	01 96       	adiw	r24, 0x01	; 1
+ 616:	90 93 66 01 	sts	0x0166, r25
+ 61a:	80 93 65 01 	sts	0x0165, r24
+ 61e:	08 95       	ret
 	}else
 	{
-		//DetectTheDot();
+		DetectTheDot();
+ 620:	0e 94 2e 02 	call	0x45c	; 0x45c <DetectTheDot>
 		ProcessTheDot();
- 60e:	0e 94 dd 03 	call	0x7ba	; 0x7ba <ProcessTheDot>
+ 624:	0e 94 e8 03 	call	0x7d0	; 0x7d0 <ProcessTheDot>
 		TmrCntADC=0;
- 612:	10 92 54 01 	sts	0x0154, r1
- 616:	10 92 53 01 	sts	0x0153, r1
- 61a:	08 95       	ret
+ 628:	10 92 66 01 	sts	0x0166, r1
+ 62c:	10 92 65 01 	sts	0x0165, r1
+ 630:	08 95       	ret
 
-0000061c <Calculate_CRC>:
+00000632 <Calculate_CRC>:
 #include "GlobalsUI.h"
 
 
 
 uint16_t Calculate_CRC(unsigned char* pstrMsg)
 {
- 61c:	0f 93       	push	r16
- 61e:	1f 93       	push	r17
- 620:	cf 93       	push	r28
- 622:	df 93       	push	r29
- 624:	fc 01       	movw	r30, r24
+ 632:	0f 93       	push	r16
+ 634:	1f 93       	push	r17
+ 636:	cf 93       	push	r28
+ 638:	df 93       	push	r29
+ 63a:	fc 01       	movw	r30, r24
 	unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
- 626:	b2 81       	ldd	r27, Z+2	; 0x02
+ 63c:	b2 81       	ldd	r27, Z+2	; 0x02
 	uint16_t chksum=0;
 	pstrMsg+=3;
- 628:	8c 01       	movw	r16, r24
- 62a:	0d 5f       	subi	r16, 0xFD	; 253
- 62c:	1f 4f       	sbci	r17, 0xFF	; 255
- 62e:	60 e0       	ldi	r22, 0x00	; 0
- 630:	70 e0       	ldi	r23, 0x00	; 0
+ 63e:	8c 01       	movw	r16, r24
+ 640:	0d 5f       	subi	r16, 0xFD	; 253
+ 642:	1f 4f       	sbci	r17, 0xFF	; 255
+ 644:	60 e0       	ldi	r22, 0x00	; 0
+ 646:	70 e0       	ldi	r23, 0x00	; 0
 #include "GlobalsUI.h"
 
 
 
 uint16_t Calculate_CRC(unsigned char* pstrMsg)
 {
- 632:	b5 50       	subi	r27, 0x05	; 5
+ 648:	b5 50       	subi	r27, 0x05	; 5
 	unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
 	uint16_t chksum=0;
 	pstrMsg+=3;
 	while(msglen > 1)
- 634:	ab 2f       	mov	r26, r27
- 636:	a6 95       	lsr	r26
- 638:	ca 2f       	mov	r28, r26
- 63a:	d0 e0       	ldi	r29, 0x00	; 0
- 63c:	ae 01       	movw	r20, r28
- 63e:	4f 5f       	subi	r20, 0xFF	; 255
- 640:	5f 4f       	sbci	r21, 0xFF	; 255
- 642:	44 0f       	add	r20, r20
- 644:	55 1f       	adc	r21, r21
- 646:	4e 0f       	add	r20, r30
- 648:	5f 1f       	adc	r21, r31
- 64a:	08 c0       	rjmp	.+16     	; 0x65c <Calculate_CRC+0x40>
+ 64a:	ab 2f       	mov	r26, r27
+ 64c:	a6 95       	lsr	r26
+ 64e:	ca 2f       	mov	r28, r26
+ 650:	d0 e0       	ldi	r29, 0x00	; 0
+ 652:	ae 01       	movw	r20, r28
+ 654:	4f 5f       	subi	r20, 0xFF	; 255
+ 656:	5f 4f       	sbci	r21, 0xFF	; 255
+ 658:	44 0f       	add	r20, r20
+ 65a:	55 1f       	adc	r21, r21
+ 65c:	4e 0f       	add	r20, r30
+ 65e:	5f 1f       	adc	r21, r31
+ 660:	08 c0       	rjmp	.+16     	; 0x672 <Calculate_CRC+0x40>
 	{
 		chksum+=(*(pstrMsg)<<8) | *(pstrMsg+1);
- 64c:	31 81       	ldd	r19, Z+1	; 0x01
- 64e:	20 e0       	ldi	r18, 0x00	; 0
- 650:	82 81       	ldd	r24, Z+2	; 0x02
- 652:	90 e0       	ldi	r25, 0x00	; 0
- 654:	82 2b       	or	r24, r18
- 656:	93 2b       	or	r25, r19
- 658:	68 0f       	add	r22, r24
- 65a:	79 1f       	adc	r23, r25
- 65c:	32 96       	adiw	r30, 0x02	; 2
+ 662:	31 81       	ldd	r19, Z+1	; 0x01
+ 664:	20 e0       	ldi	r18, 0x00	; 0
+ 666:	82 81       	ldd	r24, Z+2	; 0x02
+ 668:	90 e0       	ldi	r25, 0x00	; 0
+ 66a:	82 2b       	or	r24, r18
+ 66c:	93 2b       	or	r25, r19
+ 66e:	68 0f       	add	r22, r24
+ 670:	79 1f       	adc	r23, r25
+ 672:	32 96       	adiw	r30, 0x02	; 2
 uint16_t Calculate_CRC(unsigned char* pstrMsg)
 {
 	unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
 	uint16_t chksum=0;
 	pstrMsg+=3;
 	while(msglen > 1)
- 65e:	e4 17       	cp	r30, r20
- 660:	f5 07       	cpc	r31, r21
- 662:	a1 f7       	brne	.-24     	; 0x64c <Calculate_CRC+0x30>
+ 674:	e4 17       	cp	r30, r20
+ 676:	f5 07       	cpc	r31, r21
+ 678:	a1 f7       	brne	.-24     	; 0x662 <Calculate_CRC+0x30>
 #include "GlobalsUI.h"
 
 
 
 uint16_t Calculate_CRC(unsigned char* pstrMsg)
 {
- 664:	aa 0f       	add	r26, r26
- 666:	fe 01       	movw	r30, r28
- 668:	ee 0f       	add	r30, r30
- 66a:	ff 1f       	adc	r31, r31
- 66c:	e0 0f       	add	r30, r16
- 66e:	f1 1f       	adc	r31, r17
+ 67a:	aa 0f       	add	r26, r26
+ 67c:	fe 01       	movw	r30, r28
+ 67e:	ee 0f       	add	r30, r30
+ 680:	ff 1f       	adc	r31, r31
+ 682:	e0 0f       	add	r30, r16
+ 684:	f1 1f       	adc	r31, r17
 		chksum+=(*(pstrMsg)<<8) | *(pstrMsg+1);
 		chksum = chksum & 0xffff;
 		msglen-=2;
 		pstrMsg+=2;
 	}
 	if(msglen>0) //If the packet size is odd numbered
- 670:	ba 17       	cp	r27, r26
- 672:	21 f0       	breq	.+8      	; 0x67c <Calculate_CRC+0x60>
+ 686:	ba 17       	cp	r27, r26
+ 688:	21 f0       	breq	.+8      	; 0x692 <Calculate_CRC+0x60>
 	{
 		chksum = chksum^ (int)*(pstrMsg++);
- 674:	80 81       	ld	r24, Z
- 676:	90 e0       	ldi	r25, 0x00	; 0
- 678:	68 27       	eor	r22, r24
- 67a:	79 27       	eor	r23, r25
+ 68a:	80 81       	ld	r24, Z
+ 68c:	90 e0       	ldi	r25, 0x00	; 0
+ 68e:	68 27       	eor	r22, r24
+ 690:	79 27       	eor	r23, r25
 	}
 	return(chksum);
 }
- 67c:	cb 01       	movw	r24, r22
- 67e:	df 91       	pop	r29
- 680:	cf 91       	pop	r28
- 682:	1f 91       	pop	r17
- 684:	0f 91       	pop	r16
- 686:	08 95       	ret
+ 692:	cb 01       	movw	r24, r22
+ 694:	df 91       	pop	r29
+ 696:	cf 91       	pop	r28
+ 698:	1f 91       	pop	r17
+ 69a:	0f 91       	pop	r16
+ 69c:	08 95       	ret
 
-00000688 <MCU_PKT_CompilePacket>:
+0000069e <MCU_PKT_CompilePacket>:
 
 bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
 {
- 688:	cf 93       	push	r28
- 68a:	df 93       	push	r29
- 68c:	98 2f       	mov	r25, r24
- 68e:	db 01       	movw	r26, r22
- 690:	ea 01       	movw	r28, r20
+ 69e:	cf 93       	push	r28
+ 6a0:	df 93       	push	r29
+ 6a2:	98 2f       	mov	r25, r24
+ 6a4:	db 01       	movw	r26, r22
+ 6a6:	ea 01       	movw	r28, r20
 	// [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
 	uint16_t chksum;
 	//Header always contain the 0xFA and 0xFB
 	MCU_Packet[0]='U';
- 692:	85 e5       	ldi	r24, 0x55	; 85
- 694:	80 93 1f 01 	sts	0x011F, r24
+ 6a8:	85 e5       	ldi	r24, 0x55	; 85
+ 6aa:	80 93 31 01 	sts	0x0131, r24
 	MCU_Packet[1]='I';
- 698:	89 e4       	ldi	r24, 0x49	; 73
- 69a:	80 93 20 01 	sts	0x0120, r24
+ 6ae:	89 e4       	ldi	r24, 0x49	; 73
+ 6b0:	80 93 32 01 	sts	0x0132, r24
 	iPktSize=plLen+7;
- 69e:	27 96       	adiw	r28, 0x07	; 7
- 6a0:	d0 93 18 01 	sts	0x0118, r29
- 6a4:	c0 93 17 01 	sts	0x0117, r28
- 6a8:	27 97       	sbiw	r28, 0x07	; 7
+ 6b4:	27 96       	adiw	r28, 0x07	; 7
+ 6b6:	d0 93 2a 01 	sts	0x012A, r29
+ 6ba:	c0 93 29 01 	sts	0x0129, r28
+ 6be:	27 97       	sbiw	r28, 0x07	; 7
 	if ( plLen+7 > 20 ) //SABT can handle packets upto 20 bytes 
- 6aa:	ce 30       	cpi	r28, 0x0E	; 14
- 6ac:	d1 05       	cpc	r29, r1
- 6ae:	14 f0       	brlt	.+4      	; 0x6b4 <MCU_PKT_CompilePacket+0x2c>
- 6b0:	80 e0       	ldi	r24, 0x00	; 0
- 6b2:	22 c0       	rjmp	.+68     	; 0x6f8 <MCU_PKT_CompilePacket+0x70>
+ 6c0:	ce 30       	cpi	r28, 0x0E	; 14
+ 6c2:	d1 05       	cpc	r29, r1
+ 6c4:	14 f0       	brlt	.+4      	; 0x6ca <MCU_PKT_CompilePacket+0x2c>
+ 6c6:	80 e0       	ldi	r24, 0x00	; 0
+ 6c8:	22 c0       	rjmp	.+68     	; 0x70e <MCU_PKT_CompilePacket+0x70>
 	{
 		return(false);
 	}
 	MCU_Packet[2] = plLen+7;
- 6b4:	9e 01       	movw	r18, r28
- 6b6:	29 5f       	subi	r18, 0xF9	; 249
- 6b8:	20 93 21 01 	sts	0x0121, r18
+ 6ca:	9e 01       	movw	r18, r28
+ 6cc:	29 5f       	subi	r18, 0xF9	; 249
+ 6ce:	20 93 33 01 	sts	0x0133, r18
 	MCU_Packet[3] = 2;	
- 6bc:	82 e0       	ldi	r24, 0x02	; 2
- 6be:	80 93 22 01 	sts	0x0122, r24
+ 6d2:	82 e0       	ldi	r24, 0x02	; 2
+ 6d4:	80 93 34 01 	sts	0x0134, r24
 	MCU_Packet[4] = cmd;	
- 6c2:	90 93 23 01 	sts	0x0123, r25
- 6c6:	20 e0       	ldi	r18, 0x00	; 0
- 6c8:	30 e0       	ldi	r19, 0x00	; 0
- 6ca:	07 c0       	rjmp	.+14     	; 0x6da <MCU_PKT_CompilePacket+0x52>
+ 6d8:	90 93 35 01 	sts	0x0135, r25
+ 6dc:	20 e0       	ldi	r18, 0x00	; 0
+ 6de:	30 e0       	ldi	r19, 0x00	; 0
+ 6e0:	07 c0       	rjmp	.+14     	; 0x6f0 <MCU_PKT_CompilePacket+0x52>
 	int i=0;
 	for(i=0;i<plLen;i++)
 	{
 		MCU_Packet[5+i]=*(pl++);
- 6cc:	8d 91       	ld	r24, X+
- 6ce:	f9 01       	movw	r30, r18
- 6d0:	ec 5d       	subi	r30, 0xDC	; 220
- 6d2:	fe 4f       	sbci	r31, 0xFE	; 254
- 6d4:	80 83       	st	Z, r24
+ 6e2:	8d 91       	ld	r24, X+
+ 6e4:	f9 01       	movw	r30, r18
+ 6e6:	ea 5c       	subi	r30, 0xCA	; 202
+ 6e8:	fe 4f       	sbci	r31, 0xFE	; 254
+ 6ea:	80 83       	st	Z, r24
 	}
 	MCU_Packet[2] = plLen+7;
 	MCU_Packet[3] = 2;	
 	MCU_Packet[4] = cmd;	
 	int i=0;
 	for(i=0;i<plLen;i++)
- 6d6:	2f 5f       	subi	r18, 0xFF	; 255
- 6d8:	3f 4f       	sbci	r19, 0xFF	; 255
- 6da:	2c 17       	cp	r18, r28
- 6dc:	3d 07       	cpc	r19, r29
- 6de:	b4 f3       	brlt	.-20     	; 0x6cc <MCU_PKT_CompilePacket+0x44>
+ 6ec:	2f 5f       	subi	r18, 0xFF	; 255
+ 6ee:	3f 4f       	sbci	r19, 0xFF	; 255
+ 6f0:	2c 17       	cp	r18, r28
+ 6f2:	3d 07       	cpc	r19, r29
+ 6f4:	b4 f3       	brlt	.-20     	; 0x6e2 <MCU_PKT_CompilePacket+0x44>
 	{
 		MCU_Packet[5+i]=*(pl++);
 	}
 	//memcpy( &MCU_Packet[5], pl, plLen);
 	chksum = Calculate_CRC(&MCU_Packet);
- 6e0:	8f e1       	ldi	r24, 0x1F	; 31
- 6e2:	91 e0       	ldi	r25, 0x01	; 1
- 6e4:	0e 94 0e 03 	call	0x61c	; 0x61c <Calculate_CRC>
+ 6f6:	81 e3       	ldi	r24, 0x31	; 49
+ 6f8:	91 e0       	ldi	r25, 0x01	; 1
+ 6fa:	0e 94 19 03 	call	0x632	; 0x632 <Calculate_CRC>
 	MCU_Packet[plLen+5] = chksum >> 8;
- 6e8:	fe 01       	movw	r30, r28
- 6ea:	ec 5d       	subi	r30, 0xDC	; 220
- 6ec:	fe 4f       	sbci	r31, 0xFE	; 254
- 6ee:	90 83       	st	Z, r25
+ 6fe:	fe 01       	movw	r30, r28
+ 700:	ea 5c       	subi	r30, 0xCA	; 202
+ 702:	fe 4f       	sbci	r31, 0xFE	; 254
+ 704:	90 83       	st	Z, r25
 	MCU_Packet[plLen+6] = chksum & 0xFF;	
- 6f0:	cb 5d       	subi	r28, 0xDB	; 219
- 6f2:	de 4f       	sbci	r29, 0xFE	; 254
- 6f4:	88 83       	st	Y, r24
- 6f6:	81 e0       	ldi	r24, 0x01	; 1
+ 706:	c9 5c       	subi	r28, 0xC9	; 201
+ 708:	de 4f       	sbci	r29, 0xFE	; 254
+ 70a:	88 83       	st	Y, r24
+ 70c:	81 e0       	ldi	r24, 0x01	; 1
 	return(true);
 }
- 6f8:	df 91       	pop	r29
- 6fa:	cf 91       	pop	r28
- 6fc:	08 95       	ret
+ 70e:	df 91       	pop	r29
+ 710:	cf 91       	pop	r28
+ 712:	08 95       	ret
 
-000006fe <SendPacket>:
+00000714 <SendPacket>:
 
 void SendPacket(char cmd, char* payLoad, int plLen)
 {
- 6fe:	cf 93       	push	r28
- 700:	df 93       	push	r29
+ 714:	cf 93       	push	r28
+ 716:	df 93       	push	r29
 	int i=0;
 	if(MCU_PKT_CompilePacket(cmd,payLoad,plLen))
- 702:	0e 94 44 03 	call	0x688	; 0x688 <MCU_PKT_CompilePacket>
- 706:	88 23       	and	r24, r24
- 708:	89 f0       	breq	.+34     	; 0x72c <SendPacket+0x2e>
- 70a:	c0 e0       	ldi	r28, 0x00	; 0
- 70c:	d0 e0       	ldi	r29, 0x00	; 0
- 70e:	07 c0       	rjmp	.+14     	; 0x71e <SendPacket+0x20>
+ 718:	0e 94 4f 03 	call	0x69e	; 0x69e <MCU_PKT_CompilePacket>
+ 71c:	88 23       	and	r24, r24
+ 71e:	89 f0       	breq	.+34     	; 0x742 <SendPacket+0x2e>
+ 720:	c0 e0       	ldi	r28, 0x00	; 0
+ 722:	d0 e0       	ldi	r29, 0x00	; 0
+ 724:	07 c0       	rjmp	.+14     	; 0x734 <SendPacket+0x20>
 	{
 		for(i=0;i<iPktSize;i++)
 		{
 			USART_transmitByteToMCU(MCU_Packet[i]);
- 710:	fe 01       	movw	r30, r28
- 712:	e1 5e       	subi	r30, 0xE1	; 225
- 714:	fe 4f       	sbci	r31, 0xFE	; 254
- 716:	80 81       	ld	r24, Z
- 718:	0e 94 ac 02 	call	0x558	; 0x558 <USART_transmitByteToMCU>
+ 726:	fe 01       	movw	r30, r28
+ 728:	ef 5c       	subi	r30, 0xCF	; 207
+ 72a:	fe 4f       	sbci	r31, 0xFE	; 254
+ 72c:	80 81       	ld	r24, Z
+ 72e:	0e 94 b1 02 	call	0x562	; 0x562 <USART_transmitByteToMCU>
 void SendPacket(char cmd, char* payLoad, int plLen)
 {
 	int i=0;
 	if(MCU_PKT_CompilePacket(cmd,payLoad,plLen))
 	{
 		for(i=0;i<iPktSize;i++)
- 71c:	21 96       	adiw	r28, 0x01	; 1
- 71e:	80 91 17 01 	lds	r24, 0x0117
- 722:	90 91 18 01 	lds	r25, 0x0118
- 726:	c8 17       	cp	r28, r24
- 728:	d9 07       	cpc	r29, r25
- 72a:	94 f3       	brlt	.-28     	; 0x710 <SendPacket+0x12>
+ 732:	21 96       	adiw	r28, 0x01	; 1
+ 734:	80 91 29 01 	lds	r24, 0x0129
+ 738:	90 91 2a 01 	lds	r25, 0x012A
+ 73c:	c8 17       	cp	r28, r24
+ 73e:	d9 07       	cpc	r29, r25
+ 740:	94 f3       	brlt	.-28     	; 0x726 <SendPacket+0x12>
 		{
 			USART_transmitByteToMCU(MCU_Packet[i]);
 		}
 	}	
 
 }
- 72c:	df 91       	pop	r29
- 72e:	cf 91       	pop	r28
- 730:	08 95       	ret
+ 742:	df 91       	pop	r29
+ 744:	cf 91       	pop	r28
+ 746:	08 95       	ret
 
-00000732 <ResetCellState>:
+00000748 <ResetCellState>:
 void ResetCellState(void)
 {
 	int i=0;
 	for(i=0;i<6;i++)
 	{
 		DotsPressed[i]=false;
- 732:	10 92 19 01 	sts	0x0119, r1
- 736:	10 92 1a 01 	sts	0x011A, r1
- 73a:	10 92 1b 01 	sts	0x011B, r1
- 73e:	10 92 1c 01 	sts	0x011C, r1
- 742:	10 92 1d 01 	sts	0x011D, r1
- 746:	10 92 1e 01 	sts	0x011E, r1
+ 748:	10 92 2b 01 	sts	0x012B, r1
+ 74c:	10 92 2c 01 	sts	0x012C, r1
+ 750:	10 92 2d 01 	sts	0x012D, r1
+ 754:	10 92 2e 01 	sts	0x012E, r1
+ 758:	10 92 2f 01 	sts	0x012F, r1
+ 75c:	10 92 30 01 	sts	0x0130, r1
 	}
 	PI_LastDotPressed=0;
- 74a:	10 92 56 01 	sts	0x0156, r1
+ 760:	10 92 68 01 	sts	0x0168, r1
 }
- 74e:	08 95       	ret
+ 764:	08 95       	ret
 
-00000750 <CaptureCellValue>:
+00000766 <CaptureCellValue>:
 	}
 }
 
 
 void CaptureCellValue(void)
 {
- 750:	20 e0       	ldi	r18, 0x00	; 0
- 752:	30 e0       	ldi	r19, 0x00	; 0
- 754:	40 e0       	ldi	r20, 0x00	; 0
+ 766:	20 e0       	ldi	r18, 0x00	; 0
+ 768:	30 e0       	ldi	r19, 0x00	; 0
+ 76a:	40 e0       	ldi	r20, 0x00	; 0
 	ProcessedCellValue=0x00;
 	for(i=0;i<6;i++)
 	{
 		if(DotsPressed[i])
 		{
 			ProcessedCellValue |= _BV(i);
- 756:	61 e0       	ldi	r22, 0x01	; 1
- 758:	70 e0       	ldi	r23, 0x00	; 0
+ 76c:	61 e0       	ldi	r22, 0x01	; 1
+ 76e:	70 e0       	ldi	r23, 0x00	; 0
 	generate a 6-bit number to be send over serial interface
 	*/
 	ProcessedCellValue=0x00;
 	for(i=0;i<6;i++)
 	{
 		if(DotsPressed[i])
- 75a:	f9 01       	movw	r30, r18
- 75c:	e7 5e       	subi	r30, 0xE7	; 231
- 75e:	fe 4f       	sbci	r31, 0xFE	; 254
- 760:	80 81       	ld	r24, Z
- 762:	88 23       	and	r24, r24
- 764:	41 f0       	breq	.+16     	; 0x776 <CaptureCellValue+0x26>
+ 770:	f9 01       	movw	r30, r18
+ 772:	e5 5d       	subi	r30, 0xD5	; 213
+ 774:	fe 4f       	sbci	r31, 0xFE	; 254
+ 776:	80 81       	ld	r24, Z
+ 778:	88 23       	and	r24, r24
+ 77a:	41 f0       	breq	.+16     	; 0x78c <CaptureCellValue+0x26>
 		{
 			ProcessedCellValue |= _BV(i);
- 766:	cb 01       	movw	r24, r22
- 768:	02 2e       	mov	r0, r18
- 76a:	02 c0       	rjmp	.+4      	; 0x770 <CaptureCellValue+0x20>
- 76c:	88 0f       	add	r24, r24
- 76e:	99 1f       	adc	r25, r25
- 770:	0a 94       	dec	r0
- 772:	e2 f7       	brpl	.-8      	; 0x76c <CaptureCellValue+0x1c>
- 774:	48 2b       	or	r20, r24
+ 77c:	cb 01       	movw	r24, r22
+ 77e:	02 2e       	mov	r0, r18
+ 780:	02 c0       	rjmp	.+4      	; 0x786 <CaptureCellValue+0x20>
+ 782:	88 0f       	add	r24, r24
+ 784:	99 1f       	adc	r25, r25
+ 786:	0a 94       	dec	r0
+ 788:	e2 f7       	brpl	.-8      	; 0x782 <CaptureCellValue+0x1c>
+ 78a:	48 2b       	or	r20, r24
 	/*
 	This section process the stored dot values and
 	generate a 6-bit number to be send over serial interface
 	*/
 	ProcessedCellValue=0x00;
 	for(i=0;i<6;i++)
- 776:	2f 5f       	subi	r18, 0xFF	; 255
- 778:	3f 4f       	sbci	r19, 0xFF	; 255
- 77a:	26 30       	cpi	r18, 0x06	; 6
- 77c:	31 05       	cpc	r19, r1
- 77e:	69 f7       	brne	.-38     	; 0x75a <CaptureCellValue+0xa>
- 780:	40 93 55 01 	sts	0x0155, r20
+ 78c:	2f 5f       	subi	r18, 0xFF	; 255
+ 78e:	3f 4f       	sbci	r19, 0xFF	; 255
+ 790:	26 30       	cpi	r18, 0x06	; 6
+ 792:	31 05       	cpc	r19, r1
+ 794:	69 f7       	brne	.-38     	; 0x770 <CaptureCellValue+0xa>
+ 796:	40 93 67 01 	sts	0x0167, r20
 		if(DotsPressed[i])
 		{
 			ProcessedCellValue |= _BV(i);
 		}
 	}
 	SendMsgPayLoad[0]=ProcessedCellValue;	//6-bit number representing the pressed dots
- 784:	40 93 01 01 	sts	0x0101, r20
+ 79a:	40 93 13 01 	sts	0x0113, r20
 	SendMsgPayLoad[1]=1;					//Cell number is always 1 for the primary interface
- 788:	81 e0       	ldi	r24, 0x01	; 1
- 78a:	80 93 02 01 	sts	0x0102, r24
+ 79e:	81 e0       	ldi	r24, 0x01	; 1
+ 7a0:	80 93 14 01 	sts	0x0114, r24
 	SendPacket('B',&SendMsgPayLoad,2);		//Send the two bytes with messege type of 'B'
- 78e:	82 e4       	ldi	r24, 0x42	; 66
- 790:	61 e0       	ldi	r22, 0x01	; 1
- 792:	71 e0       	ldi	r23, 0x01	; 1
- 794:	42 e0       	ldi	r20, 0x02	; 2
- 796:	50 e0       	ldi	r21, 0x00	; 0
- 798:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
+ 7a4:	82 e4       	ldi	r24, 0x42	; 66
+ 7a6:	63 e1       	ldi	r22, 0x13	; 19
+ 7a8:	71 e0       	ldi	r23, 0x01	; 1
+ 7aa:	42 e0       	ldi	r20, 0x02	; 2
+ 7ac:	50 e0       	ldi	r21, 0x00	; 0
+ 7ae:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
 void ResetCellState(void)
 {
 	int i=0;
 	for(i=0;i<6;i++)
 	{
 		DotsPressed[i]=false;
- 79c:	10 92 19 01 	sts	0x0119, r1
- 7a0:	10 92 1a 01 	sts	0x011A, r1
- 7a4:	10 92 1b 01 	sts	0x011B, r1
- 7a8:	10 92 1c 01 	sts	0x011C, r1
- 7ac:	10 92 1d 01 	sts	0x011D, r1
- 7b0:	10 92 1e 01 	sts	0x011E, r1
+ 7b2:	10 92 2b 01 	sts	0x012B, r1
+ 7b6:	10 92 2c 01 	sts	0x012C, r1
+ 7ba:	10 92 2d 01 	sts	0x012D, r1
+ 7be:	10 92 2e 01 	sts	0x012E, r1
+ 7c2:	10 92 2f 01 	sts	0x012F, r1
+ 7c6:	10 92 30 01 	sts	0x0130, r1
 	}
 	PI_LastDotPressed=0;
- 7b4:	10 92 56 01 	sts	0x0156, r1
+ 7ca:	10 92 68 01 	sts	0x0168, r1
 	}
 	SendMsgPayLoad[0]=ProcessedCellValue;	//6-bit number representing the pressed dots
 	SendMsgPayLoad[1]=1;					//Cell number is always 1 for the primary interface
 	SendPacket('B',&SendMsgPayLoad,2);		//Send the two bytes with messege type of 'B'
 	ResetCellState();						//Reset the cell state so that new letter can start
 }
- 7b8:	08 95       	ret
+ 7ce:	08 95       	ret
 
-000007ba <ProcessTheDot>:
+000007d0 <ProcessTheDot>:
 void ProcessTheDot(void)
 {
 	uint8_t TempDot=0;
 	uint8_t PI_ThisDot;
 	bool NewDotDetected=false;
 	if(!(PINC & (1<<UI_BR1))) //Dot1
- 7ba:	34 99       	sbic	0x06, 4	; 6
- 7bc:	03 c0       	rjmp	.+6      	; 0x7c4 <ProcessTheDot+0xa>
- 7be:	91 e0       	ldi	r25, 0x01	; 1
- 7c0:	81 e0       	ldi	r24, 0x01	; 1
- 7c2:	02 c0       	rjmp	.+4      	; 0x7c8 <ProcessTheDot+0xe>
- 7c4:	90 e0       	ldi	r25, 0x00	; 0
- 7c6:	80 e0       	ldi	r24, 0x00	; 0
+ 7d0:	34 99       	sbic	0x06, 4	; 6
+ 7d2:	03 c0       	rjmp	.+6      	; 0x7da <ProcessTheDot+0xa>
+ 7d4:	91 e0       	ldi	r25, 0x01	; 1
+ 7d6:	81 e0       	ldi	r24, 0x01	; 1
+ 7d8:	02 c0       	rjmp	.+4      	; 0x7de <ProcessTheDot+0xe>
+ 7da:	90 e0       	ldi	r25, 0x00	; 0
+ 7dc:	80 e0       	ldi	r24, 0x00	; 0
 	{
 		NewDotDetected=true;
 		TempDot=1;
 	}
 	if(!(PINC & (1<<UI_BR2))) //Dot1
- 7c8:	31 99       	sbic	0x06, 1	; 6
- 7ca:	02 c0       	rjmp	.+4      	; 0x7d0 <ProcessTheDot+0x16>
- 7cc:	92 e0       	ldi	r25, 0x02	; 2
- 7ce:	81 e0       	ldi	r24, 0x01	; 1
+ 7de:	31 99       	sbic	0x06, 1	; 6
+ 7e0:	02 c0       	rjmp	.+4      	; 0x7e6 <ProcessTheDot+0x16>
+ 7e2:	92 e0       	ldi	r25, 0x02	; 2
+ 7e4:	81 e0       	ldi	r24, 0x01	; 1
 	{
 		NewDotDetected=true;
 		TempDot=2;
 	}
 	if(!(PINC & (1<<UI_BR3))) //Dot1
- 7d0:	35 99       	sbic	0x06, 5	; 6
- 7d2:	02 c0       	rjmp	.+4      	; 0x7d8 <ProcessTheDot+0x1e>
- 7d4:	93 e0       	ldi	r25, 0x03	; 3
- 7d6:	81 e0       	ldi	r24, 0x01	; 1
+ 7e6:	35 99       	sbic	0x06, 5	; 6
+ 7e8:	02 c0       	rjmp	.+4      	; 0x7ee <ProcessTheDot+0x1e>
+ 7ea:	93 e0       	ldi	r25, 0x03	; 3
+ 7ec:	81 e0       	ldi	r24, 0x01	; 1
 	{
 		NewDotDetected=true;
 		TempDot=3;
 	}
 	if(!(PINC & (1<<UI_BR4))) //Dot1
- 7d8:	32 99       	sbic	0x06, 2	; 6
- 7da:	02 c0       	rjmp	.+4      	; 0x7e0 <ProcessTheDot+0x26>
- 7dc:	94 e0       	ldi	r25, 0x04	; 4
- 7de:	81 e0       	ldi	r24, 0x01	; 1
+ 7ee:	32 99       	sbic	0x06, 2	; 6
+ 7f0:	02 c0       	rjmp	.+4      	; 0x7f6 <ProcessTheDot+0x26>
+ 7f2:	94 e0       	ldi	r25, 0x04	; 4
+ 7f4:	81 e0       	ldi	r24, 0x01	; 1
 	{
 		NewDotDetected=true;
 		TempDot=4;
 	}
 	if(!(PINC & (1<<UI_BR5))) //Dot1
- 7e0:	33 99       	sbic	0x06, 3	; 6
- 7e2:	02 c0       	rjmp	.+4      	; 0x7e8 <ProcessTheDot+0x2e>
- 7e4:	95 e0       	ldi	r25, 0x05	; 5
- 7e6:	81 e0       	ldi	r24, 0x01	; 1
+ 7f6:	33 99       	sbic	0x06, 3	; 6
+ 7f8:	02 c0       	rjmp	.+4      	; 0x7fe <ProcessTheDot+0x2e>
+ 7fa:	95 e0       	ldi	r25, 0x05	; 5
+ 7fc:	81 e0       	ldi	r24, 0x01	; 1
 	{
 		NewDotDetected=true;
 		TempDot=5;
 	}
 	if(!(PINC & (1<<UI_BR6))) //Dot1
- 7e8:	30 99       	sbic	0x06, 0	; 6
- 7ea:	02 c0       	rjmp	.+4      	; 0x7f0 <ProcessTheDot+0x36>
- 7ec:	96 e0       	ldi	r25, 0x06	; 6
- 7ee:	02 c0       	rjmp	.+4      	; 0x7f4 <ProcessTheDot+0x3a>
+ 7fe:	30 99       	sbic	0x06, 0	; 6
+ 800:	02 c0       	rjmp	.+4      	; 0x806 <ProcessTheDot+0x36>
+ 802:	96 e0       	ldi	r25, 0x06	; 6
+ 804:	02 c0       	rjmp	.+4      	; 0x80a <ProcessTheDot+0x3a>
 	{
 		NewDotDetected=true;
 		TempDot=6;
 	}
 
 	if(NewDotDetected)
- 7f0:	88 23       	and	r24, r24
- 7f2:	41 f1       	breq	.+80     	; 0x844 <ProcessTheDot+0x8a>
+ 806:	88 23       	and	r24, r24
+ 808:	41 f1       	breq	.+80     	; 0x85a <ProcessTheDot+0x8a>
 	{
 		if(InterfaceType==1)
- 7f4:	80 91 15 01 	lds	r24, 0x0115
- 7f8:	81 30       	cpi	r24, 0x01	; 1
- 7fa:	49 f0       	breq	.+18     	; 0x80e <ProcessTheDot+0x54>
+ 80a:	80 91 27 01 	lds	r24, 0x0127
+ 80e:	81 30       	cpi	r24, 0x01	; 1
+ 810:	49 f0       	breq	.+18     	; 0x824 <ProcessTheDot+0x54>
 		{
 			//OK this is the default			
 		}else if(InterfaceType==2)
- 7fc:	80 91 15 01 	lds	r24, 0x0115
- 800:	82 30       	cpi	r24, 0x02	; 2
- 802:	29 f4       	brne	.+10     	; 0x80e <ProcessTheDot+0x54>
+ 812:	80 91 27 01 	lds	r24, 0x0127
+ 816:	82 30       	cpi	r24, 0x02	; 2
+ 818:	29 f4       	brne	.+10     	; 0x824 <ProcessTheDot+0x54>
 		{
 			//OK Flip the pattern
 			if(TempDot>3) TempDot-=3;
- 804:	94 30       	cpi	r25, 0x04	; 4
- 806:	10 f0       	brcs	.+4      	; 0x80c <ProcessTheDot+0x52>
- 808:	93 50       	subi	r25, 0x03	; 3
- 80a:	01 c0       	rjmp	.+2      	; 0x80e <ProcessTheDot+0x54>
+ 81a:	94 30       	cpi	r25, 0x04	; 4
+ 81c:	10 f0       	brcs	.+4      	; 0x822 <ProcessTheDot+0x52>
+ 81e:	93 50       	subi	r25, 0x03	; 3
+ 820:	01 c0       	rjmp	.+2      	; 0x824 <ProcessTheDot+0x54>
 			else TempDot+=3;
- 80c:	9d 5f       	subi	r25, 0xFD	; 253
+ 822:	9d 5f       	subi	r25, 0xFD	; 253
 		}
 		if(PI_LastDotPressed==TempDot) return;
- 80e:	80 91 56 01 	lds	r24, 0x0156
- 812:	89 17       	cp	r24, r25
- 814:	b9 f0       	breq	.+46     	; 0x844 <ProcessTheDot+0x8a>
+ 824:	80 91 68 01 	lds	r24, 0x0168
+ 828:	89 17       	cp	r24, r25
+ 82a:	b9 f0       	breq	.+46     	; 0x85a <ProcessTheDot+0x8a>
 		PI_LastDotPressed=TempDot;
- 816:	90 93 56 01 	sts	0x0156, r25
+ 82c:	90 93 68 01 	sts	0x0168, r25
 		DotsPressed[TempDot-1]=true;
- 81a:	e9 2f       	mov	r30, r25
- 81c:	f0 e0       	ldi	r31, 0x00	; 0
- 81e:	e8 5e       	subi	r30, 0xE8	; 232
- 820:	fe 4f       	sbci	r31, 0xFE	; 254
- 822:	81 e0       	ldi	r24, 0x01	; 1
- 824:	80 83       	st	Z, r24
+ 830:	e9 2f       	mov	r30, r25
+ 832:	f0 e0       	ldi	r31, 0x00	; 0
+ 834:	e6 5d       	subi	r30, 0xD6	; 214
+ 836:	fe 4f       	sbci	r31, 0xFE	; 254
+ 838:	81 e0       	ldi	r24, 0x01	; 1
+ 83a:	80 83       	st	Z, r24
 		SendMsgPayLoad[0]=0x30+PI_LastDotPressed;
- 826:	90 5d       	subi	r25, 0xD0	; 208
- 828:	90 93 01 01 	sts	0x0101, r25
+ 83c:	90 5d       	subi	r25, 0xD0	; 208
+ 83e:	90 93 13 01 	sts	0x0113, r25
 		SendMsgPayLoad[1]=0x31;
- 82c:	81 e3       	ldi	r24, 0x31	; 49
- 82e:	80 93 02 01 	sts	0x0102, r24
+ 842:	81 e3       	ldi	r24, 0x31	; 49
+ 844:	80 93 14 01 	sts	0x0114, r24
 		SendMsgPayLoad[2]=0x31;
- 832:	80 93 03 01 	sts	0x0103, r24
+ 848:	80 93 15 01 	sts	0x0115, r24
     	SendPacket('A',&SendMsgPayLoad,3);
- 836:	81 e4       	ldi	r24, 0x41	; 65
- 838:	61 e0       	ldi	r22, 0x01	; 1
- 83a:	71 e0       	ldi	r23, 0x01	; 1
- 83c:	43 e0       	ldi	r20, 0x03	; 3
- 83e:	50 e0       	ldi	r21, 0x00	; 0
- 840:	0e 94 7f 03 	call	0x6fe	; 0x6fe <SendPacket>
- 844:	08 95       	ret
+ 84c:	81 e4       	ldi	r24, 0x41	; 65
+ 84e:	63 e1       	ldi	r22, 0x13	; 19
+ 850:	71 e0       	ldi	r23, 0x01	; 1
+ 852:	43 e0       	ldi	r20, 0x03	; 3
+ 854:	50 e0       	ldi	r21, 0x00	; 0
+ 856:	0e 94 8a 03 	call	0x714	; 0x714 <SendPacket>
+ 85a:	08 95       	ret
 
-00000846 <__udivmodhi4>:
- 846:	aa 1b       	sub	r26, r26
- 848:	bb 1b       	sub	r27, r27
- 84a:	51 e1       	ldi	r21, 0x11	; 17
- 84c:	07 c0       	rjmp	.+14     	; 0x85c <__udivmodhi4_ep>
+0000085c <__udivmodhi4>:
+ 85c:	aa 1b       	sub	r26, r26
+ 85e:	bb 1b       	sub	r27, r27
+ 860:	51 e1       	ldi	r21, 0x11	; 17
+ 862:	07 c0       	rjmp	.+14     	; 0x872 <__udivmodhi4_ep>
 
-0000084e <__udivmodhi4_loop>:
- 84e:	aa 1f       	adc	r26, r26
- 850:	bb 1f       	adc	r27, r27
- 852:	a6 17       	cp	r26, r22
- 854:	b7 07       	cpc	r27, r23
- 856:	10 f0       	brcs	.+4      	; 0x85c <__udivmodhi4_ep>
- 858:	a6 1b       	sub	r26, r22
- 85a:	b7 0b       	sbc	r27, r23
+00000864 <__udivmodhi4_loop>:
+ 864:	aa 1f       	adc	r26, r26
+ 866:	bb 1f       	adc	r27, r27
+ 868:	a6 17       	cp	r26, r22
+ 86a:	b7 07       	cpc	r27, r23
+ 86c:	10 f0       	brcs	.+4      	; 0x872 <__udivmodhi4_ep>
+ 86e:	a6 1b       	sub	r26, r22
+ 870:	b7 0b       	sbc	r27, r23
 
-0000085c <__udivmodhi4_ep>:
- 85c:	88 1f       	adc	r24, r24
- 85e:	99 1f       	adc	r25, r25
- 860:	5a 95       	dec	r21
- 862:	a9 f7       	brne	.-22     	; 0x84e <__udivmodhi4_loop>
- 864:	80 95       	com	r24
- 866:	90 95       	com	r25
- 868:	bc 01       	movw	r22, r24
- 86a:	cd 01       	movw	r24, r26
- 86c:	08 95       	ret
+00000872 <__udivmodhi4_ep>:
+ 872:	88 1f       	adc	r24, r24
+ 874:	99 1f       	adc	r25, r25
+ 876:	5a 95       	dec	r21
+ 878:	a9 f7       	brne	.-22     	; 0x864 <__udivmodhi4_loop>
+ 87a:	80 95       	com	r24
+ 87c:	90 95       	com	r25
+ 87e:	bc 01       	movw	r22, r24
+ 880:	cd 01       	movw	r24, r26
+ 882:	08 95       	ret
 
-0000086e <_exit>:
- 86e:	f8 94       	cli
+00000884 <_exit>:
+ 884:	f8 94       	cli
 
-00000870 <__stop_program>:
- 870:	ff cf       	rjmp	.-2      	; 0x870 <__stop_program>
+00000886 <__stop_program>:
+ 886:	ff cf       	rjmp	.-2      	; 0x886 <__stop_program>

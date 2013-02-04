@@ -157,8 +157,15 @@ void RequestToPlayMP3file(const char* thisFile)
 {
 	int i = 0;
 	
-  // copy the file name to the global variable
-  while(*thisFile != '.')
+	while(i < strlen(fileName))
+	{
+		fileName[i++] = "";
+	}
+	DPRINTF("fileName = %s\n\r", fileName);
+	i = 0;
+	
+  	// copy the file name to the global variable
+	while(*thisFile != '.')
 	{
 		fileName[i++] = *(thisFile++);
 	}
@@ -166,6 +173,7 @@ void RequestToPlayMP3file(const char* thisFile)
 	fileName[i++] = *(thisFile++);
 	fileName[i++] = *(thisFile++);
 	fileName[i++] = *(thisFile++);
+	DPRINTF("end fileName = %s\n\r", fileName);
 
   // Mark that a file is queued to be played by the user interface
 	UI_MP3_file_Pending = true;
