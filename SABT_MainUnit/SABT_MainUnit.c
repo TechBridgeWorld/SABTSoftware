@@ -10,8 +10,6 @@
 
 volatile bool TMR1_INT;
 volatile bool LED_STAT;
-volatile char temp=0;
-
 
 /*
 volatile unsigned char iInit=0;
@@ -75,20 +73,31 @@ End of test code
 	//USART_transmitStringToPCFromFlash (PSTR("Press a key and see it returns."));
 	TX_NEWLINE_PC;
 	while(1){
-		//printf("Small waves crashing against the sand.");
+    // TODO remove test string
 		DPRINTF("Small waves crashing against the sand%d.", 42);
-		//fprintf(stderr, "HELLO HELLO HELLO HELLO");
-		if(temp++>100){
-			temp=0;
-		}
 
 		if(TMR1_INT){
 			TMR1_INT=false;
 		//	TimeRoutine();
 		}
+
+    // check to see if we've received data from UI board
+    // if true, process the single byte
 		if(USART_Keypad_DATA_RDY){
+      /* one of two types:
+       * [U][I}[msglen][msg_number][msg_type][payload][CRC1][CRC2]
+       * [M][C}[msglen][msg_number][msg_type][payload][CRC1][CRC2]
+       * msg_type:
+       *  A: contains braille dot at this location in the UI
+       *  B: contains braille character at this location in the UI
+       *  C: payload contains an error message
+       *  D: payload contains a control button input from UI
+       *  E: miscellaneous */
 			USART_Keypad_ReceiveAction();
 		}
+
+    // check to see if we've received data from a connected PC 
+    // if true, process the single byte
 		if(USART_PC_DATA_RDY){
 			USART_PC_ReceiveAction();
 			/*
