@@ -33,71 +33,71 @@ void init_USART_PC(void)
  * @return always 0?
  */
 unsigned char USART_PC_ReceiveAction(void){
-	USART_PC_DATA_RDY=false;
+  USART_PC_DATA_RDY=false;
 
-	if(!USART_PC_header_received)
-	{
-		USART_PC_prefix[2]=USART_PC_Received_Data;
-		USART_PC_prefix[0]=USART_PC_prefix[1];
-		USART_PC_prefix[1]=USART_PC_prefix[2];
-		if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C'))
-		{
-			USART_PC_header_received=true;
-			USART_PC_ReceivedPacket[0]=USART_PC_prefix[0];
-			USART_PC_ReceivedPacket[1]=USART_PC_prefix[1];
-			USART_PC_receive_msgcnt=2;
-			//USART_PC_length_reveived=false;
-			//USART_PC_received_playload_len=USART_PC_Received_Data;
-			//USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
-			//USART_PC_length_reveived=true;
-			//USART_PC_receive_msgcnt++;
-		}
-	}
-	else{
-		if(USART_PC_Received_Data==13) //If carraige return found --> end of the command
-		{
-			USART_PC_received_playload_len=USART_PC_receive_msgcnt;
-			USART_PC_Message_ready=true;
-			USART_PC_header_received=false;
-			//USART_PC_length_reveived=false;
-		}
-		USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
-	}
+  if(!USART_PC_header_received)
+  {
+    USART_PC_prefix[2]=USART_PC_Received_Data;
+    USART_PC_prefix[0]=USART_PC_prefix[1];
+    USART_PC_prefix[1]=USART_PC_prefix[2];
+    if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C'))
+    {
+      USART_PC_header_received=true;
+      USART_PC_ReceivedPacket[0]=USART_PC_prefix[0];
+      USART_PC_ReceivedPacket[1]=USART_PC_prefix[1];
+      USART_PC_receive_msgcnt=2;
+      //USART_PC_length_reveived=false;
+      //USART_PC_received_playload_len=USART_PC_Received_Data;
+      //USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
+      //USART_PC_length_reveived=true;
+      //USART_PC_receive_msgcnt++;
+    }
+  }
+  else{
+    if(USART_PC_Received_Data==13) //If carraige return found --> end of the command
+    {
+      USART_PC_received_playload_len=USART_PC_receive_msgcnt;
+      USART_PC_Message_ready=true;
+      USART_PC_header_received=false;
+      //USART_PC_length_reveived=false;
+    }
+    USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
+  }
 
 /*
-	else if(!USART_PC_length_reveived)
-	{		
-		if(USART_PC_receive_msgcnt==2)
-		{
-			USART_PC_received_playload_len=USART_PC_Received_Data;
-			if(USART_PC_received_playload_len=='x') //If this is 'z', then this is the init port detect message >> Proceed with a port reply.
-			{
-				USART_PC_Message_ready=false;
-				USART_PC_header_received=false;
-				USART_PC_length_reveived=false;
-				return 'z';
-			}
-			USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
-			USART_PC_length_reveived=true;
-			USART_PC_receive_msgcnt++;
-		}
-		else
-		{
-			USART_PC_header_received=false;
-		}
-	}
-	else
-	{
-		USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
-		if(USART_PC_receive_msgcnt==USART_PC_received_playload_len) //full message has been received
-		{
-			USART_PC_Message_ready=true;
-			USART_PC_header_received=false;
-			USART_PC_length_reveived=false;
-		}
-	}		
+  else if(!USART_PC_length_reveived)
+  {    
+    if(USART_PC_receive_msgcnt==2)
+    {
+      USART_PC_received_playload_len=USART_PC_Received_Data;
+      if(USART_PC_received_playload_len=='x') //If this is 'z', then this is the init port detect message >> Proceed with a port reply.
+      {
+        USART_PC_Message_ready=false;
+        USART_PC_header_received=false;
+        USART_PC_length_reveived=false;
+        return 'z';
+      }
+      USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
+      USART_PC_length_reveived=true;
+      USART_PC_receive_msgcnt++;
+    }
+    else
+    {
+      USART_PC_header_received=false;
+    }
+  }
+  else
+  {
+    USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
+    if(USART_PC_receive_msgcnt==USART_PC_received_playload_len) //full message has been received
+    {
+      USART_PC_Message_ready=true;
+      USART_PC_header_received=false;
+      USART_PC_length_reveived=false;
+    }
+  }    
 */
-	return 0;
+  return 0;
 }
 
 /**
@@ -107,10 +107,10 @@ unsigned char USART_PC_ReceiveAction(void){
  */
 void USART_transmitByteToPC( unsigned char bData )
 {
-///*	Disabled PC TX temp
-	while ( !(UCSR0A & (1<<UDRE0)) ); // Loop until the data register is empty
-	UDR0 = bData;                     // Transmit one byte of data
-//	*/
+///*  Disabled PC TX temp
+  while ( !(UCSR0A & (1<<UDRE0)) ); // Loop until the data register is empty
+  UDR0 = bData;                     // Transmit one byte of data
+//  */
 }
 
 /** 

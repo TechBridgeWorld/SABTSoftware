@@ -12,49 +12,49 @@ char MD3_Last_Dot;
 
 void MD3_PlayRequestedDot(void)
 {
-	switch(MD3_Last_Dot)
-	{
-		case '1':
-			RequestToPlayMP3file("MD3_1.MP3");
-			break;
-		case '2':
-			RequestToPlayMP3file("MD3_2.MP3");
-			break;
-		case '3':
-			RequestToPlayMP3file("MD3_3.MP3");
-			break;
-		case '4':
-			RequestToPlayMP3file("MD3_4.MP3");
-			break;
-		case '5':
-			RequestToPlayMP3file("MD3_5.MP3");
-			break;
-		case '6':
-			RequestToPlayMP3file("MD3_6.MP3");
-			break;
-	}
+  switch(MD3_Last_Dot)
+  {
+    case '1':
+      RequestToPlayMP3file("MD3_1.MP3");
+      break;
+    case '2':
+      RequestToPlayMP3file("MD3_2.MP3");
+      break;
+    case '3':
+      RequestToPlayMP3file("MD3_3.MP3");
+      break;
+    case '4':
+      RequestToPlayMP3file("MD3_4.MP3");
+      break;
+    case '5':
+      RequestToPlayMP3file("MD3_5.MP3");
+      break;
+    case '6':
+      RequestToPlayMP3file("MD3_6.MP3");
+      break;
+  }
 }
 
 void MD3_Reset(void)
 {
-	MD3_Current_State=0;
+  MD3_Current_State=0;
 }
 
 void MD3_Main(void)
 {
-	switch(MD3_Current_State)
-	{
-		case 0:
-			RequestToPlayMP3file("MD3INT.MP3");
-			MD3_Current_State=1;
-			break;
-		case 1:
-			break;
-		case 2:
-			MD3_PlayRequestedDot();
-			MD3_Current_State=1;
-			break;
-	}
+  switch(MD3_Current_State)
+  {
+    case 0:
+      RequestToPlayMP3file("MD3INT.MP3");
+      MD3_Current_State=1;
+      break;
+    case 1:
+      break;
+    case 2:
+      MD3_PlayRequestedDot();
+      MD3_Current_State=1;
+      break;
+  }
 }
 
 void MD3_CallModeYesAnswer(void)
@@ -69,8 +69,8 @@ void MD3_CallModeNoAnswer(void)
 
 void MD3_InputDot(char thisDot)
 {
-	MD3_Last_Dot=thisDot;
-	MD3_Current_State=2;
+  MD3_Last_Dot=thisDot;
+  MD3_Current_State=2;
 }
 
 void MD3_InputCell(char thisCell)

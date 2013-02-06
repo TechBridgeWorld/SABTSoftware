@@ -1,10 +1,10 @@
 #include "Globals.h"
 
 //******************************************************************
-//Function	: to initialize the SD/SDHC card in SPI mode
-//Arguments	: none
-//return	: unsigned char; will be 0 if no error,
-// 			  otherwise the response byte will be sent
+//Function  : to initialize the SD/SDHC card in SPI mode
+//Arguments  : none
+//return  : unsigned char; will be 0 if no error,
+//         otherwise the response byte will be sent
 //******************************************************************
 unsigned char SD_init(void)
 {
@@ -21,7 +21,7 @@ do
    response = SD_sendCommand(GO_IDLE_STATE, 0); //send 'reset & go idle' command
    retry++;
    if(retry>0x20) 
-   	  return 1;   //time out, card not detected
+       return 1;   //time out, card not detected
    
 } while(response != 0x01);
 
@@ -32,17 +32,17 @@ SPI_transmit (0xff);
 retry = 0;
 
 SD_version = 2; //default set to SD compliance with ver2.x; 
-				//this may change after checking the next command
+        //this may change after checking the next command
 do
 {
 response = SD_sendCommand(SEND_IF_COND,0x000001AA); //Check power supply status, mendatory for SDHC card
 retry++;
 if(retry>0xfe) 
    {
-	  //TX_NEWLINE;
-	  SD_version = 1;
-	  cardType = 1;
-	  break;
+    //TX_NEWLINE;
+    SD_version = 1;
+    cardType = 1;
+    break;
    } //time out
 
 }while(response != 0x01);
@@ -58,7 +58,7 @@ retry++;
 if(retry>0xfe) 
    {
       //TX_NEWLINE;
-	  return 2;  //time out, card initialization failed
+    return 2;  //time out, card initialization failed
    } 
 
 }while(response != 0x00);
@@ -71,13 +71,13 @@ if (SD_version == 2)
 { 
    do
    {
-	 response = SD_sendCommand(READ_OCR,0);
-	 retry++;
-	 if(retry>0xfe) 
+   response = SD_sendCommand(READ_OCR,0);
+   retry++;
+   if(retry>0xfe) 
      {
        //TX_NEWLINE;
-	   cardType = 0;
-	   break;
+     cardType = 0;
+     break;
      } //time out
 
    }while(response != 0x00);
@@ -94,10 +94,10 @@ return 0; //successful return
 }
 
 //******************************************************************
-//Function	: to send a command to SD card
-//Arguments	: unsigned char (8-bit command value)
-// 			  & unsigned long (32-bit command argument)
-//return	: unsigned char; response byte
+//Function  : to send a command to SD card
+//Arguments  : unsigned char (8-bit command value)
+//         & unsigned long (32-bit command argument)
+//return  : unsigned char; response byte
 //******************************************************************
 unsigned char SD_sendCommand(unsigned char cmd, unsigned long arg)
 {
@@ -108,7 +108,7 @@ unsigned char response, retry=0, status;
 //multipying it with 512. which is equivalent to shifting it left 9 times
 //following 'if' loop does that
 
-if(SDHC_flag == 0)		
+if(SDHC_flag == 0)    
 if(cmd == READ_SINGLE_BLOCK     ||
    cmd == READ_MULTIPLE_BLOCKS  ||
    cmd == WRITE_SINGLE_BLOCK    ||
@@ -117,7 +117,7 @@ if(cmd == READ_SINGLE_BLOCK     ||
    cmd == ERASE_BLOCK_END_ADDR ) 
    {
      arg = arg << 9;
-   }	   
+   }     
 
 SD_CS_ASSERT;
 
@@ -127,7 +127,7 @@ SPI_transmit(arg>>16);
 SPI_transmit(arg>>8);
 SPI_transmit(arg);
 
-if(cmd == SEND_IF_COND)	 //it is compulsory to send correct CRC for CMD8 (CRC=0x87) & CMD0 (CRC=0x95)
+if(cmd == SEND_IF_COND)   //it is compulsory to send correct CRC for CMD8 (CRC=0x87) & CMD0 (CRC=0x95)
   SPI_transmit(0x87);    //for remaining commands, CRC is ignored in SPI mode
 else 
   SPI_transmit(0x95); 
@@ -153,10 +153,10 @@ return response; //return state
 }
 
 //*****************************************************************
-//Function	: to erase specified no. of blocks of SD card
-//Arguments	: none
-//return	: unsigned char; will be 0 if no error,
-// 			  otherwise the response byte will be sent
+//Function  : to erase specified no. of blocks of SD card
+//Arguments  : none
+//return  : unsigned char; will be 0 if no error,
+//         otherwise the response byte will be sent
 //*****************************************************************
 unsigned char SD_erase (unsigned long startBlock, unsigned long totalBlocks)
 {
@@ -178,10 +178,10 @@ return 0; //normal return
 }
 
 //******************************************************************
-//Function	: to read a single block from SD card
-//Arguments	: none
-//return	: unsigned char; will be 0 if no error,
-// 			  otherwise the response byte will be sent
+//Function  : to read a single block from SD card
+//Arguments  : none
+//return  : unsigned char; will be 0 if no error,
+//         otherwise the response byte will be sent
 //******************************************************************
 unsigned char SD_readSingleBlock(unsigned long startBlock)
 {
@@ -211,10 +211,10 @@ return 0;
 }
 
 //******************************************************************
-//Function	: to write to a single block of SD card
-//Arguments	: none
-//return	: unsigned char; will be 0 if no error,
-// 			  otherwise the response byte will be sent
+//Function  : to write to a single block of SD card
+//Arguments  : none
+//return  : unsigned char; will be 0 if no error,
+//         otherwise the response byte will be sent
 //******************************************************************
 unsigned char SD_writeSingleBlock(unsigned long startBlock)
 {
@@ -261,10 +261,10 @@ return 0;
 #ifndef FAT_TESTING_ONLY
 
 //***************************************************************************
-//Function	: to read multiple blocks from SD card & send every block to UART
-//Arguments	: none
-//return	: unsigned char; will be 0 if no error,
-// 			  otherwise the response byte will be sent
+//Function  : to read multiple blocks from SD card & send every block to UART
+//Arguments  : none
+//return  : unsigned char; will be 0 if no error,
+//         otherwise the response byte will be sent
 //****************************************************************************
 unsigned char SD_readMultipleBlock (unsigned long startBlock, unsigned long totalBlocks)
 {
@@ -343,18 +343,18 @@ while( blockCounter < totalBlocks )
    do
    {
      data = receiveByte();
-     if(data == 0x08)	//'Back Space' key pressed
-	 { 
-	   if(i != 0)
-	   { 
-	     transmitByte(data);
-	     transmitByte(' '); 
-	     transmitByte(data); 
-	     i--; 
-		 size--;
-	   } 
-	   continue;     
-	 }
+     if(data == 0x08)  //'Back Space' key pressed
+   { 
+     if(i != 0)
+     { 
+       transmitByte(data);
+       transmitByte(' '); 
+       transmitByte(data); 
+       i--; 
+     size--;
+     } 
+     continue;     
+   }
      transmitByte(data);
      buffer[i++] = data;
      if(data == 0x0d)
@@ -362,7 +362,7 @@ while( blockCounter < totalBlocks )
         transmitByte(0x0a);
         buffer[i++] = 0x0a;
      }
-	 if(i == 512) break;
+   if(i == 512) break;
    }while (data != '~');
 
 //   TX_NEWLINE;
