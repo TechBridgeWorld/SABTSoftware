@@ -1,5 +1,5 @@
 /**
- * @file VX1053.c
+ * @file VS1053.c
  * @brief code for the SABT audio codec
  * @author Nick LaGrow (nlagrow)
  */

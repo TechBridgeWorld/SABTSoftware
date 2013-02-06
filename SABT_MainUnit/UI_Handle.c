@@ -26,6 +26,7 @@ bool UI_CheckModes(void)
   */
   unsigned char FileContent[100];
   unsigned char ModeID[3];
+  // TODO should PCPrintContent be of length 4?
   unsigned char PCPrintContent[2];
   int i=0;
   int iMoN;
@@ -71,6 +72,7 @@ bool UI_CheckModes(void)
     {
       bBoNFound=true;
     }
+
 
     i++;    
   }

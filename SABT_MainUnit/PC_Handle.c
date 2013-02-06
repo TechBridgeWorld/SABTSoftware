@@ -39,17 +39,25 @@ void PC_RequestsToModifyModesFile(void)
 {
   const char* ModesFile="MODES.DAT";
   unsigned char WritingFileContent[20];
+  
+  // Clear the buffer
   int iT=0;
   for(iT=0;iT<20;iT++)
   {
     WritingFileContent[iT]=0x00;
   }
+
   InitSDCard(false);
+
+  // Copy over the modes in the form <1><2>...<n>
   iT=0;
   for(iT=3;iT<USART_PC_received_playload_len;iT++)
   {
     WritingFileContent[iT-3]=USART_PC_ReceivedPacket[iT];
   }
+
+  DPRINTF("File content: %s\n", WritingFileContent);
+
   if(ReplaceTheContentOfThisFileWith(ModesFile,WritingFileContent)==0)
   {
     USART_transmitStringToPCFromFlash(PSTR("SABT-OK"));

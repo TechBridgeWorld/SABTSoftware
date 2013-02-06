@@ -18,7 +18,7 @@ MD1.o: ../MD1.c ../Globals.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/interrupt.h ../FAT32.h \
   ../USART_PC.h ../SD_routines.h ../VS1053.h ../SPI.h ../USART_Keypad.h \
-  ../UI_Handle.h ../PC_Handle.h
+  ../UI_Handle.h ../PC_Handle.h ../MD1.h
 
 ../Globals.h:
 
@@ -73,3 +73,5 @@ c:/winavr-20100110/lib/gcc/../../avr/include/avr/interrupt.h:
 ../UI_Handle.h:
 
 ../PC_Handle.h:
+
+../MD1.h:

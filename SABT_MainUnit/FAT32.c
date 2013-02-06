@@ -330,6 +330,10 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
   unsigned int iReadByteCnt;
   bool bEndOfFile=false;
 
+  PRINTF("In readAndRetrieve, fileName:");
+  PRINTF(fileName);
+  TX_NEWLINE_PC;
+
   error = convertFileName (fileName); //convert fileName into FAT format
   if(error) return 1;
 
@@ -491,20 +495,25 @@ unsigned char convertFileName (unsigned char *fileName)
   unsigned char fileNameFAT[11];
   unsigned char j, k;
 
-  DPRINTF("|%s |\n\r", fileName);
+  PRINTF("[convertFileName]Filename:");
+  PRINTF(fileName);
+  TX_NEWLINE_PC;
 
   for(j=0; j<12; j++) {
-    DPRINTF("%c", fileName[j]);
     if(fileName[j] == '.') 
       break;
   }
-  DPRINTF("\n\r");
 
   
+  // TODO #define 0 ->failure
+  // TODO define magic numbers
+  // 0 = SUCCESS
+  // TODO better success conditions
   if (j == 12)
     // assume that a string without any dots is already converted
     return 0;
 
+  // 1 = BAD_EXTENSION
   if(j>8) {
     USART_transmitStringToPCFromFlash(PSTR("Invalid fileName.")); 
     return 1;
@@ -517,6 +526,7 @@ unsigned char convertFileName (unsigned char *fileName)
     fileNameFAT[k] = ' ';
 
   j++;
+
   for(k=8; k<11; k++) //setting file extention
   {
     if(fileName[j] != 0)
@@ -544,8 +554,17 @@ unsigned char convertFileName (unsigned char *fileName)
   for(j=0; j<11; j++)
     fileName[j] = fileNameFAT[j];
 
+  // Add null terminator to filename
+  //fileName[11] = '\0';
 
-  DPRINTF("[%s]\n\r", fileName);
+  PRINTF("[convertFileName]File name FAT:");
+  PRINTF(fileNameFAT);
+  TX_NEWLINE_PC;
+
+
+  PRINTF("[convertFileName]File name after:");
+  PRINTF(fileName);
+  TX_NEWLINE_PC;
 
   return 0;
 }
@@ -574,7 +593,7 @@ int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fil
     startBlock = getFirstSector (cluster);
     i=0;
     j=0;
-    while(*fileContent!='$')
+    while(*fileContent != '$')
     {      
       buffer[i++]=*fileContent;
       fileContent++;

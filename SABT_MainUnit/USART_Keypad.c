@@ -24,7 +24,7 @@ void init_USART_Keypad(void)
   UBRR1L = 0x19; //set baud rate lo
   UBRR1H = 0x00; //set baud rate hi 19,200 baud with 8MHz clock
   UCSR1B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
-   USART_UI_length_reveived=false;
+  USART_UI_length_received=false;
   USART_UI_header_received=false;
   USART_UI_Message_ready=false;
 }
@@ -53,20 +53,20 @@ void USART_Keypad_ReceiveAction(void){
       USART_UI_ReceivedPacket[0]=USART_UI_prefix[0];
       USART_UI_ReceivedPacket[1]=USART_UI_prefix[1];
       USART_UI_receive_msgcnt=2;
-      USART_UI_length_reveived=false;
+      USART_UI_length_received=false;
       //USART_UI_received_playload_len=USART_Keypad_Received_Data;
       //USART_UI_ReceivedPacket[USART_UI_receive_msgcnt]=USART_Keypad_Received_Data;
       //USART_UI_length_reveived=true;
       //USART_UI_receive_msgcnt++;
     }
   }
-  else if(!USART_UI_length_reveived)
+  else if(!USART_UI_length_received)
   {
     if(USART_UI_receive_msgcnt==2)
     {
       USART_UI_received_playload_len=USART_Keypad_Received_Data;
       USART_UI_ReceivedPacket[USART_UI_receive_msgcnt]=USART_Keypad_Received_Data;
-      USART_UI_length_reveived=true;
+      USART_UI_length_received=true;
       USART_UI_receive_msgcnt++;
     }
     else
@@ -81,7 +81,7 @@ void USART_Keypad_ReceiveAction(void){
     {
       USART_UI_Message_ready=true;
       USART_UI_header_received=false;
-      USART_UI_length_reveived=false;
+      USART_UI_length_received=false;
     }
   }    
 }  

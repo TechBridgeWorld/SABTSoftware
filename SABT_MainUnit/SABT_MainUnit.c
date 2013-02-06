@@ -75,7 +75,7 @@ End of test code
   TX_NEWLINE_PC;
   while(1){
     // TODO remove test string
-    DPRINTF("Small waves crashing against the sand%d.", 42);
+    // DPRINTF("Small waves crashing against the sand%d.", 42);
 
     if(TMR1_INT){
       TMR1_INT=false;

@@ -14,33 +14,30 @@
 //******************************************************************
 unsigned char SD_init(void)
 {
-unsigned char i, response, SD_version;
-unsigned int retry=0 ;
+  unsigned char i, response, SD_version;
+  unsigned int retry=0 ;
 
- for(i=0;i<10;i++)
-      SPI_transmit(0xff);   //80 clock pulses spent before sending the first command
+  for(i=0;i<10;i++)
+    SPI_transmit(0xff);   //80 clock pulses spent before sending the first command
+    SD_CS_ASSERT;
+    do
+    {
+       response = SD_sendCommand(GO_IDLE_STATE, 0); //send 'reset & go idle' command
+       retry++;
+       if(retry>0x20) 
+         return 1;   //time out, card not detected
+    } while(response != 0x01);
 
-SD_CS_ASSERT;
-do
-{
-  
-   response = SD_sendCommand(GO_IDLE_STATE, 0); //send 'reset & go idle' command
-   retry++;
-   if(retry>0x20) 
-       return 1;   //time out, card not detected
-   
-} while(response != 0x01);
+    SD_CS_DEASSERT;
+    SPI_transmit (0xff);
+    SPI_transmit (0xff);
 
-SD_CS_DEASSERT;
-SPI_transmit (0xff);
-SPI_transmit (0xff);
+    retry = 0;
 
-retry = 0;
-
-SD_version = 2; //default set to SD compliance with ver2.x; 
+    SD_version = 2; //default set to SD compliance with ver2.x; 
         //this may change after checking the next command
-do
-{
+    do
+    {
 response = SD_sendCommand(SEND_IF_COND,0x000001AA); //Check power supply status, mendatory for SDHC card
 retry++;
 if(retry>0xfe) 

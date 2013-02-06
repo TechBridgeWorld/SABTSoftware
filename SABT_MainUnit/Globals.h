@@ -57,4 +57,7 @@ unsigned char debug_buffer[256];
   sprintf(debug_buffer, msg, ##__VA_ARGS__); \
   USART_transmitStringToPC(&debug_buffer);
 
+#define PRINTF(msg) \
+  USART_transmitStringToPC(msg);
+
 #endif /* _GLOBALS_H_ */
