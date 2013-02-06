@@ -1,3 +1,9 @@
+/**
+ * @file MD3.c
+ * @brief mode 3 code
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "Globals.h"
 
 int MD3_Current_State;

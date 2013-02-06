@@ -8,7 +8,6 @@
 
 #include "Globals.h"
 
-
 unsigned char getBootSectorData (void)
 {
   struct BS_Structure *bpb; //mapping the buffer onto the structure

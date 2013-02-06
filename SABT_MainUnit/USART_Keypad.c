@@ -4,7 +4,6 @@
  * @author Alex Etling (petling)
  */
 
-
 #include "Globals.h"
 
 bool USART_UI_header_received,USART_UI_length_received;

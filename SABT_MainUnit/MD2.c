@@ -1,3 +1,9 @@
+/**
+ * @file MD2.c
+ * @brief mode 2 code
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "Globals.h"
 #include "Modes.h"
 

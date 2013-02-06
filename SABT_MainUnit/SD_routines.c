@@ -1,3 +1,9 @@
+/**
+ * @file SD_routines.c
+ * @brief code to interact with SD card
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #include "Globals.h"
 
 //******************************************************************
