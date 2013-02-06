@@ -22,7 +22,8 @@ void InitializeSystem(void);
 
 /**
  * @brief NOT SURE WHAT IT IS Doing
- *    IT seems like the PORTD is a data register. @ref AtATmega1284P(Preferred).pdf
+ *    IT seems like the PORTD is a data register. Turns off/on bits 5,6,7 in Portd depending on LED_STAT
+ * @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
 void TimeRoutine(void){

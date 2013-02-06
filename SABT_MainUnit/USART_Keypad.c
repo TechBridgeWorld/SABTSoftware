@@ -7,7 +7,7 @@
 
 #include "Globals.h"
 
-bool USART_UI_header_received,USART_UI_length_reveived;
+bool USART_UI_header_received,USART_UI_length_received;
 unsigned char USART_UI_prefix[3];
 unsigned char USART_UI_receive_msgcnt;
 unsigned char USART_UI_received_playload_len;
@@ -34,7 +34,9 @@ void init_USART_Keypad(void)
 /**
  * @brief   Receives message stored in globabl USART_Keypad_Received_Data
  *          Then proceeds to decode message, use its value, and allow for more 
- *          messages to be sent
+ *          messages to be sent. USART_UI_prefix - mini shift register which shifts
+ *          from 2 -> 1 -> 0
+ *          Transfers data from USART_Keypad_Reiceved_Data->USART_UI_ReceivedPacket
  * @ref  tech_report.pdf
  * @return Void
  */
