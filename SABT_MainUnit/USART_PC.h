@@ -1,3 +1,9 @@
+/**
+ * @file USART_PC.h
+ * @brief handle USART-PC interactions
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #ifndef _USART_PC_H_
 #define _USART_PC_H_
 
@@ -7,7 +13,8 @@
 #define INT  1
 #define LONG 2
 
-#define TX_NEWLINE_PC {USART_transmitByteToPC(0x0d); USART_transmitByteToPC(0x0a);}
+#define TX_NEWLINE_PC { USART_transmitByteToPC(0x0d); \
+                        USART_transmitByteToPC(0x0a);}
 
 volatile char USART_PC_Received_Data;
 volatile char USART_PC_Data_To_Transmit;
@@ -23,4 +30,4 @@ void USART_transmitByteToPC(unsigned char);
 void USART_transmitStringToPC(unsigned char*);
 void USART_transmitStringToPCFromFlash(char*);
 
-#endif
+#endif /* _USART_PC_H_ */

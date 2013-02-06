@@ -1,3 +1,9 @@
+/**
+ * @file USART_Keypad.h
+ * @brief handle USART-UI interactions
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #ifndef _USART_KEYPAD_H_
 #define _USART_KEYPAD_H_
 
@@ -7,7 +13,8 @@
 #define INT  1
 #define LONG 2
 
-#define TX_NEWLINE_KP {USART_transmitByteToKeypad(0x0d); USART_transmitByteToKeypad(0x0a);}
+#define TX_NEWLINE_KP { USART_transmitByteToKeypad(0x0d); \
+                        USART_transmitByteToKeypad(0x0a);}
 
 volatile char USART_Keypad_Received_Data;
 volatile char USART_Keypad_Data_To_Transmit;
@@ -22,4 +29,4 @@ void USART_transmitByteToKeypad(unsigned char);
 void USART_transmitStringToKeypad(unsigned char*);
 void USART_transmitStringToKeypadFromFlash(char*);
 
-#endif
+#endif /* _USART_KEYPAD_H_ */

@@ -1,3 +1,9 @@
+/**
+ * @file Globals.h
+ * @brief global definitions for the MCU
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H
 
@@ -28,28 +34,27 @@ unsigned char fileName[13];
 
 volatile char tempCnt;
 /*
-MP3 files.
-INT.MP3 - Introductory words
-MD1.MP3 - Mode 1 introduction MP3
-MD1.MP3 - Mode 2 introduction MP3
-ERR1.MP3 - Invalid mode, please press mode button select a valid mode
-
-MD1\WC.MP3
-MD1\1.MP3
-MD1\2.MP3
-MD1\3.MP3
-MD1\4.MP3
-MD1\5.MP3
-MD1\6.MP3
-
-
-*/
+ * MP3 files. 
+ * INT.MP3 - Introductory word.
+ * MD1.MP3 - Mode 1 introduction MP3
+ * MD1.MP3 - Mode 2 introduction MP3
+ * ERR1.MP3 - Invalid mode, please press mode button select a valid mode
+ *
+ * MD1\WC.MP3
+ * MD1\1.MP3
+ * MD1\2.MP3
+ * MD1\3.MP3
+ * MD1\4.MP3
+ * MD1\5.MP3
+ * MD1\6.MP3
+ */
 
 // vars for print statements
 unsigned char debug_buffer[256];
+
 // debug print statement
 #define DPRINTF(msg, ...) \
-	sprintf(debug_buffer, msg, ##__VA_ARGS__); \
-	USART_transmitStringToPC(&debug_buffer);
+  sprintf(debug_buffer, msg, ##__VA_ARGS__); \
+  USART_transmitStringToPC(&debug_buffer);
 
-#endif
+#endif /* _GLOBALS_H_ */
