@@ -28,19 +28,30 @@ void init_USART_PC(void)
 /**
  * @brief   Receives message stored in global USART_PC_Received_Data
  *          Then proceeds to decode message, use its value, and allow for more
- *          messages to be sent
+ *          message to be processed by PC_parse_message()
  * @ref  tech_report.pdf
  * @return always 0?
  */
 unsigned char USART_PC_ReceiveAction(void){
   USART_PC_DATA_RDY=false;
+  message_count ++;
 
+  //if we get to the end of the message
+  if(USART_PC_Received_Data == CARR_RETURN)
+  {
+    message_count = 0;
+    if(!valid_message){
+      valid_message = true;
+      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!!!");
+    }
+  }
+    
   if(!USART_PC_header_received)
   {
     USART_PC_prefix[2]=USART_PC_Received_Data;
     USART_PC_prefix[0]=USART_PC_prefix[1];
     USART_PC_prefix[1]=USART_PC_prefix[2];
-    if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C'))
+    if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C') && (message_count == 2))
     {
       USART_PC_header_received=true;
       USART_PC_ReceivedPacket[0]=USART_PC_prefix[0];
@@ -52,9 +63,14 @@ unsigned char USART_PC_ReceiveAction(void){
       //USART_PC_length_reveived=true;
       //USART_PC_receive_msgcnt++;
     }
+    else if(((USART_PC_prefix[0]!='P') || (USART_PC_prefix[1]!='C')) &&
+            (message_count == 2))
+    {
+      valid_message = false;
+    }
   }
   else{
-    if(USART_PC_Received_Data==13) //If carraige return found --> end of the command
+    if(USART_PC_Received_Data==CARR_RETURN) //If carraige return found --> end of the command
     {
       USART_PC_received_playload_len=USART_PC_receive_msgcnt;
       USART_PC_Message_ready=true;

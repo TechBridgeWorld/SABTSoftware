@@ -30,6 +30,10 @@ bool PC_parse_message()
     case PC_CMD_NEWMODES:
       PC_RequestsToModifyModesFile();
       break;
+    //incorrect message type
+    default:
+      PRINTF("SABT-INCORRECT MESSAGE TYPE!!!!");
+      break;
   }
 }
 

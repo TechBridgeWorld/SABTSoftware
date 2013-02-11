@@ -2,6 +2,7 @@
  * @file USART_PC.h
  * @brief handle USART-PC interactions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
  */
 
 #ifndef _USART_PC_H_
@@ -9,9 +10,10 @@
 
 #include <stdbool.h> 
 
-#define CHAR 0
-#define INT  1
-#define LONG 2
+#define CHAR        0
+#define INT         1
+#define LONG        2
+#define CARR_RETURN 13
 
 #define TX_NEWLINE_PC { USART_transmitByteToPC(0x0d); \
                         USART_transmitByteToPC(0x0a);}
@@ -21,6 +23,10 @@ volatile char USART_PC_Data_To_Transmit;
 volatile bool USART_PC_DATA_RDY;
 volatile bool USART_PC_Message_ready;
 volatile unsigned char USART_PC_received_playload_len;
+
+//count for checking incoming messages
+char message_count = 0;
+bool valid_message = true;
 
 volatile unsigned char USART_PC_ReceivedPacket[20];
 
