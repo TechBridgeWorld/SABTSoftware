@@ -55,23 +55,26 @@ unsigned char getBootSectorData (void)
   return 0;
 }
 
-//***************************************************************************
-//Function: to calculate first sector address of any given cluster
-//Arguments: cluster number for which first sector is to be found
-//return: first sector address
-//***************************************************************************
+
+/**
+ * @brief calculates the first sector address of any given cluster
+ * @param clusterNumber - unsigned long, cluster number on which first sector found
+ * @return unsgined long - first secotr address
+ */
 unsigned long getFirstSector(unsigned long clusterNumber)
 {
   return (((clusterNumber - 2) * sectorPerCluster) + firstDataSector);
 }
 
-//***************************************************************************
-//Function: get cluster entry value from FAT to find out the next cluster in the chain
-//or set new cluster entry in FAT
-//Arguments: 1. current cluster number, 2. get_set (=GET, if next cluster is to be found or = SET,
-//if next cluster is to be set 3. next cluster number, if argument#2 = SET, else 0
-//return: next cluster number, if if argument#2 = GET, else 0
-//****************************************************************************
+
+/**
+ * @brief get cluster entry value from FAT to find out the next cluster in chain
+ * @param clusterNumber - unsinged long, current cluster number
+ * @param get_set - unsigned char, get - if next sector is to be got, and set if 
+ *                  next sector is to be set
+ * @param clusterEntry - unsigned long, next cluster number if arg2 = Set, else = 0
+ * @return unsinged long - next cluster number if arg2 = get, else 0
+ */
 unsigned long getSetNextCluster (unsigned long clusterNumber,
                                  unsigned char get_set,
                                  unsigned long clusterEntry)
@@ -105,15 +108,17 @@ unsigned long getSetNextCluster (unsigned long clusterNumber,
   return (0);
 }
 
-//********************************************************************************************
-//Function: to get or set next free cluster or total free clusters in FSinfo sector of SD card
-//Arguments: 1.flag:TOTAL_FREE or NEXT_FREE, 
-//       2.flag: GET or SET 
-//       3.new FS entry, when argument2 is SET; or 0, when argument2 is GET
-//return: next free cluster, if arg1 is NEXT_FREE & arg2 is GET
-//        total number of free clusters, if arg1 is TOTAL_FREE & arg2 is GET
-//      0xffffffff, if any error or if arg2 is SET
-//********************************************************************************************
+
+/**
+ * @brief Function is used to get or set next free cluster or total free clusters
+ *        in FSinfo sector of SD card
+ * @param totOrNext - unsigned char, can be either TOTAL_FREE or NEXT_FREE
+ * @param get_set - unsigned char, flag that can be GET or SEt
+ * @param FSEntry - unsigned long, new FS entry when arg2 is SET or 0 when GET
+ * @return unsigned long - next free cluster if arg1 is NEXT_FREE and arg2 is GET
+ *                       total # of free clusters if arg1 is TOTAL_FREE and arg2
+ *                       GET.  0xffffffff if any error or arg2 is Set
+ */
 unsigned long getSetFreeCluster(unsigned char totOrNext, unsigned char get_set, unsigned long FSEntry)
 {
   struct FSInfo_Structure *FS = (struct FSInfo_Structure *) &buffer;
@@ -143,13 +148,14 @@ unsigned long getSetFreeCluster(unsigned char totOrNext, unsigned char get_set, 
   return 0xffffffff;
 }
 
-//***************************************************************************
-//Function: to get DIR/FILE list or a single file address (cluster number) or to delete a specified file
-//Arguments: #1 - flag: GET_LIST, GET_FILE or DELETE #2 - pointer to file name (0 if arg#1 is GET_LIST)
-//return: first cluster of the file, if flag = GET_FILE
-//        print file/dir list of the root directory, if flag = GET_LIST
-//      Delete the file mentioned in arg#2, if flag = DELETE
-//****************************************************************************
+/**
+ * @brief function gets DIR/FILE list or a single file address or deletes specified
+ *         file
+ * @param flag - unsigned char, can be GET_LIST, GET_FILE or DELETE
+ * @param fileName - unsinged char *, pointer to the file name to operate on
+ * @return struct dir_Structure * - first cluster of file if flag = GET_FILE
+ *         print file/dir list if flag = GET_LIST. Delete file if flag = DELETE
+ */
 struct dir_Structure* findFiles (unsigned char flag, unsigned char *fileName)
 {
   unsigned long cluster, sector, firstSector, firstCluster, nextCluster;
@@ -257,15 +263,17 @@ struct dir_Structure* findFiles (unsigned char flag, unsigned char *fileName)
   return 0;
 }
 
-//***************************************************************************
-//Function: if flag=READ then to read file from SD card and send contents to UART 
-//if flag=VERIFY then functions will verify whether a specified file is already existing
-//Arguments: flag (READ or VERIFY) and pointer to the file name
-//return: 0, if normal operation or flag is READ
-//        1, if file is already existing and flag = VERIFY
-//      2, if file name is incompatible
-//***************************************************************************
 
+/**
+ * @brief 
+ * @param  flag - unsigned char, flag=READ then to read file from SD card and send 
+ *                contents to UART. if flag=VERIFY then functions will verify 
+ *                whether a specified file is already existing
+ * @param  fileName - unsigned char *, the file you are reading or verifying
+ * @return char - returns 0 on success
+ *                returns 1 if files already exists and flag = Verify
+ *                returns 2 on error convertingFileName
+ */
 unsigned char readFile (unsigned char flag, unsigned char *fileName)
 {
   struct dir_Structure *dir;
@@ -381,11 +389,13 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
 }
 
 
-/*
-This function plays a given MP3 files, until:
-1. The files reach the end of file
-2. Stop playing command issued from the controller
-
+/**
+ * @brief  This function plays a given MP3 files, until:
+ *          1. The files reach the end of file
+ *          2. Stop playing command issued from the controller
+ * @param fileName - unsighed char *, simply name of the file to operate on
+ * @return unsigned char - return 0 on success
+ *                         return 2 on error converting fileName
 */
 
 unsigned char PlayMP3file (unsigned char *fileName)
@@ -572,7 +582,15 @@ unsigned char convertFileName (unsigned char *fileName)
 /*
 Modified write file function with replacing all the text with new text given
 */
-
+/**
+ * @brief  reads the data in fileContent into buffer and uses the function
+ *         SD_writeSingleBlock() to put the value in buffer onto the SD card
+ *         Data you are writing in MUST END IN $. If not garbage will be written in. 
+ * @param  fileName - unsigned char *, This contains the file to replace data in
+ * @param  fileContent - unsighed char *, What to put into fileName
+ * @return int - returns 0 if the file exists you are trying to overwrite
+ *               returns 1 if the file does not exist
+ */
 int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fileContent)
 {
   unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector;
@@ -622,6 +640,8 @@ int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fil
     dir = (struct dir_Structure *) &buffer[0]; 
     //extraMemory = fileSize - dir->fileSize;
     dir->fileSize = fileSize;
+    //if we are writing the modes file - the next line rewrites stuff written in
+    // above
     SD_writeSingleBlock (firstSector);
     _delay_ms(100);
     return 0;
@@ -634,162 +654,164 @@ int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fil
     //USART_transmitStringToPCFromFlash(PSTR("SABT-ERR001")); 
     //TX_NEWLINE_PC;
   }
-  return 2;
+  //NOT NEEDED - Can not get here
+  //return 2;
 }
 
 
-//************************************************************************************
-//Function: to create a file in FAT32 format in the root directory if given 
-//      file name does not exist; if the file already exists then append the data
-//Arguments: pointer to the file name
-//return: none
-//************************************************************************************
+
+/**
+ * @brief function creates a file in FAT32 format in the root directory if given 
+ *        file name does not exists. If it already exists then append data to end
+ * @param fileName - unsigned char *, this is the name of the file to write to
+ * @return VOID
+ */
 void writeFile (unsigned char *fileName)
-{
-unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector;
-unsigned int i, firstClusterHigh, firstClusterLow;
-struct dir_Structure *dir;
-unsigned long cluster, nextCluster, prevCluster, firstSector, clusterCount, extraMemory;
-
-j = readFile (VERIFY, fileName);
-
-if(j == 1) 
-{
-  USART_transmitStringToPCFromFlash(PSTR("  File already existing, appending data..")); 
-  appendFile = 1;
-  cluster = appendStartCluster;
-  clusterCount=0;
-  while(1)
   {
-    nextCluster = getSetNextCluster (cluster, GET, 0);
-    if(nextCluster == EOF) break;
-  cluster = nextCluster;
-  clusterCount++;
-  }
+  unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector;
+  unsigned int i, firstClusterHigh, firstClusterLow;
+  struct dir_Structure *dir;
+  unsigned long cluster, nextCluster, prevCluster, firstSector, clusterCount, extraMemory;
 
-  sector = (fileSize - (clusterCount * sectorPerCluster * bytesPerSector)) / bytesPerSector; //last sector number of the last cluster of the file
-  start = 1;
+  j = readFile (VERIFY, fileName);
+
+  if(j == 1)
+  {
+    USART_transmitStringToPCFromFlash(PSTR("  File already existing, appending data.."));
+    appendFile = 1;
+    cluster = appendStartCluster;
+    clusterCount=0;
+    while(1)
+    {
+      nextCluster = getSetNextCluster (cluster, GET, 0);
+      if(nextCluster == EOF) break;
+      cluster = nextCluster;
+      clusterCount++;
+    }
+
+    sector = (fileSize - (clusterCount * sectorPerCluster * bytesPerSector)) / bytesPerSector; //last sector number of the last cluster of the file
+    start = 1;
 //  appendFile();
 //  return;
-}
-else if(j == 2) 
-   return; //invalid file name
-else
-{
-//  TX_NEWLINE_PC;
-//  USART_transmitStringToPCFromFlash(PSTR(" Creating File.."));
+  }
+  else if(j == 2)
+    return; //invalid file name
+  else
+  {
+  //  TX_NEWLINE_PC;
+  //  USART_transmitStringToPCFromFlash(PSTR(" Creating File.."));
 
-  cluster = getSetFreeCluster (NEXT_FREE, GET, 0);
-  if(cluster > totalClusters)
-     cluster = rootCluster;
+    cluster = getSetFreeCluster (NEXT_FREE, GET, 0);
+    if(cluster > totalClusters)
+      cluster = rootCluster;
 
-  cluster = searchNextFreeCluster(cluster);
-   if(cluster == 0)
-   {
-//      TX_NEWLINE_PC;
-//      USART_transmitStringToPCFromFlash(PSTR(" No free cluster!"));
-    return;
-   }
-  getSetNextCluster(cluster, SET, EOF);   //last cluster of the file, marked EOF
+    cluster = searchNextFreeCluster(cluster);
+    if(cluster == 0)
+    {
+      //      TX_NEWLINE_PC;
+      //      USART_transmitStringToPCFromFlash(PSTR(" No free cluster!"));
+      return;
+    }
+    getSetNextCluster(cluster, SET, EOF);   //last cluster of the file, marked EOF
    
-  firstClusterHigh = (unsigned int) ((cluster & 0xffff0000) >> 16 );
-  firstClusterLow = (unsigned int) ( cluster & 0x0000ffff);
-  fileSize = 0;
-}
+    firstClusterHigh = (unsigned int) ((cluster & 0xffff0000) >> 16 );
+    firstClusterLow = (unsigned int) ( cluster & 0x0000ffff);
+    fileSize = 0;
+  }
 
 
 
-while(1)
-{
-   if(start)
-   {
+  while(1)
+  {
+    if(start)
+    {
       start = 0;
-    startBlock = getFirstSector (cluster) + sector;
-    SD_readSingleBlock (startBlock);
-    i = fileSize % bytesPerSector;
-    j = sector;
-   }
-   else
-   {
+      startBlock = getFirstSector (cluster) + sector;
+      SD_readSingleBlock (startBlock);
+      i = fileSize % bytesPerSector;
+      j = sector;
+    }
+    else
+    {
       startBlock = getFirstSector (cluster);
-    i=0;
-    j=0;
-   }
+      i=0;
+      j=0;
+    }
    
 
-//   TX_NEWLINE_PC;
-//   USART_transmitStringToPCFromFlash(PSTR(" Enter text (end with ~):"));
+    //   TX_NEWLINE_PC;
+    //   USART_transmitStringToPCFromFlash(PSTR(" Enter text (end with ~):"));
    
-   do
-   {
-     if(sectorEndFlag == 1) //special case when the last character in previous sector was '\r'
-   {
-     USART_transmitByteToPC ('\n');
+    do
+    {
+      if(sectorEndFlag == 1) //special case when the last character in previous sector was '\r'
+      {
+        USART_transmitByteToPC ('\n');
         buffer[i++] = '\n'; //appending 'Line Feed (LF)' character
-    fileSize++;
-   }
-
-  sectorEndFlag = 0;
-
-   data = 0;//receiveByte();
-   if(data == 0x08)  //'Back Space' key pressed
-   { 
-     if(i != 0)
-     { 
-//       USART_transmitByteToPC(data);
-//     USART_transmitByteToPC(' '); 
-//       USART_transmitByteToPC(data); 
-       i--; 
-     fileSize--;
-     } 
-     continue;     
-   }
-//   USART_transmitByteToPC(data);
-     buffer[i++] = data;
-   fileSize++;
-     if(data == '\r')  //'Carriege Return (CR)' character
-     {
-        if(i == 512)
-       sectorEndFlag = 1;  //flag to indicate that the appended '\n' char should be put in the next sector
-      else
-    { 
-//       USART_transmitByteToPC ('\n');
-           buffer[i++] = '\n'; //appending 'Line Feed (LF)' character
-       fileSize++;
+        fileSize++;
       }
-     }
+
+      sectorEndFlag = 0;
+
+      data = 0;//receiveByte();
+      if(data == 0x08)  //'Back Space' key pressed
+      {
+        if(i != 0)
+        {
+        //       USART_transmitByteToPC(data);
+        //     USART_transmitByteToPC(' ');
+        //       USART_transmitByteToPC(data);
+          i--;
+          fileSize--;
+        }
+        continue;
+      }
+      //   USART_transmitByteToPC(data);
+      buffer[i++] = data;
+      fileSize++;
+      if(data == '\r')  //'Carriege Return (CR)' character
+      {
+        if(i == 512)
+          sectorEndFlag = 1;  //flag to indicate that the appended '\n' char should be put in the next sector
+        else
+        {
+          //       USART_transmitByteToPC ('\n');
+          buffer[i++] = '\n'; //appending 'Line Feed (LF)' character
+          fileSize++;
+        }
+      }
    
      if(i >= 512)   //though 'i' will never become greater than 512, it's kept here to avoid 
-   {        //infinite loop in case it happens to be greater than 512 due to some data corruption
-     i=0;
-     error = SD_writeSingleBlock (startBlock);
+     {        //infinite loop in case it happens to be greater than 512 due to some data corruption
+       i=0;
+       error = SD_writeSingleBlock (startBlock);
        j++;
-     if(j == sectorPerCluster) {j = 0; break;}
-     startBlock++; 
-     }
-  }while (data != '~');
+       if(j == sectorPerCluster) {j = 0; break;}
+       startBlock++;
+    }
+  }
+  while (data != '~');
 
-   if(data == '~') 
-   {
-      fileSize--;  //to remove the last entered '~' character
+  if(data == '~')
+  {
+    fileSize--;  //to remove the last entered '~' character
     i--;
     for(;i<512;i++)  //fill the rest of the buffer with 0x00
         buffer[i]= 0x00;
-       error = SD_writeSingleBlock (startBlock);
+    error = SD_writeSingleBlock (startBlock);
 
-      break;
-   } 
+    break;
+  }
     
-   prevCluster = cluster;
+  prevCluster = cluster;
+  cluster = searchNextFreeCluster(prevCluster); //look for a free cluster starting from the current cluster
 
-   cluster = searchNextFreeCluster(prevCluster); //look for a free cluster starting from the current cluster
-
-   if(cluster == 0)
-   {
-//      TX_NEWLINE_PC;
-//      USART_transmitStringToPCFromFlash(PSTR(" No free cluster!"));
+  if(cluster == 0)
+  {
+    //      TX_NEWLINE_PC;
+    //      USART_transmitStringToPCFromFlash(PSTR(" No free cluster!"));
     return;
-   }
+  }
 
    getSetNextCluster(prevCluster, SET, cluster);
    getSetNextCluster(cluster, SET, EOF);   //last cluster of the file, marked EOF
@@ -894,12 +916,12 @@ while(1)
 }
 
 
-//***************************************************************************
-//Function: to search for the next free cluster in the root directory
-//          starting from a specified cluster
-//Arguments: Starting cluster
-//return: the next free cluster
-//****************************************************************
+/**
+ * @brief function searches for the next free cluster in the root directory starting
+ *        at specified cluster
+ * @param startCluster - unsinged long, starting cluster
+ * @return usigned long, the number of the next free cluster
+ */
 unsigned long searchNextFreeCluster (unsigned long startCluster)
 {
   unsigned long cluster, *value, sector;
@@ -921,15 +943,15 @@ unsigned long searchNextFreeCluster (unsigned long startCluster)
  return 0;
 }
 
-//***************************************************************************
-//Function: to display total memory and free memory of SD card, using UART
-//Arguments: none
-//return: none
-//Note: this routine can take upto 15sec for 1GB card (@1MHz clock)
-//it tries to read from SD whether a free cluster count is stored, if it is stored
-//then it will return immediately. Otherwise it will count the total number of
-//free clusters, which takes time
-//****************************************************************************
+
+/**
+ * @brief function displays the total memory and free memory of SD Card using UART
+ *        NOTE: this routine can take upto 15sec for 1GB card (@1MHz clock)
+ *        it tries to read from SD whether a free cluster count is stored, if it is 
+ *        stored then it will return immediately. Otherwise it will count the total 
+ *        number of free clusters, which takes time
+ * @return VOID
+ */
 void memoryStatistics (void)
 {
 unsigned long freeClusters, totalClusterCount, cluster;
@@ -985,13 +1007,14 @@ displayMemory (HIGH, freeMemory);
 //TX_NEWLINE_PC; 
 }
 
-//************************************************************
-//Function: To convert the unsigned long value of memory into 
-//          text string and send to UART
-//Arguments: 1. unsigned char flag. If flag is HIGH, memory will be displayed in KBytes, else in Bytes. 
-//       2. unsigned long memory value
-//return: none
-//************************************************************
+/**
+ * @brief function converts the unsigned long value of memory into text string and
+ *        send ot UART
+ * @param flag - unsigned char, if HIGH - memory will be displayed in KBytes.
+ *               else in Bytes
+ * @param memory - unsigned long, memory value 
+ * @return VOID
+ */
 void displayMemory (unsigned char flag, unsigned long memory)
 {
   unsigned char memoryString[] = "              Bytes"; //19 character long string for memory display
@@ -1011,11 +1034,12 @@ void displayMemory (unsigned char flag, unsigned long memory)
   USART_transmitStringToPC(memoryString);
 }
 
-//********************************************************************
-//Function: to delete a specified file from the root directory
-//Arguments: pointer to the file name
-//return: none
-//********************************************************************
+
+/**
+ * @brief function deletes the specified file in the root directory
+ * @param fileName - unsigned char *, file name of file that you want deleted
+ * @return VOID
+ */
 void deleteFile (unsigned char *fileName)
 {
   unsigned char error;
@@ -1026,13 +1050,15 @@ void deleteFile (unsigned char *fileName)
   findFiles (DELETE, fileName);
 }
 
-//********************************************************************
-//Function: update the free memory count in the FSinfo sector. 
-//      Whenever a file is deleted or created, this function will be called
-//      to ADD or REMOVE clusters occupied by the file
-//Arguments: #1.flag ADD or REMOVE #2.file size in Bytes
-//return: none
-//********************************************************************
+
+/**
+ * @brief function updates the free memory count in FSinfo sector. Whenever a file
+ *        is deleted or created, this function will be called to ADD or REMOVE 
+ *        clusters occupied by teh file
+ * @param flag - unsigned char, can be ADD or REMOVE
+ * @param size - unsigned long, file size in Bytes
+ * @return VOID
+ */
 void freeMemoryUpdate (unsigned char flag, unsigned long size)
 {
   unsigned long freeClusters;

@@ -2,6 +2,7 @@
  * @file SD_routines.c
  * @brief code to interact with SD card
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
  */
 
 #include "Globals.h"
@@ -213,12 +214,13 @@ SD_CS_DEASSERT;
 return 0;
 }
 
-//******************************************************************
-//Function  : to write to a single block of SD card
-//Arguments  : none
-//return  : unsigned char; will be 0 if no error,
-//         otherwise the response byte will be sent
-//******************************************************************
+/**
+ * @brief Writes a single block of SD Card. Data that is written is put into the
+ *        buffer variables and writes out the 512 charachters.  
+ * @param startBlock - unsigned long, describes which block you want to right 
+ * @return unsigned char - 0 if no error
+ *                         response byte will be sent if an error
+ */
 unsigned char SD_writeSingleBlock(unsigned long startBlock)
 {
 unsigned char response;
@@ -228,34 +230,34 @@ unsigned int i, retry=0;
   
  if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
 
-SD_CS_ASSERT;
+  SD_CS_ASSERT;
 
-SPI_transmit(0xfe);     //Send start block token 0xfe (0x11111110)
+  SPI_transmit(0xfe);     //Send start block token 0xfe (0x11111110)
 
-for(i=0; i<512; i++)    //send 512 bytes data
-  SPI_transmit(buffer[i]);
+  for(i=0; i<512; i++)    //send 512 bytes data
+    SPI_transmit(buffer[i]);
 
-SPI_transmit(0xff);     //transmit dummy CRC (16-bit), CRC is ignored here
-SPI_transmit(0xff);
+  SPI_transmit(0xff);     //transmit dummy CRC (16-bit), CRC is ignored here
+  SPI_transmit(0xff);
 
-response = SPI_receive();
+  response = SPI_receive();
 
-if( (response & 0x1f) != 0x05) //response= 0xXXX0AAA1 ; AAA='010' - data accepted
-{                              //AAA='101'-data rejected due to CRC error
-  SD_CS_DEASSERT;              //AAA='110'-data rejected due to write error
-  return response;
-}
+  if( (response & 0x1f) != 0x05) //response= 0xXXX0AAA1 ; AAA='010' - data accepted
+  {                              //AAA='101'-data rejected due to CRC error
+    SD_CS_DEASSERT;              //AAA='110'-data rejected due to write error
+    return response;
+  }
 
-while(!SPI_receive()) //wait for SD card to complete writing and get idle
-if(retry++ > 0xfffe){SD_CS_DEASSERT; return 1;}
+  while(!SPI_receive()) //wait for SD card to complete writing and get idle
+    if(retry++ > 0xfffe){SD_CS_DEASSERT; return 1;}
 
-SD_CS_DEASSERT;
-SPI_transmit(0xff);   //just spend 8 clock cycle delay before reasserting the CS line
-SD_CS_ASSERT;         //re-asserting the CS line to verify if card is still busy
+  SD_CS_DEASSERT;
+  SPI_transmit(0xff);   //just spend 8 clock cycle delay before reasserting the CS line
+  SD_CS_ASSERT;         //re-asserting the CS line to verify if card is still busy
 
-while(!SPI_receive()) //wait for SD card to complete writing and get idle
-   if(retry++ > 0xfffe){SD_CS_DEASSERT; return 1;}
-SD_CS_DEASSERT;
+  while(!SPI_receive()) //wait for SD card to complete writing and get idle
+    if(retry++ > 0xfffe){SD_CS_DEASSERT; return 1;}
+  SD_CS_DEASSERT;
 
 return 0;
 }

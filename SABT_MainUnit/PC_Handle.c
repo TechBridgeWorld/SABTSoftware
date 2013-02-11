@@ -11,6 +11,9 @@
 /**
  * @brief This fucntion reads the message in USART_PC_RecievedPacket. It determines
  *        its type and sends the appropriate message to PC
+ *        The two possibilities are that you sent 'x' - PC_CMD_INIT - this just gets
+ *        response from the system. The other message is 'M' - PC_CMD_NEWMODES
+ *        this message type will change the mode file
  * @return bool    but does not seem to ever return, so it will return false?
  */
 bool PC_parse_message()
@@ -27,12 +30,17 @@ bool PC_parse_message()
     case PC_CMD_NEWMODES:
       PC_RequestsToModifyModesFile();
       break;
+    //incorrect message type
+    default:
+      PRINTF("SABT-INCORRECT MESSAGE TYPE!!!!");
+      break;
   }
 }
 
 /**
  * @brief This function will replace the MODES.DAT file with new modes from the 
- *        message variable USART_PC_RecievedPacket
+ *        message variable USART_PC_RecievedPacket.  
+ *        The message size can at most be 20 charachters - WritingFileContent
  * @return Void
  */
 void PC_RequestsToModifyModesFile(void)
@@ -49,8 +57,7 @@ void PC_RequestsToModifyModesFile(void)
 
   InitSDCard(false);
 
-  // Copy over the modes in the form <1><2>...<n>
-  iT=0;
+  // Copy over the modes in the form <1><2>...<n>. Ignoring the "PCM" header
   for(iT=3;iT<USART_PC_received_playload_len;iT++)
   {
     WritingFileContent[iT-3]=USART_PC_ReceivedPacket[iT];
