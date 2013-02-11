@@ -19,14 +19,20 @@ int main(void)
 {
 	InitializeUI();
 	SendMsgPayLoad[0]=0x01;
-  //SendPacket('D',SendMsgPayLoad,1);
+    SendPacket('D',(char *)SendMsgPayLoad,5);
+	//USART_transmitByteToMCU('Q');
+	
 	while(1) //Main loop
 	/*
 	This loop will take care of all the signal handling from the 
 	*/
  	{
+
+	//USART_transmitByteToMCU('Q');
+
+	  //SendPacket('D',SendMsgPayLoad,5);
     // Test the transmission to MCU 
-    USART_transmitStringToMCU("A message from the Primary UI Board \n");
+    //USART_transmitStringToMCU("A message from the Primary UI Board \n");
 		
     // TODO:  remove these
 		//SetStatLED1(true);

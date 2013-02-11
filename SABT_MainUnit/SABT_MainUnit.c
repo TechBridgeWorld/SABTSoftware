@@ -21,8 +21,7 @@ void InitializeSystem(void);
 
 
 /**
- * @brief NOT SURE WHAT IT IS Doing
- *    IT seems like the PORTD is a data register. Turns off/on bits 5,6,7 in Portd depending on LED_STAT
+ * @brief Turns off/on bits 5,6,7 in Portd depending on LED_STAT to make the 3 LEDs on the board blink?
  * @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
@@ -86,8 +85,8 @@ End of test code
     // if true, process the single byte
     if(USART_Keypad_DATA_RDY){
       /* one of two types:
-       * [U][I}[msglen][msg_number][msg_type][payload][CRC1][CRC2]
-       * [M][C}[msglen][msg_number][msg_type][payload][CRC1][CRC2]
+       * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
+       * [M][C][msglen][msg_number][msg_type][payload][CRC1][CRC2]
        * msg_type:
        *  A: contains braille dot at this location in the UI
        *  B: contains braille character at this location in the UI
@@ -119,11 +118,6 @@ End of test code
     }
     if(UI_MP3_file_Pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
-
-      PlayMP3file(fileName);  //WHERE IS THIS FUNCTION?
-
-      PlayMP3file(fileName);
-      RequestToPlayMP3file("INT.MP3");
       PlayMP3file(fileName);
       
     }
@@ -154,6 +148,7 @@ ISR(TIMER1_COMPA_vect){
  * @return  Void
  */
 ISR(USART1_RX_vect){
+  DPRINTF("%c\r\n", UDR1);
   USART_Keypad_Received_Data=UDR1;
   USART_Keypad_DATA_RDY=true; 
 };
@@ -167,10 +162,10 @@ ISR(USART1_RX_vect){
  * @return  Void
  */
 ISR(USART0_RX_vect){
-//Temporarly using the PC as the UI
+//Temporarily using the PC as the UI
 //  USART_Keypad_Received_Data=UDR0;
 //  USART_Keypad_DATA_RDY=true; 
-///*  Temporaraly disabled the PC communications since we are simulating the UI with PC
+///*  Temporarily disabled the PC communications since we are simulating the UI with PC
   USART_PC_Received_Data=UDR0;
   USART_PC_DATA_RDY=true;
 //*/

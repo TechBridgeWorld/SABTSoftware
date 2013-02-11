@@ -34,8 +34,8 @@ ISR(TIMER1_COMPA_vect){
 void TimerRoutine(void)
 {
 	TMR1_INT=false;
-	USART_transmitStringToMCU("hello small waves");
-	/*
+	//USART_transmitStringToMCU("hello small waves");
+	//
 	if(!LED_STAT){
 		SetStatLED2(true);
 		SetStatLED1(false);
@@ -45,7 +45,7 @@ void TimerRoutine(void)
 		SetStatLED1(true);
 		LED_STAT=false;
 	}
-	/*/
+	//
 	CheckCommandButtons();
 	RunCommandTasks();
 	if(TmrCntADC<2)

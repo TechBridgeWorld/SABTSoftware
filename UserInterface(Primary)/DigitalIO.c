@@ -160,7 +160,7 @@ void RunCommandTasks(void)
 		{
 			InterfaceType=1;
 		}
-		return 0;
+		return;
 	}
 	if(VolUpState==1)
 	{
@@ -178,7 +178,7 @@ void Enter1Task(void)
 {
 	SetStatLED2(true);
 	SendMsgPayLoad[0]=0x01;
-	SendPacket('D',&SendMsgPayLoad,1);
+	SendPacket('D',(char*)SendMsgPayLoad,1);
 	CaptureCellValue();
 }
 
@@ -187,33 +187,33 @@ void Enter2Task(void)
 	SetStatLED2(false);
 	SendMsgPayLoad[0]=0x02;
 	SendMsgPayLoad[1]='E';
-	SendPacket('D',&SendMsgPayLoad,2);
+	SendPacket('D',(char*)SendMsgPayLoad,2);
 }
 
 void Mode1Task(void)
 {
 	SetStatLED1(true);
 	SendMsgPayLoad[0]=0x03;
-	SendPacket('D',&SendMsgPayLoad,1);
+	SendPacket('D',(char*)SendMsgPayLoad,1);
 }
 
 void Mode2Task(void)
 {
 	SetStatLED1(false);
 	SendMsgPayLoad[0]=0x04;
-	SendPacket('D',&SendMsgPayLoad,1);
+	SendPacket('D',(char*)SendMsgPayLoad,1);
 }
 
 void VolUpTask(void)
 {
 	SendMsgPayLoad[0]=0x06;
-	SendPacket('D',&SendMsgPayLoad,1);
+	SendPacket('D',(char*)SendMsgPayLoad,1);
 }
 
 void VolDownTask(void)
 {
 	SendMsgPayLoad[0]=0x05;
-	SendPacket('D',&SendMsgPayLoad,1);
+	SendPacket('D',(char*)SendMsgPayLoad,1);
 }
 
 /*

@@ -149,7 +149,7 @@ bool UI_parse_message(bool IsPlaying)
   uint16_t chksum=UI_calculate_CRC(&USART_UI_ReceivedPacket);
   
   // TODO test this
-  DPRINTF("[UI_parse_message] Entering function");
+  PRINTF("[UI_parse_message] Entering function");
   
   if ( chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 | USART_UI_ReceivedPacket[message_len-1]))
   {

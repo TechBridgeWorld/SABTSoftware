@@ -42,7 +42,7 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
 		MCU_Packet[5+i]=*(pl++);
 	}
 	//memcpy( &MCU_Packet[5], pl, plLen);
-	chksum = Calculate_CRC(&MCU_Packet);
+	chksum = Calculate_CRC((unsigned char*)MCU_Packet);
 	MCU_Packet[plLen+5] = chksum >> 8;
 	MCU_Packet[plLen+6] = chksum & 0xFF;	
 	return(true);

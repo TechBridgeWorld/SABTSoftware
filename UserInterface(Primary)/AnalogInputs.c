@@ -62,9 +62,9 @@ uint8_t analog10(int which)
 {
 	int i=0;
 	uint8_t tADCH,tADCL;
-	uint16_t tADC0=0;
+	//uint16_t tADC0=0;
 	uint16_t tADC[10];
-	uint16_t eADC;
+	//uint16_t eADC;
 	uint16_t iVal=0;
 	//bool ADC_STABLE=false;
 	ADMUX = 0x40 + which;
@@ -104,7 +104,7 @@ void DetectTheDot(void)
 			SendMsgPayLoad[0]=iADC;
 			SendMsgPayLoad[2]=(char)(valADC & 0x00ff);
 			SendMsgPayLoad[1]=(char)((valADC >> 8) & 0x00ff);
-			SendPacket('E',&SendMsgPayLoad,3);
+			SendPacket('E',(char*)SendMsgPayLoad,3);
 			/*
 			---------------------------------------------------------
 			*/

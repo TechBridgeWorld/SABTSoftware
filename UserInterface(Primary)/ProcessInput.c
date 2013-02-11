@@ -20,7 +20,7 @@ In the primary interface the Braille inputs ar configured as digital inputs
 void ProcessTheDot(void)
 {
 	uint8_t TempDot=0;
-	uint8_t PI_ThisDot;
+//	uint8_t PI_ThisDot;
 	bool NewDotDetected=false;
 	if(!(PINC & (1<<UI_BR1))) //Dot1
 	{
@@ -70,7 +70,7 @@ void ProcessTheDot(void)
 		SendMsgPayLoad[0]=0x30+PI_LastDotPressed;
 		SendMsgPayLoad[1]=0x31;
 		SendMsgPayLoad[2]=0x31;
-    	SendPacket('A',&SendMsgPayLoad,3);
+    	SendPacket('A',(char*)SendMsgPayLoad,3);
 		//SendPacket('E',&SendMsgPayLoad,3);
 	}
 }
@@ -93,6 +93,6 @@ void CaptureCellValue(void)
 	}
 	SendMsgPayLoad[0]=ProcessedCellValue;	//6-bit number representing the pressed dots
 	SendMsgPayLoad[1]=1;					//Cell number is always 1 for the primary interface
-	SendPacket('B',&SendMsgPayLoad,2);		//Send the two bytes with messege type of 'B'
+	SendPacket('B',(char*)SendMsgPayLoad,2);		//Send the two bytes with messege type of 'B'
 	ResetCellState();						//Reset the cell state so that new letter can start
 }
