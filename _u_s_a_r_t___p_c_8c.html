@@ -94,7 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Deals with USART communication with main board - please update.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Globals.h&quot;</code><br/>
+<div class="textblock"><code>#include &quot;<a class="el" href="_globals_8h_source.html">Globals.h</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -102,16 +102,16 @@ Functions</h2></td></tr>
 <tr class="memdesc:a4160b8102fb8057ebecb911f300d1f0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the buad communication over USART.  <a href="#a4160b8102fb8057ebecb911f300d1f0a"></a><br/></td></tr>
 <tr class="separator:a4160b8102fb8057ebecb911f300d1f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eeb914fae5acc624172055064757e11"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_s_a_r_t___p_c_8c.html#a5eeb914fae5acc624172055064757e11">USART_PC_ReceiveAction</a> (void)</td></tr>
-<tr class="memdesc:a5eeb914fae5acc624172055064757e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives message stored in globabl USART_PC_Received_Data Then proceeds to decode message, use its value, and allow for more messages to be sent tech_report.pdf.  <a href="#a5eeb914fae5acc624172055064757e11"></a><br/></td></tr>
+<tr class="memdesc:a5eeb914fae5acc624172055064757e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives message stored in global USART_PC_Received_Data Then proceeds to decode message, use its value, and allow for more message to be processed by <a class="el" href="_p_c___handle_8c.html#aa1113dc366cfca824233d94bede21502" title="This fucntion reads the message in USART_PC_RecievedPacket. It determines its type and sends the appr...">PC_parse_message()</a> tech_report.pdf.  <a href="#a5eeb914fae5acc624172055064757e11"></a><br/></td></tr>
 <tr class="separator:a5eeb914fae5acc624172055064757e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3414936bd9a09e124d23eeaff82dc8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_s_a_r_t___p_c_8c.html#ac3414936bd9a09e124d23eeaff82dc8a">USART_transmitByteToPC</a> (unsigned char bData)</td></tr>
-<tr class="memdesc:ac3414936bd9a09e124d23eeaff82dc8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waits till available to send message and puts data in Global value.  <a href="#ac3414936bd9a09e124d23eeaff82dc8a"></a><br/></td></tr>
+<tr class="memdesc:ac3414936bd9a09e124d23eeaff82dc8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">transmit one byte to UDR0 (PC connection)  <a href="#ac3414936bd9a09e124d23eeaff82dc8a"></a><br/></td></tr>
 <tr class="separator:ac3414936bd9a09e124d23eeaff82dc8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b001ffcfdebd8abecf76330d1ffe9db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_s_a_r_t___p_c_8c.html#a3b001ffcfdebd8abecf76330d1ffe9db">USART_transmitStringToPCFromFlash</a> (char *strData)</td></tr>
 <tr class="memdesc:a3b001ffcfdebd8abecf76330d1ffe9db"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads each byte of data and sends it to the Flash individually  <a href="#a3b001ffcfdebd8abecf76330d1ffe9db"></a><br/></td></tr>
 <tr class="separator:a3b001ffcfdebd8abecf76330d1ffe9db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a705841d62b95485db20f846cf65d8f43"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a705841d62b95485db20f846cf65d8f43"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>USART_transmitStringToPC</b> (unsigned char *strData)</td></tr>
+<tr class="memitem:a705841d62b95485db20f846cf65d8f43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_s_a_r_t___p_c_8c.html#a705841d62b95485db20f846cf65d8f43">USART_transmitStringToPC</a> (unsigned char *strData)</td></tr>
+<tr class="memdesc:a705841d62b95485db20f846cf65d8f43"><td class="mdescLeft">&#160;</td><td class="mdescRight">transmit a string to UDR0 (PC connection)  <a href="#a705841d62b95485db20f846cf65d8f43"></a><br/></td></tr>
 <tr class="separator:a705841d62b95485db20f846cf65d8f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -131,7 +131,9 @@ unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>USART_PC_rec
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Deals with USART communication with main board - please update. </p>
-<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd>
+<dd>
+Nick LaGrow (nlagrow) </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a4160b8102fb8057ebecb911f300d1f0a"></a>
 <div class="memitem">
@@ -166,8 +168,8 @@ unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>USART_PC_rec
       </table>
 </div><div class="memdoc">
 
-<p>Receives message stored in globabl USART_PC_Received_Data Then proceeds to decode message, use its value, and allow for more messages to be sent tech_report.pdf. </p>
-<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+<p>Receives message stored in global USART_PC_Received_Data Then proceeds to decode message, use its value, and allow for more message to be processed by <a class="el" href="_p_c___handle_8c.html#aa1113dc366cfca824233d94bede21502" title="This fucntion reads the message in USART_PC_RecievedPacket. It determines its type and sends the appr...">PC_parse_message()</a> tech_report.pdf. </p>
+<dl class="section return"><dt>Returns</dt><dd>always 0? </dd></dl>
 
 </div>
 </div>
@@ -185,16 +187,41 @@ unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>USART_PC_rec
       </table>
 </div><div class="memdoc">
 
-<p>Waits till available to send message and puts data in Global value. </p>
+<p>transmit one byte to UDR0 (PC connection) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">bData</td><td>unsigned Char contains the byte that needs to be sent return Void </td></tr>
+    <tr><td class="paramname">bData</td><td>contains the byte that needs to be sent return Void </td></tr>
   </table>
   </dd>
 </dl>
 <ul>
 <li>Disabled PC TX temp </li>
 </ul>
+
+</div>
+</div>
+<a class="anchor" id="a705841d62b95485db20f846cf65d8f43"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void USART_transmitStringToPC </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>strData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>transmit a string to UDR0 (PC connection) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">strData</td><td>string to transmit </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void TODO: does this method send null terminator? </dd></dl>
 
 </div>
 </div>
@@ -226,7 +253,7 @@ unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>USART_PC_rec
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

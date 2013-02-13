@@ -88,33 +88,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">VS1053.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __VS1053_H__</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __VS1053_H__</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span> </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> VS1053_SKIP_PLAY;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//Public access functions</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> VS1053_Initialize(<span class="keywordtype">void</span>);  <span class="comment">//Init decoder chip</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">void</span> VS1053_SoftwareReset(<span class="keywordtype">void</span>);    <span class="comment">//Software reset routine</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keywordtype">bool</span> VS1053_IncreaseVol(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordtype">bool</span> VS1053_DecreaseVol(<span class="keywordtype">void</span>);</div>
+<a href="_v_s1053_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#ifndef __VS1053_H__</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __VS1053_H__</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span> </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> VS1053_SKIP_PLAY;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keywordtype">void</span> VS1053_WriteData(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> data);  <span class="comment">//Write MP3 data</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">void</span> VS1053_WriteCmd(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> addr, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd); <span class="comment">//Write to an internal register</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> VS1053_ReadCmd(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> addr);    <span class="comment">//Read an internal register</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordtype">void</span> RequestToPlayMP3file(<span class="keyword">const</span> <span class="keywordtype">char</span>* thisFile);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//Internal functions</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//Public access functions</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="_v_s1053_8c.html#a5f40330ba86fed7bad8b93cabfa730b2" title="initialize the audio codec">VS1053_Initialize</a>(<span class="keywordtype">void</span>);  <span class="comment">//Init decoder chip</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">void</span> VS1053_SoftwareReset(<span class="keywordtype">void</span>);  <span class="comment">//Software reset routine</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">bool</span> VS1053_IncreaseVol(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">bool</span> VS1053_DecreaseVol(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> VS1053_WriteData(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> data);  <span class="comment">//Write MP3 data</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//Write to an internal register</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">void</span> VS1053_WriteCmd(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> addr, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd);  </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> VS1053_ReadCmd(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> addr);  <span class="comment">//Read an internal register</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_v_s1053_8c.html#a88c75c3f083120b80a2903d6d458673d" title="queues an MP3 file to be played Only one file can be queued to be played at a time (picked up by the ...">RequestToPlayMP3file</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* thisFile);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __VS1053_H__ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>contains the main routine for the SABT main unit  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Globals.h&quot;</code><br/>
+<div class="textblock"><code>#include &quot;<a class="el" href="_globals_8h_source.html">Globals.h</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -109,18 +109,19 @@ Functions</h2></td></tr>
 <tr class="memdesc:a6fcae6ac5c66199840fe21526701cd10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the system and interrupts.  <a href="#a6fcae6ac5c66199840fe21526701cd10"></a><br/></td></tr>
 <tr class="separator:a6fcae6ac5c66199840fe21526701cd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfbd2f83d9962b52d072efd1526059fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_a_b_t___main_unit_8c.html#acfbd2f83d9962b52d072efd1526059fc">TimeRoutine</a> (void)</td></tr>
-<tr class="memdesc:acfbd2f83d9962b52d072efd1526059fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOT SURE WHAT IT IS Doing IT seems like the PORTD is a data register. AtATmega1284P(Preferred).pdf.  <a href="#acfbd2f83d9962b52d072efd1526059fc"></a><br/></td></tr>
+<tr class="memdesc:acfbd2f83d9962b52d072efd1526059fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOT SURE WHAT IT IS Doing IT seems like the PORTD is a data register. Turns off/on bits 5,6,7 in Portd depending on LED_STAT AtATmega1284P(Preferred).pdf.  <a href="#acfbd2f83d9962b52d072efd1526059fc"></a><br/></td></tr>
 <tr class="separator:acfbd2f83d9962b52d072efd1526059fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a840291bc02cba5474a4cb46a9b9566fe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_a_b_t___main_unit_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a> (void)</td></tr>
 <tr class="memdesc:a840291bc02cba5474a4cb46a9b9566fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">the main routine  <a href="#a840291bc02cba5474a4cb46a9b9566fe"></a><br/></td></tr>
 <tr class="separator:a840291bc02cba5474a4cb46a9b9566fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad39420cdd896dd12c68e36313139d0a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad39420cdd896dd12c68e36313139d0a5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ISR</b> (TIMER1_COMPA_vect)</td></tr>
+<tr class="memitem:ad39420cdd896dd12c68e36313139d0a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_a_b_t___main_unit_8c.html#ad39420cdd896dd12c68e36313139d0a5">ISR</a> (TIMER1_COMPA_vect)</td></tr>
+<tr class="memdesc:ad39420cdd896dd12c68e36313139d0a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">ISR is an interrupt handler that will be called when its argument corresponds to the interupt called.  <a href="#ad39420cdd896dd12c68e36313139d0a5"></a><br/></td></tr>
 <tr class="separator:ad39420cdd896dd12c68e36313139d0a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6e8a8009a9ae0c59f25a496d1cf5a84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6e8a8009a9ae0c59f25a496d1cf5a84"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ISR</b> (USART1_RX_vect)</td></tr>
+<tr class="memitem:ae6e8a8009a9ae0c59f25a496d1cf5a84"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_a_b_t___main_unit_8c.html#ae6e8a8009a9ae0c59f25a496d1cf5a84">ISR</a> (USART1_RX_vect)</td></tr>
+<tr class="memdesc:ae6e8a8009a9ae0c59f25a496d1cf5a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">ISR is an interrupt handler that will be called when its argument corresponds to the interupt called.  <a href="#ae6e8a8009a9ae0c59f25a496d1cf5a84"></a><br/></td></tr>
 <tr class="separator:ae6e8a8009a9ae0c59f25a496d1cf5a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a084f0a9cf05b1877bd8a71a90dae7ff8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_a_b_t___main_unit_8c.html#a084f0a9cf05b1877bd8a71a90dae7ff8">ISR</a> (USART0_RX_vect)</td></tr>
+<tr class="memdesc:a084f0a9cf05b1877bd8a71a90dae7ff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">ISR is an interrupt handler that will be called when its argument corresponds to the interupt called.  <a href="#a084f0a9cf05b1877bd8a71a90dae7ff8"></a><br/></td></tr>
 <tr class="separator:a084f0a9cf05b1877bd8a71a90dae7ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -131,9 +132,6 @@ volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>TMR1_INT</b>
 <tr class="memitem:a538de1b1294ef5ad1faf900741b2a720"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a538de1b1294ef5ad1faf900741b2a720"></a>
 volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>LED_STAT</b></td></tr>
 <tr class="separator:a538de1b1294ef5ad1faf900741b2a720"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7795c143c26dca91f329a475c069191"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7795c143c26dca91f329a475c069191"></a>
-volatile char&#160;</td><td class="memItemRight" valign="bottom"><b>temp</b> =0</td></tr>
-<tr class="separator:ab7795c143c26dca91f329a475c069191"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>contains the main routine for the SABT main unit </p>
@@ -158,6 +156,56 @@ volatile char&#160;</td><td class="memItemRight" valign="bottom"><b>temp</b> =0<
 
 </div>
 </div>
+<a class="anchor" id="ad39420cdd896dd12c68e36313139d0a5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ISR </td>
+          <td>(</td>
+          <td class="paramtype">TIMER1_COMPA_vect&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ISR is an interrupt handler that will be called when its argument corresponds to the interupt called. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Interrupt</td><td>vector. Compared to interupt that is fired to see if correct function to call http://www.nongnu.org/avr-libc/ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae6e8a8009a9ae0c59f25a496d1cf5a84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ISR </td>
+          <td>(</td>
+          <td class="paramtype">USART1_RX_vect&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ISR is an interrupt handler that will be called when its argument corresponds to the interupt called. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Interrupt</td><td>vector. Compared to interupt that is fired to see if correct function to call http://www.nongnu.org/avr-libc/ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a084f0a9cf05b1877bd8a71a90dae7ff8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -171,6 +219,15 @@ volatile char&#160;</td><td class="memItemRight" valign="bottom"><b>temp</b> =0<
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>ISR is an interrupt handler that will be called when its argument corresponds to the interupt called. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Interrupt</td><td>vector. Compared to interupt that is fired to see if correct function to call http://www.nongnu.org/avr-libc/ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
 <ul>
 <li>Temporaraly disabled the PC communications since we are simulating the UI with PC </li>
 </ul>
@@ -210,7 +267,7 @@ volatile char&#160;</td><td class="memItemRight" valign="bottom"><b>temp</b> =0<
       </table>
 </div><div class="memdoc">
 
-<p>NOT SURE WHAT IT IS Doing IT seems like the PORTD is a data register. AtATmega1284P(Preferred).pdf. </p>
+<p>NOT SURE WHAT IT IS Doing IT seems like the PORTD is a data register. Turns off/on bits 5,6,7 in Portd depending on LED_STAT AtATmega1284P(Preferred).pdf. </p>
 <dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
 
 </div>
@@ -218,7 +275,7 @@ volatile char&#160;</td><td class="memItemRight" valign="bottom"><b>temp</b> =0<
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

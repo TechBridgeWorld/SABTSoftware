@@ -93,56 +93,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Reads data from File Allocation Table 32 (FAT 32) format. This system defines clusters, which are contiguous regions of memory.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Globals.h&quot;</code><br/>
+<div class="textblock"><code>#include &quot;<a class="el" href="_globals_8h_source.html">Globals.h</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a1a404adb1477372c136ee3d8ec370bef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a404adb1477372c136ee3d8ec370bef"></a>
 unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>getBootSectorData</b> (void)</td></tr>
 <tr class="separator:a1a404adb1477372c136ee3d8ec370bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e2988f898a6b56ba385ae2c34128a86"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e2988f898a6b56ba385ae2c34128a86"></a>
-unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstSector</b> (unsigned long clusterNumber)</td></tr>
+<tr class="memitem:a7e2988f898a6b56ba385ae2c34128a86"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a7e2988f898a6b56ba385ae2c34128a86">getFirstSector</a> (unsigned long clusterNumber)</td></tr>
+<tr class="memdesc:a7e2988f898a6b56ba385ae2c34128a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the first sector address of any given cluster  <a href="#a7e2988f898a6b56ba385ae2c34128a86"></a><br/></td></tr>
 <tr class="separator:a7e2988f898a6b56ba385ae2c34128a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0d24683088974e34e652dcf46037c9f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0d24683088974e34e652dcf46037c9f"></a>
-unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>getSetNextCluster</b> (unsigned long clusterNumber, unsigned char get_set, unsigned long clusterEntry)</td></tr>
+<tr class="memitem:ab0d24683088974e34e652dcf46037c9f"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#ab0d24683088974e34e652dcf46037c9f">getSetNextCluster</a> (unsigned long clusterNumber, unsigned char get_set, unsigned long clusterEntry)</td></tr>
+<tr class="memdesc:ab0d24683088974e34e652dcf46037c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">get cluster entry value from FAT to find out the next cluster in chain  <a href="#ab0d24683088974e34e652dcf46037c9f"></a><br/></td></tr>
 <tr class="separator:ab0d24683088974e34e652dcf46037c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44efd4747cb07a0a1cf3784c838b6a6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a44efd4747cb07a0a1cf3784c838b6a6e"></a>
-unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>getSetFreeCluster</b> (unsigned char totOrNext, unsigned char get_set, unsigned long FSEntry)</td></tr>
+<tr class="memitem:a44efd4747cb07a0a1cf3784c838b6a6e"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a44efd4747cb07a0a1cf3784c838b6a6e">getSetFreeCluster</a> (unsigned char totOrNext, unsigned char get_set, unsigned long FSEntry)</td></tr>
+<tr class="memdesc:a44efd4747cb07a0a1cf3784c838b6a6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function is used to get or set next free cluster or total free clusters in FSinfo sector of SD card.  <a href="#a44efd4747cb07a0a1cf3784c838b6a6e"></a><br/></td></tr>
 <tr class="separator:a44efd4747cb07a0a1cf3784c838b6a6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb92769ff06a9d54732e7ff22ec07eef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb92769ff06a9d54732e7ff22ec07eef"></a>
-struct <a class="el" href="structdir___structure.html">dir_Structure</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>findFiles</b> (unsigned char flag, unsigned char *fileName)</td></tr>
+<tr class="memitem:acb92769ff06a9d54732e7ff22ec07eef"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structdir___structure.html">dir_Structure</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#acb92769ff06a9d54732e7ff22ec07eef">findFiles</a> (unsigned char flag, unsigned char *fileName)</td></tr>
+<tr class="memdesc:acb92769ff06a9d54732e7ff22ec07eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">function gets DIR/FILE list or a single file address or deletes specified file  <a href="#acb92769ff06a9d54732e7ff22ec07eef"></a><br/></td></tr>
 <tr class="separator:acb92769ff06a9d54732e7ff22ec07eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab213e22a70270c138864e3075aa51fb8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab213e22a70270c138864e3075aa51fb8"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>readFile</b> (unsigned char flag, unsigned char *fileName)</td></tr>
+<tr class="memitem:ab213e22a70270c138864e3075aa51fb8"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#ab213e22a70270c138864e3075aa51fb8">readFile</a> (unsigned char flag, unsigned char *fileName)</td></tr>
 <tr class="separator:ab213e22a70270c138864e3075aa51fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee620dcede02bf8349f704e598d90d89"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#aee620dcede02bf8349f704e598d90d89">readAndRetreiveFileContents</a> (unsigned char *fileName, unsigned char *dataString)</td></tr>
 <tr class="separator:aee620dcede02bf8349f704e598d90d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdef267b8305837acbd02add6ad7f23e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afdef267b8305837acbd02add6ad7f23e"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>PlayMP3file</b> (unsigned char *fileName)</td></tr>
+<tr class="memitem:afdef267b8305837acbd02add6ad7f23e"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#afdef267b8305837acbd02add6ad7f23e">PlayMP3file</a> (unsigned char *fileName)</td></tr>
+<tr class="memdesc:afdef267b8305837acbd02add6ad7f23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function plays a given MP3 files, until:  <a href="#afdef267b8305837acbd02add6ad7f23e"></a><br/></td></tr>
 <tr class="separator:afdef267b8305837acbd02add6ad7f23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a126f62cbfb84a23224d07d7eebb1f377"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a126f62cbfb84a23224d07d7eebb1f377"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>convertFileName</b> (unsigned char *fileName)</td></tr>
+<tr class="memitem:a126f62cbfb84a23224d07d7eebb1f377"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a126f62cbfb84a23224d07d7eebb1f377">convertFileName</a> (unsigned char *fileName)</td></tr>
+<tr class="memdesc:a126f62cbfb84a23224d07d7eebb1f377"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the input fileName (which is in FAT format) in the following fashion: &lt;filename.ext&gt; --&mdash;&gt; &lt;filename[padding to 8 chars]ext&gt; filename must be &lt;= 8 chars and ext must be &lt;= 3 chars. Thus, INT.MP3 becomes [INT MP3]. Also, capitalizes lowercase files.  <a href="#a126f62cbfb84a23224d07d7eebb1f377"></a><br/></td></tr>
 <tr class="separator:a126f62cbfb84a23224d07d7eebb1f377"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fea385b9800617fcb1cad4f5493ea67"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1fea385b9800617fcb1cad4f5493ea67"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>ReplaceTheContentOfThisFileWith</b> (unsigned char *fileName, unsigned char *fileContent)</td></tr>
+<tr class="memitem:a1fea385b9800617fcb1cad4f5493ea67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a1fea385b9800617fcb1cad4f5493ea67">ReplaceTheContentOfThisFileWith</a> (unsigned char *fileName, unsigned char *fileContent)</td></tr>
+<tr class="memdesc:a1fea385b9800617fcb1cad4f5493ea67"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads the data in fileContent into buffer and uses the function <a class="el" href="_s_d__routines_8c.html#aa72e78c5d2b4664dfdbb339030a1798c" title="Writes a single block of SD Card. Data that is written is put into the buffer variables and writes ou...">SD_writeSingleBlock()</a> to put the value in buffer onto the SD card Data you are writing in MUST END IN $. If not garbage will be written in.  <a href="#a1fea385b9800617fcb1cad4f5493ea67"></a><br/></td></tr>
 <tr class="separator:a1fea385b9800617fcb1cad4f5493ea67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18f109c80cfc13f98d54b936a8f89f1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18f109c80cfc13f98d54b936a8f89f1a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeFile</b> (unsigned char *fileName)</td></tr>
+<tr class="memitem:a18f109c80cfc13f98d54b936a8f89f1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a18f109c80cfc13f98d54b936a8f89f1a">writeFile</a> (unsigned char *fileName)</td></tr>
+<tr class="memdesc:a18f109c80cfc13f98d54b936a8f89f1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">function creates a file in FAT32 format in the root directory if given file name does not exists. If it already exists then append data to end  <a href="#a18f109c80cfc13f98d54b936a8f89f1a"></a><br/></td></tr>
 <tr class="separator:a18f109c80cfc13f98d54b936a8f89f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92d056bee6b45c23b0b06fd4390daaba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92d056bee6b45c23b0b06fd4390daaba"></a>
-unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>searchNextFreeCluster</b> (unsigned long startCluster)</td></tr>
+<tr class="memitem:a92d056bee6b45c23b0b06fd4390daaba"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a92d056bee6b45c23b0b06fd4390daaba">searchNextFreeCluster</a> (unsigned long startCluster)</td></tr>
+<tr class="memdesc:a92d056bee6b45c23b0b06fd4390daaba"><td class="mdescLeft">&#160;</td><td class="mdescRight">function searches for the next free cluster in the root directory starting at specified cluster  <a href="#a92d056bee6b45c23b0b06fd4390daaba"></a><br/></td></tr>
 <tr class="separator:a92d056bee6b45c23b0b06fd4390daaba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b15151c2fa2f87cfcb8ff703c4d64cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b15151c2fa2f87cfcb8ff703c4d64cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>memoryStatistics</b> (void)</td></tr>
+<tr class="memitem:a8b15151c2fa2f87cfcb8ff703c4d64cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a8b15151c2fa2f87cfcb8ff703c4d64cc">memoryStatistics</a> (void)</td></tr>
+<tr class="memdesc:a8b15151c2fa2f87cfcb8ff703c4d64cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">function displays the total memory and free memory of SD Card using UART NOTE: this routine can take upto 15sec for 1GB card (@1MHz clock) it tries to read from SD whether a free cluster count is stored, if it is stored then it will return immediately. Otherwise it will count the total number of free clusters, which takes time  <a href="#a8b15151c2fa2f87cfcb8ff703c4d64cc"></a><br/></td></tr>
 <tr class="separator:a8b15151c2fa2f87cfcb8ff703c4d64cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac038c8795e541cbd5a33eda705b01934"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac038c8795e541cbd5a33eda705b01934"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>displayMemory</b> (unsigned char flag, unsigned long memory)</td></tr>
+<tr class="memitem:ac038c8795e541cbd5a33eda705b01934"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#ac038c8795e541cbd5a33eda705b01934">displayMemory</a> (unsigned char flag, unsigned long memory)</td></tr>
+<tr class="memdesc:ac038c8795e541cbd5a33eda705b01934"><td class="mdescLeft">&#160;</td><td class="mdescRight">function converts the unsigned long value of memory into text string and send ot UART  <a href="#ac038c8795e541cbd5a33eda705b01934"></a><br/></td></tr>
 <tr class="separator:ac038c8795e541cbd5a33eda705b01934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae257afc618304098844252c3d71b788"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae257afc618304098844252c3d71b788"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteFile</b> (unsigned char *fileName)</td></tr>
+<tr class="memitem:aae257afc618304098844252c3d71b788"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#aae257afc618304098844252c3d71b788">deleteFile</a> (unsigned char *fileName)</td></tr>
+<tr class="memdesc:aae257afc618304098844252c3d71b788"><td class="mdescLeft">&#160;</td><td class="mdescRight">function deletes the specified file in the root directory  <a href="#aae257afc618304098844252c3d71b788"></a><br/></td></tr>
 <tr class="separator:aae257afc618304098844252c3d71b788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a546d211c1f6659e26fc0eae87393bff0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a546d211c1f6659e26fc0eae87393bff0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>freeMemoryUpdate</b> (unsigned char flag, unsigned long size)</td></tr>
+<tr class="memitem:a546d211c1f6659e26fc0eae87393bff0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a546d211c1f6659e26fc0eae87393bff0">freeMemoryUpdate</a> (unsigned char flag, unsigned long size)</td></tr>
+<tr class="memdesc:a546d211c1f6659e26fc0eae87393bff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">function updates the free memory count in FSinfo sector. Whenever a file is deleted or created, this function will be called to ADD or REMOVE clusters occupied by teh file  <a href="#a546d211c1f6659e26fc0eae87393bff0"></a><br/></td></tr>
 <tr class="separator:a546d211c1f6659e26fc0eae87393bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9912b92d9e9f9ec6217a023f7d1d046e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_f_a_t32_8c.html#a9912b92d9e9f9ec6217a023f7d1d046e">InitSDCard</a> (bool bVerb)</td></tr>
 <tr class="memdesc:a9912b92d9e9f9ec6217a023f7d1d046e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the SD card, communicates with computer to let know what type of card and sets up the rest of the SD card.  <a href="#a9912b92d9e9f9ec6217a023f7d1d046e"></a><br/></td></tr>
@@ -150,8 +149,287 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>freeMemoryUpdate</b> 
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Reads data from File Allocation Table 32 (FAT 32) format. This system defines clusters, which are contiguous regions of memory. </p>
-<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd>
+<dd>
+Kory Stiger (kstiger) </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a126f62cbfb84a23224d07d7eebb1f377"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char convertFileName </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts the input fileName (which is in FAT format) in the following fashion: &lt;filename.ext&gt; --&mdash;&gt; &lt;filename[padding to 8 chars]ext&gt; filename must be &lt;= 8 chars and ext must be &lt;= 3 chars. Thus, INT.MP3 becomes [INT MP3]. Also, capitalizes lowercase files. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>unsigned char* string which contains the file name that needs to be converted </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>unsigned char 1 for failure 0 for victory  Currently overwrites the passed in buffer so if you pass in the same buffer twice, it will have already converted the fileName (specifically removed the '.' which is what the invalid file check is done off of) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aae257afc618304098844252c3d71b788"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void deleteFile </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function deletes the specified file in the root directory </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>- unsigned char *, file name of file that you want deleted </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VOID </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac038c8795e541cbd5a33eda705b01934"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void displayMemory </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>flag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>memory</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function converts the unsigned long value of memory into text string and send ot UART </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>- unsigned char, if HIGH - memory will be displayed in KBytes. else in Bytes </td></tr>
+    <tr><td class="paramname">memory</td><td>- unsigned long, memory value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VOID </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="acb92769ff06a9d54732e7ff22ec07eef"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structdir___structure.html">dir_Structure</a>* findFiles </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>flag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>function gets DIR/FILE list or a single file address or deletes specified file </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>- unsigned char, can be GET_LIST, GET_FILE or DELETE </td></tr>
+    <tr><td class="paramname">fileName</td><td>- unsinged char *, pointer to the file name to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>struct <a class="el" href="structdir___structure.html">dir_Structure</a> * - first cluster of file if flag = GET_FILE print file/dir list if flag = GET_LIST. Delete file if flag = DELETE </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a546d211c1f6659e26fc0eae87393bff0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void freeMemoryUpdate </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>flag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function updates the free memory count in FSinfo sector. Whenever a file is deleted or created, this function will be called to ADD or REMOVE clusters occupied by teh file </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>- unsigned char, can be ADD or REMOVE </td></tr>
+    <tr><td class="paramname">size</td><td>- unsigned long, file size in Bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VOID </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7e2988f898a6b56ba385ae2c34128a86"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long getFirstSector </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>clusterNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculates the first sector address of any given cluster </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusterNumber</td><td>- unsigned long, cluster number on which first sector found </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>unsgined long - first secotr address </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a44efd4747cb07a0a1cf3784c838b6a6e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long getSetFreeCluster </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>totOrNext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>get_set</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>FSEntry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function is used to get or set next free cluster or total free clusters in FSinfo sector of SD card. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">totOrNext</td><td>- unsigned char, can be either TOTAL_FREE or NEXT_FREE </td></tr>
+    <tr><td class="paramname">get_set</td><td>- unsigned char, flag that can be GET or SEt </td></tr>
+    <tr><td class="paramname">FSEntry</td><td>- unsigned long, new FS entry when arg2 is SET or 0 when GET </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>unsigned long - next free cluster if arg1 is NEXT_FREE and arg2 is GET total # of free clusters if arg1 is TOTAL_FREE and arg2 GET. 0xffffffff if any error or arg2 is Set </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab0d24683088974e34e652dcf46037c9f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long getSetNextCluster </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>clusterNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>get_set</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>clusterEntry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get cluster entry value from FAT to find out the next cluster in chain </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusterNumber</td><td>- unsinged long, current cluster number </td></tr>
+    <tr><td class="paramname">get_set</td><td>- unsigned char, get - if next sector is to be got, and set if next sector is to be set </td></tr>
+    <tr><td class="paramname">clusterEntry</td><td>- unsigned long, next cluster number if arg2 = Set, else = 0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>unsinged long - next cluster number if arg2 = get, else 0 </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9912b92d9e9f9ec6217a023f7d1d046e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -174,6 +452,52 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>freeMemoryUpdate</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8b15151c2fa2f87cfcb8ff703c4d64cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void memoryStatistics </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function displays the total memory and free memory of SD Card using UART NOTE: this routine can take upto 15sec for 1GB card (@1MHz clock) it tries to read from SD whether a free cluster count is stored, if it is stored then it will return immediately. Otherwise it will count the total number of free clusters, which takes time </p>
+<dl class="section return"><dt>Returns</dt><dd>VOID </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afdef267b8305837acbd02add6ad7f23e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char PlayMP3file </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function plays a given MP3 files, until: </p>
+<pre class="fragment">     1. The files reach the end of file
+     2. Stop playing command issued from the controller
+</pre> <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>- unsighed char *, simply name of the file to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>unsigned char - return 0 on success return 2 on error converting fileName </dd></dl>
 
 </div>
 </div>
@@ -210,10 +534,130 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>freeMemoryUpdate</b> 
 
 </div>
 </div>
+<a class="anchor" id="ab213e22a70270c138864e3075aa51fb8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char readFile </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>flag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>- unsigned char, flag=READ then to read file from SD card and send contents to UART. if flag=VERIFY then functions will verify whether a specified file is already existing </td></tr>
+    <tr><td class="paramname">fileName</td><td>- unsigned char *, the file you are reading or verifying </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>char - returns 0 on success returns 1 if files already exists and flag = Verify returns 2 on error convertingFileName </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a1fea385b9800617fcb1cad4f5493ea67"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ReplaceTheContentOfThisFileWith </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileContent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reads the data in fileContent into buffer and uses the function <a class="el" href="_s_d__routines_8c.html#aa72e78c5d2b4664dfdbb339030a1798c" title="Writes a single block of SD Card. Data that is written is put into the buffer variables and writes ou...">SD_writeSingleBlock()</a> to put the value in buffer onto the SD card Data you are writing in MUST END IN $. If not garbage will be written in. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>- unsigned char *, This contains the file to replace data in </td></tr>
+    <tr><td class="paramname">fileContent</td><td>- unsighed char *, What to put into fileName </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - returns 0 if the file exists you are trying to overwrite returns 1 if the file does not exist </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a92d056bee6b45c23b0b06fd4390daaba"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long searchNextFreeCluster </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>startCluster</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function searches for the next free cluster in the root directory starting at specified cluster </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startCluster</td><td>- unsinged long, starting cluster </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>usigned long, the number of the next free cluster </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a18f109c80cfc13f98d54b936a8f89f1a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void writeFile </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>function creates a file in FAT32 format in the root directory if given file name does not exists. If it already exists then append data to end </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>- unsigned char *, this is the name of the file to write to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VOID </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

@@ -93,15 +93,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>This file controls both User interface to Main control and computer ineractions tech_report.pdf.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Globals.h&quot;</code><br/>
-<code>#include &quot;Modes.h&quot;</code><br/>
+<div class="textblock"><code>#include &quot;<a class="el" href="_globals_8h_source.html">Globals.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="_modes_8h_source.html">Modes.h</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a7625beb2ce43e69177f05f38a981203d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#a7625beb2ce43e69177f05f38a981203d">UI_CheckModes</a> (void)</td></tr>
+<tr class="memdesc:a7625beb2ce43e69177f05f38a981203d"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads modes from MODES.DAT file and tells computer how many modes and what they are  <a href="#a7625beb2ce43e69177f05f38a981203d"></a><br/></td></tr>
 <tr class="separator:a7625beb2ce43e69177f05f38a981203d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa78ec56612e4363379f12855e698acea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa78ec56612e4363379f12855e698acea"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>UI_calculate_CRC</b> (unsigned char *pstrMsg)</td></tr>
+<tr class="memitem:aa78ec56612e4363379f12855e698acea"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#aa78ec56612e4363379f12855e698acea">UI_calculate_CRC</a> (unsigned char *pstrMsg)</td></tr>
+<tr class="memdesc:aa78ec56612e4363379f12855e698acea"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate CRC (cyclic redundancy check)  <a href="#aa78ec56612e4363379f12855e698acea"></a><br/></td></tr>
 <tr class="separator:aa78ec56612e4363379f12855e698acea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5b70e309b6e2171d87c585f58bcb5ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5b70e309b6e2171d87c585f58bcb5ed"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>UI_buildMessage</b> (char MessageType)</td></tr>
@@ -109,17 +110,17 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>UI_buildMessage</b> (
 <tr class="memitem:a8604fa0f28d7c5d61a5e916bc4e40f18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#a8604fa0f28d7c5d61a5e916bc4e40f18">UI_parse_message</a> (bool IsPlaying)</td></tr>
 <tr class="memdesc:a8604fa0f28d7c5d61a5e916bc4e40f18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a message in USART_UI_RecievedPacket. Then determines what type of message it has recieved. It then interacts with the mode accordingly and sends a message of recieval at the end.  <a href="#a8604fa0f28d7c5d61a5e916bc4e40f18"></a><br/></td></tr>
 <tr class="separator:a8604fa0f28d7c5d61a5e916bc4e40f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb6033f24c1625817ad7ba61b519323d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb6033f24c1625817ad7ba61b519323d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ControlKeyPressed</b> (void)</td></tr>
+<tr class="memitem:afb6033f24c1625817ad7ba61b519323d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#afb6033f24c1625817ad7ba61b519323d">UI_ControlKeyPressed</a> (void)</td></tr>
+<tr class="memdesc:afb6033f24c1625817ad7ba61b519323d"><td class="mdescLeft">&#160;</td><td class="mdescRight">(?)  <a href="#afb6033f24c1625817ad7ba61b519323d"></a><br/></td></tr>
 <tr class="separator:afb6033f24c1625817ad7ba61b519323d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2730d282135b5bba394db7e63001319"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2730d282135b5bba394db7e63001319"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_Play_Intro_Currentmode</b> (void)</td></tr>
+<tr class="memitem:af2730d282135b5bba394db7e63001319"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#af2730d282135b5bba394db7e63001319">UI_Play_Intro_Currentmode</a> (void)</td></tr>
+<tr class="memdesc:af2730d282135b5bba394db7e63001319"><td class="mdescLeft">&#160;</td><td class="mdescRight">play the MP3 associated with the current mode  <a href="#af2730d282135b5bba394db7e63001319"></a><br/></td></tr>
 <tr class="separator:af2730d282135b5bba394db7e63001319"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae61ed4d60fdf3816d5f2a52d2516a377"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae61ed4d60fdf3816d5f2a52d2516a377"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_CallModeYesAnswer</b> (void)</td></tr>
+<tr class="memitem:ae61ed4d60fdf3816d5f2a52d2516a377"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#ae61ed4d60fdf3816d5f2a52d2516a377">UI_CallModeYesAnswer</a> (void)</td></tr>
+<tr class="memdesc:ae61ed4d60fdf3816d5f2a52d2516a377"><td class="mdescLeft">&#160;</td><td class="mdescRight">(?)  <a href="#ae61ed4d60fdf3816d5f2a52d2516a377"></a><br/></td></tr>
 <tr class="separator:ae61ed4d60fdf3816d5f2a52d2516a377"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90ae015fe52e35a82f20b79e2b6242b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90ae015fe52e35a82f20b79e2b6242b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_CallModeNoAnswer</b> (void)</td></tr>
+<tr class="memitem:a90ae015fe52e35a82f20b79e2b6242b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_i___handle_8c.html#a90ae015fe52e35a82f20b79e2b6242b9">UI_CallModeNoAnswer</a> (void)</td></tr>
+<tr class="memdesc:a90ae015fe52e35a82f20b79e2b6242b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">(?)  <a href="#a90ae015fe52e35a82f20b79e2b6242b9"></a><br/></td></tr>
 <tr class="separator:a90ae015fe52e35a82f20b79e2b6242b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a652366d793593a4795f252271bc8fc62"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a652366d793593a4795f252271bc8fc62"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_InputDotToCurrentMode</b> (char thisDot)</td></tr>
@@ -136,8 +137,73 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ResetTheCurrentMod
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file controls both User interface to Main control and computer ineractions tech_report.pdf. </p>
-<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Alex Etling (petling) </dd>
+<dd>
+Nick LaGrow (nlagrow) </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="aa78ec56612e4363379f12855e698acea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t UI_calculate_CRC </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>pstrMsg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate CRC (cyclic redundancy check) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pstrMsg</td><td>message (?) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>CRC value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a90ae015fe52e35a82f20b79e2b6242b9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UI_CallModeNoAnswer </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>(?) </p>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae61ed4d60fdf3816d5f2a52d2516a377"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UI_CallModeYesAnswer </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>(?) </p>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a7625beb2ce43e69177f05f38a981203d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -151,8 +217,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ResetTheCurrentMod
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>reads modes from MODES.DAT file and tells computer how many modes and what they are </p>
 <dl class="section return"><dt>Returns</dt><dd>bool - return true on succesful completion of transmission, false on failure </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afb6033f24c1625817ad7ba61b519323d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UI_ControlKeyPressed </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>(?) </p>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
 
 </div>
 </div>
@@ -171,6 +257,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ResetTheCurrentMod
 </div><div class="memdoc">
 
 <p>Reads a message in USART_UI_RecievedPacket. Then determines what type of message it has recieved. It then interacts with the mode accordingly and sends a message of recieval at the end. </p>
+<p>UI string: [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2] msgtypes: </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">IsPlaying</td><td>- bool determines whether or not an MP3 Files is playing </td></tr>
@@ -178,6 +265,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ResetTheCurrentMod
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool - returns true if succesfully parsed, understood, and used message </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af2730d282135b5bba394db7e63001319"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UI_Play_Intro_Currentmode </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>play the MP3 associated with the current mode </p>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
 
 </div>
 </div>
@@ -203,7 +309,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UI_ResetTheCurrentMod
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

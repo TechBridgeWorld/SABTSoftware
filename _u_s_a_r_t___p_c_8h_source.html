@@ -88,36 +88,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">USART_PC.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef _USART_PC_H_</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define _USART_PC_H_</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span> </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define CHAR 0</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INT  1</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LONG 2</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define TX_NEWLINE_PC {USART_transmitByteToPC(0x0d); USART_transmitByteToPC(0x0a);}</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">char</span> USART_PC_Received_Data;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">char</span> USART_PC_Data_To_Transmit;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> USART_PC_DATA_RDY;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> USART_PC_Message_ready;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> USART_PC_received_playload_len;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> USART_PC_ReceivedPacket[20];</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a4160b8102fb8057ebecb911f300d1f0a" title="Initializes the buad communication over USART.">init_USART_PC</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a5eeb914fae5acc624172055064757e11" title="Receives message stored in globabl USART_PC_Received_Data Then proceeds to decode message...">USART_PC_ReceiveAction</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#ac3414936bd9a09e124d23eeaff82dc8a" title="Waits till available to send message and puts data in Global value.">USART_transmitByteToPC</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">void</span> USART_transmitStringToPC(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a3b001ffcfdebd8abecf76330d1ffe9db" title="reads each byte of data and sends it to the Flash individually">USART_transmitStringToPCFromFlash</a>(<span class="keywordtype">char</span>*);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#endif</span></div>
+<a href="_u_s_a_r_t___p_c_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef _USART_PC_H_</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define _USART_PC_H_</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span> </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#define CHAR        0</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INT         1</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LONG        2</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define CARR_RETURN 13</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define TX_NEWLINE_PC { USART_transmitByteToPC(0x0d); \</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">                        USART_transmitByteToPC(0x0a);}</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">char</span> USART_PC_Received_Data;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">char</span> USART_PC_Data_To_Transmit;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> USART_PC_DATA_RDY;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">bool</span> USART_PC_Message_ready;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> USART_PC_received_playload_len;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//count for checking incoming messages</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">char</span> message_count = 0;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">bool</span> valid_message = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> USART_PC_ReceivedPacket[20];</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a4160b8102fb8057ebecb911f300d1f0a" title="Initializes the buad communication over USART.">init_USART_PC</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a5eeb914fae5acc624172055064757e11" title="Receives message stored in global USART_PC_Received_Data Then proceeds to decode message, use its value, and allow for more message to be processed by PC_parse_message() tech_report.pdf.">USART_PC_ReceiveAction</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#ac3414936bd9a09e124d23eeaff82dc8a" title="transmit one byte to UDR0 (PC connection)">USART_transmitByteToPC</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a705841d62b95485db20f846cf65d8f43" title="transmit a string to UDR0 (PC connection)">USART_transmitStringToPC</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_u_s_a_r_t___p_c_8c.html#a3b001ffcfdebd8abecf76330d1ffe9db" title="reads each byte of data and sends it to the Flash individually">USART_transmitStringToPCFromFlash</a>(<span class="keywordtype">char</span>*);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* _USART_PC_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 16:14:09 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 12 2013 19:47:38 for SABT Software by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>
