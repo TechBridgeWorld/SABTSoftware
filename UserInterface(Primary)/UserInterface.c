@@ -17,27 +17,27 @@ void InitializeUI(void);
  */
 int main(void)
 {
-	InitializeUI();
-	SendMsgPayLoad[0]=0x01;
+  InitializeUI();
+  SendMsgPayLoad[0]=0x01;
   //SendPacket('D',SendMsgPayLoad,1);
-	while(1) //Main loop
-	/*
-	This loop will take care of all the signal handling from the 
-	*/
- 	{
+  while(1) //Main loop
+  /*
+  This loop will take care of all the signal handling from the 
+  */
+   {
     // Test the transmission to MCU 
     USART_transmitStringToMCU("A message from the Primary UI Board \n");
-		
+    
     // TODO:  remove these
-		//SetStatLED1(true);
-		//SetStatLED2(true); 
+    //SetStatLED1(true);
+    //SetStatLED2(true); 
     
     // Check to see if timer interrupt has occurred
-		if(TMR1_INT)
-		{
-			TimerRoutine();
-		}
-	}
+    if(TMR1_INT)
+    {
+      TimerRoutine();
+    }
+  }
 
 return 0;
 }
@@ -47,21 +47,21 @@ return 0;
  */
 void InitializeUI(void)
 {
-	//Initialize the Serial comm with the main module
-	init_USART_MCU();
+  //Initialize the Serial comm with the main module
+  init_USART_MCU();
 
-	//Initialize the analog ports
+  //Initialize the analog ports
   //TODO: why is this commented out?
-	//InitializeAnalogPorts();
+  //InitializeAnalogPorts();
 
-	//Initialize the digital input/output pins
-	Initialize_Digital_IO();
+  //Initialize the digital input/output pins
+  Initialize_Digital_IO();
 
-	// Initialize the timer
-	initTimer();
+  // Initialize the timer
+  initTimer();
 
-	// Enable interrupts
-	sei();
+  // Enable interrupts
+  sei();
 
-	InterfaceType=1;
+  InterfaceType=1;
 }

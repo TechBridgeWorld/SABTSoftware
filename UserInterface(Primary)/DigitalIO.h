@@ -1,5 +1,11 @@
-#ifndef _DIGITALIO_H_
-#define _DIGITALIO_H
+/**
+ * @file DigitalIO.h
+ * @brief Definitions for Input/Output
+ * @author Nick LaGrow (nlagrow)
+ */
+
+#ifndef _DIGITAL_IO_H_
+#define _DIGITAL_IO_H
 
 //Braill inputs for primary interface (Digital)
 #define UI_BR1 4
@@ -23,12 +29,12 @@
 #define UI_STAT1 6
 #define UI_STAT2 7
 
-//Digital IO button states
-/*
-0-Idle
-1-Button Pressed
-2-Button command used
-*/
+/* Digital IO button states:
+ * 0 - Idle
+ * 1 - Button pressed
+ * 2 - Button command used
+ */
+
 volatile char Enter1State;
 volatile char Enter2State;
 volatile char Mode1State;
@@ -49,5 +55,4 @@ void Mode2Task(void);
 void VolUpTask(void);
 void VolDownTask(void);
 
-#endif
-
+#endif /* _DIGITAL_IO_H_ */
