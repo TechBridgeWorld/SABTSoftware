@@ -4,8 +4,8 @@
  * @author Nick LaGrow (nlagrow)
  */
 
-#ifndef _GLOBALS_H_
-#define _GLOBALS_H
+#ifndef _GLOBALS_UI_H_
+#define _GLOBALS_UI_H_
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>

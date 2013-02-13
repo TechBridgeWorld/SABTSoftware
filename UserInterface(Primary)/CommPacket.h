@@ -1,3 +1,9 @@
+/**
+ * @file CommPacket.h
+ * @brief Definitions for building packets
+ * @author Nick LaGrow (nlagrow)
+ */
+
 #ifndef _COMM_PACKET_H_
 #define _COMM_PACKET_H_
 
@@ -9,4 +15,4 @@ uint16_t Calculate_CRC(unsigned char* pstrMsg);
 bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen);
 void SendPacket(char cmd, char* payLoad, int plLen);
 
-#endif
+#endif /* _COMM_PACKET_H_ */
