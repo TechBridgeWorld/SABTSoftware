@@ -18,9 +18,10 @@ void initTimer(void)
 {
 	TMR1_INT=false;
 	TCCR1A=0x00;
-	TCCR1B=0x0D;
-	OCR1A=780; //1s interval
-	TIMSK1 |= (1<<OCIE1A); //Enable interrupt
+ 	TCCR1B=0x0D;
+  	OCR1A=780; //1s interval
+ 	TIMSK1 |= (1<<OCIE1A); //Enable interrupt
+  
 	TmrCntADC=0;
 }
 
@@ -29,12 +30,13 @@ void initTimer(void)
  */
 ISR(TIMER1_COMPA_vect){
 	TMR1_INT=true;
+	SetStatLED2(false);
 };
 
 void TimerRoutine(void)
 {
 	TMR1_INT=false;
-	//USART_transmitStringToMCU("hello small waves");
+	/*//USART_transmitStringToMCU("hello small waves");
 	//
 	if(!LED_STAT){
 		SetStatLED2(true);
@@ -56,5 +58,6 @@ void TimerRoutine(void)
 		DetectTheDot();
 		ProcessTheDot();
 		TmrCntADC=0;
-	}
+	}*/
+	SetStatLED2(false);
 }

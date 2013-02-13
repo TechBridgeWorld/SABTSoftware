@@ -137,6 +137,7 @@ End of test code
  */
 ISR(TIMER1_COMPA_vect){
   TMR1_INT=true;
+  PRINTF("HEY YOU GOT  A TIMER INTERRUPT\n\r");
 };
 
 /**
@@ -148,7 +149,7 @@ ISR(TIMER1_COMPA_vect){
  * @return  Void
  */
 ISR(USART1_RX_vect){
-  DPRINTF("%c\r\n", UDR1);
+  PRINTF("I GOT A MESSAGE\n\r");
   USART_Keypad_Received_Data=UDR1;
   USART_Keypad_DATA_RDY=true; 
 };
@@ -200,7 +201,10 @@ void InitializeSystem(void){
   TX_NEWLINE_PC;
 
   InitSDCard(true);
-  
+
+  message_count = 0;
+  valid_message = true;  
+
   if(!UI_CheckModes())
   {
     USART_transmitStringToPCFromFlash (PSTR("Mode file not found"));

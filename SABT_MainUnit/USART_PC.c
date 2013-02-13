@@ -42,7 +42,7 @@ unsigned char USART_PC_ReceiveAction(void){
     message_count = 0;
     if(!valid_message){
       valid_message = true;
-      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!!!");
+      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
     

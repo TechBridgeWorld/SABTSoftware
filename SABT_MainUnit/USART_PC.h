@@ -25,8 +25,8 @@ volatile bool USART_PC_Message_ready;
 volatile unsigned char USART_PC_received_playload_len;
 
 //count for checking incoming messages
-char message_count = 0;
-bool valid_message = true;
+char message_count;
+bool valid_message;
 
 volatile unsigned char USART_PC_ReceivedPacket[20];
 
