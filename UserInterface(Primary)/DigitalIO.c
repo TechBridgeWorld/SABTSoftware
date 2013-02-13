@@ -188,7 +188,7 @@ void RunCommandTasks(void)
     {
       InterfaceType=1;
     }
-    return 0;
+    return;
   }
   if(VolUpState==1)
   {

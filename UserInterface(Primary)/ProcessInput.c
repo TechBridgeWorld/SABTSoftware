@@ -33,7 +33,6 @@ void ResetCellState(void)
 void ProcessTheDot(void)
 {
   uint8_t TempDot = 0;
-  uint8_t PI_ThisDot;
   bool NewDotDetected = false;
 
   // TODO what is PINC?
@@ -95,7 +94,7 @@ void ProcessTheDot(void)
     SendMsgPayLoad[0] = 0x30 + PI_LastDotPressed;
     SendMsgPayLoad[1] = 0x31;
     SendMsgPayLoad[2] = 0x31;
-    SendPacket('A',&SendMsgPayLoad,3);
+    SendPacket('A',(char*)&SendMsgPayLoad,3);
 
     //SendPacket('E',&SendMsgPayLoad,3);
   }
@@ -123,6 +122,6 @@ void CaptureCellValue(void)
 
   SendMsgPayLoad[0]=ProcessedCellValue;   // 6-bit number representing the pressed dots
   SendMsgPayLoad[1]=1;                    // Always 1 for Primary UI - only 1 cell
-  SendPacket('B',&SendMsgPayLoad,2);      // Send the two bytes with messege type of 'B'
+  SendPacket('B',(char*)&SendMsgPayLoad,2);      // Send the two bytes with messege type of 'B'
   ResetCellState();                       // Reset the cell sate for new letter
 }

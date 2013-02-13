@@ -45,7 +45,7 @@ int main(void)
   */
    {
     // Test the transmission to MCU 
-    USART_transmitStringToMCU("A message from the Primary UI Board \n");
+    USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
     
     // TODO:  remove these
     //SetStatLED1(true);

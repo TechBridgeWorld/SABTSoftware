@@ -41,7 +41,7 @@ void TimerRoutine(void)
 {
   TMR1_INT = false;
   // Test string
-  USART_transmitStringToMCU("hello small waves");
+  USART_transmitStringToMCU((unsigned char*)"hello small waves");
   
   /*
   if(!LED_STAT){
