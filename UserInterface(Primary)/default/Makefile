@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = UserInterface.o DigitalIO.o AnalogInputs.o USART_MCU.o Timer.o CommPacket.o ProcessInput.o 
+OBJECTS = UserInterface.o DigitalIO.o AnalogInputs.o USART_MCU.o Timer.o ProcessInput.o CommPacket.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -59,10 +59,10 @@ USART_MCU.o: ../USART_MCU.c
 Timer.o: ../Timer.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-CommPacket.o: ../CommPacket.c
+ProcessInput.o: ../ProcessInput.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ProcessInput.o: ../ProcessInput.c
+CommPacket.o: ../CommPacket.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

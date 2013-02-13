@@ -24,13 +24,53 @@ void delay10()
   return;
 }
 
+//uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
+
+
+// watchdog timer interrupt handler (?)
+// attempt to catch wdt interrupt
+ISR(_VECTOR(7)){
+  SetStatLED2(true);
+}
+
+
 /**
  * @brief the main execution loop for the primary ui board
  * Executes an infinite loop, should never return
  * @return 0
  */
-int main(void)
+int main(void)//
 {
+  // Attempt to turn WDT to interrupt instead of reset mode
+  //MCUSR &= ~(1<<3);
+  //WDTCSR |= (1<<6);
+  //WDTCSR &= ~(1<<3);
+
+  // Attempt to turn off wdt
+  //wdt_reset();
+  //wdt_disable();
+
+  InitializeUI();
+
+  // Enough delay to not allow LED2 to turn on unless wdt is handled
+  // used for testing: if the second light turns on, we know we disabled watchdog
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+  delay10();
+
+  SetStatLED2(true);
+
+  while(1){};
+
+
+/*
   InitializeUI();
   SendMsgPayLoad[0]=0x01;
   //SendPacket('D',SendMsgPayLoad,1);
@@ -40,10 +80,8 @@ int main(void)
   SetStatLED1(false);
   
   while(1) //Main loop
-  /*
-  This loop will take care of all the signal handling from the 
-  */
-   {
+  // This loop will take care of all the signal handling from the 
+  {
     // Test the transmission to MCU 
     USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
     
@@ -57,7 +95,7 @@ int main(void)
       TimerRoutine();
     }
   }
-
+*/
   return 0;
 }
 
