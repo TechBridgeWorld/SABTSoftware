@@ -26,13 +26,96 @@ void delay10()
 
 //uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
 
-
-// watchdog timer interrupt handler (?)
-// attempt to catch wdt interrupt
-ISR(_VECTOR(7)){
+//reset
+ISR(_VECTOR(1)){
   SetStatLED2(true);
 }
 
+/* TEST VECTORS
+ISR(_VECTOR(2)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(3)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(4)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(5)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(6)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(7)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(8)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(9)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(10)){
+  SetStatLED2(true);
+}*/
+ISR(_VECTOR(11)){
+  if(!LED_STAT){
+    SetStatLED2(true);
+    SetStatLED1(false);
+    LED_STAT=true;
+  }else{
+    SetStatLED2(false);
+    SetStatLED1(true);
+    LED_STAT=false;
+  }
+}
+/*ISR(_VECTOR(12)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(13)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(14)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(15)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(16)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(17)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(18)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(19)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(20)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(21)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(22)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(23)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(24)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(25)){
+  SetStatLED2(true);
+}
+ISR(_VECTOR(26)){
+  SetStatLED2(true);
+}
+*/
 
 /**
  * @brief the main execution loop for the primary ui board
@@ -66,8 +149,40 @@ int main(void)//
   delay10();
 
   SetStatLED2(true);
+/*
+  delay10();
+  delay10();
+  delay10();
+  SetStatLED1(false);
+  SetStatLED2(true);
+  delay10();
+  delay10();
+  delay10();
+  SetStatLED1(true);
+  SetStatLED2(false);
+  delay10();
+  delay10();
+  delay10();
+  SetStatLED1(false);
+  SetStatLED2(true);
+  */
 
-  while(1){};
+  while(1) //Main loop
+  // This loop will take care of all the signal handling from the 
+  {
+    // Test the transmission to MCU 
+    USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
+    
+    // TODO:  remove these
+    //SetStatLED1(true);
+    //SetStatLED2(true); 
+    
+    // Check to see if timer interrupt has occurred
+    if(TMR1_INT)
+    {
+      TimerRoutine();
+    }
+  }
 
 
 /*

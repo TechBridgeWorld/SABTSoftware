@@ -5,8 +5,6 @@
  */
 
 #include "GlobalsUI.h"
-
-volatile bool LED_STAT; // TODO what is this
 int TmrCntADC;          // TODO what is this
 
 /**
@@ -28,10 +26,9 @@ void initTimer(void)
  * @brief interrupt handler for TIMER1_COMPA_vect
  * @return Void
  */
-ISR(TIMER1_COMPA_vect){
-  TMR1_INT = true;
-  SetStatLED2(false);
-};
+//ISR(/*TIMER1_COMPA_vect*/ _VECTOR(11)){ // should be TIMER1_CAPT_vect
+//  TMR1_INT = true;
+//};
 
 /**
  * @brief routine executed on timer interrupt (during main loop)

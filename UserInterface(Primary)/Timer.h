@@ -10,6 +10,8 @@
 volatile bool TMR1_INT;
 void initTimer(void);
 
+volatile bool LED_STAT; // TODO what is this
+
 void TimerRoutine(void);
 
 #endif /* _TIMER_H_ */

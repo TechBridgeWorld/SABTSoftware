@@ -26,7 +26,7 @@ void init_USART_MCU(void)
 
 // TODO: what does this do?
 
-ISR(USART0_RX_vect){
+ISR(/* USART0_RX_vect */ _VECTOR(18)){ // actually  SPI_STC_vect
   USART_MCU_Received_Data=UDR0;
   USART_MCU_DATA_RDY=true;
 };

@@ -4,7 +4,7 @@
 
 ## General Flags
 PROJECT = UserInterface
-MCU = atmega1284p
+MCU = atmega168a
 TARGET = UserInterface.elf
 CC = avr-gcc
 
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99                          -Werror    -DF_CPU=8000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99                          -Werror                   -DF_CPU=8000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS += -Wl,--defsym=__stack=0x4000 -Wl,-Map=UserInterface.map
+LDFLAGS += -Wl,--defsym=__stack=0x4000  -Wl,-Map=UserInterface.map
 
 
 ## Intel Hex file production flags
