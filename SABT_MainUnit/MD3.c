@@ -15,9 +15,13 @@ char MD3_Last_Dot;
 0 - Just started (in the begining, play the Welcome message)
 1 - Waiting for user input
 2 - Last user input processed
-
 */
 
+/**
+ * @brief  Given a char, in Last_Cell, play the corresponding number
+ *         sound file
+ * @return Void
+ */
 void MD3_PlayRequestedDot(void)
 {
   switch(MD3_Last_Dot)
@@ -48,6 +52,10 @@ void MD3_Reset(void)
   MD3_Current_State=0;
 }
 
+/**
+ * @brief  Step through the main stages in the code.
+ * @return Void
+ */
 void MD3_Main(void)
 {
   switch(MD3_Current_State)
@@ -75,12 +83,20 @@ void MD3_CallModeNoAnswer(void)
 
 }
 
+/**
+ * @brief  Set the dot the from input
+ * @return Void
+ */
 void MD3_InputDot(char thisDot)
 {
   MD3_Last_Dot=thisDot;
   MD3_Current_State=2;
 }
 
+/**
+ * @brief
+ * @return Void
+ */
 void MD3_InputCell(char thisCell)
 {
 

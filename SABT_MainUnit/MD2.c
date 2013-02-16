@@ -19,7 +19,11 @@ char MD2_Last_Dot;
 2 - Last user input processed
 
 */
-
+/**
+ * @brief  Given a char, in Last_Cell, play the corresponding letter 
+ *         sound file 
+ * @return Void
+ */
 void PlayRequestedCell(void)
 {
   switch(Last_Cell)
@@ -108,7 +112,11 @@ void PlayRequestedCell(void)
   }
 }
 
-
+/**
+ * @brief  Given a char, in Last_Cell, play the corresponding number
+ *         sound file
+ * @return Void
+ */
 void MD2_PlayRequestedDot(void)
 {
   switch(MD2_Last_Dot)
@@ -134,13 +142,20 @@ void MD2_PlayRequestedDot(void)
   }
 }
 
-
+/**
+ * @brief  Reset the current state
+ * @return Void
+ */
 void MD2_Reset(void)
 {
   Current_State=0;
   MD2_Last_Dot=0;
 }
 
+/**
+ * @brief  Step through the main stages in the code. 
+ * @return Void
+ */
 void MD2_Main(void)
 {
   switch(Current_State)
@@ -172,12 +187,20 @@ void MD2_CallModeNoAnswer(void)
 
 }
 
+/**
+ * @brief  Set the dot the from input
+ * @return Void
+ */
 void MD2_InputDot(char thisDot)
 {
   MD2_Last_Dot=thisDot;
   Current_State=3;
 }
 
+/**
+ * @brief  
+ * @return Void
+ */
 void MD2_InputCell(char thisCell)
 {
   if(MD2_Last_Dot!=0)
