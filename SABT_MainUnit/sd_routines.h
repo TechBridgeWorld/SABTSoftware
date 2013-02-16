@@ -3,6 +3,8 @@
  * @brief definitions for SD card stuff
  * @author CC Dharmani, Chennai (India)
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  *
  * **************************************************************
  *  ****** FUNCTIONS FOR SD RAW DATA TRANSFER *******

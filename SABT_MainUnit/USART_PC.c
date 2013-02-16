@@ -3,6 +3,7 @@
  * @brief Deals with USART communication with main board - please update
  * @author Alex Etling (petling)
  * @author Nick LaGrow (nlagrow)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

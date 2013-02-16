@@ -2,6 +2,7 @@
  * @file FAT32.c
  * @brief    Reads data from File Allocation Table 32 (FAT 32) format.  
  *           This system defines clusters, which are contiguous regions of memory.
+ * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)
  */

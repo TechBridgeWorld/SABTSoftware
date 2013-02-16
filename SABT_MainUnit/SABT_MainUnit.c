@@ -2,6 +2,8 @@
  * @file SABT_MainUnit.c
  * @brief contains the main routine for the SABT main unit
  * @author Nick LaGrow (nlagrow), Alex Etling (petling)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #define F_CPU 8000000UL

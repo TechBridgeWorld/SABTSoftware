@@ -2,6 +2,8 @@
  * @file CommPacket.h
  * @brief Definitions for building packets
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _COMM_PACKET_H_

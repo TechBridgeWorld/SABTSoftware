@@ -3,6 +3,7 @@
  * @brief code to interact with SD card
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

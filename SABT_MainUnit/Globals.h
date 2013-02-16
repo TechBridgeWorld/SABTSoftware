@@ -2,6 +2,8 @@
  * @file Globals.h
  * @brief global definitions for the MCU
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _GLOBALS_H_

@@ -2,6 +2,8 @@
  * @file USART_MCU.c
  * @brief contains code for the USART->MCU interface
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

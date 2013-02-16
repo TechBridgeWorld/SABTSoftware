@@ -2,6 +2,8 @@
  * @file UserInterface.c
  * @brief contains main loop for primary interface board
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #define F_CPU 8000000UL

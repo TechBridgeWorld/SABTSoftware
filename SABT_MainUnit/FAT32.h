@@ -13,6 +13,8 @@
  * ********************************************************
  * @author CC Dharmani, Chennai (India)
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  *
  * Link to the Post: 
  *  http://www.dharmanitech.com/2009/01/sd-card-interfacing-with-atmega8-fat32.html

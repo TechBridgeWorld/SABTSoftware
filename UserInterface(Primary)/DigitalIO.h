@@ -2,6 +2,8 @@
  * @file DigitalIO.h
  * @brief Definitions for Input/Output
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _DIGITAL_IO_H_

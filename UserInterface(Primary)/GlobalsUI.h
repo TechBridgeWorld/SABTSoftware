@@ -2,6 +2,8 @@
  * @file GlobalsUI.h
  * @brief contains global includes and definitions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _GLOBALS_UI_H_

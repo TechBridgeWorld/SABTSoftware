@@ -2,6 +2,8 @@
  * @file PC_handle.h
  * @brief definitions for handling PC-MCU interactions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _PC_HANDLE_H_

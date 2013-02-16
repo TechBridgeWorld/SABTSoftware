@@ -2,6 +2,8 @@
  * @file DigitalIO.c
  * @brief handle digital input/output
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

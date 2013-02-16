@@ -2,6 +2,8 @@
  * @file AnalogInputs.h
  * @brief Analog input definitions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _ANALOG_INPUTS_H_

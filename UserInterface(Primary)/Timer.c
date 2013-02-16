@@ -2,6 +2,8 @@
  * @file Timer.c
  * @brief handles timer interrupts for the user interface
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

@@ -2,6 +2,8 @@
  * @file SPI.h
  * @brief TODO not sure what SPI is
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _SPI_H_

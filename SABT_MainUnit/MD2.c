@@ -2,6 +2,8 @@
  * @file MD2.c
  * @brief mode 2 code
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

@@ -3,8 +3,9 @@
  * @brief This file controls both User interface to Main control and
  *        computer ineractions
  * @ref   tech_report.pdf
- * @author Alex Etling (petling)
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

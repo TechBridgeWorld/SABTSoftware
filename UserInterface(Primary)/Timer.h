@@ -2,6 +2,8 @@
  * @file Timer.h
  * @brief definitions for the timer
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _TIMER_H_

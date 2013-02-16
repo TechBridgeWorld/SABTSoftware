@@ -2,6 +2,8 @@
  * @file AnalogInputs.c
  * @brief handle analog inputs
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

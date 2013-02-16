@@ -5,7 +5,9 @@
  *  This says that The Serial Peripheral Interface (SPI) allows high
  *  speedsynchronous data transfer between the ATmega1284P and 
  *  peripheral devices or between several AVR devices.
+ * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

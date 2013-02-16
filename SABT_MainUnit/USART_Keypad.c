@@ -2,6 +2,8 @@
  * @file USART_Keypad.c
  * @brief Deals with USART communication from the main board - please update 
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
+ * @author Nick LaGrow (nlagrow)
  */
 
 #include "Globals.h"

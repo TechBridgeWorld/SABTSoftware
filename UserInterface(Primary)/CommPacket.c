@@ -2,6 +2,8 @@
  * @file CommPacket.c
  * @brief handle communication packets
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

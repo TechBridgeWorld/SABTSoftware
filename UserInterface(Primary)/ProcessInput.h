@@ -2,6 +2,8 @@
  * @file ProcessInput.h
  * @brief Handle dot presses
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _PROCESS_INPUT_H_

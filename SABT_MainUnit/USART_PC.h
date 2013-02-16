@@ -3,6 +3,7 @@
  * @brief handle USART-PC interactions
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _USART_PC_H_

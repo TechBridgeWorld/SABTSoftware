@@ -2,7 +2,9 @@
  * @file PC_Handle.c
  * @brief  This file deals with interacting with the PC, send/ receive messages.  It
  *         also allows you to overwrite the modes used in the function
- * @author Alex Etling(petling)
+ * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

@@ -2,6 +2,8 @@
  * @file VS1053.c
  * @brief code for the SABT audio codec
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"

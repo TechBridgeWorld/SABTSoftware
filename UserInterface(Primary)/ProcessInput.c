@@ -2,6 +2,8 @@
  * @file ProcessInput.c
  * @brief process input from dots
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "GlobalsUI.h"

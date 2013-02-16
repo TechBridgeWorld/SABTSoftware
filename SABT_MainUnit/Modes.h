@@ -2,6 +2,8 @@
  * @file Modes.h
  * @brief just includes mode files
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 // TODO this file is terrible
