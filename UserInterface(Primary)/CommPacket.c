@@ -35,7 +35,7 @@ uint16_t Calculate_CRC(unsigned char* pstrMsg)
 /**
  * @brief compile packet to send to MCU (?)
  *
- * [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
+ *        [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
  *
  * @param cmd command type (A-E)
  * @param pl the packet message
@@ -81,7 +81,7 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
  * @param payload the message
  * @param plLen length of the message
  * @return Void
- * TODO: make sure sent packages can't race / be garbled
+ * @TODO: make sure sent packages can't race / be garbled
  */
 void SendPacket(char cmd, char* payLoad, int plLen)
 {

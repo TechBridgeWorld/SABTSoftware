@@ -29,7 +29,7 @@ void ResetCellState(void)
 
 /**
  * @brief Search for the pressed dot values and update the pressed dots array
- * In the primary UI the braille inputs are configured as digital inputs
+ *        In the primary UI the braille inputs are configured as digital inputs
  * @return Void
  */
 void ProcessTheDot(void)
@@ -116,8 +116,8 @@ void ProcessTheDot(void)
 
 /**
  * @brief Get entire cell value
- * Processes the stored dot values and generates a 6-bit number to
- * send over the serial interface.
+ *        Processes the stored dot values and generates a 6-bit number to
+ *        send over the serial interface.
  * @return Void
  */
 void CaptureCellValue(void)
