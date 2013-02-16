@@ -43,7 +43,7 @@ void Initialize_Digital_IO(void)
   DDRD |= _BV(UI_STAT1)|_BV(UI_STAT2);
 
   //switch off stat LEDs
-  SetStatLED1(true);
+  SetStatLED1(false);
   SetStatLED2(false);
 }
 

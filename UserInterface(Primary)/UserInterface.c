@@ -7,7 +7,6 @@
 #define F_CPU 8000000UL
 
 #include "GlobalsUI.h"
-#include <avr/wdt.h>
 
 void InitializeUI(void);
 
@@ -27,9 +26,9 @@ void delay10()
 //uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
 
 //reset
-ISR(_VECTOR(1)){
+/*ISR(_VECTOR(1)){
   SetStatLED2(true);
-}
+}*/
 
 /* TEST VECTORS
 ISR(_VECTOR(2)){
@@ -59,7 +58,7 @@ ISR(_VECTOR(9)){
 ISR(_VECTOR(10)){
   SetStatLED2(true);
 }*/
-ISR(_VECTOR(11)){
+/*ISR(_VECTOR(11)){
   if(!LED_STAT){
     SetStatLED2(true);
     SetStatLED1(false);
@@ -69,7 +68,7 @@ ISR(_VECTOR(11)){
     SetStatLED1(true);
     LED_STAT=false;
   }
-}
+}*/
 /*ISR(_VECTOR(12)){
   SetStatLED2(true);
 }
@@ -124,58 +123,13 @@ ISR(_VECTOR(26)){
  */
 int main(void)//
 {
-  // Attempt to turn WDT to interrupt instead of reset mode
-  //MCUSR &= ~(1<<3);
-  //WDTCSR |= (1<<6);
-  //WDTCSR &= ~(1<<3);
-
-  // Attempt to turn off wdt
-  //wdt_reset();
-  //wdt_disable();
-
   InitializeUI();
 
-  // Enough delay to not allow LED2 to turn on unless wdt is handled
-  // used for testing: if the second light turns on, we know we disabled watchdog
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-  delay10();
-
-  SetStatLED2(true);
-/*
-  delay10();
-  delay10();
-  delay10();
-  SetStatLED1(false);
-  SetStatLED2(true);
-  delay10();
-  delay10();
-  delay10();
-  SetStatLED1(true);
-  SetStatLED2(false);
-  delay10();
-  delay10();
-  delay10();
-  SetStatLED1(false);
-  SetStatLED2(true);
-  */
-
-  while(1) //Main loop
+  while(1) // Main loop
   // This loop will take care of all the signal handling from the 
   {
     // Test the transmission to MCU 
-    USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
-    
-    // TODO:  remove these
-    //SetStatLED1(true);
-    //SetStatLED2(true); 
+    // USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
     
     // Check to see if timer interrupt has occurred
     if(TMR1_INT)
@@ -184,33 +138,6 @@ int main(void)//
     }
   }
 
-
-/*
-  InitializeUI();
-  SendMsgPayLoad[0]=0x01;
-  //SendPacket('D',SendMsgPayLoad,1);
-  
-  delay10();
-  //SetStatLED2(false);
-  SetStatLED1(false);
-  
-  while(1) //Main loop
-  // This loop will take care of all the signal handling from the 
-  {
-    // Test the transmission to MCU 
-    USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
-    
-    // TODO:  remove these
-    //SetStatLED1(true);
-    //SetStatLED2(true); 
-    
-    // Check to see if timer interrupt has occurred
-    if(TMR1_INT)
-    {
-      TimerRoutine();
-    }
-  }
-*/
   return 0;
 }
 

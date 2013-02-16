@@ -64,6 +64,8 @@ Code to test the file write section
 End of test code
 */
 
+  UI_MODE_SELECTED = 1; // TODO remove
+  UI_Current_Mode = 1; // TODO remove after tuesday
 
   //Display the files in the SD card
   //TX_NEWLINE_PC;
@@ -137,7 +139,7 @@ End of test code
  */
 ISR(TIMER1_COMPA_vect){
   TMR1_INT=true;
-  PRINTF("HEY YOU GOT  A TIMER INTERRUPT\n\r");
+  //PRINTF("HEY YOU GOT  A TIMER INTERRUPT\n\r");
 };
 
 /**
@@ -149,9 +151,11 @@ ISR(TIMER1_COMPA_vect){
  * @return  Void
  */
 ISR(USART1_RX_vect){
-  PRINTF("I GOT A MESSAGE\n\r");
+  //PRINTF("I GOT A MESSAGE\n\r");
   USART_Keypad_Received_Data=UDR1;
   USART_Keypad_DATA_RDY=true; 
+  USART_transmitByteToPC(USART_Keypad_Received_Data);
+  set_Last_Dot(USART_Keypad_Received_Data);
 };
 
 /**

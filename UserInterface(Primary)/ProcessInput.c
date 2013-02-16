@@ -36,45 +36,54 @@ void ProcessTheDot(void)
   bool NewDotDetected = false;
 
   // TODO what is PINC?
+  // PINC: the address of where dots are stored
 
   if(!(PINC & (1 << UI_BR1))) // Dot1
   {
     NewDotDetected = true;
     TempDot = 1;
+	SetStatLED1(true);
+	USART_transmitByteToMCU('1');
   }
 
   if(!(PINC & (1 << UI_BR2))) // Dot2
   {
     NewDotDetected = true;
     TempDot = 2;
+	USART_transmitByteToMCU('2');
   }
 
   if(!(PINC & (1 << UI_BR3))) // Dot3
   {
     NewDotDetected = true;
     TempDot = 3;
+	USART_transmitByteToMCU('3');
   }
 
   if(!(PINC & (1 << UI_BR4))) // Dot4
   {
     NewDotDetected = true;
     TempDot = 4;
+	USART_transmitByteToMCU('4');
   }
 
   if(!(PINC & (1 << UI_BR5))) // Dot5
   {
     NewDotDetected = true;
     TempDot = 5;
+	USART_transmitByteToMCU('5');
   }
 
   if(!(PINC & (1 << UI_BR6))) // Dot6
   {
     NewDotDetected = true;
     TempDot = 6;
+	USART_transmitByteToMCU('6');
   }
 
   // TODO what is this doing
 
+/*
   if(NewDotDetected)
   {
     if(InterfaceType == 1)
@@ -98,6 +107,9 @@ void ProcessTheDot(void)
 
     //SendPacket('E',&SendMsgPayLoad,3);
   }
+*/
+
+
 }
 
 /**
