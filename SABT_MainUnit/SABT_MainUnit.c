@@ -167,7 +167,7 @@ ISR(USART1_RX_vect)
   USART_Keypad_Received_Data=UDR1;
   USART_Keypad_DATA_RDY=true; 
   USART_transmitByteToPC(USART_Keypad_Received_Data);
-  set_Last_Dot(USART_Keypad_Received_Data);
+  set_last_dot(USART_Keypad_Received_Data);
 };
 
 /**
