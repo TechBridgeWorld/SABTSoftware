@@ -70,8 +70,8 @@ Code to test the file write section
 End of test code
 */
 
-  UI_MODE_SELECTED = 1; // TODO remove
-  UI_Current_Mode = 1; // TODO remove after tuesday
+  UI_MODE_SELECTED = 1; // @TODO remove
+  UI_Current_Mode = 1; // @TODO remove after tuesday
 
   //Display the files in the SD card
   //TX_NEWLINE_PC;
