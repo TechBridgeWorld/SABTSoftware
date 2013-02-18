@@ -145,6 +145,7 @@ int main(void)//
 
 /**
  * @brief initialize basic elements of the UI board
+ * @return Void
  */
 void InitializeUI(void)
 {

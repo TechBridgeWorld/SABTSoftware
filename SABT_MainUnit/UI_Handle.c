@@ -381,6 +381,10 @@ void UI_CallModeNoAnswer(void)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_InputDotToCurrentMode(char thisDot)
 {
   switch(UI_Current_Mode)
@@ -399,6 +403,10 @@ void UI_InputDotToCurrentMode(char thisDot)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_InputCellToCurrentMode(char thisCell)
 {
   switch(UI_Current_Mode)
@@ -441,6 +449,10 @@ void UI_RunMainOfCurrentMode(void)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_ResetTheCurrentMode(void)
 {
   if(UI_MODE_SELECTED){

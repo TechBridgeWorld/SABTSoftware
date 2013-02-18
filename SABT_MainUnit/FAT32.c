@@ -9,6 +9,12 @@
 
 #include "Globals.h"
 
+
+/**
+ * @brief Reads in data data from boot sector and checks to make sure that it is the FAT32 standard
+ * @return unsigned char - return 0 on successful read
+ *                         return 1 on error of file system or if not read properly
+ */
 unsigned char getBootSectorData (void)
 {
   struct BS_Structure *bpb; //mapping the buffer onto the structure
@@ -266,7 +272,9 @@ struct dir_Structure* findFiles (unsigned char flag, unsigned char *fileName)
 
 
 /**
- * @brief 
+ * @brief  Can act as a reader or verifier depending on the flag sent in in flag
+ *         If it is VERIFY- just wil let you know if the file is there.  If it is 
+ *         read then it actually reads in the contents of the file. 
  * @param  flag - unsigned char, flag=READ then to read file from SD card and send 
  *                contents to UART. if flag=VERIFY then functions will verify 
  *                whether a specified file is already existing
@@ -325,10 +333,14 @@ unsigned char readFile (unsigned char flag, unsigned char *fileName)
 }
 
 /**
- * @brief
+ * @brief This file just reads in data from the given fileName if it can find and 
+ *         and process the file.
  * @param fileName    char *   That contains the file name of what you want to read
           dataString  char *   Where the data is put, can store 100 bytes
- * @return unsigned char - number where zero means success
+ * @return unsigned char - number where 0 means success
+ *                         1 means that you could not convert fileName
+ *                         2 means file does not exists
+ *                         3 will mean inability to read a cluster
  */
 unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned char *dataString)
 {
@@ -492,9 +504,9 @@ unsigned char PlayMP3file (unsigned char *fileName)
 
 /**
  * @brief Converts the input fileName (which is in FAT format) in the following fashion:
- * <filename.ext> -----> <filename[padding to 8 chars]ext>
- * filename must be <= 8 chars and ext must be <= 3 chars.
- * Thus, INT.MP3 becomes [INT     MP3]. Also, capitalizes lowercase files.
+ *        <filename.ext> -----> <filename[padding to 8 chars]ext>
+ *        filename must be <= 8 chars and ext must be <= 3 chars.
+ *        Thus, INT.MP3 becomes [INT     MP3]. Also, capitalizes lowercase files.
  * @param fileName unsigned char* string which contains the file name that needs to be converted
  * @return unsigned char 1 for failure 0 for victory
  * @TODO Currently overwrites the passed in buffer so if you pass in the same buffer twice, it 
@@ -665,7 +677,7 @@ int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fil
  * @brief function creates a file in FAT32 format in the root directory if given 
  *        file name does not exists. If it already exists then append data to end
  * @param fileName - unsigned char *, this is the name of the file to write to
- * @return VOID
+ * @return Void
  */
 void writeFile (unsigned char *fileName)
   {
@@ -951,7 +963,7 @@ unsigned long searchNextFreeCluster (unsigned long startCluster)
  *        it tries to read from SD whether a free cluster count is stored, if it is 
  *        stored then it will return immediately. Otherwise it will count the total 
  *        number of free clusters, which takes time
- * @return VOID
+ * @return Void
  */
 void memoryStatistics (void)
 {
@@ -1014,7 +1026,7 @@ displayMemory (HIGH, freeMemory);
  * @param flag - unsigned char, if HIGH - memory will be displayed in KBytes.
  *               else in Bytes
  * @param memory - unsigned long, memory value 
- * @return VOID
+ * @return Void
  */
 void displayMemory (unsigned char flag, unsigned long memory)
 {
@@ -1039,7 +1051,7 @@ void displayMemory (unsigned char flag, unsigned long memory)
 /**
  * @brief function deletes the specified file in the root directory
  * @param fileName - unsigned char *, file name of file that you want deleted
- * @return VOID
+ * @return Void
  */
 void deleteFile (unsigned char *fileName)
 {
@@ -1058,7 +1070,7 @@ void deleteFile (unsigned char *fileName)
  *        clusters occupied by teh file
  * @param flag - unsigned char, can be ADD or REMOVE
  * @param size - unsigned long, file size in Bytes
- * @return VOID
+ * @return Void
  */
 void freeMemoryUpdate (unsigned char flag, unsigned long size)
 {

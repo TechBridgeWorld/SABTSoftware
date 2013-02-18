@@ -13,7 +13,8 @@
  * @brief Sets the given input to the file's last_dot
  * @return Void
  */
-void set_last_dot(char dot) {
+void set_last_dot(char dot)
+{
   last_dot = dot;
 }
 
@@ -23,7 +24,8 @@ void set_last_dot(char dot) {
  *        return the charachter of that number;
  * @return char - charachter representation of a number from 1 - 6
  */
-char random_number_as_char() {
+char random_number_as_char()
+{
   char ret_char;
   int num = TCNT1;
   
@@ -60,7 +62,8 @@ char random_number_as_char() {
  * @param last_dot - unsigned char.   Which dot to play 
  * @return Void
  */
-void PlayRequestedDot(unsigned char last_dot) {
+void PlayRequestedDot(unsigned char last_dot)
+{
   // TODO default case?
   switch(last_dot)
   {
@@ -87,10 +90,11 @@ void PlayRequestedDot(unsigned char last_dot) {
 
 /**
  * @brief Reset mode 1 to starting state
- * Should be useful for error handling
+ *        Should be useful for error handling
  * @return Void
  */
-void MD1_Reset(void) {
+void MD1_Reset(void)
+{
   current_state = STATE_INITIAL;
 }
 
@@ -100,8 +104,10 @@ void MD1_Reset(void) {
  * whether they pressed the correct dot
  * @return Void
  */
-void MD1_Main(void) {
-  switch(current_state) {
+void MD1_Main(void)
+{
+  switch(current_state)
+  {
     case STATE_INITIAL:
       PRINTF("[MD1] Entering MD1\n");
 
@@ -125,11 +131,14 @@ void MD1_Main(void) {
         current_state = STATE_PROC_INPUT;
         break;
     case STATE_PROC_INPUT:
-      if(last_dot != expected_dot) {
+      if(last_dot != expected_dot)
+      {
         RequestToPlayMP3file("no.MP3");
         last_dot = 0;
         current_state = STATE_WAIT_INPUT;
-      } else {
+      }
+      else
+      {
         RequestToPlayMP3file("good.MP3");
         last_dot = 0;
         current_state = STATE_REQUEST_INPUT1;
@@ -146,11 +155,12 @@ void MD1_CallModeNoAnswer(void) {}
 
 /**
  * @brief register dot input
- * Sets the program to STATE_PROC_INPUT
+ *        Sets the program to STATE_PROC_INPUT
  * @param thisDot the dot being input
  * @return Void
  */
-void MD1_InputDot(char this_dot) {
+void MD1_InputDot(char this_dot)
+{
   last_dot = this_dot;
   current_state = STATE_PROC_INPUT;
 }

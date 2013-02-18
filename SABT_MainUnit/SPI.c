@@ -16,7 +16,8 @@
  * @brief Initilizes variables for SPI
  * @return Void
  */
-void SPI_Initialize(void){
+void SPI_Initialize(void)
+{
   DDRB |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD)|_BV(MP3_RESET);
   DDRB &= ~_BV(MP3_DREQ);
   DDRB=0xB7;
@@ -24,37 +25,70 @@ void SPI_Initialize(void){
   SPI_2X();
 }
 
-void SPI_DeselectAll(void){
+/**
+ * @brief Deselects all from the SPI
+ * @return Void
+ */
+void SPI_DeselectAll(void)
+{
   SPI_PORT |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD);
 }
 
+/**
+ * @brief Selects all from the SPI
+ * @return Void
+ */
 void SPI_Select_SD(void){
   SPI_PORT |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD);
   SPI_PORT &= ~_BV(SD_SELECT);
 }
 
-void SPI_Select_MP3_Data(void){
+/**
+ * @brief Selects MP3 data for the SPI
+ * @return Void
+ */
+void SPI_Select_MP3_Data(void)
+{
   SPI_PORT |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD);
   SPI_PORT &= ~_BV(MP3_DATA);
 }
 
-void SPI_Select_MP3_Cmd(void){
+/**
+ * @brief Selects MP3 cmd for the SPI
+ * @return Void
+ */
+void SPI_Select_MP3_Cmd(void)
+{
   SPI_PORT |= _BV(SD_SELECT)|_BV(MP3_DATA)|_BV(MP3_CMD);
   SPI_PORT &= ~_BV(MP3_CMD);
 }
 
+/**
+ * @brief 
+ * @return Void
+ */
 void SPI_2X(void){ //4MHz
   SPCR &= ~_BV(SPR1);
   SPCR &= ~_BV(SPR0);
   SPSR |= _BV(SPI2X);
 }
 
-void SPI_1X(void){  //62.5 kHz
+/**
+ * @brief 
+ * @return Void
+ */
+void SPI_1X(void)
+{  //62.5 kHz
   SPCR |= _BV(SPR1)|_BV(SPR0);
   SPSR &= ~_BV(SPI2X);
 }
 
-unsigned char SPI_transmit(unsigned char data){
+/**
+ * @brief Transmits data - NOT SURE HOW
+ * @return Void
+ */
+unsigned char SPI_transmit(unsigned char data)
+{
   // Start transmission
   SPDR = data;
   // Wait for transmission complete
@@ -63,7 +97,12 @@ unsigned char SPI_transmit(unsigned char data){
   return(data);
 }
 
-unsigned char SPI_receive(void){
+/**
+ * @brief  Recieves data - NOT SURE HOW
+ * @return Void
+ */
+unsigned char SPI_receive(void)
+{
   unsigned char data;
   // Wait for reception complete
 

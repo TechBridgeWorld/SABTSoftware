@@ -27,13 +27,16 @@ void InitializeSystem(void);
  * @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
-void TimeRoutine(void){
+void TimeRoutine(void)
+{
   if(!LED_STAT){
     PORTD &= ~_BV(5);
     PORTD &= ~_BV(6);
     PORTD &= ~_BV(7);
     LED_STAT=true;
-  }else{
+  }
+  else
+  {
     PORTD |= _BV(5);
     PORTD |= _BV(6);
     PORTD |= _BV(7);
@@ -45,7 +48,8 @@ void TimeRoutine(void){
  * @brief the main routine
  * @return Void
  */
-int main(void){  
+int main(void)
+{
   InitializeSystem();
 /*
 Code to test the file write section
@@ -76,18 +80,21 @@ End of test code
   TX_NEWLINE_PC;
   //USART_transmitStringToPCFromFlash (PSTR("Press a key and see it returns."));
   TX_NEWLINE_PC;
-  while(1){
+  while(1)
+  {
     // TODO remove test string
     // DPRINTF("Small waves crashing against the sand%d.", 42);
 
-    if(TMR1_INT){
+    if(TMR1_INT)
+    {
       TMR1_INT=false;
     //  TimeRoutine();
     }
 
     // check to see if we've received data from UI board
     // if true, process the single byte
-    if(USART_Keypad_DATA_RDY){
+    if(USART_Keypad_DATA_RDY)
+    {
       /* one of two types:
        * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
        * [M][C][msglen][msg_number][msg_type][payload][CRC1][CRC2]
@@ -102,7 +109,8 @@ End of test code
 
     // check to see if we've received data from a connected PC 
     // if true, process the single byte
-    if(USART_PC_DATA_RDY){
+    if(USART_PC_DATA_RDY)
+    {
       USART_PC_ReceiveAction();
       /*
       if(USART_PC_ReceiveAction()=='z')//This is a special case where the PC is requesting ACK for port detect
@@ -139,7 +147,8 @@ End of test code
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(TIMER1_COMPA_vect){
+ISR(TIMER1_COMPA_vect)
+{
   TMR1_INT=true;
   //PRINTF("HEY YOU GOT  A TIMER INTERRUPT\n\r");
 };
@@ -152,7 +161,8 @@ ISR(TIMER1_COMPA_vect){
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART1_RX_vect){
+ISR(USART1_RX_vect)
+{
   //PRINTF("I GOT A MESSAGE\n\r");
   USART_Keypad_Received_Data=UDR1;
   USART_Keypad_DATA_RDY=true; 
@@ -168,7 +178,8 @@ ISR(USART1_RX_vect){
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART0_RX_vect){
+ISR(USART0_RX_vect)
+{
 //Temporarily using the PC as the UI
 //  USART_Keypad_Received_Data=UDR0;
 //  USART_Keypad_DATA_RDY=true; 
@@ -183,7 +194,8 @@ ISR(USART0_RX_vect){
  * @brief Initialize the system and interrupts
  * @return Void
  */
-void InitializeSystem(void){
+void InitializeSystem(void)
+{
   TMR1_INT = false;   // clear the timer interrupt flag
   PORTA = 0x00;
   DDRA = 0xFF;  

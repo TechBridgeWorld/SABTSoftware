@@ -12,8 +12,8 @@ char TempBytes[20];
 
 /**
  * @brief initialize the USART hardware
- * Baud Rate: 19,200
- * Clock: 8MHz
+ *        Baud Rate: 19,200
+ *        Clock: 8MHz
  * @return Void
  */
 void init_USART_MCU(void)
@@ -27,7 +27,10 @@ void init_USART_MCU(void)
 }
 
 // TODO: what does this do?
-
+/**
+ * @brief interrupt handler for USART0_RX
+ * @return Void
+ */
 ISR(/* USART0_RX_vect */ _VECTOR(18)){ // actually  SPI_STC_vect
   USART_MCU_Received_Data=UDR0;
   USART_MCU_DATA_RDY=true;
@@ -35,7 +38,7 @@ ISR(/* USART0_RX_vect */ _VECTOR(18)){ // actually  SPI_STC_vect
 
 /**
  * @brief receive action sent from PC
- * TODO: why is line commented out / how does it work
+ * @TODO: why is line commented out / how does it work
  * @return Void
  */
 void USART_PC_ReceiveAction(void){
@@ -46,9 +49,9 @@ void USART_PC_ReceiveAction(void){
 /**
  * @brief transmit a single byte to the data register
  * @param bData the data to transmit
- * UCSR0A : register
- * UDRE0 : USART Data register empty (bit 5 of UCSR0A
- * UDR0 : Data register
+ * @param UCSR0A : register
+ * @param UDRE0 : USART Data register empty (bit 5 of UCSR0A
+ * @param UDR0 : Data register
  * @return Void (transmits data)
  */
 void USART_transmitByteToMCU( unsigned char bData )

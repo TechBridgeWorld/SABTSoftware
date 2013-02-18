@@ -41,7 +41,8 @@ void init_USART_Keypad(void)
  * @ref  tech_report.pdf
  * @return Void
  */
-void USART_Keypad_ReceiveAction(void){
+void USART_Keypad_ReceiveAction(void)
+{
   USART_Keypad_DATA_RDY=false;
 
   if(!USART_UI_header_received)
@@ -88,6 +89,11 @@ void USART_Keypad_ReceiveAction(void){
   }    
 }  
 
+/**
+ * @brief Transmits byte data from MC --> UI over UDR1
+ * @param data - unsigned char, byte to transmit to UI
+ * @return Void
+ */
 void USART_transmitByteToKeypad( unsigned char data )
 {
   while ( !(UCSR1A & (1<<UDRE1)) )
@@ -95,13 +101,22 @@ void USART_transmitByteToKeypad( unsigned char data )
   UDR1 = data;               /* Start transmition */
 }
 
+/**
+ * @brief Transmits string data from MC Flash --> UI over UDR1
+ * @param string - char*, String to transmit to UI
+ * @return Void
+ */
 void USART_transmitStringToKeypadFromFlash(char* string)
 {
   while (pgm_read_byte(&(*string)))
    USART_transmitByteToKeypad(pgm_read_byte(&(*string++)));
 }
 
-
+/**
+ * @brief Transmits string data from MC --> UI over UDR1
+ * @param string - char*, String to transmit to UI
+ * @return Void
+ */
 void USART_transmitStringToKeypad(unsigned char* string)
 {
   while (*string)
