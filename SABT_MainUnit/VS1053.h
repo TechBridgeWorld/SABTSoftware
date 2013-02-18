@@ -2,6 +2,8 @@
  * @file VS1053.h
  * @brief TODO idk wut this is
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef __VS1053_H__

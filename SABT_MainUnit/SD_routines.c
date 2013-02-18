@@ -3,6 +3,7 @@
  * @brief code to interact with SD card
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"
@@ -13,6 +14,11 @@
 //return  : unsigned char; will be 0 if no error,
 //         otherwise the response byte will be sent
 //******************************************************************
+
+/**
+ * @brief initializes the SD/SDHC card in SPI mode
+ * @return unsigned char - return 0 if no error and response byte otherwise
+ */
 unsigned char SD_init(void)
 {
   unsigned char i, response, SD_version;
@@ -39,62 +45,62 @@ unsigned char SD_init(void)
         //this may change after checking the next command
     do
     {
-response = SD_sendCommand(SEND_IF_COND,0x000001AA); //Check power supply status, mendatory for SDHC card
-retry++;
-if(retry>0xfe) 
-   {
-    //TX_NEWLINE;
-    SD_version = 1;
-    cardType = 1;
-    break;
-   } //time out
+      response = SD_sendCommand(SEND_IF_COND,0x000001AA); //Check power supply status, mendatory for SDHC card
+      retry++;
+      if(retry>0xfe) 
+      {
+        //TX_NEWLINE;
+        SD_version = 1;
+        cardType = 1;
+        break;
+       } //time out
 
-}while(response != 0x01);
+     }while(response != 0x01);
 
-retry = 0;
+     retry = 0;
 
-do
-{
-response = SD_sendCommand(APP_CMD,0); //CMD55, must be sent before sending any ACMD command
-response = SD_sendCommand(SD_SEND_OP_COND,0x40000000); //ACMD41
-
-retry++;
-if(retry>0xfe) 
-   {
-      //TX_NEWLINE;
-    return 2;  //time out, card initialization failed
-   } 
-
-}while(response != 0x00);
-
-
-retry = 0;
-SDHC_flag = 0;
-
-if (SD_version == 2)
-{ 
-   do
-   {
-   response = SD_sendCommand(READ_OCR,0);
-   retry++;
-   if(retry>0xfe) 
+     do
      {
-       //TX_NEWLINE;
-     cardType = 0;
-     break;
-     } //time out
+       response = SD_sendCommand(APP_CMD,0); //CMD55, must be sent before sending any ACMD command
+       response = SD_sendCommand(SD_SEND_OP_COND,0x40000000); //ACMD41
 
-   }while(response != 0x00);
+       retry++;
+       if(retry>0xfe)
+       {
+         //TX_NEWLINE;
+         return 2;  //time out, card initialization failed
+       }
 
-   if(SDHC_flag == 1) cardType = 2;
-   else cardType = 3;
-}
+      }while(response != 0x00);
+
+
+    retry = 0;
+    SDHC_flag = 0;
+
+    if (SD_version == 2)
+    {
+    do
+    {
+      response = SD_sendCommand(READ_OCR,0);
+      retry++;
+      if(retry>0xfe)
+      {
+        //TX_NEWLINE;
+        cardType = 0;
+        break;
+      } //time out
+
+    }while(response != 0x00);
+
+    if(SDHC_flag == 1) cardType = 2;
+    else cardType = 3;
+  }
 
 //SD_sendCommand(CRC_ON_OFF, OFF); //disable CRC; deafault - CRC disabled in SPI mode
 //SD_sendCommand(SET_BLOCK_LEN, 512); //set block size to 512; default size is 512
 
 
-return 0; //successful return
+  return 0; //successful return
 }
 
 //******************************************************************
@@ -103,6 +109,12 @@ return 0; //successful return
 //         & unsigned long (32-bit command argument)
 //return  : unsigned char; response byte
 //******************************************************************
+/**
+ * @brief sends a command to the SD card
+ * @param cmd - unsigned char, command to send to the SD card
+ * @param arg - unsigned long, argument of the command sent
+ * @return unsigned char - response byte
+ */
 unsigned char SD_sendCommand(unsigned char cmd, unsigned long arg)
 {
 unsigned char response, retry=0, status;
@@ -162,6 +174,10 @@ return response; //return state
 //return  : unsigned char; will be 0 if no error,
 //         otherwise the response byte will be sent
 //*****************************************************************
+/**
+ * @brief Erases the specified no. of blocks of SD card
+ * @return unsigned char - 0 if no error and response byte if error
+ */
 unsigned char SD_erase (unsigned long startBlock, unsigned long totalBlocks)
 {
 unsigned char response;
@@ -187,6 +203,10 @@ return 0; //normal return
 //return  : unsigned char; will be 0 if no error,
 //         otherwise the response byte will be sent
 //******************************************************************
+/**
+ * @brief Reads a single block from SD card
+ * @return unsigned char - 0 if no error and response byte if error
+ */
 unsigned char SD_readSingleBlock(unsigned long startBlock)
 {
 unsigned char response;
@@ -271,6 +291,11 @@ return 0;
 //return  : unsigned char; will be 0 if no error,
 //         otherwise the response byte will be sent
 //****************************************************************************
+
+/**
+ * @brief Reads multiple blocks from the SD card and send every block to UART
+ * @return unsigned char - 0 if no error and response byte if error
+ */
 unsigned char SD_readMultipleBlock (unsigned long startBlock, unsigned long totalBlocks)
 {
 unsigned char response;
@@ -326,6 +351,11 @@ return 0;
 //return: unsigned char; will be 0 if no error,
 // otherwise the response byte will be sent
 //****************************************************************************
+
+/**
+ * @brief Recieves data from UART and writes to multiple blocks of SD card
+ * @return unsigned char - response byte
+ */
 unsigned char SD_writeMultipleBlock(unsigned long startBlock, unsigned long totalBlocks)
 {
 unsigned char response, data;

@@ -2,10 +2,12 @@
  * @file GlobalsUI.h
  * @brief contains global includes and definitions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
-#ifndef _GLOBALS_H_
-#define _GLOBALS_H
+#ifndef _GLOBALS_UI_H_
+#define _GLOBALS_UI_H_
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>

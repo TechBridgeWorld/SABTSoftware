@@ -1,5 +1,13 @@
-#ifndef _ANALOGINPUTS_H_
-#define _ANALOGINPUTS_H_
+/**
+ * @file AnalogInputs.h
+ * @brief Analog input definitions
+ * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
+ */
+
+#ifndef _ANALOG_INPUTS_H_
+#define _ANALOG_INPUTS_H_
 
 volatile bool ADC_COMPLETE;
 volatile uint16_t ADC_LastVal[6];
@@ -10,4 +18,4 @@ uint16_t MeasureInput(int whichADC);
 
 void DetectTheDot(void);
 
-#endif
+#endif /* _ANALOG_INPUTS_H_ */

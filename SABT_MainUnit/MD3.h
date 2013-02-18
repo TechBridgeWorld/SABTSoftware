@@ -2,6 +2,8 @@
  * @file MD3.h
  * @brief definitions for mode 3
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _MD3_H_

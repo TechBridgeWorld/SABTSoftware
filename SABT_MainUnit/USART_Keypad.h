@@ -2,6 +2,8 @@
  * @file USART_Keypad.h
  * @brief handle USART-UI interactions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _USART_KEYPAD_H_

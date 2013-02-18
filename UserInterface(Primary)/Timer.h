@@ -1,9 +1,19 @@
+/**
+ * @file Timer.h
+ * @brief definitions for the timer
+ * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
+ */
+
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
 volatile bool TMR1_INT;
 void initTimer(void);
 
+volatile bool LED_STAT; // TODO what is this
+
 void TimerRoutine(void);
 
-#endif
+#endif /* _TIMER_H_ */

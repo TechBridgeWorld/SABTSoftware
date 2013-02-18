@@ -2,6 +2,8 @@
  * @file MD2.h
  * @brief definitions for mode 2
  * @author Nick LaGrow
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _MD2_H_

@@ -2,6 +2,8 @@
  * @file USART_MCU.h
  * @brief definitions for the USART->MCU interface
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _USART_MCU_H_

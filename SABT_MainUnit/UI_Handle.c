@@ -3,8 +3,9 @@
  * @brief This file controls both User interface to Main control and
  *        computer ineractions
  * @ref   tech_report.pdf
- * @author Alex Etling (petling)
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"
@@ -149,7 +150,7 @@ bool UI_parse_message(bool IsPlaying)
   uint16_t chksum=UI_calculate_CRC(&USART_UI_ReceivedPacket);
   
   // TODO test this
-  DPRINTF("[UI_parse_message] Entering function");
+  PRINTF("[UI_parse_message] Entering function");
   
   if ( chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 | USART_UI_ReceivedPacket[message_len-1]))
   {
@@ -380,6 +381,10 @@ void UI_CallModeNoAnswer(void)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_InputDotToCurrentMode(char thisDot)
 {
   switch(UI_Current_Mode)
@@ -398,6 +403,10 @@ void UI_InputDotToCurrentMode(char thisDot)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_InputCellToCurrentMode(char thisCell)
 {
   switch(UI_Current_Mode)
@@ -440,6 +449,10 @@ void UI_RunMainOfCurrentMode(void)
   }
 }
 
+/**
+ * @brief (?)
+ * @return Void
+ */
 void UI_ResetTheCurrentMode(void)
 {
   if(UI_MODE_SELECTED){

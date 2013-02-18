@@ -2,6 +2,8 @@
  * @file VS1053.c
  * @brief code for the SABT audio codec
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"
@@ -17,7 +19,11 @@ volatile uint16_t VS1053_Vol;
 
 /**
  * @brief initialize the audio codec
- * @return ?
+ * @return unsigned char - return 0 on success
+ *                         return 1 if not written properly to 0x03
+ *                         return 2 if not written properly to 0x0B
+ *                         return 3 if not written properly to 0x0b
+ *                         return 4 if not written properly to 0x00
  */
 unsigned char VS1053_Initialize(void)
 {
@@ -94,6 +100,10 @@ bool VS1053_IncreaseVol(void)
   return true;
 }
 
+/**
+ * @brief Decreases the volume on the volume on the sound chip
+ * @return bool - whether or not it could complete the required change
+ */
 bool VS1053_DecreaseVol(void)
 {
   int retry=0;
@@ -113,6 +123,11 @@ bool VS1053_DecreaseVol(void)
   return true;
 }          
 
+/**
+ * @brief ?
+ * @param data - unsigned char, transmits data on SPI interface
+ * @return Void
+ */
 void VS1053_WriteData(unsigned char data)
 {
   SPI_Select_MP3_Data();
@@ -120,6 +135,12 @@ void VS1053_WriteData(unsigned char data)
   SPI_DeselectAll();
 }
 
+/**
+ * @brief ?
+ * @param addr - unsigned char, address to write into
+ * @param cmd - unsigned int, commmand to process
+ * @return Void
+ */
 void VS1053_WriteCmd(unsigned char addr, unsigned int cmd)
 {
     temp4 = (cmd & 0xFF00) >> 8;
@@ -133,6 +154,11 @@ void VS1053_WriteCmd(unsigned char addr, unsigned int cmd)
   SPI_DeselectAll();
 }
 
+/**
+ * @brief ?
+ * @param addr - unsigned char, address to read from
+ * @return unsigned int - return combination of SPI_recieves
+ */
 unsigned int VS1053_ReadCmd(unsigned char addr)
 {
   tempAddr=addr;
@@ -148,8 +174,8 @@ unsigned int VS1053_ReadCmd(unsigned char addr)
 
 /**
  * @brief queues an MP3 file to be played
- * Only one file can be queued to be played at a time (picked up by the main
- * loop)
+ *        Only one file can be queued to be played at a time (picked up by the main
+ *        loop)
  * @param thisFile  the name of the MP3 file to be played
  * @return Void
  */

@@ -2,6 +2,8 @@
  * @file UI_Handle.h
  * @brief Handle UI-MCU interactions
  * @author Nick LaGrow (nlagrow)
+ * @author Alex Etling (petling)
+ * @author Kory Stiger (kstiger)
  */
 
 #ifndef _UI_HANDLE_H_

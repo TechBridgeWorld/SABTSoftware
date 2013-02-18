@@ -3,6 +3,7 @@
  * @brief Deals with USART communication with main board - please update
  * @author Alex Etling (petling)
  * @author Nick LaGrow (nlagrow)
+ * @author Kory Stiger (kstiger)
  */
 
 #include "Globals.h"
@@ -32,7 +33,8 @@ void init_USART_PC(void)
  * @ref  tech_report.pdf
  * @return always 0?
  */
-unsigned char USART_PC_ReceiveAction(void){
+unsigned char USART_PC_ReceiveAction(void)
+{
   USART_PC_DATA_RDY=false;
   message_count ++;
 
@@ -40,9 +42,10 @@ unsigned char USART_PC_ReceiveAction(void){
   if(USART_PC_Received_Data == CARR_RETURN)
   {
     message_count = 0;
-    if(!valid_message){
+    if(!valid_message)
+    {
       valid_message = true;
-      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!!!");
+      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
     
