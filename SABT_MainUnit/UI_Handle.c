@@ -30,18 +30,18 @@ bool UI_CheckModes(void)
   // TODO should PCPrintContent be of length 4?
   unsigned char PCPrintContent[2];
   int i = 0;
-  int iMoN;
+  int iMoN = 0;
   bool bBoNFound;
   const char* ModesFile = "MODES.DAT";
 
   Number_of_modes=0;
   for(i=0;i<100;i++)
     FileContent[i]=0;
-  if(readAndRetreiveFileContents (ModesFile,FileContent)>0)
+  if(readAndRetreiveFileContents((unsigned char*)ModesFile, FileContent) > 0)
   {
     return false;
   }
-  USART_transmitStringToPC(&FileContent);
+  USART_transmitStringToPC((unsigned char*)&FileContent);
   TX_NEWLINE_PC;
   bBoNFound=false;
   i=0;
@@ -49,7 +49,7 @@ bool UI_CheckModes(void)
   {
     if(FileContent[i]=='>')
     {
-      UI_Modes[Number_of_modes]=atoi(ModeID);
+      UI_Modes[Number_of_modes] = atoi((char*)ModeID);
       Number_of_modes++;
       bBoNFound=false;
     }
@@ -79,14 +79,14 @@ bool UI_CheckModes(void)
   USART_transmitStringToPCFromFlash(PSTR("Number of modes selected: "));
   PCPrintContent[0]=0;
   PCPrintContent[1]=0;
-  sprintf(PCPrintContent, "%d", Number_of_modes);
-  USART_transmitStringToPC(&PCPrintContent);
+  sprintf((char*)PCPrintContent, "%d", Number_of_modes);
+  USART_transmitStringToPC((unsigned char*)&PCPrintContent);
   TX_NEWLINE_PC;
   USART_transmitStringToPCFromFlash(PSTR("And the modes are; "));
   for(i=0;i<Number_of_modes;i++)
   {
-    sprintf(PCPrintContent, "%d, ", UI_Modes[i]);
-    USART_transmitStringToPC(&PCPrintContent);
+    sprintf((char*)PCPrintContent, "%d, ", UI_Modes[i]);
+    USART_transmitStringToPC((unsigned char*)&PCPrintContent);
   }  
   TX_NEWLINE_PC;
   return true; 
@@ -146,7 +146,7 @@ bool UI_parse_message(bool mp3_is_playing)
   //unsigned char message_payload[20];
   //unsigned char i=0;
 
-  uint16_t chksum = UI_calculate_CRC(&USART_UI_ReceivedPacket);
+  uint16_t chksum = UI_calculate_CRC((unsigned char*)&USART_UI_ReceivedPacket);
   
   // TODO test this
   PRINTF("[UI_parse_message] Entering function");
@@ -191,12 +191,12 @@ bool UI_parse_message(bool mp3_is_playing)
         ADCmsg[1]=USART_UI_ReceivedPacket[6];
         ADCmsg[2]=USART_UI_ReceivedPacket[7];
         USART_transmitStringToPCFromFlash(PSTR("Analog Input channel,MSB,LSB :"));
-        sprintf(ADCmsg,
+        sprintf((char*)ADCmsg,
                 "%d,%d,%d",
                 USART_UI_ReceivedPacket[5],
                 USART_UI_ReceivedPacket[6],
                 USART_UI_ReceivedPacket[7]);
-        USART_transmitStringToPC(&ADCmsg);
+        USART_transmitStringToPC((unsigned char*)&ADCmsg);
         TX_NEWLINE_PC;
         TX_NEWLINE_PC;
         break;

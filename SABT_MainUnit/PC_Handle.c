@@ -16,9 +16,9 @@
  *        The two possibilities are that you sent 'x' - PC_CMD_INIT - this just gets
  *        response from the system. The other message is 'M' - PC_CMD_NEWMODES
  *        this message type will change the mode file
- * @return bool    but does not seem to ever return, so it will return false?
+ * @return Void
   */
-bool PC_parse_message()
+void PC_parse_message()
 {
   unsigned char MessageType;
   USART_PC_Message_ready=false;
@@ -67,7 +67,7 @@ void PC_RequestsToModifyModesFile(void)
 
   DPRINTF("File content: %s\n", WritingFileContent);
 
-  if(ReplaceTheContentOfThisFileWith(ModesFile,WritingFileContent)==0)
+  if(ReplaceTheContentOfThisFileWith((unsigned char*)ModesFile, WritingFileContent) == 0)
   {
     USART_transmitStringToPCFromFlash(PSTR("SABT-OK"));
     TX_NEWLINE_PC;      

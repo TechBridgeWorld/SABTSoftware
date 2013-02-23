@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <stdbool.h> 
+#include <stdlib.h>
 
 #define UI_CMD_NONE 0
 #define UI_CMD_ENT1 1

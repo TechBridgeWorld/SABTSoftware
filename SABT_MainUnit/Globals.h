@@ -56,10 +56,10 @@ unsigned char debug_buffer[256];
 
 // debug print statement
 #define DPRINTF(msg, ...) \
-  sprintf(debug_buffer, msg, ##__VA_ARGS__); \
-  USART_transmitStringToPC(&debug_buffer);
+  sprintf((char*)debug_buffer, (char*)msg, ##__VA_ARGS__); \
+  USART_transmitStringToPC((unsigned char*)&debug_buffer);
 
 #define PRINTF(msg) \
-  USART_transmitStringToPC(msg);
+  USART_transmitStringToPC((unsigned char*)msg);
 
 #endif /* _GLOBALS_H_ */

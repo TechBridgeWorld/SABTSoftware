@@ -26,7 +26,6 @@ void set_last_dot(char dot)
  */
 char random_number_as_char()
 {
-  char ret_char;
   int num = TCNT1;
   
   num *= PRIME;

@@ -8,8 +8,9 @@
 
 #include "Globals.h"
 
-int MD3_Current_State;
+int MD3_current_state;
 char MD3_Last_Dot;
+char expected_dot;
 //Current_State - Defines the status of the mode
 /* Vales and meanings
 0 - Just started (in the begining, play the Welcome message)
@@ -25,7 +26,7 @@ char MD3_Last_Dot;
  *        the different animals before repeating the list.
  * @return int - number between 1 - 11 corresponding to the animal file to play
  */
-int choose_animal()
+/*int choose_animal()
 {
   char ret_char;
   int num = TCNT1;
@@ -49,7 +50,7 @@ int choose_animal()
   }
 
   return num;
-}
+}*/
 
 /**
  * @brief Helper function to choose_animal(). Ensures that the same animal isn't
@@ -57,7 +58,7 @@ int choose_animal()
  * @return int - 0 means no (hasn't been used yet)
  *               1 means yes (has been used)
  */
-int animal_used(int num) {
+/*int animal_used(int num) {
   int i;
 
   for (i=0; i<11; i++) {
@@ -66,7 +67,7 @@ int animal_used(int num) {
   }
 
   return 0;
-}
+}*/
 
 /**
  * @brief  Given a char, in Last_Cell, play the corresponding number
@@ -100,7 +101,7 @@ void MD3_PlayRequestedDot(void)
 
 void MD3_Reset(void)
 {
-  MD3_Current_State=0;
+  MD3_current_state=0;
 }
 
 /**
@@ -111,8 +112,9 @@ void MD3_Reset(void)
  * @TODO record MD3INT.MP3
  */
 void MD3_Main(void)
-{
-  switch(MD3_Current_State)
+{/*
+	char button_bits;
+  switch(MD3_current_state)
   {
     case STATE_INITIAL:
       RequestToPlayMP3file("MD3INT.MP3");
@@ -156,7 +158,7 @@ void MD3_Main(void)
           MD3_Current_State = STATE_PROC_INPUT;
 		} else if (last_dot >= '1' && last_dot <='6') {
           button_bits != (1<<atoi(last_dot)-1);
-		  MD3_PlayRequestedDot(atoi(last_dot));
+		  MD3_PlayRequestedDot();
 		}
 	  }
 	  break;
@@ -171,42 +173,42 @@ void MD3_Main(void)
   }
 
 
-switch(current_state)
+switch(MD3_current_state)
   {
     case STATE_INITIAL:
       PRINTF("[MD1] Entering MD1\n");
 
       // Play the introductory message for Mode 1
       RequestToPlayMP3file("MD1INT.MP3");
-      current_state = STATE_REQUEST_INPUT1;
+      MD3_current_state = STATE_REQUEST_INPUT1;
       break;
     case STATE_REQUEST_INPUT1:
       RequestToPlayMP3file("find_dot.MP3");
-      current_state = STATE_REQUEST_INPUT2;
+      MD3_current_state = STATE_REQUEST_INPUT2;
       break;
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
       expected_dot = random_number_as_char(); 
       DPRINTF("dot requested = %c\r\n", expected_dot);
       PlayRequestedDot(expected_dot);
-      current_state = STATE_WAIT_INPUT;
+      MD3_current_state = STATE_WAIT_INPUT;
       break;
     case STATE_WAIT_INPUT:
       if(last_dot != 0)
-        current_state = STATE_PROC_INPUT;
+        MD3_current_state = STATE_PROC_INPUT;
         break;
     case STATE_PROC_INPUT:
       if(last_dot != expected_dot)
       {
         RequestToPlayMP3file("no.MP3");
         last_dot = 0;
-        current_state = STATE_WAIT_INPUT;
+        MD3_current_state = STATE_WAIT_INPUT;
       }
       else
       {
         RequestToPlayMP3file("good.MP3");
         last_dot = 0;
-        current_state = STATE_REQUEST_INPUT1;
+        MD3_current_state = STATE_REQUEST_INPUT1;
       }      
       break;
     default:
@@ -214,7 +216,7 @@ switch(current_state)
   }
 
 
-
+*/
 }
 
 void MD3_CallModeYesAnswer(void){}
@@ -227,7 +229,7 @@ void MD3_CallModeNoAnswer(void){}
 void MD3_InputDot(char thisDot)
 {
   MD3_Last_Dot=thisDot;
-  MD3_Current_State=2;
+  MD3_current_state=2;
 }
 
 /**
