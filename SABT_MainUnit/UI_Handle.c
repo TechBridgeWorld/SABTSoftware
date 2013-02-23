@@ -215,7 +215,8 @@ bool UI_parse_message(bool mp3_is_playing)
 }
 
 /**
- * @brief (?) 
+ * @brief Handle pressing command buttons (mode control, enter/exit, volume
+ * control)
  * @return Void
  */
 void UI_ControlKeyPressed(void)
@@ -224,14 +225,14 @@ void UI_ControlKeyPressed(void)
   {
     case UI_CMD_NONE:
       break;
-    case UI_CMD_ENT1: //Enter into a mode
+    case UI_CMD_ENT1: // Enter a mode
       USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
-      TX_NEWLINE_PC;  
+      TX_NEWLINE_PC; 
       if(!UI_MODE_SELECTED) //Then this command is to select the mode
       {
         if(UI_Selected_Mode>0)
         {
-          UI_MODE_SELECTED=true;
+          UI_MODE_SELECTED = true;
           UI_ResetTheCurrentMode();
         }
         else
@@ -245,7 +246,7 @@ void UI_ControlKeyPressed(void)
         UI_CallModeYesAnswer();
       }
       break;
-    case UI_CMD_ENT2: //Exit from a mode
+    case UI_CMD_ENT2: // Exit a mode
       USART_transmitStringToPCFromFlash(PSTR("Enter 2 pressed"));
       TX_NEWLINE_PC;
       if(UI_MODE_SELECTED) //This might be an exit from mode command or "NO" command in the mode
@@ -262,7 +263,7 @@ void UI_ControlKeyPressed(void)
       }
       //This has no effect when no mode is selected
       break;
-    case UI_CMD_MFOR:
+    case UI_CMD_MFOR: // Move forward in lsit of modes
       USART_transmitStringToPCFromFlash(PSTR("Mode 1 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
@@ -281,7 +282,7 @@ void UI_ControlKeyPressed(void)
         }
       }
       break;
-    case UI_CMD_MREV:
+    case UI_CMD_MREV: // Move backwards in list of modes
       USART_transmitStringToPCFromFlash(PSTR("Mode 2 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
@@ -300,12 +301,12 @@ void UI_ControlKeyPressed(void)
         }  
       }    
       break;
-    case UI_CMD_VOLU:
+    case UI_CMD_VOLU: // Volume Up
       USART_transmitStringToPCFromFlash(PSTR("Vol UP pressed"));
       TX_NEWLINE_PC;
       VS1053_IncreaseVol();
       break;
-    case UI_CMD_VOLD:
+    case UI_CMD_VOLD: // Volume down
       USART_transmitStringToPCFromFlash(PSTR("Vol DOWN pressed"));
       TX_NEWLINE_PC;
       VS1053_DecreaseVol();
