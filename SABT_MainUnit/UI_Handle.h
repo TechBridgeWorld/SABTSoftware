@@ -28,7 +28,7 @@ volatile char UI_Selected_Mode;
 //Dealing with the user data
 bool UI_CheckModes(void);
 uint16_t UI_calculate_CRC(unsigned char* pstrMsg);
-bool UI_parse_message(bool IsPlaying);
+bool UI_parse_message(bool mp3_is_playing);
 void UI_ControlKeyPressed(void);
 
 //Current mode related functions

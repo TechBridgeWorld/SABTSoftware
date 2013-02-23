@@ -30,88 +30,77 @@ void ResetCellState(void)
 /**
  * @brief Search for the pressed dot values and update the pressed dots array
  *        In the primary UI the braille inputs are configured as digital inputs
+ *        Sends a packet in the form [U][I][A]
  * @return Void
  */
 void ProcessTheDot(void)
 {
-  uint8_t TempDot = 0;
-  bool NewDotDetected = false;
+  uint8_t temp_dot = 0;
+  bool new_dot_detected = false;
 
-  // TODO what is PINC?
   // PINC: the address of where dots are stored
 
+  // Left column of dots (4-6)
   if(!(PINC & (1 << UI_BR1))) // Dot1
   {
-    NewDotDetected = true;
-    TempDot = 1;
-	SetStatLED1(true);
-	USART_transmitByteToMCU('1');
+    new_dot_detected = true;
+    temp_dot = 1;
   }
 
   if(!(PINC & (1 << UI_BR2))) // Dot2
   {
-    NewDotDetected = true;
-    TempDot = 2;
-	USART_transmitByteToMCU('2');
+    new_dot_detected = true;
+    temp_dot = 2;
   }
 
   if(!(PINC & (1 << UI_BR3))) // Dot3
   {
-    NewDotDetected = true;
-    TempDot = 3;
-	USART_transmitByteToMCU('3');
+    new_dot_detected = true;
+    temp_dot = 3;
   }
 
+  // Right column of dots (1-3)
   if(!(PINC & (1 << UI_BR4))) // Dot4
   {
-    NewDotDetected = true;
-    TempDot = 4;
-	USART_transmitByteToMCU('4');
+    new_dot_detected = true;
+    temp_dot = 4;
   }
 
   if(!(PINC & (1 << UI_BR5))) // Dot5
   {
-    NewDotDetected = true;
-    TempDot = 5;
-	USART_transmitByteToMCU('5');
+    new_dot_detected = true;
+    temp_dot = 5;
   }
 
   if(!(PINC & (1 << UI_BR6))) // Dot6
   {
-    NewDotDetected = true;
-    TempDot = 6;
-	USART_transmitByteToMCU('6');
+    new_dot_detected = true;
+    temp_dot = 6;
   }
 
-  // TODO what is this doing
-
-/*
-  if(NewDotDetected)
+  // We got an actual input
+  if(new_dot_detected)
   {
-    if(InterfaceType == 1)
-    {
-      //OK this is the default      
-    } else if(InterfaceType == 2)
-    {
-      //OK Flip the pattern
-      if(TempDot > 3) TempDot -= 3;
-      else TempDot += 3;
-    }
-    if(PI_LastDotPressed == TempDot) return;
+    // Switch to the correct dot formation (writing mode)
+    if(temp_dot > 3) temp_dot -= 3;
+    else temp_dot += 3;
 
-    PI_LastDotPressed = TempDot;
-    DotsPressed[TempDot-1] = true;
-    // TODO: what are 0x30,0x31,0x31 representing?
-    SendMsgPayLoad[0] = 0x30 + PI_LastDotPressed;
-    SendMsgPayLoad[1] = 0x31;
-    SendMsgPayLoad[2] = 0x31;
-    SendPacket('A',(char*)&SendMsgPayLoad,3);
+    if(PI_LastDotPressed == temp_dot) return;
 
-    //SendPacket('E',&SendMsgPayLoad,3);
+    PI_LastDotPressed = temp_dot;
+    DotsPressed[temp_dot - 1] = true;
+
+    // Send the numeral of the dot pressed (as character)
+    SendMsgPayLoad[0] = '0' + PI_LastDotPressed;
+
+    // The next two characters are for the row / column position of the braille
+    // cell. The primary board only has 1 cell, so these are both '1'
+    SendMsgPayLoad[1] = '1';
+    SendMsgPayLoad[2] = '1';
+
+    // Send the packet (form A = dot input)
+    SendPacket('A', (char*)&SendMsgPayLoad, 3);
   }
-*/
-
-
 }
 
 /**

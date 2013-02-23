@@ -15,21 +15,25 @@
  */
 uint16_t Calculate_CRC(unsigned char* pstrMsg)
 {
-  unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
-  uint16_t chksum=0;
-  pstrMsg+=3;
+  // Note that msglen doesn't include the two checksum bytes
+  unsigned char msglen= *(pstrMsg + 2) - 5;
+  uint16_t chksum = 0;
+  pstrMsg += 3;
+  
   while(msglen > 1)
   {
-    chksum+=(*(pstrMsg)<<8) | *(pstrMsg+1);
+    chksum += (*(pstrMsg)<<8) | *(pstrMsg+1);
     chksum = chksum & 0xffff;
-    msglen-=2;
-    pstrMsg+=2;
+    msglen -= 2;
+    pstrMsg += 2;
   }
-  if(msglen>0) //If the packet size is odd numbered
+  
+  if(msglen > 0) //If the packet size is odd numbered
   {
-    chksum = chksum^ (int)*(pstrMsg++);
+    chksum = chksum^(int)*(pstrMsg++);
   }
-  return(chksum);
+
+  return chksum;
 }
 
 /**
@@ -47,30 +51,25 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
   uint16_t chksum;
   int i = 0;
 
-  //Header always contain the 0xFA and 0xFB
+  // Header always contains the 0xFA and 0xFB
   MCU_Packet[0]='U';
   MCU_Packet[1]='I';
-  iPktSize=plLen+7;
+  iPktSize = plLen+7;
   
-  if ( plLen+7 > 20 ) //SABT can handle packets upto 20 bytes 
-  {
-    return false;
-  }
+  // SABT can only handle packets up to 20 bytes in length
+  if ( plLen + 7 > 20 ) return false;
 
-  MCU_Packet[2] = plLen+7;
-  MCU_Packet[3] = 2;  
-  MCU_Packet[4] = cmd;  
+  MCU_Packet[2] = plLen+7;              // Total message length
+  MCU_Packet[3] = 2;                    // Message number (TODO why 2?)
+  MCU_Packet[4] = cmd;                  // Command type: A-E 
   
-  for(i=0;i<plLen;i++)
-  {
-    MCU_Packet[5+i]=*(pl++);
-  
-  }
-  
-  //memcpy( &MCU_Packet[5], pl, plLen);
+  // Copy over the payload
+  for(i = 0; i < plLen; i++) MCU_Packet[5+i]= *(pl++);
+
+  // Calculate the checksum - place it as the last two bytes
   chksum = Calculate_CRC((unsigned char*)&MCU_Packet);
-  MCU_Packet[plLen+5] = chksum >> 8;
-  MCU_Packet[plLen+6] = chksum & 0xFF;  
+  MCU_Packet[plLen+5] = (unsigned char)(chksum >> 8);
+  MCU_Packet[plLen+6] = (unsigned char)(chksum & 0xFF);  
   
   return true;
 }
@@ -82,6 +81,7 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
  * @param plLen length of the message
  * @return Void
  * @TODO: make sure sent packages can't race / be garbled
+ * @TODO: sends byte by byte, how to capture on receiving end?
  */
 void SendPacket(char cmd, char* payLoad, int plLen)
 {

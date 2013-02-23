@@ -29,10 +29,10 @@ bool UI_CheckModes(void)
   unsigned char ModeID[3];
   // TODO should PCPrintContent be of length 4?
   unsigned char PCPrintContent[2];
-  int i=0;
+  int i = 0;
   int iMoN;
   bool bBoNFound;
-  const char* ModesFile="MODES.DAT";
+  const char* ModesFile = "MODES.DAT";
 
   Number_of_modes=0;
   for(i=0;i<100;i++)
@@ -67,7 +67,6 @@ bool UI_CheckModes(void)
         return false;
       }
       ModeID[iMoN++]=FileContent[i];
-
     }
     if(FileContent[i]=='<')
     {
@@ -135,7 +134,7 @@ bool UI_buildMessage(char MessageType)
  * @param  IsPlaying -  bool    determines whether or not an MP3 Files is playing
  * @return  bool - returns true if succesfully parsed, understood, and used message
  */
-bool UI_parse_message(bool IsPlaying)
+bool UI_parse_message(bool mp3_is_playing)
 {
   //First things first, check the CRC
 
@@ -147,74 +146,77 @@ bool UI_parse_message(bool IsPlaying)
   //unsigned char message_payload[20];
   //unsigned char i=0;
 
-  uint16_t chksum=UI_calculate_CRC(&USART_UI_ReceivedPacket);
+  uint16_t chksum = UI_calculate_CRC(&USART_UI_ReceivedPacket);
   
   // TODO test this
   PRINTF("[UI_parse_message] Entering function");
   
-  if ( chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 | USART_UI_ReceivedPacket[message_len-1]))
+  // Check the checksum
+  if (chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 
+                | USART_UI_ReceivedPacket[message_len-1]))
   {
-    //If correct, store the message elements
-    message_number=USART_UI_ReceivedPacket[3];
-    message_type=USART_UI_ReceivedPacket[4];
+    // If correct, store the message elements
+    message_number = USART_UI_ReceivedPacket[3];
+    message_type = USART_UI_ReceivedPacket[4];
 
-    //process the message
-
-    if(IsPlaying) //If a MP3 file is being played, only the commands are processed
+    // Process the message
+    if(mp3_is_playing) //If a MP3 file is being played, only the commands are processed
     {
-      if(message_type==68)
+      if(message_type == 'D')               // Control key pressed
       {
         UI_ControlKeyPressed();
-        USART_UI_Message_ready=true;
+        USART_UI_Message_ready = true;      // Once control handled, exit
         return true;
       }
     }
     
+    // Handle each type of message separately
     switch(message_type)
     {
-      case 65:   //Braille dot
-        //Only one character is being send to the current mode
+      case 'A':                             // Single braille dot
         UI_InputDotToCurrentMode(USART_UI_ReceivedPacket[5]);
         break;
-      case 66:   //Braille cell
-        /*
-        Only one character is being send to the current mode. The cell number value is currently not used
-        , if needed this information is available on USART_UI_ReceivedPacket[6]
-        */
+      case 'B':                             // Single Braille cell
         UI_InputCellToCurrentMode(USART_UI_ReceivedPacket[5]);
         break;
-      case 67:  //Error message
-        //When an error occured in the user input a message will be sent here
+      case 'C':                             // Error message
+        PRINTF("[UI_parse_message] An error occurred in the UI.");
         break;
-      case 68:  //User Command
+      case 'D':                             // Control button
         UI_ControlKeyPressed();
         break;
-      case 69:  //Acknowledgement
+      case 'E':                             // Acknowledgement
+        // TODO what does this section do? 'E' marked misceaneous in doc
         ADCmsg[0]=USART_UI_ReceivedPacket[5];
         ADCmsg[1]=USART_UI_ReceivedPacket[6];
         ADCmsg[2]=USART_UI_ReceivedPacket[7];
         USART_transmitStringToPCFromFlash(PSTR("Analog Input channel,MSB,LSB :"));
-        sprintf(ADCmsg, "%d,%d,%d", USART_UI_ReceivedPacket[5],USART_UI_ReceivedPacket[6],USART_UI_ReceivedPacket[7]); 
+        sprintf(ADCmsg,
+                "%d,%d,%d",
+                USART_UI_ReceivedPacket[5],
+                USART_UI_ReceivedPacket[6],
+                USART_UI_ReceivedPacket[7]);
         USART_transmitStringToPC(&ADCmsg);
-        TX_NEWLINE_PC;  
-        TX_NEWLINE_PC;        
+        TX_NEWLINE_PC;
+        TX_NEWLINE_PC;
         break;
       default:
         break;
     }
-    //In the end: send the acknowledgement to the sender (with the message number, of course !!!)
-  }
-  else
+    // In the end: send acknowledgement to the sender (with the message number, of course !!!)
+  } else // Checksum not valid
   {
-    USART_UI_Message_ready=false;
+    USART_UI_Message_ready = false;
     return false;
   }
+
   USART_UI_Message_ready=false;
   return true;
 }
 
 /**
- * @brief (?) 
+ * @brief Handle pressing command buttons (mode control, enter/exit, volume
+ * control)
  * @return Void
  */
 void UI_ControlKeyPressed(void)
@@ -223,14 +225,14 @@ void UI_ControlKeyPressed(void)
   {
     case UI_CMD_NONE:
       break;
-    case UI_CMD_ENT1: //Enter into a mode
+    case UI_CMD_ENT1: // Enter a mode
       USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
-      TX_NEWLINE_PC;  
+      TX_NEWLINE_PC; 
       if(!UI_MODE_SELECTED) //Then this command is to select the mode
       {
         if(UI_Selected_Mode>0)
         {
-          UI_MODE_SELECTED=true;
+          UI_MODE_SELECTED = true;
           UI_ResetTheCurrentMode();
         }
         else
@@ -244,7 +246,7 @@ void UI_ControlKeyPressed(void)
         UI_CallModeYesAnswer();
       }
       break;
-    case UI_CMD_ENT2: //Exit from a mode
+    case UI_CMD_ENT2: // Exit a mode
       USART_transmitStringToPCFromFlash(PSTR("Enter 2 pressed"));
       TX_NEWLINE_PC;
       if(UI_MODE_SELECTED) //This might be an exit from mode command or "NO" command in the mode
@@ -261,7 +263,7 @@ void UI_ControlKeyPressed(void)
       }
       //This has no effect when no mode is selected
       break;
-    case UI_CMD_MFOR:
+    case UI_CMD_MFOR: // Move forward in lsit of modes
       USART_transmitStringToPCFromFlash(PSTR("Mode 1 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
@@ -280,7 +282,7 @@ void UI_ControlKeyPressed(void)
         }
       }
       break;
-    case UI_CMD_MREV:
+    case UI_CMD_MREV: // Move backwards in list of modes
       USART_transmitStringToPCFromFlash(PSTR("Mode 2 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
@@ -299,12 +301,12 @@ void UI_ControlKeyPressed(void)
         }  
       }    
       break;
-    case UI_CMD_VOLU:
+    case UI_CMD_VOLU: // Volume Up
       USART_transmitStringToPCFromFlash(PSTR("Vol UP pressed"));
       TX_NEWLINE_PC;
       VS1053_IncreaseVol();
       break;
-    case UI_CMD_VOLD:
+    case UI_CMD_VOLD: // Volume down
       USART_transmitStringToPCFromFlash(PSTR("Vol DOWN pressed"));
       TX_NEWLINE_PC;
       VS1053_DecreaseVol();
