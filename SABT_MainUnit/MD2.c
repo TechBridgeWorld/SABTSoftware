@@ -8,6 +8,38 @@
 
 #include "Globals.h"
 #include "Modes.h"
+#define ENTER 50
+
+#define A_BITS 0b00000001
+#define B_BITS 0b00000011
+#define C_BITS 0b00001001
+#define D_BITS 0b00011001
+#define E_BITS 0b00010001
+#define F_BITS 0b00001011
+#define G_BITS 0b00011011
+#define H_BITS 0b00010011
+#define I_BITS 0b00001010
+#define J_BITS 0b00011010
+#define K_BITS 0b00000101
+#define L_BITS 0b00000111
+#define M_BITS 0b00001101
+#define N_BITS 0b00011101
+#define O_BITS 0b00010101
+#define P_BITS 0b00001111
+#define Q_BITS 0b00011111
+#define R_BITS 0b00010111
+#define S_BITS 0b00001110
+#define T_BITS 0b00011110
+#define U_BITS 0b00100101
+#define V_BITS 0b00100111
+#define W_BITS 0b00111010
+#define X_BITS 0b00101101
+#define Y_BITS 0b00111101
+#define Z_BITS 0b00110101
+
+#define PRIME = 53
+
+
 
 int Current_State;
 char Last_Cell;
@@ -18,15 +50,35 @@ char MD2_Last_Dot;
 1 - Waiting for user input
 2 - Last user input processed
 
+ /**
+ * @brief Sets the given input to the file's last_dot
+ * @return Void
+ */
+void set_last_dot2(char dot)
+{
+    last_dot = dot;
+}
+
+
+/**
+ * @brief generates a psuedo random number based on the system clock
+ * @return int- random number
+ */
+int generateRandomNumber(){
+    int ret TCNT1;
+    ret *= PRIME;
+    return ret;
+}
+
 */
 /**
  * @brief  Given a char, in Last_Cell, play the corresponding letter 
  *         sound file 
  * @return Void
  */
-void PlayRequestedCell(void)
+void PlayRequestedCell(last_cell)
 {
-  switch(Last_Cell)
+  switch(last_cell)
   {
     case 'a':
       RequestToPlayMP3file("MD2_a.MP3");
@@ -113,6 +165,101 @@ void PlayRequestedCell(void)
 }
 
 /**
+ * @brief  Given a bitmask, in Last_Cell, play the corresponding letter
+ *         sound file
+ * @param bits - char, bitmask that should representa  braile letter 
+ * @return Void
+ */
+void PlayRequestedBits(char bits)
+{
+    switch(bits)
+    {
+        case A_BITS:
+            RequestToPlayMP3file("MD2_a.MP3");
+            break;
+        case B_BITS:
+            RequestToPlayMP3file("MD2_b.MP3");
+            break;
+        case C_BITS:
+            RequestToPlayMP3file("MD2_c.MP3");
+            break;
+        case D_BITS:
+            RequestToPlayMP3file("MD2_d.MP3");
+            break;
+        case E_BITS:
+            RequestToPlayMP3file("MD2_e.MP3");
+            break;
+        case F_BITS:
+            RequestToPlayMP3file("MD2_f.MP3");
+            break;
+        case G_BITS:
+            RequestToPlayMP3file("MD2_g.MP3");
+            break;
+        case H_BITS:
+            RequestToPlayMP3file("MD2_h.MP3");
+            break;
+        case I_BITS:
+            RequestToPlayMP3file("MD2_i.MP3");
+            break;
+        case J_BITS:
+            RequestToPlayMP3file("MD2_j.MP3");
+            break;
+        case K_BITS:
+            RequestToPlayMP3file("MD2_k.MP3");
+            break;
+        case L_BITS:
+            RequestToPlayMP3file("MD2_l.MP3");
+            break;
+        case M_BITS:
+            RequestToPlayMP3file("MD2_m.MP3");
+            break;
+        case N_BITS:
+            RequestToPlayMP3file("MD2_n.MP3");
+            break;
+        case O_BITS:
+            RequestToPlayMP3file("MD2_o.MP3");
+            break;
+        case P_BITS:
+            RequestToPlayMP3file("MD2_p.MP3");
+            break;
+        case Q_BITS:
+            RequestToPlayMP3file("MD2_q.MP3");
+            break;
+        case R_BITS:
+            RequestToPlayMP3file("MD2_r.MP3");
+            break;
+        case S_BITS:
+            RequestToPlayMP3file("MD2_s.MP3");
+            break;
+        case T_BITS:
+            RequestToPlayMP3file("MD2_t.MP3");
+            break;
+        case U_BITS:
+            RequestToPlayMP3file("MD2_u.MP3");
+            break;
+        case V_BITS:
+            RequestToPlayMP3file("MD2_v.MP3");
+            break;
+        case W_BITS:
+            RequestToPlayMP3file("MD2_w.MP3");
+            break;
+        case X_BITS:
+            RequestToPlayMP3file("MD2_x.MP3");
+            break;
+        case Y_BITS:
+            RequestToPlayMP3file("MD2_y.MP3");
+            break;
+        case Z_BITS':
+            RequestToPlayMP3file("MD2_z.MP3");
+            break;
+        default:
+            RequestToPlayMP3file("WRONG.MP3");
+            break;
+    }
+}
+
+
+/**
  * @brief  Given a char, in Last_Cell, play the corresponding number
  *         sound file
  * @return Void
@@ -152,6 +299,182 @@ void MD2_Reset(void)
   MD2_Last_Dot=0;
 }
 
+
+/** 
+ * @brief compares button_bits and what current_letter is to see
+ *        if they correspond
+ * @param button_bits - char, holds bits 0-5 that correspond to which buttons have
+ *        have been pressed
+ * @param current_letter - char, letter that the bits should be matching
+ * @return bool - return true if they match, and false, if they do not
+ */
+bool checkIfCorrect(char button_bits, char current_letter){
+    switch(current_letter)
+    {
+        case 'a':
+            if(button_bits == A_BITS)
+              return true;
+            else
+              return false;
+            break;
+        case 'b':
+            if(button_bits == B_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'c':
+            if(button_bits == C_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'd':
+            if(button_bits == D_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'e':
+            if(button_bits == E_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'f':
+            if(button_bits == F_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'g':
+            if(button_bits == G_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'h':
+            if(button_bits == H_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'i':
+            if(button_bits == I_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'j':
+            if(button_bits == J_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'k':
+            if(button_bits == K_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'l':
+            if(button_bits == L_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'm':
+            if(button_bits == M_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'n':
+            if(button_bits == N_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'o':
+            if(button_bits == O_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'p':
+            if(button_bits == P_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'q':
+            if(button_bits == Q_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'r':
+            if(button_bits == R_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 's':
+            if(button_bits == S_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 't':
+            if(button_bits == T_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'u':
+            if(button_bits == U_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'v':
+            if(button_bits == V_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'w':
+            if(button_bits == W_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'x':
+            if(button_bits == X_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'y':
+            if(button_bits == Y_BITS)
+                return true;
+            else
+                return false;
+            break;
+        case 'z':
+            if(button_bits == Z_BITS)
+                return true;
+            else
+                return false;
+            break;
+        default:
+            return false;
+            break;
+    }
+    
+}
+
+
 /**
  * @brief  Step through the main stages in the code. 
  * @return Void
@@ -160,20 +483,105 @@ void MD2_Main(void)
 {
   switch(Current_State)
   {
-    case 0:
+    case STATE_INITIAL:
+      button_bits = 0;
+      letter_set = 0;
+      current_count = 0;
+      random_count = 0;
+      current_rand_letter = 0;
+      initial_letter = 'a';
+      use_random_letter = 0;
+      current_random_letter = (initial_letter + letter_set*5 +
+                               (generateRandomNumber()%5)) % 26
+      current_letter = (initial_letter + letter_set*5 + current_count) % 26;
       RequestToPlayMP3file("MD2INT.MP3");
-      Current_State=1;
+      Current_State = STATE_REQUEST_INPUT1;
       break;
-    case 1:
+          
+    case STATE_REQUEST_INPUT1:
+      RequestToPlayMP3file("");
+      Current_State = STATE_REQUEST_INPUT2;
       break;
-    case 2:
-      PlayRequestedCell();
-      Current_State=1;
+          
+    case STATE_REQUEST_INPUT2:
+      if(use_random_letter)
+        PlayRequestedCell(current_rand_letter);
+      else
+        PlayRequestedCell(current_letter);
+      Current_State = STATE_WAIT_INPUT;
       break;
-    case 3:
-      MD2_PlayRequestedDot();
-      Current_State=1;
+          
+    case STATE_WAIT_INPUT:
+      if(last_dot != 0){
+        //The user just input their word
+        if(last_dot == ENTER){
+          //they got the word right, change letter unless you are at 5
+          //alredy then enter random mode.
+          if(use_random_letter){
+            if(checkIfValidLetter(button_bits, current_letter)){
+              RequestToPlayMP3file("good.MP3");
+              //if you have successfully completed this letter set
+              if(current_count == 5){
+                use_random_letter = 1;
+                Current_State = STATE_REQUEST_INPUT1;
+              }
+              //successfully completed a letter in letter set
+              else{
+                current_count ++;
+                Current_State = STATE_REQUEST_INPUT1;
+              }
+            }
+          
+            //move to an error state so you can tell the user what they input
+            else{
+              RequestToPlayMP3file("no.MP3");
+              Current_state = STATE_ERROR1;
+            }
+          }
+          else{
+            if(checkIfValidLetter(button_bits, current_random_letter)){
+              RequestToPlayMP3file("good.MP3");
+              //if you have successfully completed this letter set
+              if(random_count == 5){
+                use_random_letter = 0;
+                Current_State = STATE_RANDOM_1;
+              }
+              //successfully completed a letter in letter set
+              else{
+                random_count ++;
+                Current_State = STATE_REQUEST_INPUT1;
+              }
+            }
+              
+            //move to an error state so you can tell the user what they input
+            else{
+              RequestToPlayMP3file("no.MP3");
+              Current_state = STATE_ERROR1;
+            }
+              
+              
+          }
+        }
+        else if((last_dot >= '1') && (last_dot <= '6')){
+          button_bits |= (1 << (atoi(last_dot) - 1)));
+          MD2_PlayRequestedDot(atoi(last_dot));
+        }
+              
+      }
       break;
+               
+      case STATE_ERROR1:
+        RequestToPlayMP3file("Pressed.MP3");
+        Current_State = STATE_ERROR2;
+      break;
+          
+      case STATE_ERROR2:
+        PlayRequestedBits(button_bits);
+        Current_State = STATE_REQUEST_INPUT1;
+      break;
+
+    
+
   }
 }
 
