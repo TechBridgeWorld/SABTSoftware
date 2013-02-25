@@ -43,20 +43,21 @@ void init_USART_Keypad(void)
  */
 void USART_Keypad_ReceiveAction(void)
 {
-  USART_Keypad_DATA_RDY=false;
+  USART_Keypad_DATA_RDY = false;
 
   if(!USART_UI_header_received)
   {
-    USART_UI_prefix[2]=USART_Keypad_Received_Data;
-    USART_UI_prefix[0]=USART_UI_prefix[1];
-    USART_UI_prefix[1]=USART_UI_prefix[2];
-    if((USART_UI_prefix[0]=='U')&&(USART_UI_prefix[1]=='I'))
+    USART_UI_prefix[2] = USART_Keypad_Received_Data;
+    USART_UI_prefix[0] = USART_UI_prefix[1];
+    USART_UI_prefix[1] = USART_UI_prefix[2];
+    
+    if((USART_UI_prefix[0] == 'U') && (USART_UI_prefix[1] == 'I'))
     {
-      USART_UI_header_received=true;
-      USART_UI_ReceivedPacket[0]=USART_UI_prefix[0];
-      USART_UI_ReceivedPacket[1]=USART_UI_prefix[1];
-      USART_UI_receive_msgcnt=2;
-      USART_UI_length_received=false;
+      USART_UI_header_received = true;
+      USART_UI_ReceivedPacket[0] = USART_UI_prefix[0];
+      USART_UI_ReceivedPacket[1] = USART_UI_prefix[1];
+      USART_UI_receive_msgcnt = 2;
+      USART_UI_length_received = false;
       //USART_UI_received_playload_len=USART_Keypad_Received_Data;
       //USART_UI_ReceivedPacket[USART_UI_receive_msgcnt]=USART_Keypad_Received_Data;
       //USART_UI_length_reveived=true;
@@ -79,12 +80,14 @@ void USART_Keypad_ReceiveAction(void)
   }
   else
   {
-    USART_UI_ReceivedPacket[USART_UI_receive_msgcnt++]=USART_Keypad_Received_Data;
-    if(USART_UI_receive_msgcnt==USART_UI_received_playload_len) //full message has been received
+    USART_UI_ReceivedPacket[USART_UI_receive_msgcnt++] = USART_Keypad_Received_Data;
+
+    // Full message has been received
+    if(USART_UI_receive_msgcnt == USART_UI_received_playload_len) 
     {
-      USART_UI_Message_ready=true;
-      USART_UI_header_received=false;
-      USART_UI_length_received=false;
+      USART_UI_Message_ready = true;
+      USART_UI_header_received = false;
+      USART_UI_length_received = false;
     }
   }    
 }  

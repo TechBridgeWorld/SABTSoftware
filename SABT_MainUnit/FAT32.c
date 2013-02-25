@@ -348,7 +348,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
   unsigned long cluster, byteCounter = 0, fileSize, firstSector;
   unsigned int k;//,iCntForSingleAudioWrite;
   unsigned char j, error;
-  unsigned int iReadByteCnt;
+  unsigned int iReadByteCnt = 0;
   bool bEndOfFile=false;
 
   PRINTF("In readAndRetrieve, fileName:");
@@ -606,10 +606,15 @@ Modified write file function with replacing all the text with new text given
  */
 int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fileContent)
 {
-  unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector;
-  unsigned int i, firstClusterHigh, firstClusterLow;
+  unsigned char j, error, appendFile = 0;
+  unsigned int i;
   struct dir_Structure *dir;
-  unsigned long cluster, nextCluster, prevCluster, firstSector, clusterCount, extraMemory;
+  unsigned long cluster, firstSector, clusterCount;
+
+  // Removed for compiler, not currently used
+  // unsigned long extraMemory, prevCluster, nextCluster;
+  // unsigned int firstClusterHigh, firstClusterLow;
+  // unsigned char sector, sectorEndFlag, start, fileCreatedFlag, data;
 
   //j = readFile (VERIFY, fileName);
 
@@ -681,7 +686,7 @@ int ReplaceTheContentOfThisFileWith (unsigned char *fileName, unsigned char *fil
  */
 void writeFile (unsigned char *fileName)
   {
-  unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector;
+  unsigned char j, data, error, fileCreatedFlag = 0, start = 0, appendFile = 0, sectorEndFlag = 0, sector = 0;
   unsigned int i, firstClusterHigh, firstClusterLow;
   struct dir_Structure *dir;
   unsigned long cluster, nextCluster, prevCluster, firstSector, clusterCount, extraMemory;
@@ -1103,9 +1108,12 @@ void freeMemoryUpdate (unsigned char flag, unsigned long size)
 void InitSDCard(bool bVerb)
 {
   unsigned char iInit=0;
-  unsigned char option, error, data, FAT32_active;
+  unsigned char error, FAT32_active;
   unsigned int i;
   cardType = 0;
+
+  // Not being used
+  // unsigned char data, option;
 
   for (i=0; i<10; i++)
   {

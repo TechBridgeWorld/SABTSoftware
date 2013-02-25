@@ -9,7 +9,8 @@
 #ifndef __VS1053_H__
 #define __VS1053_H__
 
-#include <stdbool.h> 
+#include <stdbool.h>
+#include <string.h> 
 
 volatile bool VS1053_SKIP_PLAY;
 

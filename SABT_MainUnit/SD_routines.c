@@ -77,7 +77,7 @@ unsigned char SD_init(void)
     retry = 0;
     SDHC_flag = 0;
 
-    if (SD_version == 2)afs
+    if (SD_version == 2)
     {
     do
     {

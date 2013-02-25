@@ -183,10 +183,11 @@ void RequestToPlayMP3file(const char* thisFile)
 {
   int i = 0;
   
-  while(i < strlen(fileName))
+  while(i < strlen((char*)fileName))
   {
-    fileName[i++] = "";
+    fileName[i++] = '\0';
   }
+
   DPRINTF("fileName = %s\n\r", fileName);
   i = 0;
   

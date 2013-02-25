@@ -18,12 +18,12 @@ unsigned char USART_PC_receive_msgcnt;
  */
 void init_USART_PC(void)
 {
- UCSR0B = 0x00; //disable while setting baud rate
- UCSR0A = 0x00;
- UCSR0C = 0x06;
- UBRR0L = 0x19;
- UBRR0H = 0x00; //set baud rate to 19,200 with 8MHz clock
- UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
+  UCSR0B = 0x00; //disable while setting baud rate
+  UCSR0A = 0x00;
+  UCSR0C = 0x06;
+  UBRR0L = 0x19;
+  UBRR0H = 0x00; //set baud rate to 19,200 with 8MHz clock
+  UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
 }
 
 /**
@@ -45,7 +45,7 @@ unsigned char USART_PC_ReceiveAction(void)
     if(!valid_message)
     {
       valid_message = true;
-      PRINTF("SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
+      PRINTF((unsigned char *)"SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
     

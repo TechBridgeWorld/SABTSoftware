@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS += -Wl,--defsym=__stack=0x4000  -Wl,-Map=UserInterface.map
+LDFLAGS += -Wl,--defsym=__stack=0x4000 -Wl,-Map=UserInterface.map
 
 
 ## Intel Hex file production flags
