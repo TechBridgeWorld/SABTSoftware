@@ -30,65 +30,89 @@ bool UI_CheckModes(void)
   // TODO should PCPrintContent be of length 4?
   unsigned char PCPrintContent[2];
   int i = 0;
-  int iMoN = 0;
-  bool bBoNFound;
+  int mode_number = 0;
+  bool parsing_mode_descriptor;
   const char* ModesFile = "MODES.DAT";
 
-  Number_of_modes=0;
-  for(i=0;i<100;i++)
-    FileContent[i]=0;
-  if(readAndRetreiveFileContents((unsigned char*)ModesFile, FileContent) > 0)
+  number_of_modes = 0;
+
+  // Clear file content array  
+  for(i = 0; i < 100; i++)
+    FileContent[i] = 0;
+
+  // Populate file content
+  if(readAndRetreiveFileContents(ModesFile, &FileContent[0]) > 0)
   {
+    PRINTF("FLAG 1");
+	TX_NEWLINE_PC;
     return false;
   }
-  USART_transmitStringToPC((unsigned char*)&FileContent);
+
+  // Print file contents to debug stream
+  USART_transmitStringToPC(&FileContent[0]);
   TX_NEWLINE_PC;
-  bBoNFound=false;
+
+  parsing_mode_descriptor = false;
+
   i=0;
+  // '$' signifies end of file, <i> signifies mode i active
   while(FileContent[i]!='$')
   {
+  	// at end of mode descriptor
     if(FileContent[i]=='>')
     {
-      UI_Modes[Number_of_modes] = atoi((char*)ModeID);
-      Number_of_modes++;
-      bBoNFound=false;
+      UI_Modes[number_of_modes] = atoi((char*)&ModeID[0]);
+      number_of_modes++;
+      parsing_mode_descriptor = false;
     }
-    if(!bBoNFound)
+
+	// if not at a mode descriptor, clear everything
+    if(!parsing_mode_descriptor)
     {
-      ModeID[0]=0;
-      ModeID[1]=0;
-      ModeID[2]=0;
-      iMoN=0;
+      ModeID[0] = 0;
+      ModeID[1] = 0;
+      ModeID[2] = 0;
+      mode_number = 0;
     }
     else
     {
-      if(iMoN==3)
+      if(mode_number == 3)
       {
+	    PRINTF("FLAG 2");
+		TX_NEWLINE_PC;
         return false;
       }
-      ModeID[iMoN++]=FileContent[i];
-    }
-    if(FileContent[i]=='<')
-    {
-      bBoNFound=true;
+      ModeID[mode_number++] = FileContent[i];
     }
 
+	// if at new mode descriptor
+    if(FileContent[i] == '<')
+    {
+      parsing_mode_descriptor = true;
+    }
 
     i++;    
   }
+
   USART_transmitStringToPCFromFlash(PSTR("Number of modes selected: "));
-  PCPrintContent[0]=0;
-  PCPrintContent[1]=0;
-  sprintf((char*)PCPrintContent, "%d", Number_of_modes);
-  USART_transmitStringToPC((unsigned char*)&PCPrintContent);
+
+  PCPrintContent[0] = 0;
+  PCPrintContent[1] = 0;
+
+  // Print the number of modes found to a string
+  sprintf((char*)&PCPrintContent[0], "%d", number_of_modes);
+  USART_transmitStringToPC(&PCPrintContent[0]);
   TX_NEWLINE_PC;
+
+  // Send the actual modes
   USART_transmitStringToPCFromFlash(PSTR("And the modes are; "));
-  for(i=0;i<Number_of_modes;i++)
+  for(i = 0; i < number_of_modes; i++)
   {
-    sprintf((char*)PCPrintContent, "%d, ", UI_Modes[i]);
-    USART_transmitStringToPC((unsigned char*)&PCPrintContent);
-  }  
+    sprintf((char*)&PCPrintContent[0], "%d, ", UI_Modes[i]);
+    USART_transmitStringToPC(&PCPrintContent[0]);
+  }
   TX_NEWLINE_PC;
+  
   return true; 
 }
 
@@ -269,7 +293,7 @@ void UI_ControlKeyPressed(void)
       if(!UI_MODE_SELECTED)
       {
         UI_Selected_Mode++;
-        if(UI_Selected_Mode>Number_of_modes)
+        if(UI_Selected_Mode>number_of_modes)
         {
           UI_Selected_Mode--;
           UI_Current_Mode=UI_Modes[UI_Selected_Mode-1];

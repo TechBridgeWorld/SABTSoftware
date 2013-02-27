@@ -28,13 +28,19 @@
 
 //#define NUMBER_OF_MODES 3
 
-volatile unsigned char Number_of_modes;
+volatile unsigned char number_of_modes;
 volatile unsigned char UI_Modes[10];
 
 volatile unsigned char *gFileToPlay;
 unsigned char fileName[13];
 
 volatile char tempCnt;
+
+//TODO remove
+void set_last_dot(char dot);
+void set_last_dot2(char dot);
+void set_last_dot3(char dot);
+
 /*
  * MP3 files. 
  * INT.MP3 - Introductory word.

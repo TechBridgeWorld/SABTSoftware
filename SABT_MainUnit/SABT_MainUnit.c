@@ -149,7 +149,8 @@ End of test code
 ISR(TIMER1_COMPA_vect)
 {
   TMR1_INT=true;
-};
+}
+
 
 /**
  * @brief ISR is an interrupt handler that will be called when its argument
@@ -159,7 +160,7 @@ ISR(TIMER1_COMPA_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART1_RX_vect)
+/*ISR(USART1_RX_vect)
 {
   USART_Keypad_Received_Data = UDR1;
   USART_Keypad_DATA_RDY = true; 
@@ -167,7 +168,7 @@ ISR(USART1_RX_vect)
   set_last_dot(USART_Keypad_Received_Data);
   set_last_dot2(USART_Keypad_Received_Data);
   //set_last_dot(USART_Keypad_Received_Data); // TODO delete this handled elsewhere
-};
+};*/
 
 /**
  * @brief ISR is an interrupt handler that will be called when its argument
@@ -177,17 +178,118 @@ ISR(USART1_RX_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART0_RX_vect)
+/*ISR(USART0_RX_vect)
 {
 //Temporarily using the PC as the UI
 //  USART_Keypad_Received_Data=UDR0;
 //  USART_Keypad_DATA_RDY=true; 
-///*  Temporarily disabled the PC communications since we are simulating the UI with PC
+//  Temporarily disabled the PC communications since we are simulating the UI with PC
   USART_PC_Received_Data=UDR0;
   USART_PC_DATA_RDY=true;
-//*/
-};
+//
+};*/
 
+
+
+ISR(_VECTOR(1)){
+  
+}
+ISR(_VECTOR(2)){
+  
+}
+ISR(_VECTOR(3)){
+  
+}
+ISR(_VECTOR(4)){
+  
+}
+ISR(_VECTOR(5)){
+  
+}
+ISR(_VECTOR(6)){
+  
+}
+ISR(_VECTOR(7)){
+  
+}
+ISR(_VECTOR(8)){
+  
+}
+ISR(_VECTOR(9)){
+  
+}
+ISR(_VECTOR(10)){
+  
+}
+ISR(_VECTOR(11)){
+  
+}
+ISR(_VECTOR(12)){
+  
+}
+ISR(_VECTOR(14)){
+  
+}
+ISR(_VECTOR(15)){
+  
+}
+ISR(_VECTOR(16)){
+  
+}
+ISR(_VECTOR(17)){
+  
+}
+ISR(_VECTOR(18)){
+  
+}
+ISR(_VECTOR(19)){
+  
+}
+ISR(_VECTOR(20)){
+  
+}
+ISR(_VECTOR(21)){
+  
+}
+ISR(_VECTOR(22)){
+  
+}
+ISR(_VECTOR(23)){
+  
+}
+ISR(_VECTOR(24)){
+  
+}
+ISR(_VECTOR(25)){
+  
+}
+ISR(_VECTOR(26)){
+  
+}
+ISR(_VECTOR(27)){
+  
+}
+ISR(_VECTOR(28)){
+  
+}
+ISR(_VECTOR(29)){
+  
+}
+ISR(_VECTOR(30)){
+  
+}
+ISR(_VECTOR(31)){
+  
+}
+ISR(_VECTOR(32)){
+  
+}
+ISR(_VECTOR(33)){
+  
+}
+ISR(_VECTOR(34)){
+  
+}
 
 /**
  * @brief Initialize the system and interrupts
@@ -204,12 +306,13 @@ void InitializeSystem(void)
   
   TCCR1A=0x00;
   TCCR1B=0x0D;
-  OCR1A=780; //1s interval
+  OCR1A=390; //1s interval
   TIMSK1 |= (1<<OCIE1A); //Enable interrupt
 
   init_USART_Keypad();
   init_USART_PC();
   SPI_Initialize();
+  
   sei();  // sets the interrupt flag (enables interrupts)
 
   UI_Current_Mode=0;  //No mode selected
@@ -221,17 +324,18 @@ void InitializeSystem(void)
 
   message_count = 0;
   valid_message = true;  
-
+  
   if(!UI_CheckModes())
   {
     USART_transmitStringToPCFromFlash (PSTR("Mode file not found"));
-    TX_NEWLINE_PC;
+    TX_NEWLINE_PC; 
   }
   else
   {
     USART_transmitStringToPCFromFlash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
-  
+
   RequestToPlayMP3file("INT.MP3");  // Play the welcome message
+  
 }

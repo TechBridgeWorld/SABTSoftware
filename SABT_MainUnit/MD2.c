@@ -37,8 +37,6 @@
 #define Y_BITS 0b00111101
 #define Z_BITS 0b00110101
 
-#define PRIME = 53
-
 
 
 int Current_State;
@@ -49,6 +47,7 @@ char MD2_Last_Dot;
 0 - Just started (in the begining, play the Welcome message)
 1 - Waiting for user input
 2 - Last user input processed
+*/
 
  /**
  * @brief Sets the given input to the file's last_dot
@@ -65,18 +64,17 @@ void set_last_dot2(char dot)
  * @return int- random number
  */
 int generateRandomNumber(){
-    int ret TCNT1;
+    int ret = TCNT1;
     ret *= PRIME;
     return ret;
 }
 
-*/
 /**
  * @brief  Given a char, in Last_Cell, play the corresponding letter 
  *         sound file 
  * @return Void
  */
-void PlayRequestedCell(last_cell)
+void PlayRequestedCell(char last_cell)
 {
   switch(last_cell)
   {
@@ -249,7 +247,7 @@ void PlayRequestedBits(char bits)
         case Y_BITS:
             RequestToPlayMP3file("MD2_y.MP3");
             break;
-        case Z_BITS':
+        case Z_BITS:
             RequestToPlayMP3file("MD2_z.MP3");
             break;
         default:
@@ -488,11 +486,11 @@ void MD2_Main(void)
       letter_set = 0;
       current_count = 0;
       random_count = 0;
-      current_rand_letter = 0;
+      current_random_letter = 0;
       initial_letter = 'a';
       use_random_letter = 0;
       current_random_letter = (initial_letter + letter_set*5 +
-                               (generateRandomNumber()%5)) % 26
+                               (generateRandomNumber()%5)) % 26;
       current_letter = (initial_letter + letter_set*5 + current_count) % 26;
       RequestToPlayMP3file("MD2INT.MP3");
       Current_State = STATE_REQUEST_INPUT1;
@@ -505,7 +503,7 @@ void MD2_Main(void)
           
     case STATE_REQUEST_INPUT2:
       if(use_random_letter)
-        PlayRequestedCell(current_rand_letter);
+        PlayRequestedCell(current_random_letter);
       else
         PlayRequestedCell(current_letter);
       Current_State = STATE_WAIT_INPUT;
@@ -518,7 +516,7 @@ void MD2_Main(void)
           //they got the word right, change letter unless you are at 5
           //alredy then enter random mode.
           if(use_random_letter){
-            if(checkIfValidLetter(button_bits, current_letter)){
+            if(checkIfCorrect(button_bits, current_letter)){
               RequestToPlayMP3file("good.MP3");
               //if you have successfully completed this letter set
               if(current_count == 5){
@@ -535,49 +533,54 @@ void MD2_Main(void)
             //move to an error state so you can tell the user what they input
             else{
               RequestToPlayMP3file("no.MP3");
-              Current_state = STATE_ERROR1;
+              Current_State = STATE_ERROR_1;
             }
           }
-          else{
-            if(checkIfValidLetter(button_bits, current_random_letter)){
+          else
+		  {
+            if(checkIfCorrect(button_bits, current_random_letter))
+			{
               RequestToPlayMP3file("good.MP3");
               //if you have successfully completed this letter set
-              if(random_count == 5){
+              if(random_count == 5)
+			  {
                 use_random_letter = 0;
-                Current_State = STATE_RANDOM_1;
+                Current_State = STATE_REQUEST_INPUT_1;
               }
               //successfully completed a letter in letter set
-              else{
+              else
+			  {
                 random_count ++;
-                Current_State = STATE_REQUEST_INPUT1;
+                Current_State = STATE_REQUEST_INPUT_1;
               }
             }
               
             //move to an error state so you can tell the user what they input
-            else{
+            else
+			{
               RequestToPlayMP3file("no.MP3");
-              Current_state = STATE_ERROR1;
-            }
-              
-              
+              Current_State = STATE_ERROR_1;
+            }  
           }
         }
-        else if((last_dot >= '1') && (last_dot <= '6')){
-          button_bits |= (1 << (atoi(last_dot) - 1)));
-          MD2_PlayRequestedDot(atoi(last_dot));
+        else if((last_dot >= '1') && (last_dot <= '6'))
+		{
+          button_bits |= (1 << (atoi(&last_dot) - 1));
+		  // TODO change play requested dot to take 1 param
+          MD2_PlayRequestedDot();
         }
               
       }
       break;
                
-      case STATE_ERROR1:
+      case STATE_ERROR_1:
         RequestToPlayMP3file("Pressed.MP3");
-        Current_State = STATE_ERROR2;
+        Current_State = STATE_ERROR_2;
       break;
           
-      case STATE_ERROR2:
+      case STATE_ERROR_2:
         PlayRequestedBits(button_bits);
-        Current_State = STATE_REQUEST_INPUT1;
+        Current_State = STATE_REQUEST_INPUT_1;
       break;
 
     

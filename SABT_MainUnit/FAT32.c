@@ -356,11 +356,20 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
   TX_NEWLINE_PC;
 
   error = convertFileName (fileName); //convert fileName into FAT format
-  if(error) return 1;
+  if(error) 
+  {
+    PRINTF("NOOOOO 2");
+    TX_NEWLINE_PC;
+	return 1;
+  }
 
   dir = findFiles (GET_FILE, fileName); //get the file location
   if(dir == 0) 
-    return (2);
+  {
+    PRINTF("NOOOOO 2");
+    TX_NEWLINE_PC;
+    return 2;
+  }
 
 //  if(flag == VERIFY) return (1);  //specified file name is already existing
 
@@ -396,8 +405,19 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
       }
     }
     cluster = getSetNextCluster (cluster, GET, 0);
-    if(cluster == 0) {USART_transmitStringToPCFromFlash(PSTR("Error in getting cluster")); return 3;}
+    if(cluster == 0) 
+	{
+	  PRINTF("NOOOOO 3");
+      TX_NEWLINE_PC;
+	  USART_transmitStringToPCFromFlash(PSTR("Error in getting cluster")); 
+	  return 3;
+	}
   }
+
+  PRINTF("nope SHIT BE FUCKED");
+  TX_NEWLINE_PC;
+
+
   return 4;
 }
 
