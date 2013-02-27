@@ -348,7 +348,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
   unsigned long cluster, byteCounter = 0, fileSize, firstSector;
   unsigned int k;//,iCntForSingleAudioWrite;
   unsigned char j, error;
-  unsigned int iReadByteCnt = 0;
+  unsigned int iReadByteCnt;
   bool bEndOfFile=false;
 
   PRINTF("In readAndRetrieve, fileName:");
