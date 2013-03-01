@@ -20,19 +20,27 @@
   */
 void PC_parse_message()
 {
-  unsigned char MessageType;
-  USART_PC_Message_ready=false;
-  MessageType=USART_PC_ReceivedPacket[2];
-  switch(MessageType)
+  unsigned char message_type;
+  
+  USART_PC_Message_ready = false;
+  message_type = USART_PC_ReceivedPacket[2];
+  
+  PRINTF("the character found was: ");
+  USART_transmitByteToPC(message_type);
+  TX_NEWLINE_PC; 
+  
+  switch(message_type)
   {
+    // Send a confirmation that the board received the message
     case PC_CMD_INIT:
       USART_transmitStringToPCFromFlash(PSTR("SABT-v2.1"));
       TX_NEWLINE_PC;      
       break;
+    // Modify the current modes
     case PC_CMD_NEWMODES:
       PC_RequestsToModifyModesFile();
       break;
-    //incorrect message type
+    // Incorrect message type
     default:
       PRINTF("SABT-INCORRECT MESSAGE TYPE! MUST BE 'M' OR 'x'.\r\n");
       break;
@@ -47,7 +55,7 @@ void PC_parse_message()
  */
 void PC_RequestsToModifyModesFile(void)
 {
-  const char* ModesFile="MODES.DAT";
+  const char* ModesFile = "MODES.DAT";
   unsigned char WritingFileContent[20];
   
   // Clear the buffer
@@ -64,8 +72,6 @@ void PC_RequestsToModifyModesFile(void)
   {
     WritingFileContent[iT-3]=USART_PC_ReceivedPacket[iT];
   }
-
-  DPRINTF("File content: %s\n", WritingFileContent);
 
   if(ReplaceTheContentOfThisFileWith((unsigned char*)ModesFile, WritingFileContent) == 0)
   {

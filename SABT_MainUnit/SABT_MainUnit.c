@@ -6,11 +6,9 @@
  * @author Kory Stiger (kstiger)
  */
 
-#define F_CPU 8000000UL
-
 #include "Globals.h"
 
-volatile bool TMR1_INT;
+volatile bool timer_interrupt;
 volatile bool LED_STAT;
 
 /*
@@ -24,10 +22,11 @@ void InitializeSystem(void);
 
 /**
  * @brief Turns off/on bits 5,6,7 in Portd depending on LED_STAT to make the 3 LEDs on the board blink?
+ * This is the function called each time a timer interrupt occurs.
  * @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
-void TimeRoutine(void)
+void timer_routine(void)
 {
   if(!LED_STAT){
     PORTD &= ~_BV(5);
@@ -71,7 +70,7 @@ End of test code
 */
 
   UI_MODE_SELECTED = 1; // @TODO remove
-  UI_Current_Mode = 1;  // @TODO remove after tuesday
+  UI_Current_Mode = 2;  // @TODO remove after tuesday
 
   //Display the files in the SD card
   //TX_NEWLINE_PC;
@@ -85,10 +84,10 @@ End of test code
     // TODO remove test string
     // DPRINTF("Small waves crashing against the sand%d.", 42);
 
-    if(TMR1_INT)
+    if(timer_interrupt)
     {
-      TMR1_INT=false;
-    //  TimeRoutine();
+      timer_interrupt=false;
+    //  timer_routine();
     }
 
     // check to see if we've received data from UI board
@@ -104,6 +103,7 @@ End of test code
        *  C: payload contains an error message
        *  D: payload contains a control button input from UI
        *  E: miscellaneous */
+	   //USART_transmitByteToPC(USART_Keypad_Received_Data);
       USART_Keypad_ReceiveAction();
     }
 
@@ -148,7 +148,7 @@ End of test code
  */
 ISR(TIMER1_COMPA_vect)
 {
-  TMR1_INT=true;
+  timer_interrupt = true;
 }
 
 
@@ -160,15 +160,15 @@ ISR(TIMER1_COMPA_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-/*ISR(USART1_RX_vect)
+ISR(USART1_RX_vect)
 {
+  //char buf[10];
   USART_Keypad_Received_Data = UDR1;
-  USART_Keypad_DATA_RDY = true; 
-  USART_transmitByteToPC(USART_Keypad_Received_Data);
-  set_last_dot(USART_Keypad_Received_Data);
-  set_last_dot2(USART_Keypad_Received_Data);
-  //set_last_dot(USART_Keypad_Received_Data); // TODO delete this handled elsewhere
-};*/
+  USART_Keypad_DATA_RDY = true;
+  //set_last_dot(USART_Keypad_Received_Data);
+  //set_last_dot2(USART_Keypad_Received_Data);
+  //Set_last_dot(USART_Keypad_Received_Data); // TODO delete this handled elsewhere
+};
 
 /**
  * @brief ISR is an interrupt handler that will be called when its argument
@@ -178,7 +178,7 @@ ISR(TIMER1_COMPA_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-/*ISR(USART0_RX_vect)
+ISR(USART0_RX_vect)
 {
 //Temporarily using the PC as the UI
 //  USART_Keypad_Received_Data=UDR0;
@@ -186,11 +186,12 @@ ISR(TIMER1_COMPA_vect)
 //  Temporarily disabled the PC communications since we are simulating the UI with PC
   USART_PC_Received_Data=UDR0;
   USART_PC_DATA_RDY=true;
+  USART_transmitByteToPC(USART_PC_Received_Data);
 //
-};*/
+};
 
 
-
+/*
 ISR(_VECTOR(1)){
   
 }
@@ -245,9 +246,9 @@ ISR(_VECTOR(18)){
 ISR(_VECTOR(19)){
   
 }
-ISR(_VECTOR(20)){
+//ISR(_VECTOR(20)){
   
-}
+//}
 ISR(_VECTOR(21)){
   
 }
@@ -273,10 +274,10 @@ ISR(_VECTOR(28)){
   
 }
 ISR(_VECTOR(29)){
-  
+  TX_NEWLINE_PC;
 }
 ISR(_VECTOR(30)){
-  
+  TX_NEWLINE_PC;
 }
 ISR(_VECTOR(31)){
   
@@ -290,14 +291,14 @@ ISR(_VECTOR(33)){
 ISR(_VECTOR(34)){
   
 }
-
+*/
 /**
  * @brief Initialize the system and interrupts
  * @return Void
  */
 void InitializeSystem(void)
 {
-  TMR1_INT = false;   // clear the timer interrupt flag
+  timer_interrupt = false;   // clear the timer interrupt flag
   PORTA = 0x00;
   DDRA = 0xFF;  
   PORTA = 0x00;  

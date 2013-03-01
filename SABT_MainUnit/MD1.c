@@ -10,15 +10,6 @@
 #include "MD1.h"
 
 /**
- * @brief Sets the given input to the file's last_dot
- * @return Void
- */
-void set_last_dot(char dot)
-{
-  last_dot = dot;
-}
-
-/**
  * @brief based off of the internal timer (TCNT1) - we generate
  *        a psuedo-random number. Turn that into a number from 1 - 6
  *        return the charachter of that number;
@@ -108,7 +99,7 @@ void MD1_Main(void)
   switch(current_state)
   {
     case STATE_INITIAL:
-      PRINTF("[MD1] Entering MD1\n");
+      PRINTF("[MD1] Entering MD1\n\r");
 
       // Play the introductory message for Mode 1
       RequestToPlayMP3file("MD1INT.MP3");
@@ -120,8 +111,7 @@ void MD1_Main(void)
       break;
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
-      expected_dot = random_number_as_char(); 
-      DPRINTF("dot requested = %c\r\n", expected_dot);
+      expected_dot = random_number_as_char();
       PlayRequestedDot(expected_dot);
       current_state = STATE_WAIT_INPUT;
       break;

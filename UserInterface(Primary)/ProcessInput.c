@@ -85,7 +85,7 @@ void ProcessTheDot(void)
     if(temp_dot > 3) temp_dot -= 3;
     else temp_dot += 3;
 
-    if(PI_LastDotPressed == temp_dot) return;
+    //if(PI_LastDotPressed == temp_dot) return;
 
     PI_LastDotPressed = temp_dot;
     DotsPressed[temp_dot - 1] = true;
@@ -123,8 +123,8 @@ void CaptureCellValue(void)
     }
   }
 
-  SendMsgPayLoad[0]=ProcessedCellValue;   // 6-bit number representing the pressed dots
-  SendMsgPayLoad[1]=1;                    // Always 1 for Primary UI - only 1 cell
-  SendPacket('B',(char*)&SendMsgPayLoad,2);      // Send the two bytes with messege type of 'B'
-  ResetCellState();                       // Reset the cell sate for new letter
+  SendMsgPayLoad[0]=ProcessedCellValue;          // 6-bit number representing the pressed dots
+  SendMsgPayLoad[1]=1;                           // Always 1 for Primary UI - only 1 cell
+  SendPacket('B',(char*)&SendMsgPayLoad,2);      // Send the two bytes with message type of 'B'
+  ResetCellState();                              // Reset the cell sate for new letter
 }

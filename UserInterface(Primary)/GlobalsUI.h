@@ -23,4 +23,6 @@
 #include "CommPacket.h"
 #include "ProcessInput.h"
 
+void delay10();
+
 #endif /* _GLOBALS_H_ */

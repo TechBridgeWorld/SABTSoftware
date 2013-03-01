@@ -94,10 +94,12 @@ ISR(_VECTOR(18)){
 }
 ISR(_VECTOR(19)){
   SetStatLED2(true);
-}
+}*/
 ISR(_VECTOR(20)){
+  transmit_complete = true;
   SetStatLED2(true);
-}
+  //SetStatLED2(true);
+}/*
 ISR(_VECTOR(21)){
   SetStatLED2(true);
 }
@@ -131,8 +133,8 @@ int main(void)//
   // This loop will take care of all the signal handling from the 
   {
     // Test the transmission to MCU 
-    // USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board \n");
-    
+    //USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board.\r\n");
+
     // Check to see if timer interrupt has occurred
     if(TMR1_INT)
     {
@@ -152,8 +154,7 @@ void InitializeUI(void)
   //Initialize the Serial comm with the main module
   init_USART_MCU();
 
-  //Initialize the analog ports
-  //TODO: why is this commented out?
+  //Initialize the analog ports for intermediate/advanced boards only (double check?)
   //InitializeAnalogPorts();
 
   //Initialize the digital input/output pins

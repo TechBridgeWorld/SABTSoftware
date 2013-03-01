@@ -348,7 +348,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
   unsigned long cluster, byteCounter = 0, fileSize, firstSector;
   unsigned int k;//,iCntForSingleAudioWrite;
   unsigned char j, error;
-  unsigned int iReadByteCnt;
+  unsigned int num_bytes_read;
   bool bEndOfFile=false;
 
   PRINTF("In readAndRetrieve, fileName:");
@@ -394,10 +394,10 @@ unsigned char readAndRetreiveFileContents (unsigned char *fileName, unsigned cha
         if ((byteCounter++) >= fileSize ) bEndOfFile=true;
         
       }
-      while(iReadByteCnt<k)
+      while(num_bytes_read < k)
       {
-        *dataString++=buffer[iReadByteCnt];
-        if(iReadByteCnt++==k)return 0;  
+        *dataString++ = buffer[num_bytes_read];
+        if(num_bytes_read++ == k)return 0;  
       }
       if(bEndOfFile)
       {
@@ -538,9 +538,9 @@ unsigned char convertFileName (unsigned char *fileName)
   unsigned char fileNameFAT[11];
   unsigned char j, k;
 
-  PRINTF("[convertFileName]Filename:");
-  PRINTF(fileName);
-  TX_NEWLINE_PC;
+  //PRINTF("[convertFileName]Filename:");
+  //PRINTF(fileName);
+  //TX_NEWLINE_PC;
 
   for(j=0; j<12; j++) {
     if(fileName[j] == '.') 
@@ -600,14 +600,14 @@ unsigned char convertFileName (unsigned char *fileName)
   // Add null terminator to filename
   //fileName[11] = '\0';
 
-  PRINTF("[convertFileName]File name FAT:");
-  PRINTF(fileNameFAT);
-  TX_NEWLINE_PC;
+  //PRINTF("[convertFileName]File name FAT:");
+  //PRINTF(fileNameFAT);
+  //TX_NEWLINE_PC;
 
 
-  PRINTF("[convertFileName]File name after:");
-  PRINTF(fileName);
-  TX_NEWLINE_PC;
+  //PRINTF("[convertFileName]File name after:");
+  //PRINTF(fileName);
+  //TX_NEWLINE_PC;
 
   return 0;
 }

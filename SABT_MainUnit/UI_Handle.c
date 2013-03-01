@@ -41,7 +41,7 @@ bool UI_CheckModes(void)
     FileContent[i] = 0;
 
   // Populate file content
-  if(readAndRetreiveFileContents(ModesFile, &FileContent[0]) > 0)
+  if(readAndRetreiveFileContents((unsigned char*)ModesFile, &FileContent[0]) > 0)
   {
     PRINTF("FLAG 1");
 	TX_NEWLINE_PC;
@@ -173,7 +173,7 @@ bool UI_parse_message(bool mp3_is_playing)
   uint16_t chksum = UI_calculate_CRC((unsigned char*)&USART_UI_ReceivedPacket);
   
   // TODO test this
-  PRINTF("[UI_parse_message] Entering function");
+  //PRINTF("[UI_parse_message] Entering function");
   
   // Check the checksum
   if (chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 
@@ -207,6 +207,7 @@ bool UI_parse_message(bool mp3_is_playing)
         PRINTF("[UI_parse_message] An error occurred in the UI.");
         break;
       case 'D':                             // Control button
+	  	PRINTF("CONTROL BUTTON PRESSED");
         UI_ControlKeyPressed();
         break;
       case 'E':                             // Acknowledgement

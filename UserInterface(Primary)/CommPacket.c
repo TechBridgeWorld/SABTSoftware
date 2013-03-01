@@ -52,9 +52,9 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
   int i = 0;
 
   // Header always contains the 0xFA and 0xFB
-  MCU_Packet[0]='U';
-  MCU_Packet[1]='I';
-  iPktSize = plLen+7;
+  MCU_Packet[0]='U';  //85
+  MCU_Packet[1]='I';  //73
+  iPktSize = plLen+7; //10
   
   // SABT can only handle packets up to 20 bytes in length
   if ( plLen + 7 > 20 ) return false;

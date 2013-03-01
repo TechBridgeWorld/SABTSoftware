@@ -44,7 +44,12 @@ void init_USART_Keypad(void)
 void USART_Keypad_ReceiveAction(void)
 {
   USART_Keypad_DATA_RDY = false;
-
+ /* char buf[10]; 
+  sprintf(buf, "%d", (int)USART_Keypad_Received_Data);
+  USART_transmitStringToPC((unsigned char*)buf);
+  TX_NEWLINE_PC;
+*/
+  // If no header has been found, build it
   if(!USART_UI_header_received)
   {
     USART_UI_prefix[2] = USART_Keypad_Received_Data;
@@ -64,6 +69,7 @@ void USART_Keypad_ReceiveAction(void)
       //USART_UI_receive_msgcnt++;
     }
   }
+  // Get the length of the payload
   else if(!USART_UI_length_received)
   {
     if(USART_UI_receive_msgcnt==2)
@@ -78,6 +84,7 @@ void USART_Keypad_ReceiveAction(void)
       USART_UI_header_received=false;
     }
   }
+  // Build the actual message
   else
   {
     USART_UI_ReceivedPacket[USART_UI_receive_msgcnt++] = USART_Keypad_Received_Data;
@@ -89,8 +96,8 @@ void USART_Keypad_ReceiveAction(void)
       USART_UI_header_received = false;
       USART_UI_length_received = false;
     }
-  }    
-}  
+  }
+}
 
 /**
  * @brief Transmits byte data from MC --> UI over UDR1

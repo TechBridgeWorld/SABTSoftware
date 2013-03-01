@@ -17,6 +17,7 @@
 #define STATE_PROC_INPUT      4   // Processed user input
 #define STATE_ERROR_1         5   // first part of the error sequence
 #define STATE_ERROR_2         6   // second part of the error sequence
+#define SET_LETTER_VALS	      7   // Set the letter vals for random and current
 
 char button_bits;
 char letter_set;

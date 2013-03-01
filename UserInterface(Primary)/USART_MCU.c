@@ -56,7 +56,15 @@ void USART_PC_ReceiveAction(void){
  */
 void USART_transmitByteToMCU( unsigned char bData )
 {
-  while ( !(UCSR0A & (1<<UDRE0)) );
+  while (!(UCSR0A & (1<<UDRE0)))
+  {
+  }
+  //delay10();
+  
+
+  //while (!transmit_complete) {}
+  //transmit_complete = false;
+  //while (!(UCSR0A & (1<<TXC0))) {}
   UDR0 = bData;
 }
 
@@ -68,7 +76,9 @@ void USART_transmitByteToMCU( unsigned char bData )
 void USART_transmitStringToMCUFromFlash(char* strData)
 {
   while (pgm_read_byte(&(*strData)))
-   USART_transmitByteToMCU(pgm_read_byte(&(*strData++)));
+  {
+    USART_transmitByteToMCU(pgm_read_byte(&(*strData++)));
+  }
 }
 
 /**
@@ -79,5 +89,8 @@ void USART_transmitStringToMCUFromFlash(char* strData)
 void USART_transmitStringToMCU(unsigned char* strData)
 {
   while (*strData)
-   USART_transmitByteToMCU(*strData++);
+  {
+    USART_transmitByteToMCU(*strData++);
+
+  }
 }

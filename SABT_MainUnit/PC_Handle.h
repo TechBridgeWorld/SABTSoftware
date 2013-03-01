@@ -12,8 +12,8 @@
 #include <stdint.h>
 #include <stdbool.h> 
 
-#define PC_CMD_INIT         120   //'x' for Init command
-#define PC_CMD_NEWMODES     77    //'M' followed  by new modes string
+#define PC_CMD_INIT         'x'    //'x' for Init command
+#define PC_CMD_NEWMODES     'M'    //'M' followed  by new modes string
 
 //Dealing with the user data
 //uint16_t PC_calculate_CRC(unsigned char* pstrMsg);

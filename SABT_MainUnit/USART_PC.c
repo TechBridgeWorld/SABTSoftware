@@ -38,7 +38,7 @@ unsigned char USART_PC_ReceiveAction(void)
   USART_PC_DATA_RDY=false;
   message_count ++;
 
-  //if we get to the end of the message
+  // Received an entire line; process it
   if(USART_PC_Received_Data == CARR_RETURN)
   {
     message_count = 0;
@@ -48,12 +48,14 @@ unsigned char USART_PC_ReceiveAction(void)
       PRINTF((unsigned char *)"SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
-    
+  
+  // if header not yet received, build it
   if(!USART_PC_header_received)
   {
     USART_PC_prefix[2]=USART_PC_Received_Data;
     USART_PC_prefix[0]=USART_PC_prefix[1];
     USART_PC_prefix[1]=USART_PC_prefix[2];
+
     if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C') && (message_count == 2))
     {
       USART_PC_header_received=true;

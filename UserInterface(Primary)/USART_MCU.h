@@ -11,6 +11,7 @@
 
 volatile char USART_MCU_Received_Data;
 volatile bool USART_MCU_DATA_RDY;
+volatile bool transmit_complete;
 
 void init_USART_MCU(void);
 void USART_transmitByteToMCU( unsigned char bData );

@@ -8,7 +8,7 @@
 
 #include "Globals.h"
 #include "Modes.h"
-#define ENTER 50
+#define ENTER 140
 
 #define A_BITS 0b00000001
 #define B_BITS 0b00000011
@@ -251,7 +251,7 @@ void PlayRequestedBits(char bits)
             RequestToPlayMP3file("MD2_z.MP3");
             break;
         default:
-            RequestToPlayMP3file("WRONG.MP3");
+            RequestToPlayMP3file("MD2ER1.MP3");
             break;
     }
 }
@@ -262,7 +262,7 @@ void PlayRequestedBits(char bits)
  *         sound file
  * @return Void
  */
-void MD2_PlayRequestedDot(void)
+void MD2_PlayRequestedDot(char MD2_Last_Dot)
 {
   switch(MD2_Last_Dot)
   {
@@ -489,45 +489,56 @@ void MD2_Main(void)
       current_random_letter = 0;
       initial_letter = 'a';
       use_random_letter = 0;
-      current_random_letter = (initial_letter + letter_set*5 +
-                               (generateRandomNumber()%5)) % 26;
-      current_letter = (initial_letter + letter_set*5 + current_count) % 26;
       RequestToPlayMP3file("MD2INT.MP3");
-      Current_State = STATE_REQUEST_INPUT1;
+      Current_State = SET_LETTER_VALS;
       break;
           
-    case STATE_REQUEST_INPUT1:
-      RequestToPlayMP3file("");
+    case SET_LETTER_VALS:
+	  current_random_letter = (initial_letter + ((letter_set*5 + (generateRandomNumber()%5)) % 26));
+      current_letter = (initial_letter + ((letter_set*5 + current_count) % 26));
+	  Current_State = STATE_REQUEST_INPUT1;
+	  break;
+
+	case STATE_REQUEST_INPUT1:
+      RequestToPlayMP3file("pl_wrt.MP3");
       Current_State = STATE_REQUEST_INPUT2;
       break;
           
     case STATE_REQUEST_INPUT2:
-      if(use_random_letter)
+      if(use_random_letter){
         PlayRequestedCell(current_random_letter);
-      else
+		Current_State = STATE_WAIT_INPUT;
+	  }
+      else{
         PlayRequestedCell(current_letter);
-      Current_State = STATE_WAIT_INPUT;
+        Current_State = STATE_WAIT_INPUT;
+      }
       break;
           
     case STATE_WAIT_INPUT:
       if(last_dot != 0){
         //The user just input their word
+
         if(last_dot == ENTER){
           //they got the word right, change letter unless you are at 5
           //alredy then enter random mode.
-          if(use_random_letter){
+
+          if(!use_random_letter){
             if(checkIfCorrect(button_bits, current_letter)){
               RequestToPlayMP3file("good.MP3");
               //if you have successfully completed this letter set
-              if(current_count == 5){
+              if(current_count == 4){
                 use_random_letter = 1;
-                Current_State = STATE_REQUEST_INPUT1;
+				current_count = 0;
+				random_count = 0;
+                Current_State = SET_LETTER_VALS;
               }
               //successfully completed a letter in letter set
               else{
                 current_count ++;
-                Current_State = STATE_REQUEST_INPUT1;
+                Current_State = SET_LETTER_VALS;
               }
+			  button_bits = 0;
             }
           
             //move to an error state so you can tell the user what they input
@@ -536,23 +547,28 @@ void MD2_Main(void)
               Current_State = STATE_ERROR_1;
             }
           }
+
           else
 		  {
             if(checkIfCorrect(button_bits, current_random_letter))
 			{
               RequestToPlayMP3file("good.MP3");
               //if you have successfully completed this letter set
-              if(random_count == 5)
+              if(random_count == 4)
 			  {
                 use_random_letter = 0;
-                Current_State = STATE_REQUEST_INPUT_1;
+				current_count = 0;
+				random_count = 0;
+				letter_set ++;
+                Current_State = SET_LETTER_VALS;
               }
               //successfully completed a letter in letter set
               else
 			  {
                 random_count ++;
-                Current_State = STATE_REQUEST_INPUT_1;
+                Current_State = SET_LETTER_VALS;
               }
+			  button_bits = 0;
             }
               
             //move to an error state so you can tell the user what they input
@@ -567,30 +583,39 @@ void MD2_Main(void)
 		{
           button_bits |= (1 << (atoi(&last_dot) - 1));
 		  // TODO change play requested dot to take 1 param
-          MD2_PlayRequestedDot();
+          MD2_PlayRequestedDot(last_dot);
+		  
+
         }
-              
+        last_dot = 0;      
       }
       break;
                
       case STATE_ERROR_1:
-        RequestToPlayMP3file("Pressed.MP3");
+        RequestToPlayMP3file("press.MP3");
         Current_State = STATE_ERROR_2;
       break;
           
       case STATE_ERROR_2:
         PlayRequestedBits(button_bits);
+		button_bits = 0;
         Current_State = STATE_REQUEST_INPUT_1;
       break;
 
     
 
   }
+   
 }
 
+
+/**
+ * @brief this function will be called when enter is pressed during mode
+ * @return Void
+ */
 void MD2_CallModeYesAnswer(void)
 {
-
+   last_dot = ENTER;
 }
 
 void MD2_CallModeNoAnswer(void)
@@ -604,8 +629,9 @@ void MD2_CallModeNoAnswer(void)
  */
 void MD2_InputDot(char thisDot)
 {
+  last_dot = thisDot;
   MD2_Last_Dot=thisDot;
-  Current_State=3;
+  //Current_State=3;
 }
 
 /**
@@ -617,6 +643,6 @@ void MD2_InputCell(char thisCell)
   if(MD2_Last_Dot!=0)
   {
     Last_Cell=thisCell;
-    Current_State=2;
+    //Current_State=2;
   }
 }

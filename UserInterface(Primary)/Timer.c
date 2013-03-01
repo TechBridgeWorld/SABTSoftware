@@ -41,21 +41,24 @@ void TimerRoutine(void)
   TMR1_INT = false;
   // Test string
   // USART_transmitStringToMCU((unsigned char*)"hello small waves");
-  
-  if(!LED_STAT){
+
+  if(!LED_STAT)
+  {
     //SetStatLED2(true);
     SetStatLED1(false);
     LED_STAT=true;
-  }else{
+  }
+  else
+  {
     //SetStatLED2(false);
     SetStatLED1(true);
     LED_STAT=false;
   }
+  ProcessTheDot();
   
-  
-  //CheckCommandButtons();
-  //RunCommandTasks();
-  
+  CheckCommandButtons();
+  RunCommandTasks();
+  /*
   if(TmrCntADC<2)
   {
     TmrCntADC++;
@@ -64,5 +67,5 @@ void TimerRoutine(void)
     //DetectTheDot();
     ProcessTheDot();
     TmrCntADC = 0;
-  }
+  }*/
 }
