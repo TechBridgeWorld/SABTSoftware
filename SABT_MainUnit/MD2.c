@@ -8,34 +8,6 @@
 
 #include "Globals.h"
 #include "Modes.h"
-#define ENTER 140
-
-#define A_BITS 0b00000001
-#define B_BITS 0b00000011
-#define C_BITS 0b00001001
-#define D_BITS 0b00011001
-#define E_BITS 0b00010001
-#define F_BITS 0b00001011
-#define G_BITS 0b00011011
-#define H_BITS 0b00010011
-#define I_BITS 0b00001010
-#define J_BITS 0b00011010
-#define K_BITS 0b00000101
-#define L_BITS 0b00000111
-#define M_BITS 0b00001101
-#define N_BITS 0b00011101
-#define O_BITS 0b00010101
-#define P_BITS 0b00001111
-#define Q_BITS 0b00011111
-#define R_BITS 0b00010111
-#define S_BITS 0b00001110
-#define T_BITS 0b00011110
-#define U_BITS 0b00100101
-#define V_BITS 0b00100111
-#define W_BITS 0b00111010
-#define X_BITS 0b00101101
-#define Y_BITS 0b00111101
-#define Z_BITS 0b00110101
 
 
 
@@ -76,7 +48,11 @@ int generateRandomNumber(){
  */
 void PlayRequestedCell(char last_cell)
 {
-  switch(last_cell)
+    String req_MP3;
+    sprintf(&req_MP3, "MD2_%c.MP3", last_cell);
+    RequestToPlayMP3file(reg_MP3);
+ 
+    /*switch(last_cell)
   {
     case 'a':
       RequestToPlayMP3file("MD2_a.MP3");
@@ -159,7 +135,110 @@ void PlayRequestedCell(char last_cell)
     default:
       RequestToPlayMP3file("MD2ER1.MP3");
       break;
-  }
+  }*/
+}
+
+
+/**
+ * @brief Changes letter bits into an actual char letter
+ * @param bits - char, bits that correspond to the buttons pressed
+ * @return char - letter that corresponds to buttons pressed 
+ */
+char getLetterFromBits(char bits){
+    alphbt_len = 26;
+    int i;
+    for(int i = 0; i < alphbt_len; i ++){
+        if(letter_bits_arr[i] == bits)
+            return letter_arr[i];
+        
+        
+    }
+    
+    /*switch(bits)
+    {
+        case A_BITS:
+            return 'a';
+            break;
+        case B_BITS:
+            return 'b';
+            break;
+        case C_BITS:
+            return 'c';
+            break;
+        case D_BITS:
+            return 'd';
+            break;
+        case E_BITS:
+            return 'e';
+            break;
+        case F_BITS:
+            return 'f';
+            break;
+        case G_BITS:
+            return 'g';
+            break;
+        case H_BITS:
+            return 'h';
+            break;
+        case I_BITS:
+            return 'i';
+            break;
+        case J_BITS:
+            return 'j';
+            break;
+        case K_BITS:
+            return 'k';
+            break;
+        case L_BITS:
+            return 'l';
+            break;
+        case M_BITS:
+            return 'm';
+            break;
+        case N_BITS:
+            return 'n';
+            break;
+        case O_BITS:
+            return 'o';
+            break;
+        case P_BITS:
+            return 'p';
+            break;
+        case Q_BITS:
+            return 'q';
+            break;
+        case R_BITS:
+            return 'r';
+            break;
+        case S_BITS:
+            return 's';
+            break;
+        case T_BITS:
+            return 't';
+            break;
+        case U_BITS:
+            return 'u';
+            break;
+        case V_BITS:
+            return 'v';
+            break;
+        case W_BITS:
+            return 'w';
+            break;
+        case X_BITS:
+            return 'x';
+            break;
+        case Y_BITS:
+            return 'y';
+            break;
+        case Z_BITS:
+            return 'z';
+            break;
+        default:
+            return '0';
+            break;
+    }*/
+    
 }
 
 /**
@@ -170,90 +249,7 @@ void PlayRequestedCell(char last_cell)
  */
 void PlayRequestedBits(char bits)
 {
-    switch(bits)
-    {
-        case A_BITS:
-            RequestToPlayMP3file("MD2_a.MP3");
-            break;
-        case B_BITS:
-            RequestToPlayMP3file("MD2_b.MP3");
-            break;
-        case C_BITS:
-            RequestToPlayMP3file("MD2_c.MP3");
-            break;
-        case D_BITS:
-            RequestToPlayMP3file("MD2_d.MP3");
-            break;
-        case E_BITS:
-            RequestToPlayMP3file("MD2_e.MP3");
-            break;
-        case F_BITS:
-            RequestToPlayMP3file("MD2_f.MP3");
-            break;
-        case G_BITS:
-            RequestToPlayMP3file("MD2_g.MP3");
-            break;
-        case H_BITS:
-            RequestToPlayMP3file("MD2_h.MP3");
-            break;
-        case I_BITS:
-            RequestToPlayMP3file("MD2_i.MP3");
-            break;
-        case J_BITS:
-            RequestToPlayMP3file("MD2_j.MP3");
-            break;
-        case K_BITS:
-            RequestToPlayMP3file("MD2_k.MP3");
-            break;
-        case L_BITS:
-            RequestToPlayMP3file("MD2_l.MP3");
-            break;
-        case M_BITS:
-            RequestToPlayMP3file("MD2_m.MP3");
-            break;
-        case N_BITS:
-            RequestToPlayMP3file("MD2_n.MP3");
-            break;
-        case O_BITS:
-            RequestToPlayMP3file("MD2_o.MP3");
-            break;
-        case P_BITS:
-            RequestToPlayMP3file("MD2_p.MP3");
-            break;
-        case Q_BITS:
-            RequestToPlayMP3file("MD2_q.MP3");
-            break;
-        case R_BITS:
-            RequestToPlayMP3file("MD2_r.MP3");
-            break;
-        case S_BITS:
-            RequestToPlayMP3file("MD2_s.MP3");
-            break;
-        case T_BITS:
-            RequestToPlayMP3file("MD2_t.MP3");
-            break;
-        case U_BITS:
-            RequestToPlayMP3file("MD2_u.MP3");
-            break;
-        case V_BITS:
-            RequestToPlayMP3file("MD2_v.MP3");
-            break;
-        case W_BITS:
-            RequestToPlayMP3file("MD2_w.MP3");
-            break;
-        case X_BITS:
-            RequestToPlayMP3file("MD2_x.MP3");
-            break;
-        case Y_BITS:
-            RequestToPlayMP3file("MD2_y.MP3");
-            break;
-        case Z_BITS:
-            RequestToPlayMP3file("MD2_z.MP3");
-            break;
-        default:
-            RequestToPlayMP3file("MD2ER1.MP3");
-            break;
-    }
+    PlayRequestedCell(getLetterFromBits(bits));
 }
 
 
@@ -264,27 +260,10 @@ void PlayRequestedBits(char bits)
  */
 void MD2_PlayRequestedDot(char MD2_Last_Dot)
 {
-  switch(MD2_Last_Dot)
-  {
-    case '1':
-      RequestToPlayMP3file("MD1_1.MP3");
-      break;
-    case '2':
-      RequestToPlayMP3file("MD1_2.MP3");
-      break;
-    case '3':
-      RequestToPlayMP3file("MD1_3.MP3");
-      break;
-    case '4':
-      RequestToPlayMP3file("MD1_4.MP3");
-      break;
-    case '5':
-      RequestToPlayMP3file("MD1_5.MP3");
-      break;
-    case '6':
-      RequestToPlayMP3file("MD1_6.MP3");
-      break;
-  }
+    String req_MP3;
+    sprintf(&req_MP3, "MD2_%c.MP3", MD2_Last_Dot);
+    RequestToPlayMP3file(reg_MP3);
+    
 }
 
 /**
@@ -307,7 +286,10 @@ void MD2_Reset(void)
  * @return bool - return true if they match, and false, if they do not
  */
 bool checkIfCorrect(char button_bits, char current_letter){
-    switch(current_letter)
+    char letter_from_bits = getLetterFromBits(button_bits);
+    return (letter_from_bits == current_letter);
+    
+    /*switch(current_letter)
     {
         case 'a':
             if(button_bits == A_BITS)
@@ -468,13 +450,32 @@ bool checkIfCorrect(char button_bits, char current_letter){
         default:
             return false;
             break;
-    }
+    }*/
     
 }
 
 
 /**
- * @brief  Step through the main stages in the code. 
+ * @brief This function sets up in the initial values needed to make the program work
+ * @return Void
+ */
+void setup_initial(){
+    button_bits = 0;
+    letter_set = 0;
+    current_count = 0;
+    random_count = 0;
+    current_random_letter = 0;
+    initial_letter = 'a';
+    use_random_letter = 0;
+    char [] letter_bits_arr = {A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, H_BITS, I_BITS, J_BITS,
+        K_BITS, L_BITS, M_BITS, N_BITS, O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS,
+        U_BITS, V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS};
+    char [] letter_bits = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+        'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+}
+
+/**
+ * @brief  Step through the main stages in the code.
  * @return Void
  */
 void MD2_Main(void)
@@ -482,13 +483,7 @@ void MD2_Main(void)
   switch(Current_State)
   {
     case STATE_INITIAL:
-      button_bits = 0;
-      letter_set = 0;
-      current_count = 0;
-      random_count = 0;
-      current_random_letter = 0;
-      initial_letter = 'a';
-      use_random_letter = 0;
+      setup_initial();
       RequestToPlayMP3file("MD2INT.MP3");
       Current_State = SET_LETTER_VALS;
       break;
