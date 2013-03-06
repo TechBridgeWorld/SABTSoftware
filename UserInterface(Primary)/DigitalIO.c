@@ -163,8 +163,8 @@ void run_command_tasks(void)
   // Flip from reading / writing mode
   if((vol_down_state >= BUTTON_ON) && (vol_up_state >= BUTTON_ON)) // Flip the keyboard
   {
-    if(InterfaceType == 1) InterfaceType = 2;
-    else InterfaceType = 1;
+    if(interface_type = INTERFACE_READING) interface_type = INTERFACE_WRITING;
+    else interface_type = INTERFACE_READING;
     return;
   }
   if(vol_up_state == BUTTON_ON)
