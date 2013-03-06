@@ -213,6 +213,7 @@ void Enter1Task(void)
   SetStatLED2(true);
   SendMsgPayLoad[0] = 0x01;
   SendPacket('D',(char*)&SendMsgPayLoad,1);
+  delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();
   CaptureCellValue();
 }
 

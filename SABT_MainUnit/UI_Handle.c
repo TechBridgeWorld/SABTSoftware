@@ -193,14 +193,16 @@ bool UI_parse_message(bool mp3_is_playing)
         return true;
       }
     }
-    
+    char buf[10];
+	sprintf(buf, "%c\r\n", message_type);
+	USART_transmitStringToPC((unsigned char*)buf);
     // Handle each type of message separately
     switch(message_type)
     {
       case 'A':                             // Single braille dot
         UI_InputDotToCurrentMode(USART_UI_ReceivedPacket[5]);
         break;
-      case 'B':                             // Single Braille cell
+      case 'B':  
         UI_InputCellToCurrentMode(USART_UI_ReceivedPacket[5]);
         break;
       case 'C':                             // Error message

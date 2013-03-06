@@ -8,6 +8,8 @@
 
 #include "Globals.h"
 #include "Modes.h"
+//#include "letter_globals.h"
+
 #define ENTER 140
 
 #define A_BITS 0b00000001
@@ -521,7 +523,7 @@ void MD2_Main(void)
 
         if(last_dot == ENTER){
           //they got the word right, change letter unless you are at 5
-          //alredy then enter random mode.
+          //already then enter random mode.
 
           if(!use_random_letter){
             if(checkIfCorrect(button_bits, current_letter)){
@@ -615,7 +617,7 @@ void MD2_Main(void)
  */
 void MD2_CallModeYesAnswer(void)
 {
-   last_dot = ENTER;
+  last_dot = ENTER;
 }
 
 void MD2_CallModeNoAnswer(void)
