@@ -131,6 +131,8 @@ End of test code
     if(UI_MP3_file_Pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
       PlayMP3file(fileName);
+	  // KORY CHANGED
+	  UI_MP3_file_Pending = false;
     }
     UI_RunMainOfCurrentMode();
   }
@@ -162,9 +164,12 @@ ISR(TIMER1_COMPA_vect)
  */
 ISR(USART1_RX_vect)
 {
-  //char buf[10];
+  // KORY CHANGED
+  if (!UI_MP3_file_Pending) {
   USART_Keypad_Received_Data = UDR1;
   USART_Keypad_DATA_RDY = true;
+  }
+  
   //set_last_dot(USART_Keypad_Received_Data);
   //set_last_dot2(USART_Keypad_Received_Data);
   //Set_last_dot(USART_Keypad_Received_Data); // TODO delete this handled elsewhere
@@ -190,114 +195,13 @@ ISR(USART0_RX_vect)
 //
 };
 
-
-/*
-ISR(_VECTOR(1)){
-  
-}
-ISR(_VECTOR(2)){
-  
-}
-ISR(_VECTOR(3)){
-  
-}
-ISR(_VECTOR(4)){
-  
-}
-ISR(_VECTOR(5)){
-  
-}
-ISR(_VECTOR(6)){
-  
-}
-ISR(_VECTOR(7)){
-  
-}
-ISR(_VECTOR(8)){
-  
-}
-ISR(_VECTOR(9)){
-  
-}
-ISR(_VECTOR(10)){
-  
-}
-ISR(_VECTOR(11)){
-  
-}
-ISR(_VECTOR(12)){
-  
-}
-ISR(_VECTOR(14)){
-  
-}
-ISR(_VECTOR(15)){
-  
-}
-ISR(_VECTOR(16)){
-  
-}
-ISR(_VECTOR(17)){
-  
-}
-ISR(_VECTOR(18)){
-  
-}
-ISR(_VECTOR(19)){
-  
-}
-//ISR(_VECTOR(20)){
-  
-//}
-ISR(_VECTOR(21)){
-  
-}
-ISR(_VECTOR(22)){
-  
-}
-ISR(_VECTOR(23)){
-  
-}
-ISR(_VECTOR(24)){
-  
-}
-ISR(_VECTOR(25)){
-  
-}
-ISR(_VECTOR(26)){
-  
-}
-ISR(_VECTOR(27)){
-  
-}
-ISR(_VECTOR(28)){
-  
-}
-ISR(_VECTOR(29)){
-  TX_NEWLINE_PC;
-}
-ISR(_VECTOR(30)){
-  TX_NEWLINE_PC;
-}
-ISR(_VECTOR(31)){
-  
-}
-ISR(_VECTOR(32)){
-  
-}
-ISR(_VECTOR(33)){
-  
-}
-ISR(_VECTOR(34)){
-  
-}
-*/
 /**
  * @brief Initialize the system and interrupts
  * @return Void
  */
 void InitializeSystem(void)
 {
+  UI_MP3_file_Pending = false;
   timer_interrupt = false;   // clear the timer interrupt flag
   PORTA = 0x00;
   DDRA = 0xFF;  

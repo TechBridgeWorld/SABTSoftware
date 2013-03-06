@@ -440,7 +440,8 @@ unsigned char PlayMP3file (unsigned char *fileName)
   unsigned int iAudioByteCnt;
   bool bEndOfFile=false;
 
-  UI_MP3_file_Pending=false;
+  // KORY CHANGED
+  //UI_MP3_file_Pending=false;
 
   error = convertFileName (fileName); //convert fileName into FAT format
   if(error) return 2;
@@ -484,8 +485,10 @@ unsigned char PlayMP3file (unsigned char *fileName)
             if(iAudioByteCnt++==k)return 0;    
           }  
         }
+
+		// KORY CHANGED
         //After playing a 32 bytes of data, check the user inputs
-        if(USART_Keypad_DATA_RDY)
+        /*if(USART_Keypad_DATA_RDY)
         {
           USART_Keypad_ReceiveAction();
         }
@@ -496,7 +499,7 @@ unsigned char PlayMP3file (unsigned char *fileName)
         if(USART_UI_Message_ready) //If a message ready from the user interface, process it
         {
           UI_parse_message(true);
-        }
+        }*/
       }
       if(bEndOfFile)
       {

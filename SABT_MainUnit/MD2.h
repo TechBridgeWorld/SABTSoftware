@@ -62,9 +62,6 @@ char current_letter;
 char current_random_letter;
 char use_random_letter;
 
-char[] letter_bits_arr;
-char[] letter_arr;
-
 void MD2_Main(void);
 void MD2_Reset(void);
 void MD2_CallModeYesAnswer(void);

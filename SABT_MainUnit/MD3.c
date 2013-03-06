@@ -296,7 +296,7 @@ void MD3_Main(void)
 	  if (validLetter(Last_Cell)) {
 	    char buf[16];
 		sprintf(buf, "MD2_%c.mp3", entered_letter);
-		PRINTF(buf);
+		USART_transmitStringToPC((unsigned char*)buf);
         RequestToPlayMP3file(buf);
         MD3_Current_State = STATE_CHECK_IF_CORRECT;
       } else {
@@ -306,20 +306,25 @@ void MD3_Main(void)
 	  break;
     case STATE_INVALID_INPUT:
 	  PRINTF("INVALID\r\n");
-      /*int i;
-      if (length_current_word > 0) {
-        RequestToPlayMP3file("currently_entered.mp3");
-        for (i=0; i<length_current_word; i++) {
-          RequestToPlayMP3file(strcat(entered_word[i], ".mp3"));
-          // pause here in order to play multiple files with RequestToPlayMP3file??
-        }
-      }*/
-      MD3_Current_State = STATE_WAIT_INPUT;
+      
+      //RequestToPlayMP3file("currently_entered.mp3");
+	  char buf[16];
+	  sprintf(buf, "MD2_%c.mp3", animal[current_word_index]);
+      RequestToPlayMP3file(buf);
+	  current_word_index++;
+
+	  if (current_word_index == length_current_word) {
+        MD3_Current_State = STATE_WAIT_INPUT;
+		current_word_index = 0; 
+	  }
       break;
     case STATE_CHECK_IF_CORRECT:
 	  PRINTF("CHECK\r\n");
       if (animal[length_current_word] == entered_letter) {
 		length_current_word++;
+		char buf[8];
+		sprintf(buf, "%d %d\r\n", length_current_word, strlen(animal));
+		USART_transmitStringToPC(buf);
         if (length_current_word != strlen(animal))
           MD3_Current_State = STATE_CORRECT_INPUT;
         else
@@ -330,7 +335,6 @@ void MD3_Main(void)
       break;
     case STATE_WRONG_INPUT:
 	  PRINTF("WRONG\r\n");
-      //RequestToPlayMP3file("incorrect.mp3");
 	  RequestToPlayMP3file("no.mp3");
       MD3_Current_State = STATE_WAIT_INPUT;
       break;
@@ -347,9 +351,7 @@ void MD3_Main(void)
   }
 }
 
-void MD3_CallModeYesAnswer(void){
-  last_dot = ENTER;
-}
+void MD3_CallModeYesAnswer(void){}
 void MD3_CallModeNoAnswer(void){}
 
 /**
@@ -358,8 +360,8 @@ void MD3_CallModeNoAnswer(void){}
  */
 void MD3_InputDot(char thisDot)
 {
-  MD3_Last_Dot=thisDot;
-  //MD3_current_state=2;
+  MD3_Last_Dot = thisDot;
+  MD3_PlayRequestedDot();
 }
 
 /**
@@ -368,12 +370,9 @@ void MD3_InputDot(char thisDot)
  */
 void MD3_InputCell(char thisCell)
 {
-  PRINTF("Got a cell\r\n");
-
-  if(MD3_Last_Dot!=0)
+  if(MD3_Last_Dot != 0)
   {
     Last_Cell = thisCell;
 	MD3_Current_State = STATE_PROC_INPUT;
-    //Current_State=2;
   }
 }

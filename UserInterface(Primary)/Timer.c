@@ -19,7 +19,7 @@ void initTimer(void)
   TMR1_INT = false;
   TCCR1A = 0x00;
   TCCR1B = 0x0D;
-  OCR1A = 390;            // 0.05s interval
+  OCR1A = 390;            // 0.5s interval
   TIMSK1 |= (1<<OCIE1A);  // Enable timer interrupt
   TmrCntADC = 0;  // TODO what is this?
 }

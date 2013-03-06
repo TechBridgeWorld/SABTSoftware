@@ -193,9 +193,7 @@ bool UI_parse_message(bool mp3_is_playing)
         return true;
       }
     }
-    char buf[10];
-	sprintf(buf, "%c\r\n", message_type);
-	USART_transmitStringToPC((unsigned char*)buf);
+
     // Handle each type of message separately
     switch(message_type)
     {
@@ -209,7 +207,7 @@ bool UI_parse_message(bool mp3_is_playing)
         PRINTF("[UI_parse_message] An error occurred in the UI.");
         break;
       case 'D':                             // Control button
-	  	PRINTF("CONTROL BUTTON PRESSED");
+	  	//PRINTF("CONTROL BUTTON PRESSED");
         UI_ControlKeyPressed();
         break;
       case 'E':                             // Acknowledgement
@@ -253,7 +251,7 @@ void UI_ControlKeyPressed(void)
     case UI_CMD_NONE:
       break;
     case UI_CMD_ENT1: // Enter a mode
-      USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
       TX_NEWLINE_PC; 
       if(!UI_MODE_SELECTED) //Then this command is to select the mode
       {
@@ -274,7 +272,7 @@ void UI_ControlKeyPressed(void)
       }
       break;
     case UI_CMD_ENT2: // Exit a mode
-      USART_transmitStringToPCFromFlash(PSTR("Enter 2 pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Enter 2 pressed"));
       TX_NEWLINE_PC;
       if(UI_MODE_SELECTED) //This might be an exit from mode command or "NO" command in the mode
       {
@@ -291,7 +289,7 @@ void UI_ControlKeyPressed(void)
       //This has no effect when no mode is selected
       break;
     case UI_CMD_MFOR: // Move forward in lsit of modes
-      USART_transmitStringToPCFromFlash(PSTR("Mode 1 pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Mode 1 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
       {
@@ -310,7 +308,7 @@ void UI_ControlKeyPressed(void)
       }
       break;
     case UI_CMD_MREV: // Move backwards in list of modes
-      USART_transmitStringToPCFromFlash(PSTR("Mode 2 pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Mode 2 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
       {
@@ -329,12 +327,12 @@ void UI_ControlKeyPressed(void)
       }    
       break;
     case UI_CMD_VOLU: // Volume Up
-      USART_transmitStringToPCFromFlash(PSTR("Vol UP pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Vol UP pressed"));
       TX_NEWLINE_PC;
       VS1053_IncreaseVol();
       break;
     case UI_CMD_VOLD: // Volume down
-      USART_transmitStringToPCFromFlash(PSTR("Vol DOWN pressed"));
+      //USART_transmitStringToPCFromFlash(PSTR("Vol DOWN pressed"));
       TX_NEWLINE_PC;
       VS1053_DecreaseVol();
       break;

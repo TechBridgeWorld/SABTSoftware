@@ -12,6 +12,12 @@
 int Current_State;
 char Last_Cell;
 char MD2_Last_Dot;
+//@TODO   MAKE THIS BETTER
+char letter_bits_arr[26] = {A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, H_BITS, I_BITS, J_BITS,
+        K_BITS, L_BITS, M_BITS, N_BITS, O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS,
+        U_BITS, V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS};
+char letter_arr[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+        'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 //Current_State - Defines the status of the mode
 /* Vales and meanings
 0 - Just started (in the begining, play the Welcome message)
@@ -46,9 +52,10 @@ int generateRandomNumber(){
  */
 void PlayRequestedCell(char last_cell)
 {
-    String req_MP3;
-    sprintf(&req_MP3, "MD2_%c.MP3", last_cell);
-    RequestToPlayMP3file(reg_MP3);
+    //this will hold formatted file to access
+    char req_MP3[10];
+    sprintf((char*)req_MP3, "MD2_%c.MP3", last_cell);
+    RequestToPlayMP3file(req_MP3);
  
     /*switch(last_cell)
   {
@@ -141,11 +148,12 @@ void PlayRequestedCell(char last_cell)
  * @brief Changes letter bits into an actual char letter
  * @param bits - char, bits that correspond to the buttons pressed
  * @return char - letter that corresponds to buttons pressed 
+ *                on error - not found bits, return -1
  */
 char getLetterFromBits(char bits){
-    alphbt_len = 26;
+    int alphbt_len = 26;
     int i;
-    for(int i = 0; i < alphbt_len; i ++){
+    for(i = 0; i < alphbt_len; i ++){
         if(letter_bits_arr[i] == bits)
             return letter_arr[i];
         
@@ -236,7 +244,7 @@ char getLetterFromBits(char bits){
             return '0';
             break;
     }*/
-    
+    return -1;
 }
 
 /**
@@ -258,9 +266,10 @@ void PlayRequestedBits(char bits)
  */
 void MD2_PlayRequestedDot(char MD2_Last_Dot)
 {
-    String req_MP3;
-    sprintf(&req_MP3, "MD2_%c.MP3", MD2_Last_Dot);
-    RequestToPlayMP3file(reg_MP3);
+    //this will hold formatted file to access
+    char req_MP3[10];
+    sprintf((char*)req_MP3, "MD2_%c.MP3", MD2_Last_Dot);
+    RequestToPlayMP3file(req_MP3);
     
 }
 
@@ -465,11 +474,6 @@ void setup_initial(){
     current_random_letter = 0;
     initial_letter = 'a';
     use_random_letter = 0;
-    char [] letter_bits_arr = {A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, H_BITS, I_BITS, J_BITS,
-        K_BITS, L_BITS, M_BITS, N_BITS, O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS,
-        U_BITS, V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS};
-    char [] letter_bits = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-        'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 }
 
 /**
