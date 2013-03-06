@@ -29,94 +29,94 @@ void delay10()
 
 //reset
 /*ISR(_VECTOR(1)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }*/
 
 /* TEST VECTORS
 ISR(_VECTOR(2)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(3)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(4)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(5)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(6)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(7)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(8)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(9)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(10)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }*/
 /*ISR(_VECTOR(11)){
   if(!LED_STAT){
-    SetStatLED2(true);
-    SetStatLED1(false);
+    set_stat_led2(true);
+    set_stat_led1(false);
     LED_STAT=true;
   }else{
-    SetStatLED2(false);
-    SetStatLED1(true);
+    set_stat_led2(false);
+    set_stat_led1(true);
     LED_STAT=false;
   }
 }*/
 /*ISR(_VECTOR(12)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(13)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(14)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(15)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(16)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(17)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(18)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(19)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }*/
 ISR(_VECTOR(20)){
   transmit_complete = true;
-  SetStatLED2(true);
-  //SetStatLED2(true);
+  set_stat_led2(true);
+  //set_stat_led2(true);
 }/*
 ISR(_VECTOR(21)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(22)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(23)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(24)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(25)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 ISR(_VECTOR(26)){
-  SetStatLED2(true);
+  set_stat_led2(true);
 }
 */
 

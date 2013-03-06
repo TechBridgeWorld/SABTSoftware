@@ -44,14 +44,14 @@ void TimerRoutine(void)
 
   if(!LED_STAT)
   {
-    //SetStatLED2(true);
-    SetStatLED1(false);
+    //set_stat_led2(true);
+    set_stat_led1(false);
     LED_STAT=true;
   }
   else
   {
-    //SetStatLED2(false);
-    SetStatLED1(true);
+    //set_stat_led2(false);
+    set_stat_led1(true);
     LED_STAT=false;
   }
   ProcessTheDot();

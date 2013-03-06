@@ -12,17 +12,16 @@
  * @brief initialize the IO ports
  * @return Void
  */
-void Initialize_Digital_IO(void)
+void initialize_digital_io(void)
 {
-  Enter1State = 0;
-  Enter2State = 0;
-  Mode1State = 0;
-  Mode2State = 0;
-  VolUpState = 0;
-  VolDownState = 0;
+  enter1_state = BUTTON_OFF;
+  enter2_state = BUTTON_OFF;
+  mode1_state = BUTTON_OFF;
+  mode2_state = BUTTON_OFF;
+  vol_up_state = BUTTON_OFF;
+  vol_down_state = BUTTON_OFF;
     
   // Clear the DDRC bits
-  // TODO: what are each of these?
   DDRC &= ~_BV(UI_BR1);  
   DDRC &= ~_BV(UI_BR2);
   DDRC &= ~_BV(UI_BR3);
@@ -31,7 +30,6 @@ void Initialize_Digital_IO(void)
   DDRC &= ~_BV(UI_BR6);
 
   // Clear the DDRB bits
-  // TODO: what are each of these?
   DDRB &= ~_BV(UI_ENTER1);
   DDRB &= ~_BV(UI_ENTER2);
   DDRB &= ~_BV(UI_MODE1);
@@ -44,9 +42,9 @@ void Initialize_Digital_IO(void)
   DDRD &= ~_BV(UI_VOLDOWN);
   DDRD |= _BV(UI_STAT1)|_BV(UI_STAT2);
 
-  //switch off stat LEDs
-  SetStatLED1(false);
-  SetStatLED2(false);
+  // LED lights are off initially
+  set_stat_led1(false);
+  set_stat_led2(false);
 }
 
 /**
@@ -54,153 +52,130 @@ void Initialize_Digital_IO(void)
  * @return Void
  * TODO document each step / if statement here
  */
-void CheckCommandButtons(void)
+void check_command_buttons(void)
 {
-  if(!(PINB & (1<<UI_ENTER1)))
+  // Check to see if enter1 is pressed
+  if(!(PINB & (1 << UI_ENTER1)))
   {
-    if(Enter1State==0)
+    if(enter1_state == BUTTON_OFF)
     {
-      //_delay_ms(100);
-      if(!(PINB & (1<<UI_ENTER1)))
+      if(!(PINB & (1 << UI_ENTER1)))
       {
-        Enter1State=1;
+        enter1_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    Enter1State=0;
-  }
+  else enter1_state = BUTTON_OFF;
 
-  if(!(PINB & (1<<UI_ENTER2)))
+  // Check to see if enter2 (exit) is pressed
+  if(!(PINB & (1 << UI_ENTER2)))
   {
-    if(Enter2State==0)
+    if(enter2_state == BUTTON_OFF)
     {
       _delay_ms(100);
-      if(!(PINB & (1<<UI_ENTER2)))
+      if(!(PINB & (1 << UI_ENTER2)))
       {
-        Enter2State=1;
+        enter2_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    Enter2State=0;
-  }
+  else enter2_state = BUTTON_OFF;
 
-  if(!(PINB & (1<<UI_MODE1)))
+  // Check to see if mode1 (left mode button) is pressed
+  if(!(PINB & (1 << UI_MODE1)))
   {
-    if(Mode1State==0)
+    if(mode1_state == BUTTON_OFF)
     {
-      //_delay_ms(100);
-      if(!(PINB & (1<<UI_MODE1)))
+      if(!(PINB & (1 << UI_MODE1)))
       {
-        Mode1State=1;
+        mode1_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    Mode1State=0;
-  }
+  else mode1_state = BUTTON_OFF;
 
-  if(!(PINB & (1<<UI_MODE2)))
+  // Check to see if mode2 (right mode button) is pressed
+  if(!(PINB & (1 << UI_MODE2)))
   {
-    if(Mode2State==0)
+    if(mode2_state == BUTTON_OFF)
     {
-      //_delay_ms(100);
-      if(!(PINB & (1<<UI_MODE2)))
+      if(!(PINB & (1 << UI_MODE2)))
       {
-        Mode2State=1;
+        mode2_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    Mode2State=0;
-  }
+  else mode2_state = BUTTON_OFF;
 
-  if(!(PIND & (1<<UI_VOLUP)))
+  // Check to see if volume up button is pressed
+  if(!(PIND & (1 << UI_VOLUP)))
   {
-    if(VolUpState==0)
+    if(vol_up_state == BUTTON_OFF)
     {
-      //_delay_ms(100);
-      if(!(PIND & (1<<UI_VOLUP)))
+      if(!(PIND & (1 << UI_VOLUP)))
       {
-        VolUpState=1;
+        vol_up_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    VolUpState=0;
-  }
+  else vol_up_state = BUTTON_OFF;
 
-  if(!(PIND & (1<<UI_VOLDOWN)))
+  // Check to see if volume down button is pressed
+  if(!(PIND & (1 << UI_VOLDOWN)))
   {
-    if(VolDownState==0)
+    if(vol_down_state == 0)
     {
-      //_delay_ms(100);
-      if(!(PIND & (1<<UI_VOLDOWN)))
+      if(!(PIND & (1 << UI_VOLDOWN)))
       {
-        VolDownState=1;
+        vol_down_state = BUTTON_ON;
       }
     }
   }
-  else
-  {
-    VolDownState=0;
-  }
+  else vol_down_state = BUTTON_OFF;
 }
 
 /**
  * @brief Run command tasks (?)
  * @return Void
- * TODO document these cases
  */
-void RunCommandTasks(void)
+void run_command_tasks(void)
 {
-  if(Enter1State==1)
+  if(enter1_state == BUTTON_ON)
   {
-    Enter1Task();
-    Enter1State=2;  //Set it as used
+    enter1_task();
+    enter1_state = BUTTON_PROCESSED;
   }
-  if(Enter2State==1)
+  if(enter2_state == BUTTON_ON)
   {
-    Enter2Task();
-    Enter2State=2;  //Set it as used
+    enter2_task();
+    enter2_state = BUTTON_PROCESSED;
   }
-  if(Mode1State==1)
+  if(mode1_state == BUTTON_ON)
   {
-    Mode1Task();
-    Mode1State=2;  //Set it as used
+    mode1_task();
+    mode1_state = BUTTON_PROCESSED;
   }
-  if(Mode2State==1)
+  if(mode2_state == BUTTON_ON)
   {
-    Mode2Task();
-    Mode2State=2;  //Set it as used
+    mode2_task();
+    mode2_state = BUTTON_PROCESSED;
   }
-  if((VolDownState >= 1) && (VolUpState >= 1)) //Flip the keyboard
+  // Flip from reading / writing mode
+  if((vol_down_state >= BUTTON_ON) && (vol_up_state >= BUTTON_ON)) // Flip the keyboard
   {
-    if(InterfaceType==1)
-    {
-      InterfaceType=2;
-    }
-    else
-    {
-      InterfaceType=1;
-    }
+    if(InterfaceType == 1) InterfaceType = 2;
+    else InterfaceType = 1;
     return;
   }
-  if(VolUpState==1)
+  if(vol_up_state == BUTTON_ON)
   {
-    VolUpTask();
-    VolUpState=2;  //Set it as used
+    vol_up_task();
+    vol_up_state = BUTTON_PROCESSED;
   }
-  if(VolDownState==1)
+  if(vol_down_state == BUTTON_ON)
   {
-    VolDownTask();
-    VolDownState=2;  //Set it as used
+    vol_down_task();
+    vol_down_state = BUTTON_PROCESSED;
   }
 }
 
@@ -208,12 +183,14 @@ void RunCommandTasks(void)
  * @brief enter1 button pressed
  * @return Void
  */
-void Enter1Task(void)
+void enter1_task(void)
 {
-  SetStatLED2(true);
-  mcu_message_payload[0] = 0x01;
-  send_packet('D',(char*)&mcu_message_payload,1);
+  set_stat_led2(true);
+  mcu_message_payload[0] = ENTER1_PAYLOAD;
+  send_packet('D', (char*)&mcu_message_payload, 1);
   delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();
+
+  // Send the value of the currently entered cell
   CaptureCellValue();
 }
 
@@ -221,166 +198,74 @@ void Enter1Task(void)
  * @brief enter2 button pressed
  * @return Void
  */
-void Enter2Task(void)
+void enter2_task(void)
 {
-  SetStatLED2(false);
-  mcu_message_payload[0] = 0x02;
+  set_stat_led2(false);
+  mcu_message_payload[0] = ENTER2_PAYLOAD;
   mcu_message_payload[1] = 'E';
-  send_packet('D',(char*)&mcu_message_payload,2);
+  send_packet('D', (char*)&mcu_message_payload, 2);
 }
 
 /**
  * @brief mode1 button pressed
  * @return Void
  */
-void Mode1Task(void)
+void mode1_task(void)
 {
-  SetStatLED1(true);
-  mcu_message_payload[0] = 0x03;
-  send_packet('D',(char*)&mcu_message_payload,1);
+  set_stat_led1(true);
+  mcu_message_payload[0] = MODE1_PAYLOAD;
+  send_packet('D', (char*)&mcu_message_payload, 1);
 }
 
 /**
  * @brief mode2 button pressed
  * @return Void
  */
-void Mode2Task(void)
+void mode2_task(void)
 {
-  SetStatLED1(false);
-  mcu_message_payload[0] = 0x04;
-  send_packet('D',(char*)&mcu_message_payload,1);
+  set_stat_led1(false);
+  mcu_message_payload[0] = MODE2_PAYLOAD;
+  send_packet('D', (char*)&mcu_message_payload, 1);
 }
 
 /**
  * @brief volume up button pressed
  * @return Void
  */
-void VolUpTask(void)
+void vol_up_task(void)
 {
-  mcu_message_payload[0] = 0x06;
-  send_packet('D',(char*)&mcu_message_payload,1);
+  mcu_message_payload[0] = VOL_UP_PAYLOAD;
+  send_packet('D', (char*)&mcu_message_payload, 1);
 }
 
 /**
  * @brief volume down button pressed
  * @return Void
  */
-void VolDownTask(void)
+void vol_down_task(void)
 {
-  mcu_message_payload[0] = 0x05;
+  mcu_message_payload[0] = VOL_DOWN_PAYLOAD;
   send_packet('D', (char*)&mcu_message_payload, 1);
 }
 
-// The following was commented out
-// TODO find out what these were for
-/*
-bool Enter1_Pressed(void)
-{
-//  if((PINB & (1<<UI_ENTER1))) return true;
-//  return false;
-  if(PINB & (1<<UI_ENTER1))
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
-bool Enter2_Pressed(void)
-{
-//  if((PINB & (1<<UI_ENTER2))) return true;
-//  return false;
-  if(PINB & (1<<UI_ENTER2))
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
-bool Mode1_Pressed(void)
-{
-  if((PINB & (1<<UI_MODE1))) 
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
-bool Mode2_Pressed(void)
-{
-  if((PINB & (1<<UI_MODE2))) 
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
-bool VolUp_Pressed(void)
-{
-  if((PIND & (1<<UI_VOLUP))) 
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-bool VolDown_Pressed(void)
-{
-  if((PIND & (1<<UI_VOLDOWN))) 
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-*/
-///////////////////////////////////
-
 /**
  * @brief set LED1 (yellow) to on or off
- * @param bState true turns on LED, false turns off LED
+ * @param led_on true turns on LED, false turns off LED
  * @return Void
  */
-void SetStatLED1(bool bState)
+void set_stat_led1(bool led_on)
 {
-  if(!bState)
-  {
-    PORTD &= ~_BV(UI_STAT1);
-  }
-  else
-  {
-    PORTD |= _BV(UI_STAT1);
-  }
+  if(!led_on) PORTD &= ~_BV(UI_STAT1);
+  else PORTD |= _BV(UI_STAT1);
 }
 
 /**
  * @brief set LED1 (green) to on or off
- * @param bState true turns on LED, false turns off LED
+ * @param led_on true turns on LED, false turns off LED
  * @return Void
  */
-void SetStatLED2(bool bState)
+void set_stat_led2(bool led_on)
 {
-  if(!bState)
-  {
-    PORTD &= ~_BV(UI_STAT2);
-  }
-  else
-  {
-    PORTD |= _BV(UI_STAT2);
-  }
+  if(!led_on) PORTD &= ~_BV(UI_STAT2);
+  else PORTD |= _BV(UI_STAT2);
 }
