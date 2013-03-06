@@ -8,15 +8,13 @@
 
 #include "GlobalsUI.h"
 
-char TempBytes[20];
-
 /**
  * @brief initialize the USART hardware
  *        Baud Rate: 19,200
  *        Clock: 8MHz
  * @return Void
  */
-void init_USART_MCU(void)
+void init_usart_mcu(void)
 {
   UCSR0B = 0x00; //disable while setting baud rate
   UCSR0A = 0x00;
@@ -26,58 +24,52 @@ void init_USART_MCU(void)
   UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
 }
 
-// TODO: what does this do?
 /**
  * @brief interrupt handler for USART0_RX
+ * Fires when we receive data from the MCU.
  * @return Void
  */
-ISR(/* USART0_RX_vect */ _VECTOR(18)){ // actually  SPI_STC_vect
-  USART_MCU_Received_Data=UDR0;
-  USART_MCU_DATA_RDY=true;
+ISR(/* USART0_RX_vect */ _VECTOR(18))
+{
+  usart_mcu_received_data = UDR0;
+  usart_mcu_data_ready = true;
 };
 
 /**
  * @brief receive action sent from PC
  * @TODO: why is line commented out / how does it work
+ * @TODO: does the UI board ever directly get PC input?
  * @return Void
  */
-void USART_PC_ReceiveAction(void){
-  USART_MCU_DATA_RDY=false;
+void usart_pc_receive_action(void)
+{
+  usart_mcu_data_ready = false;
   //USART_transmitByteToMCU(USART_PC_Received_Data);
 }
 
 /**
  * @brief transmit a single byte to the data register
- * @param bData the data to transmit
- * @param UCSR0A : register
- * @param UDRE0 : USART Data register empty (bit 5 of UCSR0A
- * @param UDR0 : Data register
+ * @param data the data to transmit
  * @return Void (transmits data)
  */
-void USART_transmitByteToMCU( unsigned char bData )
+void usart_transmit_byte_to_mcu(unsigned char data)
 {
-  while (!(UCSR0A & (1<<UDRE0)))
-  {
-  }
-  //delay10();
-  
-
-  //while (!transmit_complete) {}
-  //transmit_complete = false;
-  //while (!(UCSR0A & (1<<TXC0))) {}
-  UDR0 = bData;
+  // Wait for the data register to be empty by checking for
+  // Data Register Empty flag (UDRE0)
+  while (!(UCSR0A & (1<<UDRE0)));
+  UDR0 = data;
 }
 
 /**
  * @brief transmit a string from flash memory
- * @param strData pointer to the beginnning of the string in flash mem
+ * @param str_data pointer to the beginnning of the string in flash mem
  * @return Void
  */
-void USART_transmitStringToMCUFromFlash(char* strData)
+void usart_transmit_string_to_mcu_from_flash(char* str_data)
 {
-  while (pgm_read_byte(&(*strData)))
+  while (pgm_read_byte(&(*str_data)))
   {
-    USART_transmitByteToMCU(pgm_read_byte(&(*strData++)));
+    usart_transmit_byte_to_mcu(pgm_read_byte(&(*str_data++)));
   }
 }
 
@@ -86,11 +78,10 @@ void USART_transmitStringToMCUFromFlash(char* strData)
  * @param strData pointer to the beginning of the string
  * @return Void
  */
-void USART_transmitStringToMCU(unsigned char* strData)
+void usart_transmit_string_to_mcu(unsigned char* str_data)
 {
-  while (*strData)
+  while (*str_data)
   {
-    USART_transmitByteToMCU(*strData++);
-
+    usart_transmit_byte_to_mcu(*str_data++);
   }
 }

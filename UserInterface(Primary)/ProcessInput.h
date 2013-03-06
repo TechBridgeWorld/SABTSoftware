@@ -9,11 +9,19 @@
 #ifndef _PROCESS_INPUT_H_
 #define _PROCESS_INPUT_H_
 
-volatile bool DotsPressed[6];
-volatile char InterfaceType; // 1=Reading, 2=Writing
+#define NUM_DOTS          6   // Number of braille dots in a cell
 
-void ResetCellState(void);
-void ProcessTheDot(void);
-void CaptureCellValue(void);
+#define INTERFACE_READING 1   // reading vs writing formation for dots
+#define INTERFACE_WRITING 2   // writing mode
+
+volatile bool dots_pressed[NUM_DOTS];
+volatile char interface_type;
+
+char processed_cell_value;
+uint8_t pi_last_dot_pressed;
+
+void reset_cell_state(void);
+void process_the_dot(void);
+void capture_cell_value(void);
 
 #endif /* _PROCESS_INPUT_H_ */
