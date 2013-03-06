@@ -11,11 +11,10 @@
 
 #define TIMER_INTERRUPT_RATE  390 
 
-volatile bool timer_interrupt;
+volatile bool timer_interrupt;  // Indicate interrupt should be processed
+volatile bool led_toggle;       // Toggle LEDs on and off
+
 void init_timer(void);
-
-volatile bool led_toggle;     // Toggle LEDs on and off
-
 void timer_routine(void);
 
 #endif /* _TIMER_H_ */
