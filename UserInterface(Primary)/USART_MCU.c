@@ -26,23 +26,24 @@ void init_USART_MCU(void)
   UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
 }
 
-// TODO: what does this do?
 /**
  * @brief interrupt handler for USART0_RX
+ * Fires when we receive data from the MCU.
  * @return Void
  */
 ISR(/* USART0_RX_vect */ _VECTOR(18)){ // actually  SPI_STC_vect
-  USART_MCU_Received_Data=UDR0;
-  USART_MCU_DATA_RDY=true;
+  USART_MCU_Received_Data = UDR0;
+  USART_MCU_DATA_RDY = true;
 };
 
 /**
  * @brief receive action sent from PC
  * @TODO: why is line commented out / how does it work
+ * @TODO: does the UI board ever directly get PC input?
  * @return Void
  */
 void USART_PC_ReceiveAction(void){
-  USART_MCU_DATA_RDY=false;
+  USART_MCU_DATA_RDY = false;
   //USART_transmitByteToMCU(USART_PC_Received_Data);
 }
 

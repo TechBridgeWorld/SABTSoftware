@@ -9,11 +9,13 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
-volatile bool TMR1_INT;
-void initTimer(void);
+#define TIMER_INTERRUPT_RATE  390 
 
-volatile bool LED_STAT; // TODO what is this
+volatile bool timer_interrupt;
+void init_timer(void);
 
-void TimerRoutine(void);
+volatile bool led_toggle;     // Toggle LEDs on and off
+
+void timer_routine(void);
 
 #endif /* _TIMER_H_ */

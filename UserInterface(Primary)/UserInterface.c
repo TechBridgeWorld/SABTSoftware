@@ -136,7 +136,7 @@ int main(void)//
     //USART_transmitStringToMCU((unsigned char*)"A message from the Primary UI Board.\r\n");
 
     // Check to see if timer interrupt has occurred
-    if(TMR1_INT)
+    if(timer_interrupt)
     {
       TimerRoutine();
     }
