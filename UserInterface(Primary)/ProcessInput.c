@@ -99,7 +99,7 @@ void ProcessTheDot(void)
     SendMsgPayLoad[2] = '1';
 
     // Send the packet (form A = dot input)
-    SendPacket('A', (char*)&SendMsgPayLoad, 3);
+    send_packet('A', (char*)&SendMsgPayLoad, 3);
   }
 }
 
@@ -125,6 +125,6 @@ void CaptureCellValue(void)
 
   SendMsgPayLoad[0]=ProcessedCellValue;          // 6-bit number representing the pressed dots
   SendMsgPayLoad[1]=1;                           // Always 1 for Primary UI - only 1 cell
-  SendPacket('B',(char*)&SendMsgPayLoad,2);      // Send the two bytes with message type of 'B'
+  send_packet('B',(char*)&SendMsgPayLoad,2);      // Send the two bytes with message type of 'B'
   ResetCellState();                              // Reset the cell sate for new letter
 }

@@ -211,8 +211,8 @@ void RunCommandTasks(void)
 void Enter1Task(void)
 {
   SetStatLED2(true);
-  SendMsgPayLoad[0] = 0x01;
-  SendPacket('D',(char*)&SendMsgPayLoad,1);
+  mcu_message_payload[0] = 0x01;
+  send_packet('D',(char*)&mcu_message_payload,1);
   delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();
   CaptureCellValue();
 }
@@ -224,9 +224,9 @@ void Enter1Task(void)
 void Enter2Task(void)
 {
   SetStatLED2(false);
-  SendMsgPayLoad[0] = 0x02;
-  SendMsgPayLoad[1]='E';
-  SendPacket('D',(char*)&SendMsgPayLoad,2);
+  mcu_message_payload[0] = 0x02;
+  mcu_message_payload[1] = 'E';
+  send_packet('D',(char*)&mcu_message_payload,2);
 }
 
 /**
@@ -236,8 +236,8 @@ void Enter2Task(void)
 void Mode1Task(void)
 {
   SetStatLED1(true);
-  SendMsgPayLoad[0]=0x03;
-  SendPacket('D',(char*)&SendMsgPayLoad,1);
+  mcu_message_payload[0] = 0x03;
+  send_packet('D',(char*)&mcu_message_payload,1);
 }
 
 /**
@@ -247,8 +247,8 @@ void Mode1Task(void)
 void Mode2Task(void)
 {
   SetStatLED1(false);
-  SendMsgPayLoad[0]=0x04;
-  SendPacket('D',(char*)&SendMsgPayLoad,1);
+  mcu_message_payload[0] = 0x04;
+  send_packet('D',(char*)&mcu_message_payload,1);
 }
 
 /**
@@ -257,8 +257,8 @@ void Mode2Task(void)
  */
 void VolUpTask(void)
 {
-  SendMsgPayLoad[0]=0x06;
-  SendPacket('D',(char*)&SendMsgPayLoad,1);
+  mcu_message_payload[0] = 0x06;
+  send_packet('D',(char*)&mcu_message_payload,1);
 }
 
 /**
@@ -267,8 +267,8 @@ void VolUpTask(void)
  */
 void VolDownTask(void)
 {
-  SendMsgPayLoad[0]=0x05;
-  SendPacket('D',(char*)&SendMsgPayLoad,1);
+  mcu_message_payload[0] = 0x05;
+  send_packet('D', (char*)&mcu_message_payload, 1);
 }
 
 // The following was commented out
