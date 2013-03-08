@@ -164,11 +164,8 @@ ISR(TIMER1_COMPA_vect)
  */
 ISR(USART1_RX_vect)
 {
-  // KORY CHANGED
-  if (!UI_MP3_file_Pending) {
   USART_Keypad_Received_Data = UDR1;
   USART_Keypad_DATA_RDY = true;
-  }
   
   //set_last_dot(USART_Keypad_Received_Data);
   //set_last_dot2(USART_Keypad_Received_Data);
