@@ -53,10 +53,16 @@ int generateRandomNumber(){
 void PlayRequestedCell(char last_cell)
 {
     //this will hold formatted file to access
-    char req_MP3[10];
-    sprintf((char*)req_MP3, "MD2_%c.MP3", last_cell);
-    RequestToPlayMP3file(req_MP3);
- 
+	if((last_cell >= 'a') && (last_cell <= 'z')){
+      char req_MP3[10];
+      sprintf((char*)req_MP3, "MD2_%c.MP3", last_cell);
+      RequestToPlayMP3file(req_MP3);
+    }
+	
+	else{
+	  RequestToPlayMP3file("MD2ER1.MP3");
+	} 
+
     /*switch(last_cell)
   {
     case 'a':
@@ -141,6 +147,26 @@ void PlayRequestedCell(char last_cell)
       RequestToPlayMP3file("MD2ER1.MP3");
       break;
   }*/
+}
+
+
+
+/**
+ * @brief Changes letter into letter bits
+ * @param let - char, charachter letter want to change to bits 
+ * @return char - letter that corresponds to buttons pressed 
+ *                on error - not found bits, return -1
+ */
+char get_bits_from_letters(char let){
+    int alphbt_len = 26;
+    int i;
+    for(i = 0; i < alphbt_len; i ++){
+        if(letter_arr[i] == let)
+            return letter_bits_arr[i];
+        
+        
+    }
+	return -1;
 }
 
 
@@ -268,7 +294,7 @@ void MD2_PlayRequestedDot(char MD2_Last_Dot)
 {
     //this will hold formatted file to access
     char req_MP3[10];
-    sprintf((char*)req_MP3, "MD2_%c.MP3", MD2_Last_Dot);
+    sprintf((char*)req_MP3, "MD1_%c.MP3", MD2_Last_Dot);
     RequestToPlayMP3file(req_MP3);
     
 }
@@ -474,6 +500,7 @@ void setup_initial(){
     current_random_letter = 0;
     initial_letter = 'a';
     use_random_letter = 0;
+	curr_button = '0';
 }
 
 /**
@@ -491,6 +518,7 @@ void MD2_Main(void)
       break;
           
     case SET_LETTER_VALS:
+	  curr_button = '0';
 	  current_random_letter = (initial_letter + ((letter_set*5 + (generateRandomNumber()%5)) % 26));
       current_letter = (initial_letter + ((letter_set*5 + current_count) % 26));
 	  Current_State = STATE_REQUEST_INPUT1;
@@ -508,10 +536,30 @@ void MD2_Main(void)
 	  }
       else{
         PlayRequestedCell(current_letter);
-        Current_State = STATE_WAIT_INPUT;
+        Current_State = STATE_BUTT_TO_PRESS_1;
       }
       break;
           
+    case STATE_BUTT_TO_PRESS_1:
+      RequestToPlayMP3file("press.MP3");
+      Current_State = STATE_BUTT_TO_PRESS_2;
+	  break;
+
+	case STATE_BUTT_TO_PRESS_2:
+      curr_button += 1;
+      
+	  char bits = get_bits_from_letters(current_letter);
+	  char curr_bit = (bits >> (atoi(&curr_button) - 1)) & 1;
+	  //get the bits for each depending on button count - and play sound if bit is set
+	  if(curr_bit){
+         MD2_PlayRequestedDot(curr_button);
+	  }
+	  
+	  if(atoi(&curr_button) == NUM_BUT)	  
+	     Current_State = STATE_WAIT_INPUT;
+      
+	  break;
+
     case STATE_WAIT_INPUT:
       if(last_dot != 0){
         //The user just input their word
@@ -589,6 +637,7 @@ void MD2_Main(void)
       break;
                
       case STATE_ERROR_1:
+	  //@TODO- change to pressed
         RequestToPlayMP3file("press.MP3");
         Current_State = STATE_ERROR_2;
       break;
