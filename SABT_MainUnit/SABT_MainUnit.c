@@ -17,8 +17,7 @@ unsigned char option, error, data, FAT32_active;
 unsigned int i;
 */
 
-void InitializeSystem(void);
-
+void initialize_system(void);
 
 /**
  * @brief Turns off/on bits 5,6,7 in Portd depending on LED_STAT to make the 3 LEDs on the board blink?
@@ -49,7 +48,7 @@ void timer_routine(void)
  */
 int main(void)
 {
-  InitializeSystem();
+  initialize_system();
 /*
 Code to test the file write section
 */
@@ -63,21 +62,21 @@ Code to test the file write section
   }
   TestFileContent[17]='$';
   ReplaceTheContentOfThisFileWith(ModesFile,TestFileContent);
-  UI_CheckModes();
+  ui_check_modes();
 */
 /*
 End of test code
 */
 
-  UI_MODE_SELECTED = 1; // @TODO remove
-  UI_Current_Mode = 3;  // @TODO remove after tuesday
+  ui_mode_selected = 1; // @TODO remove
+  ui_current_mode = 3;  // @TODO remove after tuesday
 
   //Display the files in the SD card
   //TX_NEWLINE_PC;
   //findFiles(GET_LIST,0);
   //TX_NEWLINE_PC;
   TX_NEWLINE_PC;
-  //USART_transmitStringToPCFromFlash (PSTR("Press a key and see it returns."));
+  //usart_transmit_string_to_pc_from_flash (PSTR("Press a key and see it returns."));
   TX_NEWLINE_PC;
   while(1)
   {
@@ -86,13 +85,13 @@ End of test code
 
     if(timer_interrupt)
     {
-      timer_interrupt=false;
+      timer_interrupt = false;
     //  timer_routine();
     }
 
     // check to see if we've received data from UI board
     // if true, process the single byte
-    if(USART_Keypad_DATA_RDY)
+    if(usart_keypad_data_ready)
     {
       /* one of two types:
        * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
@@ -103,38 +102,42 @@ End of test code
        *  C: payload contains an error message
        *  D: payload contains a control button input from UI
        *  E: miscellaneous */
-	   //USART_transmitByteToPC(USART_Keypad_Received_Data);
-      USART_Keypad_ReceiveAction();
+	   //usart_transmit_byte_to_pc(usart_keypad_received_data);
+      usart_keypad_receive_action();
     }
 
     // check to see if we've received data from a connected PC 
     // if true, process the single byte
-    if(USART_PC_DATA_RDY)
+    if(usart_pc_data_ready)
     {
-      USART_PC_ReceiveAction();
+      usart_pc_receive_action();
       /*
-      if(USART_PC_ReceiveAction()=='z')//This is a special case where the PC is requesting ACK for port detect
+      if(usart_pc_receive_action()=='z')//This is a special case where the PC is requesting ACK for port detect
       {
-        USART_transmitStringToPCFromFlash(PSTR("SABT-v2.1"));
+        usart_transmit_string_to_pc_from_flash(PSTR("SABT-v2.1"));
         TX_NEWLINE_PC;
       }
       */
     }
-    if(USART_PC_Message_ready) //If a message ready from the PC, process it
+
+    if(usart_pc_message_ready) //If a message ready from the PC, process it
     {
-      PC_parse_message();
+      pc_parse_message();
     }
-    if(USART_UI_Message_ready) //If a message ready from the user interface, process it
+    
+    if(usart_ui_message_ready) //If a message ready from the user interface, process it
     {
-      UI_parse_message(false);
+      ui_parse_message(false);
     }
-    if(UI_MP3_file_Pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
+    
+    if(ui_mp3_file_pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
-      PlayMP3file(fileName);
-	  // KORY CHANGED
-	  UI_MP3_file_Pending = false;
+      play_mp3_file(file_name);
+	    // KORY CHANGED
+	    ui_mp3_file_pending = false;
     }
-    UI_RunMainOfCurrentMode();
+
+    ui_run_main_of_current_mode();
   }
   return 1;
 }
@@ -165,14 +168,15 @@ ISR(TIMER1_COMPA_vect)
 ISR(USART1_RX_vect)
 {
   // KORY CHANGED
-  if (!UI_MP3_file_Pending) {
-  USART_Keypad_Received_Data = UDR1;
-  USART_Keypad_DATA_RDY = true;
+  if (!ui_mp3_file_pending) 
+  {
+    usart_keypad_received_data = UDR1;
+    usart_keypad_data_ready = true;
   }
   
-  //set_last_dot(USART_Keypad_Received_Data);
-  //set_last_dot2(USART_Keypad_Received_Data);
-  //Set_last_dot(USART_Keypad_Received_Data); // TODO delete this handled elsewhere
+  //set_last_dot(usart_keypad_received_data);
+  //set_last_dot2(usart_keypad_received_data);
+  //Set_last_dot(usart_keypad_received_data); // TODO delete this handled elsewhere
 };
 
 /**
@@ -186,43 +190,45 @@ ISR(USART1_RX_vect)
 ISR(USART0_RX_vect)
 {
 //Temporarily using the PC as the UI
-//  USART_Keypad_Received_Data=UDR0;
-//  USART_Keypad_DATA_RDY=true; 
-//  Temporarily disabled the PC communications since we are simulating the UI with PC
-  USART_PC_Received_Data=UDR0;
-  USART_PC_DATA_RDY=true;
-  USART_transmitByteToPC(USART_PC_Received_Data);
-//
+//  usart_keypad_received_data=UDR0;
+//  usart_keypad_data_ready=true; 
+
+  // Temporarily disabled the PC communications since we are simulating the UI with PC
+  usart_pc_received_data = UDR0;
+  usart_pc_data_ready = true;
+  usart_transmit_byte_to_pc(usart_pc_received_data);
 };
 
 /**
  * @brief Initialize the system and interrupts
  * @return Void
  */
-void InitializeSystem(void)
+void initialize_system(void)
 {
-  UI_MP3_file_Pending = false;
-  timer_interrupt = false;   // clear the timer interrupt flag
+  ui_mp3_file_pending = false;
+  timer_interrupt = false;      // Clear the timer interrupt flag
   PORTA = 0x00;
   DDRA = 0xFF;  
   PORTA = 0x00;  
 
-  DDRD |= _BV(5)|_BV(6)|_BV(7);
+  // Set the data direction register values
+  // TODO fill in BV
+  DDRD |= _BV(5) | _BV(6) | _BV(7);
   
-  TCCR1A=0x00;
-  TCCR1B=0x0D;
-  OCR1A=390; //1s interval
+  TCCR1A = 0x00;
+  TCCR1B = 0x0D;
+  OCR1A = 390; //1s interval
   TIMSK1 |= (1<<OCIE1A); //Enable interrupt
 
-  init_USART_Keypad();
-  init_USART_PC();
-  SPI_Initialize();
+  init_usart_keypad();
+  init_usart_pc();
+  spi_initialize();
   
   sei();  // sets the interrupt flag (enables interrupts)
 
-  UI_Current_Mode=0;  //No mode selected
+  ui_current_mode = 0;  //No mode selected
   TX_NEWLINE_PC;
-  USART_transmitStringToPCFromFlash (PSTR("SABT testing..."));
+  usart_transmit_string_to_pc_from_flash (PSTR("SABT testing..."));
   TX_NEWLINE_PC;
 
   InitSDCard(true);
@@ -230,17 +236,17 @@ void InitializeSystem(void)
   message_count = 0;
   valid_message = true;  
   
-  if(!UI_CheckModes())
+  if(!ui_check_modes())
   {
-    USART_transmitStringToPCFromFlash (PSTR("Mode file not found"));
+    usart_transmit_string_to_pc_from_flash (PSTR("Mode file not found"));
     TX_NEWLINE_PC; 
   }
   else
   {
-    USART_transmitStringToPCFromFlash (PSTR("Mode file found"));
+    usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
 
-  RequestToPlayMP3file("INT.MP3");  // Play the welcome message
+  request_to_play_mp3_file("INT.MP3");  // Play the welcome message
   
 }

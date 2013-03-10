@@ -19,12 +19,12 @@
  * @brief initializes the SD/SDHC card in SPI mode
  * @return unsigned char - return 0 if no error and response byte otherwise
  */
-unsigned char SD_init(void)
+unsigned char sd_init(void)
 {
-  unsigned char i, response, SD_version;
-  unsigned int retry=0 ;
+  unsigned char i, response, sd_version;
+  unsigned int retry = 0;
 
-  for(i=0;i<10;i++)
+  for(i = 0; i < 10; i++)
     SPI_transmit(0xff);   //80 clock pulses spent before sending the first command
     SD_CS_ASSERT;
     do
@@ -41,7 +41,7 @@ unsigned char SD_init(void)
 
     retry = 0;
 
-    SD_version = 2; //default set to SD compliance with ver2.x; 
+    sd_version = 2; //default set to SD compliance with ver2.x; 
         //this may change after checking the next command
     do
     {
@@ -50,7 +50,7 @@ unsigned char SD_init(void)
       if(retry>0xfe) 
       {
         //TX_NEWLINE;
-        SD_version = 1;
+        sd_version = 1;
         cardType = 1;
         break;
        } //time out
@@ -75,9 +75,9 @@ unsigned char SD_init(void)
 
 
     retry = 0;
-    SDHC_flag = 0;
+    sdhc_flag = 0;
 
-    if (SD_version == 2)
+    if (sd_version == 2)
     {
     do
     {
@@ -92,7 +92,7 @@ unsigned char SD_init(void)
 
     }while(response != 0x00);
 
-    if(SDHC_flag == 1) cardType = 2;
+    if(sdhc_flag == 1) cardType = 2;
     else cardType = 3;
   }
 
@@ -124,7 +124,7 @@ unsigned char response, retry=0, status;
 //multipying it with 512. which is equivalent to shifting it left 9 times
 //following 'if' loop does that
 
-if(SDHC_flag == 0)    
+if(sdhc_flag == 0)    
 if(cmd == READ_SINGLE_BLOCK     ||
    cmd == READ_MULTIPLE_BLOCKS  ||
    cmd == WRITE_SINGLE_BLOCK    ||
@@ -154,8 +154,8 @@ while((response = SPI_receive()) == 0xff) //wait response
 if(response == 0x00 && cmd == 58)  //checking response of CMD58
 {
   status = SPI_receive() & 0x40;     //first byte of the OCR register (bit 31:24)
-  if(status == 0x40) SDHC_flag = 1;  //we need it to verify SDHC card
-  else SDHC_flag = 0;
+  if(status == 0x40) sdhc_flag = 1;  //we need it to verify SDHC card
+  else sdhc_flag = 0;
 
   SPI_receive(); //remaining 3 bytes of the OCR register are ignored here
   SPI_receive(); //one can use these bytes to check power supply limits of SD
