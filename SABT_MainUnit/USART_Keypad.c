@@ -8,17 +8,17 @@
 
 #include "Globals.h"
 
-bool USART_UI_header_received,USART_UI_length_received;
-unsigned char USART_UI_prefix[3];
-unsigned char USART_UI_receive_msgcnt;
-unsigned char USART_UI_received_playload_len;
+bool usart_ui_header_received, usart_ui_length_received;
+unsigned char usart_ui_prefix[3];
+unsigned char usart_ui_receive_msgcnt;
+unsigned char usart_ui_received_payload_len;
 
 
 /**
  * @brief Initializes the baud communication over USART.
  * @return Void
  */
-void init_USART_Keypad(void)
+void init_usart_keypad(void)
 {
   UCSR1B = 0x00; //disable while setting baud rate
   UCSR1A = 0x00;
@@ -26,75 +26,72 @@ void init_USART_Keypad(void)
   UBRR1L = 0x19; //set baud rate lo
   UBRR1H = 0x00; //set baud rate hi 19,200 baud with 8MHz clock
   UCSR1B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
-  USART_UI_length_received=false;
-  USART_UI_header_received=false;
-  USART_UI_Message_ready=false;
+  usart_ui_length_received = false;
+  usart_ui_header_received = false;
+  usart_ui_message_ready = false;
 }
 
 
 /**
- * @brief   Receives message stored in globabl USART_Keypad_Received_Data
+ * @brief   Receives message stored in globabl usart_keypad_received_data
  *          Then proceeds to decode message, use its value, and allow for more 
- *          messages to be sent. USART_UI_prefix - mini shift register which shifts
+ *          messages to be sent. usart_ui_prefix - mini shift register which shifts
  *          from 2 -> 1 -> 0
- *          Transfers data from USART_Keypad_Reiceved_Data->USART_UI_ReceivedPacket
+ *          Transfers data from USART_Keypad_Reiceved_Data->usart_ui_received_packet
  * @ref  tech_report.pdf
  * @return Void
  */
-void USART_Keypad_ReceiveAction(void)
+void usart_keypad_receive_action(void)
 {
-  USART_Keypad_DATA_RDY = false;
- /* char buf[10]; 
-  sprintf(buf, "%d", (int)USART_Keypad_Received_Data);
-  USART_transmitStringToPC((unsigned char*)buf);
-  TX_NEWLINE_PC;
-*/
+  usart_keypad_data_ready = false;
+  
   // If no header has been found, build it
-  if(!USART_UI_header_received)
+  if(!usart_ui_header_received)
   {
-    USART_UI_prefix[2] = USART_Keypad_Received_Data;
-    USART_UI_prefix[0] = USART_UI_prefix[1];
-    USART_UI_prefix[1] = USART_UI_prefix[2];
+    usart_ui_prefix[2] = usart_keypad_received_data;
+    usart_ui_prefix[0] = usart_ui_prefix[1];
+    usart_ui_prefix[1] = usart_ui_prefix[2];
     
-    if((USART_UI_prefix[0] == 'U') && (USART_UI_prefix[1] == 'I'))
+    if((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I'))
     {
-      USART_UI_header_received = true;
-      USART_UI_ReceivedPacket[0] = USART_UI_prefix[0];
-      USART_UI_ReceivedPacket[1] = USART_UI_prefix[1];
-      USART_UI_receive_msgcnt = 2;
-      USART_UI_length_received = false;
-      //USART_UI_received_playload_len=USART_Keypad_Received_Data;
-      //USART_UI_ReceivedPacket[USART_UI_receive_msgcnt]=USART_Keypad_Received_Data;
+      usart_ui_header_received = true;
+      usart_ui_received_packet[0] = usart_ui_prefix[0];
+      usart_ui_received_packet[1] = usart_ui_prefix[1];
+      usart_ui_receive_msgcnt = 2;
+      usart_ui_length_received = false;
+      // TODO why is this commented out / remove
+      //usart_ui_received_payload_len=usart_keypad_received_data;
+      //usart_ui_received_packet[usart_ui_receive_msgcnt]=usart_keypad_received_data;
       //USART_UI_length_reveived=true;
-      //USART_UI_receive_msgcnt++;
+      //usart_ui_receive_msgcnt++;
     }
   }
   // Get the length of the payload
-  else if(!USART_UI_length_received)
+  else if(!usart_ui_length_received)
   {
-    if(USART_UI_receive_msgcnt==2)
+    if(usart_ui_receive_msgcnt == 2)
     {
-      USART_UI_received_playload_len=USART_Keypad_Received_Data;
-      USART_UI_ReceivedPacket[USART_UI_receive_msgcnt]=USART_Keypad_Received_Data;
-      USART_UI_length_received=true;
-      USART_UI_receive_msgcnt++;
+      usart_ui_received_payload_len = usart_keypad_received_data;
+      usart_ui_received_packet[usart_ui_receive_msgcnt] = usart_keypad_received_data;
+      usart_ui_length_received = true;
+      usart_ui_receive_msgcnt++;
     }
     else
     {
-      USART_UI_header_received=false;
+      usart_ui_header_received = false;
     }
   }
   // Build the actual message
   else
   {
-    USART_UI_ReceivedPacket[USART_UI_receive_msgcnt++] = USART_Keypad_Received_Data;
+    usart_ui_received_packet[usart_ui_receive_msgcnt++] = usart_keypad_received_data;
 
     // Full message has been received
-    if(USART_UI_receive_msgcnt == USART_UI_received_playload_len) 
+    if(usart_ui_receive_msgcnt == usart_ui_received_payload_len) 
     {
-      USART_UI_Message_ready = true;
-      USART_UI_header_received = false;
-      USART_UI_length_received = false;
+      usart_ui_message_ready = true;
+      usart_ui_header_received = false;
+      usart_ui_length_received = false;
     }
   }
 }
@@ -104,11 +101,10 @@ void USART_Keypad_ReceiveAction(void)
  * @param data - unsigned char, byte to transmit to UI
  * @return Void
  */
-void USART_transmitByteToKeypad( unsigned char data )
+void usart_transmit_byte_to_keypad(unsigned char data)
 {
-  while ( !(UCSR1A & (1<<UDRE1)) )
-    ;                       /* Wait for empty transmit buffer */
-  UDR1 = data;               /* Start transmition */
+  while (!(UCSR1A & (1<<UDRE1)));   // Wait for empty transmit buffer
+  UDR1 = data;                      // Start transmition
 }
 
 /**
@@ -116,10 +112,10 @@ void USART_transmitByteToKeypad( unsigned char data )
  * @param string - char*, String to transmit to UI
  * @return Void
  */
-void USART_transmitStringToKeypadFromFlash(char* string)
+void usart_transmit_string_to_keypad_from_flash(char* string)
 {
   while (pgm_read_byte(&(*string)))
-   USART_transmitByteToKeypad(pgm_read_byte(&(*string++)));
+   usart_transmit_byte_to_keypad(pgm_read_byte(&(*string++)));
 }
 
 /**
@@ -127,8 +123,8 @@ void USART_transmitStringToKeypadFromFlash(char* string)
  * @param string - char*, String to transmit to UI
  * @return Void
  */
-void USART_transmitStringToKeypad(unsigned char* string)
+void usart_transmit_string_to_keypad(unsigned char* string)
 {
   while (*string)
-   USART_transmitByteToKeypad(*string++);
+   usart_transmit_byte_to_keypad(*string++);
 }
