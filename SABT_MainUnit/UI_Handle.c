@@ -17,51 +17,52 @@
  * @return bool  - return true on succesful completion of transmission, false on 
  *         failure
  */
-bool UI_CheckModes(void)
+bool ui_check_modes(void)
 {
   /*
-  The modes.dat contains the numbers of modes that need to be activated in this device. It contains the mode numbers of the required modes as follows:
-  MODENO#MODENO#$ ETC. (Last character is $)
-  For example if we need modes 2, 5 and 14 to be activated:
-  <2><5><14>$
-  */
-  unsigned char FileContent[100];
-  unsigned char ModeID[3];
-  // TODO should PCPrintContent be of length 4?
-  unsigned char PCPrintContent[2];
-  int i = 0;
-  int mode_number = 0;
+   * The modes.dat contains the numbers of modes that 
+   * need to be activated in this device. It contains the 
+   * mode numbers of the required modes as follows:
+   *    MODENO#MODENO#$ ETC. (Last character is $)
+   * For example if we need modes 2, 5 and 14 to be activated:
+   * <2><5><14>$
+   */
+  unsigned char file_content[100];
+  unsigned char mode_id[3];
+  // TODO should pc_print_content be of length 4?
+  unsigned char pc_print_content[2];
+  int i = 0, mode_number = 0;
   bool parsing_mode_descriptor;
-  const char* ModesFile = "MODES.DAT";
+  const char* modes_file = "MODES.DAT";
 
   number_of_modes = 0;
 
   // Clear file content array  
   for(i = 0; i < 100; i++)
-    FileContent[i] = 0;
+    file_content[i] = 0;
 
   // Populate file content
-  if(readAndRetreiveFileContents((unsigned char*)ModesFile, &FileContent[0]) > 0)
+  if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0)
   {
     PRINTF("FLAG 1");
-	TX_NEWLINE_PC;
+	  TX_NEWLINE_PC;
     return false;
   }
 
   // Print file contents to debug stream
-  USART_transmitStringToPC(&FileContent[0]);
+  usart_transmit_string_to_pc(&file_content[0]);
   TX_NEWLINE_PC;
 
   parsing_mode_descriptor = false;
 
-  i=0;
+  i = 0;
   // '$' signifies end of file, <i> signifies mode i active
-  while(FileContent[i]!='$')
+  while(file_content[i] != '$')
   {
   	// at end of mode descriptor
-    if(FileContent[i]=='>')
+    if(file_content[i] == '>')
     {
-      UI_Modes[number_of_modes] = atoi((char*)&ModeID[0]);
+      ui_modes[number_of_modes] = atoi((char*)&mode_id[0]);
       number_of_modes++;
       parsing_mode_descriptor = false;
     }
@@ -69,47 +70,46 @@ bool UI_CheckModes(void)
 	// if not at a mode descriptor, clear everything
     if(!parsing_mode_descriptor)
     {
-      ModeID[0] = 0;
-      ModeID[1] = 0;
-      ModeID[2] = 0;
+      mode_id[0] = 0;
+      mode_id[1] = 0;
+      mode_id[2] = 0;
       mode_number = 0;
     }
     else
     {
       if(mode_number == 3)
       {
-	    PRINTF("FLAG 2");
-		TX_NEWLINE_PC;
+        PRINTF("FLAG 2");
+		    TX_NEWLINE_PC;
         return false;
       }
-      ModeID[mode_number++] = FileContent[i];
+      mode_id[mode_number++] = file_content[i];
     }
 
-	// if at new mode descriptor
-    if(FileContent[i] == '<')
+	  // if at new mode descriptor
+    if(file_content[i] == '<')
     {
       parsing_mode_descriptor = true;
     }
-
     i++;    
   }
 
-  USART_transmitStringToPCFromFlash(PSTR("Number of modes selected: "));
+  usart_transmit_string_to_pc_from_flash(PSTR("Number of modes selected: "));
 
-  PCPrintContent[0] = 0;
-  PCPrintContent[1] = 0;
+  pc_print_content[0] = 0;
+  pc_print_content[1] = 0;
 
   // Print the number of modes found to a string
-  sprintf((char*)&PCPrintContent[0], "%d", number_of_modes);
-  USART_transmitStringToPC(&PCPrintContent[0]);
+  sprintf((char*)&pc_print_content[0], "%d", number_of_modes);
+  usart_transmit_string_to_pc(&pc_print_content[0]);
   TX_NEWLINE_PC;
 
   // Send the actual modes
-  USART_transmitStringToPCFromFlash(PSTR("And the modes are; "));
+  usart_transmit_string_to_pc_from_flash(PSTR("And the modes are; "));
   for(i = 0; i < number_of_modes; i++)
   {
-    sprintf((char*)&PCPrintContent[0], "%d, ", UI_Modes[i]);
-    USART_transmitStringToPC(&PCPrintContent[0]);
+    sprintf((char*)&pc_print_content[0], "%d, ", ui_modes[i]);
+    usart_transmit_string_to_pc(&pc_print_content[0]);
   }
   TX_NEWLINE_PC;
   
@@ -118,39 +118,32 @@ bool UI_CheckModes(void)
 
 /**
  * @brief calculate CRC (cyclic redundancy check)
- * @param pstrMsg message (?)
+ * @param message message (?)
  * @return CRC value
  */
-uint16_t UI_calculate_CRC(unsigned char* pstrMsg)
+uint16_t ui_calculate_crc(unsigned char* message)
 {
-  unsigned char msglen=*(pstrMsg+2)-5;//Not including the checksum bytes
-  uint16_t chksum=0;
+  unsigned char msglen = *(message + 2) - 5; // Not including the checksum bytes
+  uint16_t chksum = 0;
 
-  pstrMsg+=3;
+  message += 3;
   while(msglen > 1)
   {
-    chksum+=(*(pstrMsg)<<8) | *(pstrMsg+1);
+    chksum += (*(message) << 8) | *(message + 1);
     chksum = chksum & 0xffff;
-    msglen-=2;
-    pstrMsg+=2;
+    msglen -= 2;
+    message += 2;
   }
-  if(msglen>0) //If the packet size is odd numbered
+  if(msglen > 0) //If the packet size is odd numbered
   {
-    chksum = chksum^ (int)*(pstrMsg++);
+    chksum = chksum ^ (int)*(message++);
   }
-  return (chksum);
+  return chksum;
 }
-
-//TODO this seems pointless?
-bool UI_buildMessage(char MessageType)
-{
-  return true;
-}
-
 
 /**
- * @brief  Reads a message in USART_UI_RecievedPacket. Then determines what type of
- *         message it has recieved. It then interacts with the mode accordingly and
+ * @brief  Reads a message in USART_UI_ReceivedPacket. Then determines what type of
+ *         message it has received. It then interacts with the mode accordingly and
  *         sends a message of recieval at the end. 
  *
  * UI string: [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
@@ -158,38 +151,38 @@ bool UI_buildMessage(char MessageType)
  * @param  IsPlaying -  bool    determines whether or not an MP3 Files is playing
  * @return  bool - returns true if succesfully parsed, understood, and used message
  */
-bool UI_parse_message(bool mp3_is_playing)
+bool ui_parse_message(bool mp3_is_playing)
 {
   //First things first, check the CRC
 
-  unsigned char message_len = USART_UI_ReceivedPacket[2];
+  unsigned char message_len = usart_ui_received_packet[2];
   unsigned char message_number;
   unsigned char message_type;
 
-  unsigned char ADCmsg[10];
+  unsigned char adc_message[10];
   //unsigned char message_payload[20];
   //unsigned char i=0;
 
-  uint16_t chksum = UI_calculate_CRC((unsigned char*)&USART_UI_ReceivedPacket);
+  uint16_t chksum = ui_calculate_crc((unsigned char*)&usart_ui_received_packet);
   
   // TODO test this
-  //PRINTF("[UI_parse_message] Entering function");
+  //PRINTF("[ui_parse_message] Entering function");
   
   // Check the checksum
-  if (chksum == (USART_UI_ReceivedPacket[message_len-2] << 8 
-                | USART_UI_ReceivedPacket[message_len-1]))
+  if (chksum == (usart_ui_received_packet[message_len - 2] << 8 
+                | usart_ui_received_packet[message_len - 1]))
   {
     // If correct, store the message elements
-    message_number = USART_UI_ReceivedPacket[3];
-    message_type = USART_UI_ReceivedPacket[4];
+    message_number = usart_ui_received_packet[3];
+    message_type = usart_ui_received_packet[4];
 
     // Process the message
     if(mp3_is_playing) //If a MP3 file is being played, only the commands are processed
     {
       if(message_type == 'D')               // Control key pressed
       {
-        UI_ControlKeyPressed();
-        USART_UI_Message_ready = true;      // Once control handled, exit
+        ui_control_key_pressed();
+        usart_ui_message_ready = true;      // Once control handled, exit
         return true;
       }
     }
@@ -198,44 +191,46 @@ bool UI_parse_message(bool mp3_is_playing)
     switch(message_type)
     {
       case 'A':                             // Single braille dot
-        UI_InputDotToCurrentMode(USART_UI_ReceivedPacket[5]);
+        ui_input_dot_to_current_mode(usart_ui_received_packet[5]);
         break;
       case 'B':  
-        UI_InputCellToCurrentMode(USART_UI_ReceivedPacket[5]);
+        ui_input_cell_to_current_mode(usart_ui_received_packet[5]);
         break;
       case 'C':                             // Error message
-        PRINTF("[UI_parse_message] An error occurred in the UI.");
+        PRINTF("[ui_parse_message] An error occurred in the UI.");
         break;
       case 'D':                             // Control button
 	  	//PRINTF("CONTROL BUTTON PRESSED");
-        UI_ControlKeyPressed();
+        ui_control_key_pressed();
         break;
       case 'E':                             // Acknowledgement
         // TODO what does this section do? 'E' marked misceaneous in doc
-        ADCmsg[0]=USART_UI_ReceivedPacket[5];
-        ADCmsg[1]=USART_UI_ReceivedPacket[6];
-        ADCmsg[2]=USART_UI_ReceivedPacket[7];
-        USART_transmitStringToPCFromFlash(PSTR("Analog Input channel,MSB,LSB :"));
-        sprintf((char*)ADCmsg,
+        adc_message[0] = usart_ui_received_packet[5];
+        adc_message[1] = usart_ui_received_packet[6];
+        adc_message[2] = usart_ui_received_packet[7];
+        usart_transmit_string_to_pc_from_flash(PSTR("Analog Input channel,MSB,LSB :"));
+        sprintf((char*)adc_message,
                 "%d,%d,%d",
-                USART_UI_ReceivedPacket[5],
-                USART_UI_ReceivedPacket[6],
-                USART_UI_ReceivedPacket[7]);
-        USART_transmitStringToPC((unsigned char*)&ADCmsg);
+                usart_ui_received_packet[5],
+                usart_ui_received_packet[6],
+                usart_ui_received_packet[7]);
+        usart_transmit_string_to_pc((unsigned char*)&adc_message);
         TX_NEWLINE_PC;
         TX_NEWLINE_PC;
         break;
       default:
         break;
     }
-    // In the end: send acknowledgement to the sender (with the message number, of course !!!)
-  } else // Checksum not valid
+    // In the end: send acknowledgement to the sender 
+    // (with the message number, of course !!!)
+  } 
+  else // Checksum not valid
   {
-    USART_UI_Message_ready = false;
+    usart_ui_message_ready = false;
     return false;
   }
 
-  USART_UI_Message_ready=false;
+  usart_ui_message_ready = false;
   return true;
 }
 
@@ -244,97 +239,101 @@ bool UI_parse_message(bool mp3_is_playing)
  * control)
  * @return Void
  */
-void UI_ControlKeyPressed(void)
+void ui_control_key_pressed(void)
 {
-  switch(USART_UI_ReceivedPacket[5])
+  switch(usart_ui_received_packet[5])
   {
     case UI_CMD_NONE:
       break;
     case UI_CMD_ENT1: // Enter a mode
-      //USART_transmitStringToPCFromFlash(PSTR("Enter 1 pressed"));
+      //usart_transmit_string_to_pc_from_flash(PSTR("Enter 1 pressed"));
       TX_NEWLINE_PC; 
       if(!UI_MODE_SELECTED) //Then this command is to select the mode
       {
-        if(UI_Selected_Mode>0)
+        if(ui_selected_mode>0)
         {
           UI_MODE_SELECTED = true;
-          UI_ResetTheCurrentMode();
+          ui_reset_the_current_mode();
         }
         else
         {
           // TODO commented (?)
-          //RequestToPlayMP3file("ERR1.MP3");
+          //request_to_play_mp3_file("ERR1.MP3");
         }
       }
       else //Then this the "YES" command in the mode, so call the function in the mode
       {
-        UI_CallModeYesAnswer();
+        ui_call_mode_yes_answer();
       }
       break;
     case UI_CMD_ENT2: // Exit a mode
-      //USART_transmitStringToPCFromFlash(PSTR("Enter 2 pressed"));
+      //usart_transmit_string_to_pc_from_flash(PSTR("Enter 2 pressed"));
       TX_NEWLINE_PC;
-      if(UI_MODE_SELECTED) //This might be an exit from mode command or "NO" command in the mode
+      
+      //This might be an exit from mode command or "NO" command in the mode
+      if(UI_MODE_SELECTED) 
       {
-        if(USART_UI_ReceivedPacket[6]==69) //If the next byte is 'E', this is exit command (when the user pressed E2 for more than 5 secs)
+        // If the next byte is 'E', this is exit command 
+        // (when the user pressed E2 for more than 5 secs)
+        if(usart_ui_received_packet[6] == 69) 
         {
-          UI_MODE_SELECTED=false;
-          RequestToPlayMP3file("MM.MP3");
+          UI_MODE_SELECTED = false;
+          request_to_play_mp3_file("MM.MP3");
         }
         else //Then this a "NO" answer, call the mode function for this
         {
-          UI_CallModeNoAnswer();
+          ui_call_mode_no_answer();
         }
       }
       //This has no effect when no mode is selected
       break;
-    case UI_CMD_MFOR: // Move forward in lsit of modes
-      //USART_transmitStringToPCFromFlash(PSTR("Mode 1 pressed"));
+    case UI_CMD_MFOR: // Move forward in list of modes
+      //usart_transmit_string_to_pc_from_flash(PSTR("Mode 1 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
       {
-        UI_Selected_Mode++;
-        if(UI_Selected_Mode>number_of_modes)
+        ui_selected_mode++;
+        if(ui_selected_mode > number_of_modes)
         {
-          UI_Selected_Mode--;
-          UI_Current_Mode=UI_Modes[UI_Selected_Mode-1];
+          ui_selected_mode--;
+          ui_current_mode = ui_modes[ui_selected_mode - 1];
         }
         else
         {
-          UI_Current_Mode=UI_Modes[UI_Selected_Mode-1];
-          VS1053_SKIP_PLAY=true;
-          UI_Play_Intro_Currentmode();
+          ui_current_mode = ui_modes[ui_selected_mode - 1];
+          VS1053_SKIP_PLAY = true;
+          ui_play_intro_current_mode();
         }
       }
       break;
     case UI_CMD_MREV: // Move backwards in list of modes
-      //USART_transmitStringToPCFromFlash(PSTR("Mode 2 pressed"));
+      //usart_transmit_string_to_pc_from_flash(PSTR("Mode 2 pressed"));
       TX_NEWLINE_PC;
       if(!UI_MODE_SELECTED)
       {
-        UI_Selected_Mode--;
-        if(UI_Selected_Mode<1)
+        ui_selected_mode--;
+        if(ui_selected_mode < 1)
         {
-          UI_Selected_Mode=1;
-          UI_Current_Mode=UI_Modes[UI_Selected_Mode-1];
+          ui_selected_mode = 1;
+          ui_current_mode = ui_modes[ui_selected_mode - 1];
         }
         else
         {
-          UI_Current_Mode=UI_Modes[UI_Selected_Mode-1];
-          VS1053_SKIP_PLAY=true;
-          UI_Play_Intro_Currentmode();
+          ui_current_mode = ui_modes[ui_selected_mode - 1];
+          VS1053_SKIP_PLAY = true;
+          ui_play_intro_current_mode();
         }  
       }    
       break;
     case UI_CMD_VOLU: // Volume Up
-      //USART_transmitStringToPCFromFlash(PSTR("Vol UP pressed"));
+      //usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
       TX_NEWLINE_PC;
-      VS1053_IncreaseVol();
+      vs1053_increase_vol();
       break;
     case UI_CMD_VOLD: // Volume down
-      //USART_transmitStringToPCFromFlash(PSTR("Vol DOWN pressed"));
+      //usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
       TX_NEWLINE_PC;
-      VS1053_DecreaseVol();
+      vs1053_decrease_vol();
       break;
     default:
       break;
@@ -345,22 +344,22 @@ void UI_ControlKeyPressed(void)
  * @brief play the MP3 associated with the current mode
  * @return Void
  */
-void UI_Play_Intro_Currentmode(void)
+void ui_play_intro_current_mode(void)
 {
-  switch(UI_Current_Mode)
+  switch(ui_current_mode)
   {
     case 1:
-      RequestToPlayMP3file("MD1.MP3");
+      request_to_play_mp3_file("MD1.MP3");
       break;
     case 2:
-      RequestToPlayMP3file("MD2.MP3");
+      request_to_play_mp3_file("MD2.MP3");
       break;
     case 3:
-      RequestToPlayMP3file("MD3.MP3");
+      request_to_play_mp3_file("MD3.MP3");
       break;
     default:
       break;
-      //RequestToPlayMP3file("ERR1.MP3");
+      //request_to_play_mp3_file("ERR1.MP3");
   }
 }
 
@@ -368,40 +367,18 @@ void UI_Play_Intro_Currentmode(void)
  * @brief (?)
  * @return Void
  */
-void UI_CallModeYesAnswer(void)
+void ui_call_mode_yes_answer(void)
 {
-  switch(UI_Current_Mode)
+  switch(ui_current_mode)
   {
     case 1:
-      MD1_CallModeYesAnswer();
+      md1_call_mode_yes_answer();
       break;
     case 2:
-      MD2_CallModeYesAnswer();
+      md2_call_mode_yes_answer();
       break;
     case 3:
-      MD3_CallModeYesAnswer();
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief (?)
- * @return Void
- */
-void UI_CallModeNoAnswer(void)
-{
-  switch(UI_Current_Mode)
-  {
-    case 1:
-      MD1_CallModeNoAnswer();
-      break;
-    case 2:
-      MD2_CallModeNoAnswer();
-      break;
-    case 3:
-      MD3_CallModeNoAnswer();
+      md3_call_mode_yes_answer();
       break;
     default:
       break;
@@ -412,18 +389,18 @@ void UI_CallModeNoAnswer(void)
  * @brief (?)
  * @return Void
  */
-void UI_InputDotToCurrentMode(char thisDot)
+void ui_call_mode_no_answer(void)
 {
-  switch(UI_Current_Mode)
+  switch(ui_current_mode)
   {
     case 1:
-      MD1_InputDot(thisDot);
+      md1_call_mode_no_answer();
       break;
     case 2:
-      MD2_InputDot(thisDot);
+      md2_call_mode_no_answer();
       break;
     case 3:
-      MD3_InputDot(thisDot);
+      md3_call_mode_no_answer();
       break;
     default:
       break;
@@ -434,18 +411,18 @@ void UI_InputDotToCurrentMode(char thisDot)
  * @brief (?)
  * @return Void
  */
-void UI_InputCellToCurrentMode(char thisCell)
+void ui_input_dot_to_current_mode(char this_dot)
 {
-  switch(UI_Current_Mode)
+  switch(ui_current_mode)
   {
     case 1:
-      MD1_InputCell(thisCell);
+      md1_input_dot(this_dot);
       break;
     case 2:
-      MD2_InputCell(thisCell);
+      md2_input_dot(this_dot);
       break;
     case 3:
-      MD3_InputCell(thisCell);
+      md3_input_dot(this_dot);
       break;
     default:
       break;
@@ -453,22 +430,44 @@ void UI_InputCellToCurrentMode(char thisCell)
 }
 
 /**
- * @brief   Decides which of the three UI modes to go into based on UI_Current_Mode
+ * @brief (?)
+ * @return Void
+ */
+void ui_input_cell_to_current_mode(char this_cell)
+{
+  switch(ui_current_mode)
+  {
+    case 1:
+      md1_input_cell(this_cell);
+      break;
+    case 2:
+      md2_input_cell(this_cell);
+      break;
+    case 3:
+      md3_input_cell(this_cell);
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief   Decides which of the three UI modes to go into based on ui_current_mode
  * @return  Void
  */
-void UI_RunMainOfCurrentMode(void)
+void ui_run_main_of_current_mode(void)
 {
   if(UI_MODE_SELECTED){
-    switch(UI_Current_Mode)
+    switch(ui_current_mode)
     {
       case 1:
-        MD1_Main();
+        md1_main();
         break;
       case 2:
-        MD2_Main();
+        md2_main();
         break;
       case 3:
-        MD3_Main();
+        md3_main();
         break;
       default:
         break;
@@ -480,19 +479,19 @@ void UI_RunMainOfCurrentMode(void)
  * @brief (?)
  * @return Void
  */
-void UI_ResetTheCurrentMode(void)
+void ui_reset_the_current_mode(void)
 {
   if(UI_MODE_SELECTED){
-    switch(UI_Current_Mode)
+    switch(ui_current_mode)
     {
       case 1:
-        MD1_Reset();
+        md1_reset();
         break;
       case 2:
-        MD2_Reset();
+        md2_reset();
         break;
       case 3:
-        MD3_Reset();
+        md3_reset();
         break;
       default:
         break;
@@ -501,7 +500,7 @@ void UI_ResetTheCurrentMode(void)
 }
 
 /*
-void RequestToPlayMP3file(const char* thisFile)
+void request_to_play_mp3_file(const char* thisFile)
 {
   int i=0;
   while(*thisFile!='.')
