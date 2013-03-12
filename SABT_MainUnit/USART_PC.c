@@ -8,15 +8,15 @@
 
 #include "Globals.h"
 
-bool USART_PC_header_received,USART_PC_length_reveived;
-unsigned char USART_PC_prefix[3];
-unsigned char USART_PC_receive_msgcnt;
+bool usart_pc_header_received, usart_pc_length_received;
+unsigned char usart_pc_prefix[3];
+unsigned char usart_pc_receive_msgcnt;
 
 /**
  * @brief Initializes the buad communication over USART.
  * @return Void
  */
-void init_USART_PC(void)
+void init_usart_pc(void)
 {
   UCSR0B = 0x00; //disable while setting baud rate
   UCSR0A = 0x00;
@@ -27,19 +27,19 @@ void init_USART_PC(void)
 }
 
 /**
- * @brief   Receives message stored in global USART_PC_Received_Data
+ * @brief   Receives message stored in global usart_pc_received_data
  *          Then proceeds to decode message, use its value, and allow for more
  *          message to be processed by PC_parse_message()
  * @ref  tech_report.pdf
  * @return always 0?
  */
-unsigned char USART_PC_ReceiveAction(void)
+unsigned char usart_pc_receive_action(void)
 {
-  USART_PC_DATA_RDY=false;
-  message_count ++;
+  USART_PC_DATA_RDY = false;
+  message_count++;
 
   // Received an entire line; process it
-  if(USART_PC_Received_Data == CARR_RETURN)
+  if(usart_pc_received_data == CARR_RETURN)
   {
     message_count = 0;
     if(!valid_message)
@@ -50,71 +50,73 @@ unsigned char USART_PC_ReceiveAction(void)
   }
   
   // if header not yet received, build it
-  if(!USART_PC_header_received)
+  if(!usart_pc_header_received)
   {
-    USART_PC_prefix[2]=USART_PC_Received_Data;
-    USART_PC_prefix[0]=USART_PC_prefix[1];
-    USART_PC_prefix[1]=USART_PC_prefix[2];
+    usart_pc_prefix[2] = usart_pc_received_data;
+    usart_pc_prefix[0] = usart_pc_prefix[1];
+    usart_pc_prefix[1] = usart_pc_prefix[2];
 
-    if((USART_PC_prefix[0]=='P')&&(USART_PC_prefix[1]=='C') && (message_count == 2))
+    if((usart_pc_prefix[0]=='P') && (usart_pc_prefix[1]=='C') && (message_count == 2))
     {
-      USART_PC_header_received=true;
-      USART_PC_ReceivedPacket[0]=USART_PC_prefix[0];
-      USART_PC_ReceivedPacket[1]=USART_PC_prefix[1];
-      USART_PC_receive_msgcnt=2;
-      //USART_PC_length_reveived=false;
-      //USART_PC_received_playload_len=USART_PC_Received_Data;
-      //USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
-      //USART_PC_length_reveived=true;
-      //USART_PC_receive_msgcnt++;
+      usart_pc_header_received = true;
+      usart_pc_received_packet[0] = usart_pc_prefix[0];
+      usart_pc_received_packet[1] = usart_pc_prefix[1];
+      usart_pc_receive_msgcnt = 2;
+      //usart_pc_length_received=false;
+      //usart_received_payload_len=usart_pc_received_data;
+      //usart_pc_received_packet[usart_pc_receive_msgcnt]=usart_pc_received_data;
+      //usart_pc_length_received=true;
+      //usart_pc_receive_msgcnt++;
     }
-    else if(((USART_PC_prefix[0]!='P') || (USART_PC_prefix[1]!='C')) &&
+    else if(((usart_pc_prefix[0] != 'P') || (usart_pc_prefix[1] != 'C')) &&
             (message_count == 2))
     {
       valid_message = false;
     }
   }
-  else{
-    if(USART_PC_Received_Data==CARR_RETURN) //If carraige return found --> end of the command
+  else
+  {
+    // If carraige return found --> end of the command
+    if(usart_pc_received_data == CARR_RETURN)
     {
-      USART_PC_received_playload_len=USART_PC_receive_msgcnt;
-      USART_PC_Message_ready=true;
-      USART_PC_header_received=false;
-      //USART_PC_length_reveived=false;
+      usart_received_payload_len = usart_pc_receive_msgcnt;
+      usart_pc_message_ready = true;
+      usart_pc_header_received = false;
+      //usart_pc_length_received=false;
     }
-    USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
+    usart_pc_received_packet[usart_pc_receive_msgcnt++] = usart_pc_received_data;
   }
 
 /*
-  else if(!USART_PC_length_reveived)
+  else if(!usart_pc_length_received)
   {    
-    if(USART_PC_receive_msgcnt==2)
+    if(usart_pc_receive_msgcnt==2)
     {
-      USART_PC_received_playload_len=USART_PC_Received_Data;
-      if(USART_PC_received_playload_len=='x') //If this is 'z', then this is the init port detect message >> Proceed with a port reply.
+      usart_received_payload_len=usart_pc_received_data;
+      if(usart_received_payload_len=='x') //If this is 'z', then this is the init port detect message >> Proceed with a port reply.
       {
-        USART_PC_Message_ready=false;
-        USART_PC_header_received=false;
-        USART_PC_length_reveived=false;
+        usart_pc_message_ready=false;
+        usart_pc_header_received=false;
+        usart_pc_length_received=false;
         return 'z';
       }
-      USART_PC_ReceivedPacket[USART_PC_receive_msgcnt]=USART_PC_Received_Data;
-      USART_PC_length_reveived=true;
-      USART_PC_receive_msgcnt++;
+      usart_pc_received_packet[usart_pc_receive_msgcnt]=usart_pc_received_data;
+      usart_pc_length_received=true;
+      usart_pc_receive_msgcnt++;
     }
     else
     {
-      USART_PC_header_received=false;
+      usart_pc_header_received=false;
     }
   }
   else
   {
-    USART_PC_ReceivedPacket[USART_PC_receive_msgcnt++]=USART_PC_Received_Data;
-    if(USART_PC_receive_msgcnt==USART_PC_received_playload_len) //full message has been received
+    usart_pc_received_packet[usart_pc_receive_msgcnt++]=usart_pc_received_data;
+    if(usart_pc_receive_msgcnt==usart_received_payload_len) //full message has been received
     {
-      USART_PC_Message_ready=true;
-      USART_PC_header_received=false;
-      USART_PC_length_reveived=false;
+      usart_pc_message_ready=true;
+      usart_pc_header_received=false;
+      usart_pc_length_received=false;
     }
   }    
 */
@@ -123,36 +125,34 @@ unsigned char USART_PC_ReceiveAction(void)
 
 /**
  * @brief transmit one byte to UDR0 (PC connection) 
- * @param bData contains the byte that needs to be sent
+ * @param data contains the byte that needs to be sent
  * return Void
  */
-void USART_transmitByteToPC( unsigned char bData )
+void usart_transmit_byte_to_pc(unsigned char data)
 {
-///*  Disabled PC TX temp
-  while ( !(UCSR0A & (1<<UDRE0)) ); // Loop until the data register is empty
-  UDR0 = bData;                     // Transmit one byte of data
-//  */
+  while (!(UCSR0A & (1<<UDRE0)));   // Loop until the data register is empty
+  UDR0 = data;                      // Transmit one byte of data
 }
 
 /** 
  * @brief reads each byte of data and sends it to the Flash individually
- * @param strData   String     Contains message to be sent to PC
+ * @param str_data   String     Contains message to be sent to PC
  * @return Void
  */
-void USART_transmitStringToPCFromFlash(char* strData)
+void usart_transmit_string_to_pc_from_flash(char* str_data)
 {
-  while (pgm_read_byte(&(*strData)))
-   USART_transmitByteToPC(pgm_read_byte(&(*strData++)));
+  while (pgm_read_byte(&(*str_data)))
+   usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));
 }
 
 /**
  * @brief transmit a string to UDR0 (PC connection)
- * @param strData string to transmit
+ * @param str_data string to transmit
  * @return Void
  * TODO: does this method send null terminator?
  */
-void USART_transmitStringToPC(unsigned char* strData)
+void usart_transmit_string_to_pc(unsigned char* str_data)
 {
-  while (*strData)
-   USART_transmitByteToPC(*strData++);
+  while (*str_data)
+   usart_transmit_byte_to_pc(*str_data++);
 }
