@@ -43,6 +43,7 @@ void play_requested_dot(unsigned char last_dot)
     sprintf(buf, "MD1_%c.MP3", last_dot);
 
   // TODO default case?
+  // TODO(nick) make sure this works
   /*switch(last_dot)
   {
     case '1':
