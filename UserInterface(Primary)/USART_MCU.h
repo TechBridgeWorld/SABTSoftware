@@ -9,13 +9,13 @@
 #ifndef _USART_MCU_H_
 #define _USART_MCU_H_
 
-volatile char USART_MCU_Received_Data;
-volatile bool USART_MCU_DATA_RDY;
+volatile char usart_mcu_received_data;
+volatile bool usart_mcu_data_ready;
 volatile bool transmit_complete;
 
-void init_USART_MCU(void);
-void USART_transmitByteToMCU( unsigned char bData );
-void USART_transmitStringToMCUFromFlash(char* strData);
-void USART_transmitStringToMCU(unsigned char* strData);
+void init_usart_mcu(void);
+void usart_transmit_byte_to_mcu(unsigned char data);
+void usart_transmit_string_to_mcu_from_flash(char* str_data);
+void usart_transmit_string_to_mcu(unsigned char* str_data);
 
 #endif /* _USART_MCU_H_ */

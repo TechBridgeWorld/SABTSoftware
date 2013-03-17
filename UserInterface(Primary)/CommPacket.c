@@ -10,66 +10,75 @@
 
 /**
  * @brief calculate cyclic redundancy checks (CRC)
- * @param pStrMsg the message being sent
+ * @param message the message being sent
  * @return checksum
  */
-uint16_t Calculate_CRC(unsigned char* pstrMsg)
+uint16_t calculate_crc(unsigned char* message)
 {
-  // Note that msglen doesn't include the two checksum bytes
-  unsigned char msglen= *(pstrMsg + 2) - 5;
-  uint16_t chksum = 0;
-  pstrMsg += 3;
+  // Get the length of the message
+  // Note that message_length doesn't include the two checksum bytes
+  unsigned char message_length = *(message + 2) - 5;
+  uint16_t checksum = 0;
   
-  while(msglen > 1)
+  message += 3;
+  
+  // Calculate the checksum
+  while(message_length > 1)
   {
-    chksum += (*(pstrMsg)<<8) | *(pstrMsg+1);
-    chksum = chksum & 0xffff;
-    msglen -= 2;
-    pstrMsg += 2;
+    checksum += (*(message) << 8) | *(message + 1);
+    checksum = checksum & 0xffff;
+    message_length -= 2;
+    message += 2;
   }
   
-  if(msglen > 0) //If the packet size is odd numbered
+  if(message_length > 0) // If the packet size is odd numbered
   {
-    chksum = chksum^(int)*(pstrMsg++);
+    checksum = checksum^((int)*(message++));
   }
 
-  return chksum;
+  return checksum;
 }
 
 /**
  * @brief compile packet to send to MCU (?)
  *
- *        [U][I][msglen][msg_number][msgtype][payload][CRC1][CRC2]
+ *        [U][I][message_length][msg_number][msgtype][payload][CRC1][CRC2]
  *
  * @param cmd command type (A-E)
- * @param pl the packet message
- * @param plLen length of the packet message
+ * @param payload the packet message
+ * @param payload_length length of the packet message
  * @return true if the packet was created successfuly, false otw 
  */
-bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
+bool mcu_compile_packet(char cmd, char* payload, int payload_length)
 {
-  uint16_t chksum;
+  uint16_t checksum;
   int i = 0;
 
-  // Header always contains the 0xFA and 0xFB
-  MCU_Packet[0]='U';  //85
-  MCU_Packet[1]='I';  //73
-  iPktSize = plLen+7; //10
+  // Header from ui board must contain UI prefix
+  mcu_packet[0]='U';
+  mcu_packet[1]='I';
+
+  // Total packet length = payload + header + crc bytes
+  mcu_packet_size = payload_length + PACKET_WRAP_LENGTH;
   
   // SABT can only handle packets up to 20 bytes in length
-  if ( plLen + 7 > 20 ) return false;
+  if (payload_length + PACKET_WRAP_LENGTH > MAX_PACKET_LENGTH) return false;
 
-  MCU_Packet[2] = plLen+7;              // Total message length
-  MCU_Packet[3] = 2;                    // Message number (TODO why 2?)
-  MCU_Packet[4] = cmd;                  // Command type: A-E 
+  mcu_packet[2] = payload_length + PACKET_WRAP_LENGTH;  // Total message length
+  mcu_packet[3] = DEFAULT_MSG_NUMBER;                   // Message number
+  mcu_packet[4] = cmd;                                  // Command type: A-E
   
   // Copy over the payload
-  for(i = 0; i < plLen; i++) MCU_Packet[5+i]= *(pl++);
+  for(i = 0; i < payload_length; i++) 
+  {
+    mcu_packet[PACKET_HEADER_LENGTH + i] = *(payload++);
+  }
 
   // Calculate the checksum - place it as the last two bytes
-  chksum = Calculate_CRC((unsigned char*)&MCU_Packet);
-  MCU_Packet[plLen+5] = (unsigned char)(chksum >> 8);
-  MCU_Packet[plLen+6] = (unsigned char)(chksum & 0xFF);  
+  checksum = calculate_crc((unsigned char*)&mcu_packet);
+  mcu_packet[payload_length + PACKET_HEADER_LENGTH] = (unsigned char)(checksum >> 8);
+  mcu_packet[payload_length + PACKET_HEADER_LENGTH + 1] = 
+    (unsigned char)(checksum & 0xFF);  
   
   return true;
 }
@@ -78,20 +87,19 @@ bool MCU_PKT_CompilePacket(char cmd, char* pl, int plLen)
  * @brief send the prepared packet
  * @param cmd command (A-E)
  * @param payload the message
- * @param plLen length of the message
+ * @param payload_length length of the message
  * @return Void
  * @TODO: make sure sent packages can't race / be garbled
- * @TODO: sends byte by byte, how to capture on receiving end?
  */
-void SendPacket(char cmd, char* payLoad, int plLen)
+void send_packet(char cmd, char* payload, int payload_length)
 {
   int i = 0;
 
-  if(MCU_PKT_CompilePacket(cmd,payLoad,plLen))
+  if(mcu_compile_packet(cmd, payload, payload_length))
   {
-    for(i = 0; i < iPktSize; i++)
+    for(i = 0; i < mcu_packet_size; i++)
     {
-      USART_transmitByteToMCU(MCU_Packet[i]);
+      usart_transmit_byte_to_mcu(mcu_packet[i]);
     }
   }  
 }

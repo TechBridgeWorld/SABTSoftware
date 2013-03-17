@@ -32,6 +32,7 @@ int animals_used;                          // Keeps track of number of animals u
 char* animal;                              // Name of current animal
 char entered_letter;                       // Current letter being entered
 int length_current_word;                   // Keeps track of how long the current input word is
+int current_word_index;                    // Used to read back the letters in the current word
 const char* animal_list[11];               // Array of animal names (index into it to make code cleaner)
 
 void MD3_Main(void);

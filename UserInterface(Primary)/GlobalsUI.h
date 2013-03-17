@@ -17,7 +17,6 @@
 #include <avr/interrupt.h>
 
 #include "DigitalIO.h"
-#include "AnalogInputs.h"
 #include "USART_MCU.h"
 #include "Timer.h"
 #include "CommPacket.h"

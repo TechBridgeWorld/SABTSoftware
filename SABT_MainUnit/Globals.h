@@ -37,6 +37,8 @@ unsigned char fileName[13];
 
 volatile char tempCnt;
 
+volatile bool playing_mp3;
+
 //TODO remove
 void set_last_dot(char dot);
 void set_last_dot2(char dot);
