@@ -17,8 +17,8 @@
 
 //Dealing with the user data
 //uint16_t PC_calculate_CRC(unsigned char* pstrMsg);
-void PC_RequestsToModifyModesFile(void);
-void PC_parse_message(void);
-void PC_ControlKeyPressed(void);
+void pc_requests_to_modify_modes_file(void);
+void pc_parse_message(void);
+void pc_control_key_pressed(void);
 
 #endif /* _PC_HANDLE_H_ */

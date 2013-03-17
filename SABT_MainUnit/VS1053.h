@@ -1,6 +1,6 @@
 /**
  * @file VS1053.h
- * @brief TODO idk wut this is
+ * @brief volume controls
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)
@@ -12,20 +12,21 @@
 #include <stdbool.h>
 #include <string.h> 
 
-volatile bool VS1053_SKIP_PLAY;
+volatile bool vs1053_skip_play;
 
 //Public access functions
-unsigned char VS1053_Initialize(void);  //Init decoder chip
-void VS1053_SoftwareReset(void);  //Software reset routine
-bool VS1053_IncreaseVol(void);
-bool VS1053_DecreaseVol(void);
+unsigned char vs1053_initialize(void);                // Init decoder chip
+void vs1053_software_reset(void);                     // Software reset routine
+bool vs1053_increase_vol(void);
+bool vs1053_decrease_vol(void);
 
 
-void VS1053_WriteData(unsigned char data);  //Write MP3 data
-//Write to an internal register
-void VS1053_WriteCmd(unsigned char addr, unsigned int cmd);  
-unsigned int VS1053_ReadCmd(unsigned char addr);  //Read an internal register
+void vs1053_write_data(unsigned char data);           // Write MP3 data
+// Write to an internal register
+void vs1053_write_command(unsigned char addr, unsigned int cmd);  
+unsigned int vs1053_read_command(unsigned char address);  //  Read an internal register
 
-void RequestToPlayMP3file(const char* thisFile);
+
+void request_to_play_mp3_file(const char* this_file);
 
 #endif /* __VS1053_H__ */

@@ -16,25 +16,25 @@
 #define LONG        2
 #define CARR_RETURN 13
 
-#define TX_NEWLINE_PC { USART_transmitByteToPC(0x0d); \
-                        USART_transmitByteToPC(0x0a);}
+#define TX_NEWLINE_PC { usart_transmit_byte_to_pc(0x0d); \
+                        usart_transmit_byte_to_pc(0x0a);}
 
-volatile char USART_PC_Received_Data;
-volatile char USART_PC_Data_To_Transmit;
-volatile bool USART_PC_DATA_RDY;
-volatile bool USART_PC_Message_ready;
-volatile unsigned char USART_PC_received_playload_len;
+volatile char usart_pc_received_data;
+volatile char usart_pc_data_to_transmit;
+volatile bool usart_pc_data_ready;
+volatile bool usart_pc_message_ready;
+volatile unsigned char usart_pc_received_payload_len;
 
 //count for checking incoming messages
 char message_count;
 bool valid_message;
 
-volatile unsigned char USART_PC_ReceivedPacket[20];
+volatile unsigned char usart_pc_received_packet[20];
 
-void init_USART_PC(void);
-unsigned char USART_PC_ReceiveAction(void);
-void USART_transmitByteToPC(unsigned char);
-void USART_transmitStringToPC(unsigned char*);
-void USART_transmitStringToPCFromFlash(char*);
+void init_usart_pc(void);
+unsigned char usart_pc_receive_action(void);
+void usart_transmit_byte_to_pc(unsigned char);
+void usart_transmit_string_to_pc(unsigned char*);
+void usart_transmit_string_to_pc_from_flash(char*);
 
 #endif /* _USART_PC_H_ */

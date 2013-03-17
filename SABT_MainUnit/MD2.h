@@ -1,5 +1,5 @@
 /**
- * @file MD2.h
+ * @file md2.h
  * @brief definitions for mode 2
  * @author Nick LaGrow
  * @author Alex Etling (petling)
@@ -67,12 +67,12 @@ char current_random_letter;
 char use_random_letter;
 char curr_button;
 
-void MD2_Main(void);
-void MD2_Reset(void);
-void MD2_CallModeYesAnswer(void);
-void MD2_CallModeNoAnswer(void);
+void md2_main(void);
+void md2_reset(void);
+void md2_call_mode_yes_answer(void);
+void md2_call_mode_no_answer(void);
 
-void MD2_InputDot(char thisDot);
-void MD2_InputCell(char thisCell);
+void md2_input_dot(char this_dot);
+void md2_input_cell(char this_cell);
 
 #endif /* _MD2_H_ */

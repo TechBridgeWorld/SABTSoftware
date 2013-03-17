@@ -18,27 +18,27 @@
  *        this message type will change the mode file
  * @return Void
   */
-void PC_parse_message()
+void pc_parse_message()
 {
   unsigned char message_type;
   
-  USART_PC_Message_ready = false;
-  message_type = USART_PC_ReceivedPacket[2];
+  usart_pc_message_ready = false;
+  message_type = usart_pc_received_packet[2];
   
   PRINTF("the character found was: ");
-  USART_transmitByteToPC(message_type);
+  usart_transmit_byte_to_pc(message_type);
   TX_NEWLINE_PC; 
   
   switch(message_type)
   {
     // Send a confirmation that the board received the message
     case PC_CMD_INIT:
-      USART_transmitStringToPCFromFlash(PSTR("SABT-v2.1"));
+      usart_transmit_string_to_pc_from_flash(PSTR("SABT-v2.1"));
       TX_NEWLINE_PC;      
       break;
     // Modify the current modes
     case PC_CMD_NEWMODES:
-      PC_RequestsToModifyModesFile();
+      pc_requests_to_modify_modes_file();
       break;
     // Incorrect message type
     default:
@@ -50,35 +50,38 @@ void PC_parse_message()
 /**
  * @brief This function will replace the MODES.DAT file with new modes from the 
  *        message variable USART_PC_RecievedPacket.  
- *        The message size can at most be 20 charachters - WritingFileContent
+ *        The message size can at most be 20 charachters - writing_file_content
  * @return Void
  */
-void PC_RequestsToModifyModesFile(void)
+void pc_requests_to_modify_modes_file(void)
 {
-  const char* ModesFile = "MODES.DAT";
-  unsigned char WritingFileContent[20];
+  const char* modes_file = "MODES.DAT";
+  unsigned char writing_file_content[20];
   
   // Clear the buffer
-  int iT=0;
-  for(iT=0;iT<20;iT++)
+  int t = 0;
+  for(t = 0; t < 20; t++)
   {
-    WritingFileContent[iT]=0x00;
+    writing_file_content[t]=0x00;
   }
 
-  InitSDCard(false);
+  init_sd_card(false);
 
   // Copy over the modes in the form <1><2>...<n>. Ignoring the "PCM" header
-  for(iT=3;iT<USART_PC_received_playload_len;iT++)
+  for(t = 3; t < usart_pc_received_payload_len; t++)
   {
-    WritingFileContent[iT-3]=USART_PC_ReceivedPacket[iT];
+    writing_file_content[t - 3] = usart_pc_received_packet[t];
   }
 
-  if(ReplaceTheContentOfThisFileWith((unsigned char*)ModesFile, WritingFileContent) == 0)
+  if(replace_the_contents_of_this_file_with(
+        (unsigned char*)modes_file, writing_file_content) == 0)
   {
-    USART_transmitStringToPCFromFlash(PSTR("SABT-OK"));
+    usart_transmit_string_to_pc_from_flash(PSTR("SABT-OK"));
     TX_NEWLINE_PC;      
-  }else{
-    USART_transmitStringToPCFromFlash(PSTR("SABT-FAIL"));
+  }
+  else
+  {
+    usart_transmit_string_to_pc_from_flash(PSTR("SABT-FAIL"));
     TX_NEWLINE_PC;  
   }
 }

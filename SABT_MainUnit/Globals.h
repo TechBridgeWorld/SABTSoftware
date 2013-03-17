@@ -30,12 +30,12 @@
 #define F_CPU 8000000UL
 
 volatile unsigned char number_of_modes;
-volatile unsigned char UI_Modes[10];
+volatile unsigned char ui_modes[10];
 
-volatile unsigned char *gFileToPlay;
-unsigned char fileName[13];
+volatile unsigned char *g_file_to_play;
+unsigned char file_name[13];
 
-volatile char tempCnt;
+volatile char temp_cnt;
 
 volatile bool playing_mp3;
 
@@ -45,6 +45,6 @@ void set_last_dot2(char dot);
 void set_last_dot3(char dot);
 
 #define PRINTF(msg) \
-  USART_transmitStringToPC((unsigned char*)msg);
+  usart_transmit_string_to_pc((unsigned char*)msg);
 
 #endif /* _GLOBALS_H_ */

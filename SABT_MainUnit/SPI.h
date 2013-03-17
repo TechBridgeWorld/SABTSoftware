@@ -27,14 +27,14 @@
 #define MP3_RESET 3
 */
 
-void SPI_Initialize(void);
-void SPI_DeselectAll(void);
-void SPI_Select_SD(void);
-void SPI_Select_MP3_Data(void);
-void SPI_Select_MP3_Cmd(void);
-void SPI_2X(void);  //Double speed operation
-void SPI_1X(void);  //Single speed operation (only needed for 
-unsigned char SPI_transmit(unsigned char);
-unsigned char SPI_receive(void);
+void spi_initialize(void);
+void spi_deselect_all(void);
+void spi_select_sd(void);
+void spi_select_mp3_data(void);
+void spi_select_mp3_cmd(void);
+void spi_2x(void);                          // Double speed operation
+void spi_1x(void);                          // Single speed operation
+unsigned char spi_transmit(unsigned char);
+unsigned char spi_receive(void);
 
 #endif /* _SPI_H_ */
