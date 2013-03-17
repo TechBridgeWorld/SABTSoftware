@@ -231,7 +231,7 @@ void initialize_system(void)
   usart_transmit_string_to_pc_from_flash (PSTR("SABT testing..."));
   TX_NEWLINE_PC;
 
-  InitSDCard(true);
+  init_sd_card(true);
 
   message_count = 0;
   valid_message = true;  

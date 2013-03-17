@@ -293,7 +293,7 @@ void md3_main(void)
       if (valid_letter(last_cell)) {
         char buf[16];
         sprintf(buf, "MD2_%c.mp3", entered_letter);
-        USART_transmitStringToPC((unsigned char*)buf);
+        usart_transmit_string_to_pc((unsigned char*)buf);
         request_to_play_mp3_file(buf);
         md3_current_state = STATE_CHECK_IF_CORRECT;
       } else {
@@ -323,7 +323,7 @@ void md3_main(void)
         length_current_word++;
         char buf[8];
         sprintf(buf, "%d %d\r\n", length_current_word, strlen(animal));
-        USART_transmitStringToPC(buf);
+        usart_transmit_string_to_pc((unsigned char*)buf);
         if (length_current_word != strlen(animal))
           md3_current_state = STATE_CORRECT_INPUT;
         else

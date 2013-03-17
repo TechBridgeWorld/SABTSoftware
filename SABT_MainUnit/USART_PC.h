@@ -16,8 +16,8 @@
 #define LONG        2
 #define CARR_RETURN 13
 
-#define TX_NEWLINE_PC { USART_transmitByteToPC(0x0d); \
-                        USART_transmitByteToPC(0x0a);}
+#define TX_NEWLINE_PC { usart_transmit_byte_to_pc(0x0d); \
+                        usart_transmit_byte_to_pc(0x0a);}
 
 volatile char usart_pc_received_data;
 volatile char usart_pc_data_to_transmit;

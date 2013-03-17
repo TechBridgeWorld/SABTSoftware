@@ -161,7 +161,7 @@ unsigned long get_set_next_cluster(unsigned long cluster_number,
                                    unsigned char get_set,
                                    unsigned long cluster_entry);
 unsigned char read_file(unsigned char flag, unsigned char *file_name);
-unsigned char read_and_retreive_file_contents(unsigned char *file_name,
+unsigned char read_and_retrieve_file_contents(unsigned char *file_name,
                                               unsigned char *data_string);
 unsigned char play_mp3_file(unsigned char *file_name);
 unsigned char convert_file_name(unsigned char *file_name);

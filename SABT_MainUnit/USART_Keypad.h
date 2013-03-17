@@ -15,8 +15,8 @@
 #define INT  1
 #define LONG 2
 
-#define TX_NEWLINE_KP { USART_transmitByteToKeypad(0x0d); \
-                        USART_transmitByteToKeypad(0x0a);}
+#define TX_NEWLINE_KP { usart_transmit_byte_to_keypad(0x0d); \
+                        usart_transmit_byte_to_keypad(0x0a);}
 
 volatile char usart_keypad_received_data;
 volatile char usart_keypad_data_to_transmit;

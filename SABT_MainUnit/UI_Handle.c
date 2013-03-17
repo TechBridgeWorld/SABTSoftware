@@ -45,7 +45,7 @@ bool ui_check_modes(void)
   if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0)
   {
     PRINTF("FLAG 1");
-	  TX_NEWLINE_PC;
+	TX_NEWLINE_PC;
     return false;
   }
 

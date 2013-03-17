@@ -36,7 +36,7 @@ unsigned char get_boot_sector_data (void)
 
     if(mbr->signature != 0xaa55) return 1;       //if it is not even MBR then it's not FAT32
 
-    partition = (struct partitionInfo_Structure *)(mbr->partitionData);//first partition
+    partition = (struct partitionInfo_Structure *)(mbr->partition_data);//first partition
     unused_sectors = partition->first_sector; //the unused sectors, hidden to the FAT
 
     sd_read_single_block(partition->first_sector);//read the bpb sector
@@ -45,19 +45,19 @@ unsigned char get_boot_sector_data (void)
   }
 
   bytes_per_sector = bpb->bytes_per_sector;
-  //transmitHex(INT, bytes_per_sector); USART_transmitByteToPC(' ');
+  //transmitHex(INT, bytes_per_sector); usart_transmit_byte_to_pc(' ');
   sector_per_cluster = bpb->sector_per_cluster;
-  //transmitHex(INT, sector_per_cluster); USART_transmitByteToPC(' ');
+  //transmitHex(INT, sector_per_cluster); usart_transmit_byte_to_pc(' ');
   reserved_sector_count = bpb->reserved_sector_count;
   root_cluster = bpb->root_cluster; // + (sector / sector_per_cluster) +1;
-  first_data_sector = bpb->hiddenSectors + reserved_sector_count 
-    + (bpb->numberofFATs * bpb->FATsize_F32);
+  first_data_sector = bpb->hidden_sectors + reserved_sector_count 
+    + (bpb->number_of_fats * bpb->fat_size_f32);
 
-  data_sectors = bpb->totalSectors_F32
+  data_sectors = bpb->total_sectors_f32
                 - bpb->reserved_sector_count
-                - ( bpb->numberofFATs * bpb->FATsize_F32);
+                - ( bpb->number_of_fats * bpb->fat_size_f32);
   total_clusters = data_sectors / sector_per_cluster;
-  //transmitHex(LONG, total_clusters); USART_transmitByteToPC(' ');
+  //transmitHex(LONG, total_clusters); usart_transmit_byte_to_pc(' ');
 
   // Check if FSinfo free clusters count is valid
   if((get_set_free_cluster (TOTAL_FREE, GET, 0)) > total_clusters)  
@@ -209,7 +209,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
                 if(flag == GET_FILE)
                 {
                   append_file_sector = first_sector + sector;
-                  appendFileLocation = i;
+                  append_file_location = i;
                   append_start_cluster = (((unsigned long) dir->first_cluster_hi) << 16) 
                     | dir->first_cluster_lo;
           file_size = dir->file_size;
@@ -251,8 +251,8 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
            TX_NEWLINE_PC;
          for(j=0; j<11; j++)
            {
-           if(j == 8) USART_transmitByteToPC(' ');
-           USART_transmitByteToPC (dir->name[j]);
+           if(j == 8) usart_transmit_byte_to_pc(' ');
+           usart_transmit_byte_to_pc (dir->name[j]);
          }
            usart_transmit_string_to_pc_from_flash (PSTR("   "));
            if((dir->attrib != 0x10) && (dir->attrib != 0x08))
@@ -292,7 +292,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
  *                returns 1 if files already exists and flag = Verify
  *                returns 2 on error convertingFileName
  */
-unsigned char readFile (unsigned char flag, unsigned char *file_name)
+unsigned char read_file (unsigned char flag, unsigned char *file_name)
 {
   struct dir_Structure *dir;
   unsigned long cluster, byteCounter = 0, file_size, first_sector;
@@ -346,13 +346,13 @@ unsigned char readFile (unsigned char flag, unsigned char *file_name)
  * @brief This file just reads in data from the given file_name if it can find and 
  *         and process the file.
  * @param file_name    char *   That contains the file name of what you want to read
-          dataString  char *   Where the data is put, can store 100 bytes
+          data_string  char *   Where the data is put, can store 100 bytes
  * @return unsigned char - number where 0 means success
  *                         1 means that you could not convert file_name
  *                         2 means file does not exists
  *                         3 will mean inability to read a cluster
  */
-unsigned char readAndRetreiveFileContents (unsigned char *file_name, unsigned char *dataString)
+unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned char *data_string)
 {
   struct dir_Structure *dir;
   unsigned long cluster, byteCounter = 0, file_size, first_sector;
@@ -361,7 +361,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *file_name, unsigned ch
   unsigned int num_bytes_read;
   bool end_of_file = false;
 
-  PRINTF("In readAndRetrieve, file_name:");
+  PRINTF("In read_and_retrieve, file_name:");
   PRINTF(file_name);
   TX_NEWLINE_PC;
 
@@ -406,7 +406,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *file_name, unsigned ch
       }
       while(num_bytes_read < k)
       {
-        *dataString++ = buffer[num_bytes_read];
+        *data_string++ = buffer[num_bytes_read];
         if(num_bytes_read++ == k)return 0;  
       }
       if(end_of_file)
@@ -441,7 +441,7 @@ unsigned char readAndRetreiveFileContents (unsigned char *file_name, unsigned ch
  *                         return 2 on error converting file_name
 */
 
-unsigned char PlayMP3file (unsigned char *file_name)
+unsigned char play_mp3_file(unsigned char *file_name)
 {
   struct dir_Structure *dir;
   unsigned long cluster, byteCounter = 0, file_size, first_sector;
@@ -484,14 +484,14 @@ unsigned char PlayMP3file (unsigned char *file_name)
         if(vs1053_skip_play)
         {
           vs1053_skip_play = false;
-          VS1053_SoftwareReset();
+          vs1053_software_reset();
           return 0;//playing stopped by user
         }
         if((PINB & (1<<MP3_DREQ)))
         {
           for(iCntForSingleAudioWrite=0;iCntForSingleAudioWrite<32;iCntForSingleAudioWrite++)
           {
-            VS1053_WriteData(buffer[iAudioByteCnt]);
+            vs1053_write_data(buffer[iAudioByteCnt]);
             if(iAudioByteCnt++==k)return 0;    
           }  
         }
@@ -782,17 +782,17 @@ unsigned char convert_file_name (unsigned char *file_name)
 Modified write file function with replacing all the text with new text given
 */
 /**
- * @brief  reads the data in fileContent into buffer and uses the function
+ * @brief  reads the data in file_content into buffer and uses the function
  *         sd_write_single_block() to put the value in buffer onto the SD card
  *         Data you are writing in MUST END IN $. If not garbage will be written in. 
  * @param  file_name - unsigned char *, This contains the file to replace data in
- * @param  fileContent - unsighed char *, What to put into file_name
+ * @param  file_content - unsighed char *, What to put into file_name
  * @return int - returns 0 if the file exists you are trying to overwrite
  *               returns 1 if the file does not exist
  */
-int ReplaceTheContentOfThisFileWith (unsigned char *file_name, unsigned char *fileContent)
+int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned char *file_content)
 {
-  unsigned char j, error, appendFile = 0;
+  unsigned char j, error, append_file = 0;
   unsigned int i;
   struct dir_Structure *dir;
   unsigned long cluster, first_sector, cluster_count;
@@ -804,21 +804,21 @@ int ReplaceTheContentOfThisFileWith (unsigned char *file_name, unsigned char *fi
 
   //j = readFile (VERIFY, file_name);
 
-  if(readFile (VERIFY, file_name) == 1) 
+  if(read_file (VERIFY, file_name) == 1) 
   {
     //usart_transmit_string_to_pc_from_flash(PSTR("File found, replacing existing information...")); 
     //TX_NEWLINE_PC;
-    appendFile = 1;
+    append_file = 1;
     cluster = append_start_cluster;
     cluster_count=0;
     first_sector = get_first_sector (cluster);
     start_block = get_first_sector (cluster);
     i=0;
     j=0;
-    while(*fileContent != '$')
+    while(*file_content != '$')
     {      
-      buffer[i++]=*fileContent;
-      fileContent++;
+      buffer[i++]=*file_content;
+      file_content++;
       if(i >= 512)
       {        
         i=0;
@@ -828,18 +828,18 @@ int ReplaceTheContentOfThisFileWith (unsigned char *file_name, unsigned char *fi
         start_block++; 
       }
     }
-    //fileContent--;
-    if(*fileContent=='$')
+    //file_content--;
+    if(*file_content == '$')
     {
-      buffer[i++]='$';
-      for(;i<512;i++)  //fill the rest of the buffer with 0x00
-        buffer[i]= 0x00;
+      buffer[i++] = '$';
+      for(;i < 512; i++)  //fill the rest of the buffer with 0x00
+        buffer[i] = 0x00;
       error = sd_write_single_block (start_block);
       _delay_ms(100);
       //usart_transmit_string_to_pc_from_flash(PSTR("Successfully replace the file content")); 
       //TX_NEWLINE_PC;
     }
-    sd_read_single_block (first_sector);    
+    sd_read_single_block(first_sector);    
     _delay_ms(100);
     dir = (struct dir_Structure *) &buffer[0]; 
     //extraMemory = file_size - dir->file_size;
@@ -874,7 +874,7 @@ void write_file (unsigned char *file_name)
 {
   struct dir_Structure *dir;
   unsigned char j, data, error, file_created_flag = 0;
-  unsigned char start = 0, appendFile = 0, sector_end_flag = 0, sector = 0;
+  unsigned char start = 0, append_file = 0, sector_end_flag = 0, sector = 0;
   unsigned int i, first_cluster_high, first_cluster_low;
   unsigned long cluster, next_cluster, prev_cluster;
   unsigned long first_sector, cluster_count, extraMemory;
@@ -941,7 +941,7 @@ void write_file (unsigned char *file_name)
       // Special case when the last character in previous sector was '\r'
       if(sector_end_flag == 1) 
       {
-        USART_transmitByteToPC ('\n');
+        usart_transmit_byte_to_pc ('\n');
         buffer[i++] = '\n'; // Appending 'Line Feed (LF)' character
         file_size++;
       }
@@ -967,7 +967,7 @@ void write_file (unsigned char *file_name)
           sector_end_flag = 1;  //flag to indicate that the appended '\n' char should be put in the next sector
         else
         {
-          //       USART_transmitByteToPC ('\n');
+          //       usart_transmit_byte_to_pc ('\n');
           buffer[i++] = '\n'; //appending 'Line Feed (LF)' character
           file_size++;
         }
@@ -1014,7 +1014,7 @@ void write_file (unsigned char *file_name)
   if(append_file)  //executes this loop if file is to be appended
   {
     sd_read_single_block (append_file_sector);    
-    dir = (struct dir_Structure *) &buffer[appendFileLocation];
+    dir = (struct dir_Structure *) &buffer[append_file_location];
     extraMemory = file_size - dir->file_size;
     dir->file_size = file_size;
     sd_write_single_block (append_file_sector);
@@ -1048,7 +1048,7 @@ void write_file (unsigned char *file_name)
         {
           for(j = 0; j < 11; j++) dir->name[j] = file_name[j];
           dir->attrib = ATTR_ARCHIVE;  //settting file attribute as 'archive'
-          dir->NTreserved = 0;      //always set to 0
+          dir->nt_reserved = 0;      //always set to 0
           dir->time_tenth = 0;      //always set to 0
           dir->create_time = 0x9684;    //fixed time of creation
           dir->create_date = 0x3a37;    //fixed date of creation
@@ -1282,7 +1282,7 @@ void init_sd_card(bool verbose)
 
   for (i = 0; i < 10; i++)
   {
-    error = SD_init();
+    error = sd_init();
     if(!error) break;
   }
 
@@ -1336,7 +1336,7 @@ void init_sd_card(bool verbose)
         PSTR("FAT32 file system detected..."));
     }
     TX_NEWLINE_PC;  
-    init = VS1053_Initialize();
+    init = vs1053_initialize();
     
     if(init == 0)
     {
@@ -1347,7 +1347,7 @@ void init_sd_card(bool verbose)
     else
     {
       usart_transmit_string_to_pc_from_flash (PSTR("Error initializing VS1053 - CODE "));
-      USART_transmitByteToPC(init + 64);
+      usart_transmit_byte_to_pc(init + 64);
       TX_NEWLINE_PC;
     }
   }
@@ -1369,6 +1369,6 @@ void init_sd_card(bool verbose)
       FAT32_active = 0;
     }
 
-    init = VS1053_Initialize();
+    init = vs1053_initialize();
   }
 }
