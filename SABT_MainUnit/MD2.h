@@ -13,6 +13,8 @@
 // This is arbitrary
 #define ENTER 140
 
+#define NUM_BUT 6
+
 //bit correspondance for letters.  Right most bit is 1
 #define A_BITS 0b00000001
 #define B_BITS 0b00000011
@@ -52,6 +54,8 @@
 #define STATE_ERROR_1         5   // first part of the error sequence
 #define STATE_ERROR_2         6   // second part of the error sequence
 #define SET_LETTER_VALS	      7   // Set the letter vals for random and current
+#define STATE_BUTT_TO_PRESS_1 8   //play press sound before telling which buttons to press
+#define STATE_BUTT_TO_PRESS_2 9   //play each of the buttons requested 
 
 char button_bits;
 char letter_set;
@@ -61,6 +65,7 @@ char initial_letter;
 char current_letter;
 char current_random_letter;
 char use_random_letter;
+char curr_button;
 
 void md2_main(void);
 void md2_reset(void);

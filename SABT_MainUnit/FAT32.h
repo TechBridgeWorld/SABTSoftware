@@ -146,6 +146,10 @@ unsigned long append_file_location, file_size, append_start_cluster;
 // Global flag to keep track of free cluster count updating in FSinfo sector
 unsigned char free_cluster_count_updated;
 
+//for Text files track all clusters that they contain
+unsigned long *dict_clusters;
+unsigned int dict_cluster_cnt;
+
 //************* functions *************
 unsigned char get_boot_sector_data(void);
 unsigned long get_first_sector(unsigned long cluster_number);

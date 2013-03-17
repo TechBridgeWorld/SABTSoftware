@@ -1,7 +1,10 @@
 /**
  * @file FAT32.c
- * @brief    Reads data from File Allocation Table 32 (FAT 32) format.  
- *           This system defines clusters, which are contiguous regions of memory.
+ * @brief Reads data from File Allocation Table 32 (FAT 32) format.
+ *        This system defines clusters, which are contiguous regions of memory.
+ *        Can walk down clusters for each file (clustor is a group of sectors)
+ *        and each cluster points to next cluster or end of file 
+ * @ref http://en.wikipedia.org/wiki/File_Allocation_Table#Logical_sectored_FAT
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)
@@ -160,7 +163,9 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
 
 /**
  * @brief function gets DIR/FILE list or a single file address or deletes specified
- *         file
+ *         file.  Will find starting location for the file. 
+ *         Globals used in this function appendFileSector, appendFileLocation,
+ *         appendStartCluster, fileSize
  * @param flag - unsigned char, can be GET_LIST, GET_FILE or DELETE
  * @param file_name - unsinged char *, pointer to the file name to operate on
  * @return struct dir_Structure * - first cluster of file if flag = GET_FILE
@@ -196,6 +201,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
           {
             if((flag == GET_FILE) || (flag == DELETE))
             {
+              //loop over the name[] array till you do not see a match,(DID NOT match)
               for(j=0; j<11; j++)
               if(dir->name[j] != file_name[j]) break;
               if(j == 11)
@@ -264,6 +270,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
 
      cluster = (get_set_next_cluster (cluster, GET, 0));
 
+     //out of bonds?? TODO - look at
      if(cluster > 0x0ffffff6)
         return 0;
      if(cluster == 0) 
@@ -465,7 +472,7 @@ unsigned char PlayMP3file (unsigned char *file_name)
     {
       sd_read_single_block(first_sector + j);
 
-
+      //for all sectors in this cluster, read in their data (512 bytes)
       for(k=0; k<512; k++)
       {
         if ((byteCounter++) >= file_size ) end_of_file=true;
@@ -520,6 +527,159 @@ unsigned char PlayMP3file (unsigned char *file_name)
   }
   return 0;
 }
+
+
+
+/**
+ * @brief This function will take in a filename and read/prints the contents 
+ *        of this file.  It will also populate the clusters array with a pointer
+ *        to each cluster
+ * @param fileName - unsigned char *, name of the file we are trying to find
+ * @return unsigned char - status of trying to read
+ */
+unsigned char read_dict_file(unsigned char *fileName)
+{
+    struct dir_Structure *dir;
+    unsigned long cluster, byteCounter = 0, fileSize, firstSector;
+    unsigned int k,iCntForSingleAudioWrite;
+    unsigned char j, error;
+    unsigned int iAudioByteCnt;
+    bool bEndOfFile=false;
+    //clusters needs to be an array - I am not sure of the correct size, so will start
+    //at 4096
+    dict_clusters = unsigned long[4096];
+    dict_cluster_cnt = 0;
+    
+    
+    error = convertFileName (fileName); //convert fileName into FAT format
+    if(error) return 2;
+    
+    dir = findFiles (GET_FILE, fileName); //get the file location
+    if(dir == 0)
+        return (0);
+    
+    cluster = (((unsigned long) dir->firstClusterHI) << 16) | dir->firstClusterLO;
+    
+    fileSize = dir->fileSize;
+    while(1)
+    {
+        dict_clusters[dict_cluster_cnt] = cluster;
+        dict_cluster_cnt ++;
+        firstSector = getFirstSector(cluster);
+        
+        for(j=0; j<sectorPerCluster; j++)
+        {
+            SD_readSingleBlock(firstSector + j);
+            
+            //number of bytes read at each sector
+            byteCounter += 512;
+            PRINTF(buffer);
+            TX_NEWLINE_PC;
+
+            
+            if(bEndOfFile)
+            {
+                return 0;
+            }
+            
+        }
+        
+        cluster = getSetNextCluster (cluster, GET, 0);
+        if(cluster == 0) 
+        {
+            USART_transmitStringToPCFromFlash(PSTR("Error in getting cluster")); 
+            return 0;
+        }
+    }
+    return 0;
+}
+
+
+/**
+ * @brief This function will find the word in the dictionary file
+ *        This will find a word accross multiple clusters/sectors.
+ *        In a dictionary file, words are seperated by '/n'
+ * @param file_name - unsigned char *, file for dict to look in
+ * @param word - unsigned char *, word you are trying to find 
+ * @return bool - returns whether or not you have found word
+ */
+bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
+    int cluster_cnt = dict_cluster_cnt;
+    unsigned long curr_cluster, first_sector;
+    int hi = cluster_cnt - 1;
+    int lo = 0;
+    int cmp_wrd = 0;
+    error = convertFileName (fileName); //convert fileName into FAT format
+    if(error) return 2;
+    
+    dir = findFiles (GET_FILE, fileName); //get the file location
+    if(dir == 0)
+        return (0);
+    
+    cluster = (((unsigned long) dir->firstClusterHI) << 16) | dir->firstClusterLO;
+    
+    fileSize = dir->fileSize;
+    
+    
+    //search for the cluster that contains the word
+    while((hi - lo) > 1){
+        mid = (hi + lo) / 2;
+        curr_cluster = dict_cluster_cnt[mid];
+        first_sector = getFirstSector (curr_cluster);
+        //store these values into the buffer array 
+        SD_readSingleBlock(first_sector);
+        
+        //this should return 0 for found, 1 for less then first, 2 for greater then first
+        cmp_wrd = check_first_full_word(word);
+        
+        
+        
+        
+    }
+    
+    
+}
+
+
+/**
+ * @brief This should compare/find word with the fist word found in buffer
+ * @param word - unsigned char *, word to compare with the first word
+ * @return int - 0 if word is same then first word in buffer
+ *               1 if word is less then first word in buffer
+ *               2 if word is greater then first word in buffer 
+ *               -1 error
+ */
+int check_first_full_word(unsigned char *word){
+    unsigned char *first_word;
+    int i = 0;
+    //find the start of the first word
+    while(1){
+        if(buffer[i] == '/n')
+            first_word = &buffer[i+1];
+    }
+    
+    i = 0;
+    while(1){
+        //if word is greater then first word
+        if(word[i] > first_word[i])
+            return 2;
+        //if word is less then first word
+        else if(word[i] < first_word[i])
+            return 1;
+        //if both words are terminated, null terminated by word and newline for firstword
+        else if((word[i] == 0)  && (first_word[i] == '/n'))
+            return 0;
+        
+    }
+    
+    //if you got here, it is an error
+    return -1;
+    
+    
+}
+
+
+
 
 
 //***************************************************************************

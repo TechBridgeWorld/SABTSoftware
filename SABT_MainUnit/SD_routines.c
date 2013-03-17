@@ -1,6 +1,7 @@
 /**
  * @file SD_routines.c
  * @brief code to interact with SD card
+ * @ref sdcard_appnote_foust
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)
@@ -194,6 +195,7 @@ unsigned char sd_erase (unsigned long start_block, unsigned long total_blocks)
 
 /**
  * @brief Reads a single block from SD card
+ *        Reads 512 bytes (SPI Block) from SD Card
  * @return unsigned char - 0 if no error and response byte if error
  */
 unsigned char SD_readSingleBlock(unsigned long start_block)
