@@ -165,7 +165,7 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
  * @brief function gets DIR/FILE list or a single file address or deletes specified
  *         file.  Will find starting location for the file. 
  *         Globals used in this function appendFileSector, appendFileLocation,
- *         appendStartCluster, fileSize
+ *         appendStartCluster, file_size
  * @param flag - unsigned char, can be GET_LIST, GET_FILE or DELETE
  * @param file_name - unsinged char *, pointer to the file name to operate on
  * @return struct dir_Structure * - first cluster of file if flag = GET_FILE
@@ -531,63 +531,63 @@ unsigned char play_mp3_file(unsigned char *file_name)
 
 
 /**
- * @brief This function will take in a filename and read/prints the contents 
+ * @brief This function will take in a file_name and read/prints the contents 
  *        of this file.  It will also populate the clusters array with a pointer
  *        to each cluster
- * @param fileName - unsigned char *, name of the file we are trying to find
+ * @param file_name - unsigned char *, name of the file we are trying to find
  * @return unsigned char - status of trying to read
  */
-unsigned char read_dict_file(unsigned char *fileName)
+unsigned char read_dict_file(unsigned char *file_name)
 {
     struct dir_Structure *dir;
-    unsigned long cluster, byteCounter = 0, fileSize, firstSector;
-    unsigned int k,iCntForSingleAudioWrite;
+    unsigned long cluster, file_size, first_sector;
     unsigned char j, error;
-    unsigned int iAudioByteCnt;
-    bool bEndOfFile=false;
+    bool end_of_file=false;
+    int byte_counter;
+
     //clusters needs to be an array - I am not sure of the correct size, so will start
     //at 4096
-    dict_clusters = unsigned long[4096];
+    unsigned long dict_clusters[4096];
     dict_cluster_cnt = 0;
     
     
-    error = convertFileName (fileName); //convert fileName into FAT format
+    error = convert_file_name (file_name); //convert file_name into FAT format
     if(error) return 2;
     
-    dir = findFiles (GET_FILE, fileName); //get the file location
+    dir = find_files (GET_FILE, file_name); //get the file location
     if(dir == 0)
         return (0);
     
-    cluster = (((unsigned long) dir->firstClusterHI) << 16) | dir->firstClusterLO;
+    cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
     
-    fileSize = dir->fileSize;
+    file_size = dir->file_size;
     while(1)
     {
         dict_clusters[dict_cluster_cnt] = cluster;
         dict_cluster_cnt ++;
-        firstSector = getFirstSector(cluster);
+        first_sector = get_first_sector(cluster);
         
-        for(j=0; j<sectorPerCluster; j++)
+        for(j=0; j<sector_per_cluster; j++)
         {
-            SD_readSingleBlock(firstSector + j);
+            sd_read_single_block(first_sector + j);
             
             //number of bytes read at each sector
-            byteCounter += 512;
+            byte_counter += 512;
             PRINTF(buffer);
             TX_NEWLINE_PC;
 
             
-            if(bEndOfFile)
+            if(end_of_file)
             {
                 return 0;
             }
             
         }
         
-        cluster = getSetNextCluster (cluster, GET, 0);
+        cluster = get_set_next_cluster (cluster, GET, 0);
         if(cluster == 0) 
         {
-            USART_transmitStringToPCFromFlash(PSTR("Error in getting cluster")); 
+            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
             return 0;
         }
     }
@@ -603,41 +603,42 @@ unsigned char read_dict_file(unsigned char *fileName)
  * @param word - unsigned char *, word you are trying to find 
  * @return bool - returns whether or not you have found word
  */
-bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
+bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
+{
     int cluster_cnt = dict_cluster_cnt;
     unsigned long curr_cluster, first_sector;
     int hi = cluster_cnt - 1;
     int lo = 0;
     int cmp_wrd = 0;
-    error = convertFileName (fileName); //convert fileName into FAT format
+	int mid;
+	int cluster;
+	struct dir_Structure *dir;
+	int error;
+    
+
+    error = convert_file_name (file_name); //convert file_name into FAT format
     if(error) return 2;
     
-    dir = findFiles (GET_FILE, fileName); //get the file location
+    dir = find_files (GET_FILE, file_name); //get the file location
     if(dir == 0)
         return (0);
     
-    cluster = (((unsigned long) dir->firstClusterHI) << 16) | dir->firstClusterLO;
+    cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
     
-    fileSize = dir->fileSize;
+    file_size = dir->file_size;
     
     
     //search for the cluster that contains the word
     while((hi - lo) > 1){
         mid = (hi + lo) / 2;
-        curr_cluster = dict_cluster_cnt[mid];
-        first_sector = getFirstSector (curr_cluster);
+//        curr_cluster = dict_cluster_cnt[mid];
+        first_sector = get_first_sector (curr_cluster);
         //store these values into the buffer array 
-        SD_readSingleBlock(first_sector);
+        sd_read_single_block(first_sector);
         
         //this should return 0 for found, 1 for less then first, 2 for greater then first
         cmp_wrd = check_first_full_word(word);
-        
-        
-        
-        
     }
-    
-    
 }
 
 
@@ -649,12 +650,13 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
  *               2 if word is greater then first word in buffer 
  *               -1 error
  */
-int check_first_full_word(unsigned char *word){
+int check_first_full_word(unsigned char *word)
+{
     unsigned char *first_word;
     int i = 0;
     //find the start of the first word
     while(1){
-        if(buffer[i] == '/n')
+        if(buffer[i] == '\n')
             first_word = &buffer[i+1];
     }
     
@@ -667,7 +669,7 @@ int check_first_full_word(unsigned char *word){
         else if(word[i] < first_word[i])
             return 1;
         //if both words are terminated, null terminated by word and newline for firstword
-        else if((word[i] == 0)  && (first_word[i] == '/n'))
+        else if((word[i] == 0)  && (first_word[i] == '\n'))
             return 0;
         
     }
@@ -690,8 +692,8 @@ int check_first_full_word(unsigned char *word){
 
 /**
  * @brief Converts the input file_name (which is in FAT format) in the following fashion:
- *        <filename.ext> -----> <filename[padding to 8 chars]ext>
- *        filename must be <= 8 chars and ext must be <= 3 chars.
+ *        <file_name.ext> -----> <file_name[padding to 8 chars]ext>
+ *        file_name must be <= 8 chars and ext must be <= 3 chars.
  *        Thus, INT.MP3 becomes [INT     MP3]. Also, capitalizes lowercase files.
  * @param file_name unsigned char* string which contains the file name that needs to be converted
  * @return unsigned char 1 for failure 0 for victory
@@ -701,14 +703,14 @@ int check_first_full_word(unsigned char *word){
 */ 
 unsigned char convert_file_name (unsigned char *file_name)
 {
-  unsigned char file_nameFAT[11];
+  unsigned char file_name_fat[11];
   unsigned char j, k;
 
-  //PRINTF("[convert_file_name]Filename:");
+  //PRINTF("[convert_file_name]file_name:");
   //PRINTF(file_name);
   //TX_NEWLINE_PC;
 
-  for(j=0; j<12; j++) {
+  for(j = 0; j < 12; j++) {
     if(file_name[j] == '.') 
       break;
   }
@@ -728,46 +730,46 @@ unsigned char convert_file_name (unsigned char *file_name)
     return 1;
   }
 
-  for(k=0; k<j; k++) //setting file name
-    file_nameFAT[k] = file_name[k];
+  for(k = 0; k < j; k++) //setting file name
+    file_name_fat[k] = file_name[k];
 
-  for(k=j; k<=7; k++) //filling file name trail with blanks
-    file_nameFAT[k] = ' ';
+  for(k = j; k <= 7; k++) //filling file name trail with blanks
+    file_name_fat[k] = ' ';
 
   j++;
 
-  for(k=8; k<11; k++) //setting file extention
+  for(k = 8; k < 11; k++) //setting file extention
   {
     if(file_name[j] != 0)
     {
-      file_nameFAT[k] = file_name[j++];
+      file_name_fat[k] = file_name[j++];
     }
     else //filling extension trail with blanks
     {
       while(k<11)
       {
-        file_nameFAT[k++] = ' ';
+        file_name_fat[k++] = ' ';
       }
     }
   }
 
-  for(j=0; j<11; j++) //converting small letters to caps
+  for(j = 0; j < 11; j++) //converting small letters to caps
   {
-    if((file_nameFAT[j] >= 0x61) && (file_nameFAT[j] <= 0x7a))
+    if((file_name_fat[j] >= 0x61) && (file_name_fat[j] <= 0x7a))
     {
-        file_nameFAT[j] -= 0x20;
+        file_name_fat[j] -= 0x20;
     }
   }
 
 
-  for(j=0; j<11; j++)
-    file_name[j] = file_nameFAT[j];
+  for(j = 0; j < 11; j++)
+    file_name[j] = file_name_fat[j];
 
-  // Add null terminator to filename
+  // Add null terminator to file_name
   //file_name[11] = '\0';
 
   //PRINTF("[convert_file_name]File name FAT:");
-  //PRINTF(file_nameFAT);
+  //PRINTF(file_name_fat);
   //TX_NEWLINE_PC;
 
 

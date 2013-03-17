@@ -176,4 +176,6 @@ void delete_file(unsigned char *file_name);
 void free_memory_update(unsigned char flag, unsigned long size);
 void init_sd_card(bool verb);
 
+int check_first_full_word(unsigned char *word);
+
 #endif /* _FAT32_H_ */
