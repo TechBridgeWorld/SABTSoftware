@@ -140,6 +140,10 @@ unsigned long unusedSectors, appendFileSector, appendFileLocation, fileSize, app
 //global flag to keep track of free cluster count updating in FSinfo sector
 unsigned char freeClusterCountUpdated;
 
+//for Text files track all clusters that they contain
+unsigned long *dict_clusters;
+unsigned int dict_cluster_cnt;
+
 //************* functions *************
 unsigned char getBootSectorData (void);
 unsigned long getFirstSector(unsigned long clusterNumber);
