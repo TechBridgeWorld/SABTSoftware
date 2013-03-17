@@ -21,25 +21,25 @@
 #define UI_CMD_VOLU 5
 #define UI_CMD_VOLD 6
 
-volatile bool UI_MP3_file_Pending;
-volatile bool UI_MODE_SELECTED;
-volatile char UI_Current_Mode;
-volatile char UI_Selected_Mode;
+volatile bool ui_mp3_file_pending;
+volatile bool ui_mode_selected;
+volatile char ui_current_mode;
+volatile char ui_selected_mode;
 
 //Dealing with the user data
-bool UI_CheckModes(void);
-uint16_t UI_calculate_CRC(unsigned char* pstrMsg);
-bool UI_parse_message(bool mp3_is_playing);
-void UI_ControlKeyPressed(void);
+bool ui_check_modes(void);
+uint16_t ui_calculate_crc(unsigned char* message);
+bool ui_parse_message(bool mp3_is_playing);
+void ui_control_key_pressed(void);
 
 //Current mode related functions
-void UI_Play_Intro_Currentmode(void);
-void UI_CallModeYesAnswer(void);
-void UI_CallModeNoAnswer(void);
-void UI_InputDotToCurrentMode(char thisDot);
-void UI_InputCellToCurrentMode(char thisCell);
-void UI_RunMainOfCurrentMode(void);
-void UI_ResetTheCurrentMode(void);
+void ui_play_intro_current_mode(void);
+void ui_call_mode_yes_answer(void);
+void ui_call_mode_no_answer(void);
+void ui_input_dot_to_current_mode(char this_dot);
+void ui_input_cell_to_current_mode(char this_cell);
+void ui_run_main_of_current_mode(void);
+void ui_reset_the_current_mode(void);
 
 //MP3 play related functions
 //void RequestToPlayMP3file(const char* thisFile);

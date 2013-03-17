@@ -22,12 +22,12 @@ int current_state;               // current state of the mode
 char expected_dot;               // The expected response from user 
 char last_dot;                   // char representing last big dot pressed
 
-void MD1_Main(void);
-void MD1_Reset(void);
-void MD1_CallModeYesAnswer(void);
-void MD1_CallModeNoAnswer(void);
+void md1_main(void);
+void md1_reset(void);
+void md1_call_mode_yes_answer(void);
+void md1_call_mode_no_answer(void);
 
-void MD1_InputDot(char thisDot);
-void MD1_InputCell(char thisCell );
+void md1_input_dot(char this_dot);
+void md1_input_cell(char this_cell);
 
 #endif /* _MD1_H_ */

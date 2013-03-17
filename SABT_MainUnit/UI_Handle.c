@@ -248,11 +248,11 @@ void ui_control_key_pressed(void)
     case UI_CMD_ENT1: // Enter a mode
       //usart_transmit_string_to_pc_from_flash(PSTR("Enter 1 pressed"));
       TX_NEWLINE_PC; 
-      if(!UI_MODE_SELECTED) //Then this command is to select the mode
+      if(!ui_mode_selected) //Then this command is to select the mode
       {
         if(ui_selected_mode>0)
         {
-          UI_MODE_SELECTED = true;
+          ui_mode_selected = true;
           ui_reset_the_current_mode();
         }
         else
@@ -271,13 +271,13 @@ void ui_control_key_pressed(void)
       TX_NEWLINE_PC;
       
       //This might be an exit from mode command or "NO" command in the mode
-      if(UI_MODE_SELECTED) 
+      if(ui_mode_selected) 
       {
         // If the next byte is 'E', this is exit command 
         // (when the user pressed E2 for more than 5 secs)
         if(usart_ui_received_packet[6] == 69) 
         {
-          UI_MODE_SELECTED = false;
+          ui_mode_selected = false;
           request_to_play_mp3_file("MM.MP3");
         }
         else //Then this a "NO" answer, call the mode function for this
@@ -290,7 +290,7 @@ void ui_control_key_pressed(void)
     case UI_CMD_MFOR: // Move forward in list of modes
       //usart_transmit_string_to_pc_from_flash(PSTR("Mode 1 pressed"));
       TX_NEWLINE_PC;
-      if(!UI_MODE_SELECTED)
+      if(!ui_mode_selected)
       {
         ui_selected_mode++;
         if(ui_selected_mode > number_of_modes)
@@ -301,7 +301,7 @@ void ui_control_key_pressed(void)
         else
         {
           ui_current_mode = ui_modes[ui_selected_mode - 1];
-          VS1053_SKIP_PLAY = true;
+          vs1053_skip_play = true;
           ui_play_intro_current_mode();
         }
       }
@@ -309,7 +309,7 @@ void ui_control_key_pressed(void)
     case UI_CMD_MREV: // Move backwards in list of modes
       //usart_transmit_string_to_pc_from_flash(PSTR("Mode 2 pressed"));
       TX_NEWLINE_PC;
-      if(!UI_MODE_SELECTED)
+      if(!ui_mode_selected)
       {
         ui_selected_mode--;
         if(ui_selected_mode < 1)
@@ -320,7 +320,7 @@ void ui_control_key_pressed(void)
         else
         {
           ui_current_mode = ui_modes[ui_selected_mode - 1];
-          VS1053_SKIP_PLAY = true;
+          vs1053_skip_play = true;
           ui_play_intro_current_mode();
         }  
       }    
@@ -457,7 +457,7 @@ void ui_input_cell_to_current_mode(char this_cell)
  */
 void ui_run_main_of_current_mode(void)
 {
-  if(UI_MODE_SELECTED){
+  if(ui_mode_selected){
     switch(ui_current_mode)
     {
       case 1:
@@ -481,7 +481,7 @@ void ui_run_main_of_current_mode(void)
  */
 void ui_reset_the_current_mode(void)
 {
-  if(UI_MODE_SELECTED){
+  if(ui_mode_selected){
     switch(ui_current_mode)
     {
       case 1:

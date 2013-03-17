@@ -349,8 +349,8 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
  * @brief Recieves data from UART and writes to multiple blocks of SD card
  * @return unsigned char - response byte
  */
-unsigned char sd_write_multiple_block(unsigned long start_block, 
-                                      unsigned long total_blocks)
+unsigned char sd_write_multiple_blocks(unsigned long start_block, 
+                                       unsigned long total_blocks)
 {
   unsigned char response, data;
   unsigned int i, retry = 0;

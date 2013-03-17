@@ -49,7 +49,7 @@
 #define ERASE_BLOCK_START_ADDR    32
 #define ERASE_BLOCK_END_ADDR      33
 #define ERASE_SELECTED_BLOCKS     38
-#define SD_SEND_OP_COND           41   //ACMD
+#define SD_SEND_OP_COND           41   // ACMD
 #define APP_CMD                   55
 #define READ_OCR                  58
 #define CRC_ON_OFF                59
@@ -57,15 +57,17 @@
 #define ON     1
 #define OFF    0
 
-volatile unsigned long startBlock, totalBlocks; 
-volatile unsigned char SDHC_flag, cardType, buffer[512];
+volatile unsigned long start_block, total_blocks; 
+volatile unsigned char sdhc_flag, card_type, buffer[512];
 
-unsigned char SD_init(void);
-unsigned char SD_sendCommand(unsigned char cmd, unsigned long arg);
-unsigned char SD_readSingleBlock(unsigned long startBlock);
-unsigned char SD_writeSingleBlock(unsigned long startBlock);
-unsigned char SD_readMultipleBlock (unsigned long startBlock, unsigned long totalBlocks);
-unsigned char SD_writeMultipleBlock(unsigned long startBlock, unsigned long totalBlocks);
-unsigned char SD_erase (unsigned long startBlock, unsigned long totalBlocks);
+unsigned char sd_init(void);
+unsigned char sd_send_command(unsigned char cmd, unsigned long arg);
+unsigned char sd_read_single_block(unsigned long start_block);
+unsigned char sd_write_single_block(unsigned long start_block);
+unsigned char sd_read_multiple_blocks(unsigned long start_block, 
+                                      unsigned long total_blocks);
+unsigned char sd_write_multiple_blocks(unsigned long start_block, 
+                                       unsigned long total_blocks);
+unsigned char sd_erase(unsigned long start_block, unsigned long total_blocks);
 
 #endif /* _SD_ROUTINES_H_ */

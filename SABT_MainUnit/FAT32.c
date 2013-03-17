@@ -456,7 +456,7 @@ unsigned char PlayMP3file (unsigned char *file_name)
   cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
 
   file_size = dir->file_size;
-  VS1053_SKIP_PLAY=false;
+  vs1053_skip_play=false;
   while(1)
   {
     first_sector = get_first_sector (cluster);
@@ -474,9 +474,9 @@ unsigned char PlayMP3file (unsigned char *file_name)
       iAudioByteCnt=0;
       while(iAudioByteCnt<k)
       {
-        if(VS1053_SKIP_PLAY)
+        if(vs1053_skip_play)
         {
-          VS1053_SKIP_PLAY=false;
+          vs1053_skip_play = false;
           VS1053_SoftwareReset();
           return 0;//playing stopped by user
         }
