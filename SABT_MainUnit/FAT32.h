@@ -105,6 +105,9 @@ struct dir_Structure{
   unsigned long fileSize; //size of file in bytes
 };
 
+//buffer variable
+#define BUFFER_SIZE 512
+
 //Attribute definitions for file/directory
 #define ATTR_READ_ONLY     0x01
 #define ATTR_HIDDEN        0x02

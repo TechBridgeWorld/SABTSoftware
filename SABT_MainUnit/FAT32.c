@@ -553,10 +553,10 @@ unsigned char read_dict_file(unsigned char *fileName)
     dict_cluster_cnt = 0;
     
     
-    error = convertFileName (fileName); //convert fileName into FAT format
+    error = convertFileName(fileName); //convert fileName into FAT format
     if(error) return 2;
     
-    dir = findFiles (GET_FILE, fileName); //get the file location
+    dir = findFiles(GET_FILE, fileName); //get the file location
     if(dir == 0)
         return (0);
     
@@ -606,6 +606,7 @@ unsigned char read_dict_file(unsigned char *fileName)
  * @return bool - returns whether or not you have found word
  */
 bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
+    bool found = false;
     int cluster_cnt = dict_cluster_cnt;
     unsigned long curr_cluster, first_sector;
     int hi = cluster_cnt - 1;
@@ -626,7 +627,7 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
     //search for the cluster that contains the word
     while((hi - lo) > 1){
         mid = (hi + lo) / 2;
-        curr_cluster = dict_cluster_cnt[mid];
+        curr_cluster = dict_clusters[mid];
         first_sector = getFirstSector (curr_cluster);
         //store these values into the buffer array 
         SD_readSingleBlock(first_sector);
@@ -635,13 +636,83 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
         cmp_wrd = check_first_full_word(word);
         
         
+        if(cmp_wrd == 0){
+            found = true;
+            break;
+        }
+        
+        else if(cmp_wrd == 1)
+            hi = mid - 1;
+        
+        else if(cmp_wrd == 2)
+            lo = mid + 1;
+        
+        //if you get any other return value, you know that it is wrong. 
+        else
+            return false;
+        
         
         
     }
     
+    //if you have narrowed it down to the sector that is pointed at by lo
+    if(found == false){
+        firstSector = getFirstSector(dict_clusters[lo]);
+        for(j=0; j<sectorPerCluster; j++)
+        {
+            
+            SD_readSingleBlock(firstSector + j);
+            
+            if(find_wrd_in_buff(word))
+                return true;
+            
+        }
+        //if you get here, that means that you did not have find the word in any part of the cluster it should be in
+        return false;
+    }
+    
+    //this must mean you found it while doing your work in bin search part.  
+    return true;
+    
+    
+    
     
 }
 
+/**
+ * @brief This should compare/find word in buffer
+ * @param word - unsigned char *, word to compare with the first word
+ * @return bool - return whether or not you found value in buffer
+ */
+bool find_wrd_in_buff(unsigned char *word){
+    int i = 0, j = 0;
+    unsigned char *first_word;
+    
+    for(i; i < BUFFER_SIZE; i ++){
+      while(i < BUFFER_SIZE){
+        if(buffer[i] == '/n')
+            first_word = &buffer[i+1];
+      }
+      
+      j = 0;
+      while((i + j) < BUFFER_SIZE){
+        //if not the correct word, break
+        if(word[j] != first_word[j])
+          break;
+          
+        //if you find the end of both words at the same time, and have not left
+        //loop yet, need to return true
+        else if((word[i] == 0)  && (first_word[i] == '/n'))
+          return true;
+            
+          j ++;
+      }
+      //want to start looking for next word where checking failed
+      i += (j - 1);
+    }
+    //if you get all the way through, did not find the word, so return false
+    return false;
+}
 
 /**
  * @brief This should compare/find word with the fist word found in buffer
@@ -658,6 +729,7 @@ int check_first_full_word(unsigned char *word){
     while(1){
         if(buffer[i] == '/n')
             first_word = &buffer[i+1];
+        i ++;
     }
     
     i = 0;
@@ -672,6 +744,7 @@ int check_first_full_word(unsigned char *word){
         else if((word[i] == 0)  && (first_word[i] == '/n'))
             return 0;
         
+        i++;
     }
     
     //if you got here, it is an error

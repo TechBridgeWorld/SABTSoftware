@@ -58,7 +58,7 @@
 #define OFF    0
 
 volatile unsigned long startBlock, totalBlocks; 
-volatile unsigned char SDHC_flag, cardType, buffer[512];
+volatile unsigned char SDHC_flag, cardType, buffer[BUFFER_SIZE];
 
 unsigned char SD_init(void);
 unsigned char SD_sendCommand(unsigned char cmd, unsigned long arg);
