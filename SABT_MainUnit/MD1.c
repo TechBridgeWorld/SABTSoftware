@@ -34,7 +34,7 @@ char random_number_as_char()
  * @param last_dot - unsigned char.   Which dot to play 
  * @return Void
  */
-void play_requested_dot(unsigned char last_dot)
+void md1_play_requested_dot(unsigned char last_dot)
 {
   char buf[10];
 
@@ -101,7 +101,7 @@ void md1_main(void)
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
       expected_dot = random_number_as_char();
-      play_requested_dot(expected_dot);
+      md1_play_requested_dot(expected_dot);
       current_state = STATE_WAIT_INPUT;
       break;
     case STATE_WAIT_INPUT:

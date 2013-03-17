@@ -45,6 +45,6 @@ void set_last_dot2(char dot);
 void set_last_dot3(char dot);
 
 #define PRINTF(msg) \
-  USART_transmitStringToPC((unsigned char*)msg);
+  usart_transmit_string_to_pc((unsigned char*)msg);
 
 #endif /* _GLOBALS_H_ */

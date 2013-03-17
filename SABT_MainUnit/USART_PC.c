@@ -9,6 +9,7 @@
 #include "Globals.h"
 
 bool usart_pc_header_received, usart_pc_length_received;
+int usart_received_payload_len;
 unsigned char usart_pc_prefix[3];
 unsigned char usart_pc_receive_msgcnt;
 
@@ -35,7 +36,7 @@ void init_usart_pc(void)
  */
 unsigned char usart_pc_receive_action(void)
 {
-  USART_PC_DATA_RDY = false;
+  usart_pc_data_ready = false;
   message_count++;
 
   // Received an entire line; process it

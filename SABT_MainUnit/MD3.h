@@ -45,7 +45,7 @@ void md3_reset(void);
 void md3_call_mode_yes_answer(void);
 void md3_call_mode_no_answer(void);
 
-void md3_inputDot(char thisDot);
-void md3_inputCell(char this_cell);
+void md3_input_dot(char thisDot);
+void md3_input_cell(char this_cell);
 
 #endif /* _MD3_H_ */

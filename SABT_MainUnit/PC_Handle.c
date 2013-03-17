@@ -68,7 +68,7 @@ void pc_requests_to_modify_modes_file(void)
   init_sd_card(false);
 
   // Copy over the modes in the form <1><2>...<n>. Ignoring the "PCM" header
-  for(t = 3; t < usart_pc_received_playload_len; t++)
+  for(t = 3; t < usart_pc_received_payload_len; t++)
   {
     writing_file_content[t - 3] = usart_pc_received_packet[t];
   }

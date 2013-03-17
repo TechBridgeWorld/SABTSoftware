@@ -196,7 +196,7 @@ unsigned char sd_erase (unsigned long start_block, unsigned long total_blocks)
  * @brief Reads a single block from SD card
  * @return unsigned char - 0 if no error and response byte if error
  */
-unsigned char SD_readSingleBlock(unsigned long start_block)
+unsigned char sd_read_single_block(unsigned long start_block)
 {
   unsigned char response;
   unsigned int i, retry = 0;

@@ -34,7 +34,7 @@ unsigned char vs1053_initialize(void)
   SPI_PORT &= ~_BV(MP3_RESET);    // De assert RESET line (Chip in the reset state)
   _delay_ms(20);                  // Hold for 20ms
   SPI_PORT |= _BV(MP3_RESET);     // Assert RESET line (Chip is powered now)
-  SPI_1X();                       // Low speed mode
+  spi_1x();                       // Low speed mode
   _delay_ms(20);                  // Hold for 20ms
   retry = 0;
 
