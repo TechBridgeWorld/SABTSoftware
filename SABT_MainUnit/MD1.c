@@ -1,6 +1,6 @@
 /**
  * @file MD1.c
- * @brief code for the Primary User Interface Mode
+ * @brief Mode 1 code - Dot Practice
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)

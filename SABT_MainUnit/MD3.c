@@ -1,6 +1,6 @@
 /**
  * @file MD3.c
- * @brief mode 3 code
+ * @brief Mode 3 code - Animal Game
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)
@@ -268,23 +268,17 @@ void md3_main(void)
     
     case STATE_REQUEST_INPUT2:
       PRINTF("INPUT2\r\n");
-      request_to_play_mp3_file(strcat(animal, ".mp3"));
+
+      char animal_file[16];
+      sprintf(animal_file, "%s.mp3", animal);
+      request_to_play_mp3_file(animal_file);
+
       md3_current_state = STATE_WAIT_INPUT;
+
       break;
     
     case STATE_WAIT_INPUT:
-      // Progress to next state when MD3_Input_Cell is called below
-
-      //PRINTF("WAIT\r\n");
-      /*if(last_dot != 0){
-        if (last_dot == ENTER) {
-        md3_current_state = STATE_PROC_INPUT;
-        } else if (last_dot >= '1' && last_dot <='6') {
-        button_bits |= (1<<(atoi(&last_dot)-1));
-        play_requested_dot();    
-        }
-        last_dot = 0;
-        }*/
+      // Progress to next state when md3_input_cell is called below
       break;
     
     case STATE_PROC_INPUT:
@@ -293,7 +287,7 @@ void md3_main(void)
       if (valid_letter(last_cell)) {
         char buf[16];
         sprintf(buf, "MD2_%c.mp3", entered_letter);
-        usart_transmit_string_to_pc((unsigned char*)buf);
+        //usart_transmit_string_to_pc((unsigned char*)buf);
         request_to_play_mp3_file(buf);
         md3_current_state = STATE_CHECK_IF_CORRECT;
       } else {
@@ -305,7 +299,6 @@ void md3_main(void)
     case STATE_INVALID_INPUT:
       PRINTF("INVALID\r\n");
 
-      //request_to_play_mp3_file("currently_entered.mp3");
       char buf[16];
       sprintf(buf, "MD2_%c.mp3", animal[current_word_index]);
       request_to_play_mp3_file(buf);
@@ -321,9 +314,7 @@ void md3_main(void)
       PRINTF("CHECK\r\n");
       if (animal[length_current_word] == entered_letter) {
         length_current_word++;
-        char buf[8];
-        sprintf(buf, "%d %d\r\n", length_current_word, strlen(animal));
-        usart_transmit_string_to_pc((unsigned char*)buf);
+        
         if (length_current_word != strlen(animal))
           md3_current_state = STATE_CORRECT_INPUT;
         else
@@ -347,7 +338,7 @@ void md3_main(void)
     
     case STATE_DONE_WITH_CURRENT_ANIMAL:
       PRINTF("DONE\r\n");
-      request_to_play_mp3_file("nice_work.mp3");
+      request_to_play_mp3_file("nc_wrk.mp3");
       md3_current_state = STATE_REQUEST_INPUT1;
       break;
   }

@@ -12,7 +12,6 @@
 
 #include "Globals.h"
 
-
 /**
  * @brief Reads in data data from boot sector and checks to make sure that it is the FAT32 standard
  * @return unsigned char - return 0 on successful read
@@ -361,9 +360,9 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
   unsigned int num_bytes_read;
   bool end_of_file = false;
 
-  PRINTF("In read_and_retrieve, file_name:");
-  PRINTF(file_name);
-  TX_NEWLINE_PC;
+  //PRINTF("In read_and_retrieve, file_name:");
+  //PRINTF(file_name);
+  //TX_NEWLINE_PC;
 
   error = convert_file_name (file_name); //convert file_name into FAT format
   if(error) 
@@ -451,7 +450,7 @@ unsigned char play_mp3_file(unsigned char *file_name)
   bool end_of_file=false;
 
   // KORY CHANGED
-  //UI_MP3_file_Pending=false;
+  ui_mp3_file_pending=false;
 
   error = convert_file_name (file_name); //convert file_name into FAT format
   if(error) return 2;
@@ -498,18 +497,18 @@ unsigned char play_mp3_file(unsigned char *file_name)
 
 		// KORY CHANGED
         //After playing a 32 bytes of data, check the user inputs
-        /*if(USART_Keypad_DATA_RDY)
+        if(usart_keypad_data_ready)
         {
-          USART_Keypad_ReceiveAction();
+          usart_keypad_receive_action();
         }
-        if(USART_PC_DATA_RDY)
+        if(usart_pc_data_ready)
         {
-          USART_PC_ReceiveAction();
+          usart_pc_receive_action();
         }    
-        if(USART_UI_Message_ready) //If a message ready from the user interface, process it
+        if(usart_ui_message_ready) //If a message ready from the user interface, process it
         {
-          UI_parse_message(true);
-        }*/
+          ui_parse_message(true);
+        }
       }
       if(end_of_file)
       {
@@ -542,14 +541,17 @@ unsigned char read_dict_file(unsigned char *file_name)
     struct dir_Structure *dir;
     unsigned long cluster, file_size, first_sector;
     unsigned char j, error;
-    bool end_of_file=false;
-    int byte_counter;
-
+	unsigned long i ;
+    bool end_of_file = false;
+    int byte_counter = 0;
+	int count = 0;
     //clusters needs to be an array - I am not sure of the correct size, so will start
     //at 4096
-    unsigned long dict_clusters[4096];
+	//@TODO   MUST FREE SOMEWHERE
+	// READ in 281 clusters
+    dict_clusters = calloc(300,sizeof(unsigned long));
     dict_cluster_cnt = 0;
-    
+    //unsigned long  dict_clusters[4096];
     
 
     error = convert_file_name (file_name); //convert file_name into FAT format
@@ -569,23 +571,30 @@ unsigned char read_dict_file(unsigned char *file_name)
         dict_cluster_cnt ++;
         first_sector = get_first_sector(cluster);
         
+		//PUT ++++ at end of file to make sure we were at the end.  
         for(j=0; j<sector_per_cluster; j++)
         {
             sd_read_single_block(first_sector + j);
-            
-            //number of bytes read at each sector
-            byte_counter += 512;
-            PRINTF(buffer);
-            TX_NEWLINE_PC;
+           	for(i = 0; i < BUFFER_SIZE; i ++){
+		      if(buffer[i] =='+'){
+			    end_of_file = true;
+			  }	
+			}
 
+            //number of bytes read at each sector
+            byte_counter += BUFFER_SIZE;
             
             if(end_of_file)
             {
-                return 0;
+			  PRINTF("read in dictionary");
+              TX_NEWLINE_PC;
+              return 0;
             }
             
         }
-        
+		count ++;
+			            //PRINTF(buffer);
+            //TX_NEWLINE_PC;
         cluster = get_set_next_cluster (cluster, GET, 0);
         if(cluster == 0) 
         {
@@ -601,15 +610,15 @@ unsigned char read_dict_file(unsigned char *file_name)
  * @brief This function will find the word in the dictionary file
  *        This will find a word accross multiple clusters/sectors.
  *        In a dictionary file, words are seperated by '/n'
- * @param file_name - unsigned char *, file for dict to look in
+ * @param file_name - unsigned char *, file for dictionary look up
  * @param word - unsigned char *, word you are trying to find 
  * @return bool - returns whether or not you have found word
+ * @TODO - NEED TO FIX WORD - IT IS GETTTING CORRUPTED
+ * @TODO - NEED TO TAKE EDGE CASES OFF of CLUSTERS- WORDS that overlap clusters
  */
-bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
-    bool found = false;
-
+bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 {
-
+    bool found = false;
     int cluster_cnt = dict_cluster_cnt;
     unsigned long curr_cluster, first_sector;
     int hi = cluster_cnt - 1;
@@ -619,15 +628,20 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
 	int cluster;
 	struct dir_Structure *dir;
 	int error;
-    
+	int j =0;
+	word = "dog";
 
     error = convert_file_name (file_name); //convert file_name into FAT format
     if(error) return 2;
     
+
+
     dir = find_files (GET_FILE, file_name); //get the file location
     if(dir == 0)
         return (0);
     
+
+
     cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
     
     file_size = dir->file_size;
@@ -635,8 +649,9 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
     
     //search for the cluster that contains the word
     while((hi - lo) > 1){
+
         mid = (hi + lo) / 2;
-        curr_cluster = dict_cluster_cnt[mid];
+        curr_cluster = dict_clusters[mid];
         first_sector = get_first_sector (curr_cluster);
 
         //store these values into the buffer array 
@@ -648,36 +663,57 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
         
         
         if(cmp_wrd == 0){
+		PRINTF("FOUND!");
             found = true;
             break;
         }
         
-        else if(cmp_wrd == 1)
-            hi = mid - 1;
+        else if(cmp_wrd == 1){
+            PRINTF("HI!");
+			TX_NEWLINE_PC;
+			hi = mid - 1;
+		}
         
-        else if(cmp_wrd == 2)
-            lo = mid + 1;
+        else if(cmp_wrd == 2){
+		PRINTF("LO!");
+			TX_NEWLINE_PC;
+            lo = mid;
+		}
         
         //if you get any other return value, you know that it is wrong. 
-        else
+        else{
+		PRINTF("ERROR!");
+			TX_NEWLINE_PC;
             return false;
+		}
         
         
         
     }
-    
     //if you have narrowed it down to the sector that is pointed at by lo
     if(found == false){
-        firstSector = getFirstSector(dict_clusters[lo]);
-        for(j=0; j<sectorPerCluster; j++)
+        first_sector = get_first_sector(dict_clusters[lo]);
+        for(j=0; j<sector_per_cluster; j++)
         {
             
-            SD_readSingleBlock(firstSector + j);
+            sd_read_single_block(first_sector + j);
             
             if(find_wrd_in_buff(word))
                 return true;
             
         }
+
+        first_sector = get_first_sector(dict_clusters[hi]);
+        for(j=0; j<sector_per_cluster; j++)
+        {
+            
+            sd_read_single_block(first_sector + j);
+            
+            if(find_wrd_in_buff(word))
+                return true;
+            
+        }
+
         //if you get here, that means that you did not have find the word in any part of the cluster it should be in
         return false;
     }
@@ -698,31 +734,38 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word){
  */
 bool find_wrd_in_buff(unsigned char *word){
     int i = 0, j = 0;
-    unsigned char *first_word;
-    
-    for(i; i < BUFFER_SIZE; i ++){
+    unsigned char *first_word = (unsigned char *)"";
+
+    for(i = 0; i < BUFFER_SIZE; i ++){
+	  PRINTF("\r");
       while(i < BUFFER_SIZE){
-        if(buffer[i] == '/n')
-            first_word = &buffer[i+1];
+        if(buffer[i] == '\n'){
+          first_word = (unsigned char *)&buffer[i+1];
+          break;
+		}
+
+		i ++;
       }
-      
+
+
       j = 0;
       while((i + j) < BUFFER_SIZE){
+        //if you find the end of both words at the same time, and have not left
+        //loop yet, need to return true
+        if((word[j] == 0)  && (first_word[j] == '\r')){
+		  PRINTF("FOUND IITT!!\n\r");
+          return true;
+        }
+
         //if not the correct word, break
         if(word[j] != first_word[j])
           break;
-          
-        //if you find the end of both words at the same time, and have not left
-        //loop yet, need to return true
-        else if((word[i] == 0)  && (first_word[i] == '/n'))
-          return true;
-            
+        
           j ++;
       }
       //want to start looking for next word where checking failed
-      i += (j - 1);
+      i += (j);
     }
-    //if you get all the way through, did not find the word, so return false
     return false;
 }
 
@@ -736,12 +779,16 @@ bool find_wrd_in_buff(unsigned char *word){
  */
 int check_first_full_word(unsigned char *word)
 {
-    unsigned char *first_word;
+//PRINTF("enter!");
+//			TX_NEWLINE_PC;
+    unsigned char *first_word = (unsigned char *)&buffer[0];
     int i = 0;
     //find the start of the first word
-    while(1){
-        if(buffer[i] == '\n')
-            first_word = &buffer[i+1];
+    while(i < BUFFER_SIZE){
+        if(buffer[i] == '\n'){
+           first_word = (unsigned char *)&buffer[i+1];
+           break;
+        }
         i ++;
     }
     
@@ -762,8 +809,7 @@ int check_first_full_word(unsigned char *word)
     
     //if you got here, it is an error
     return -1;
-    
-    
+
 }
 
 
@@ -789,14 +835,14 @@ int check_first_full_word(unsigned char *word)
 */ 
 unsigned char convert_file_name (unsigned char *file_name)
 {
-  unsigned char file_name_fat[11];
+  unsigned char file_name_fat[FILE_NAME_LEN];
   unsigned char j, k;
 
   //PRINTF("[convert_file_name]file_name:");
   //PRINTF(file_name);
   //TX_NEWLINE_PC;
 
-  for(j = 0; j < 12; j++) {
+  for(j = 0; j < FILE_NAME_LEN; j++) {
     if(file_name[j] == '.') 
       break;
   }
@@ -805,8 +851,8 @@ unsigned char convert_file_name (unsigned char *file_name)
   // TODO #define 0 ->failure
   // TODO define magic numbers
   // 0 = SUCCESS
-  // TODO better success conditions
-  if (j == 12)
+  // @TODO better success conditions
+  if (j >= FILE_NAME_LEN)
     // assume that a string without any dots is already converted
     return 0;
 
@@ -824,7 +870,7 @@ unsigned char convert_file_name (unsigned char *file_name)
 
   j++;
 
-  for(k = 8; k < 11; k++) //setting file extention
+  for(k = 8; k < FILE_NAME_LEN; k++) //setting file extention
   {
     if(file_name[j] != 0)
     {
@@ -839,7 +885,7 @@ unsigned char convert_file_name (unsigned char *file_name)
     }
   }
 
-  for(j = 0; j < 11; j++) //converting small letters to caps
+  for(j = 0; j < 13; j++) //converting small letters to caps
   {
     if((file_name_fat[j] >= 0x61) && (file_name_fat[j] <= 0x7a))
     {
@@ -848,7 +894,7 @@ unsigned char convert_file_name (unsigned char *file_name)
   }
 
 
-  for(j = 0; j < 11; j++)
+  for(j = 0; j < 13; j++)
     file_name[j] = file_name_fat[j];
 
   // Add null terminator to file_name

@@ -23,93 +23,11 @@
 #ifndef _FAT32_H_
 #define _FAT32_H_
 
-//Structure to access Master Boot Record for getting info about partioions
-struct MBRinfo_Structure{
-unsigned char nothing[446];        //ignore, fill the gap in the structure
-unsigned char partitionData[64];   //partition records (16x4)
-unsigned int signature;            //0xaa55
-};
-
-//Structure to access info of the first partioion of the disk 
-struct partitionInfo_Structure{         
-unsigned char status;              //0x80 - active partition
-unsigned char headStart;          //starting head
-unsigned int cylSectStart;         //starting cylinder and sector
-unsigned char type;                //partition type 
-unsigned char headEnd;             //ending head of the partition
-unsigned int cylSectEnd;           //ending cylinder and sector
-//total sectors between MBR & the first sector of the partition
-unsigned long firstSector;    
-unsigned long sectorsTotal;        //size of this partition in sectors
-};
-
-//Structure to access boot sector data
-struct BS_Structure{
-  unsigned char jumpBoot[3];        //default: 0x009000EB
-  unsigned char OEMName[8];
-  unsigned int bytesPerSector;      //deafault: 512
-  unsigned char sectorPerCluster;
-  unsigned int reservedSectorCount;
-  unsigned char numberofFATs;
-  unsigned int rootEntryCount;
-  unsigned int totalSectors_F16;    //must be 0 for FAT32
-  unsigned char mediaType;
-  unsigned int FATsize_F16;         //must be 0 for FAT32
-  unsigned int sectorsPerTrack;
-  unsigned int numberofHeads;
-  unsigned long hiddenSectors;
-  unsigned long totalSectors_F32;
-  unsigned long FATsize_F32;        //count of sectors occupied by one FAT
-  unsigned int extFlags;
-  unsigned int FSversion;           //0x0000 (defines version 0.0)
-  unsigned long rootCluster;        //first cluster of root directory (=2)
-  unsigned int FSinfo;              //sector number of FSinfo structure (=1)
-  unsigned int BackupBootSector;
-  unsigned char reserved[12];
-  unsigned char driveNumber;
-  unsigned char reserved1;
-  unsigned char bootSignature;
-  unsigned long volumeID;
-  unsigned char volumeLabel[11];    //"NO NAME "
-  unsigned char fileSystemType[8];  //"FAT32"
-  unsigned char bootData[420];
-  unsigned int bootEndSignature;    //0xaa55
-};
-
-
-//Structure to access FSinfo sector data
-struct FSInfo_Structure
-{
-  unsigned long leadSignature; //0x41615252
-  unsigned char reserved1[480];
-  unsigned long structureSignature; //0x61417272
-  unsigned long freeClusterCount; //initial: 0xffffffff
-  unsigned long nextFreeCluster; //initial: 0xffffffff
-  unsigned char reserved2[12];
-  unsigned long trailSignature; //0xaa550000
-};
-
-//Structure to access Directory Entry in the FAT
-struct dir_Structure{
-  unsigned char name[11];
-  unsigned char attrib; //file attributes
-  unsigned char NTreserved; //always 0
-  unsigned char timeTenth; //tenths of seconds, set to 0 here
-  unsigned int createTime; //time file was created
-  unsigned int createDate; //date file was created
-  unsigned int lastAccessDate;
-  unsigned int firstClusterHI; //higher word of the first cluster number
-  unsigned int writeTime; //time of last write
-  unsigned int writeDate; //date of last write
-  unsigned int firstClusterLO; //lower word of the first cluster number
-  unsigned long fileSize; //size of file in bytes
-};
-
 //buffer variable
-#define BUFFER_SIZE 512
+#define BUFFER_SIZE   512
+#define FILE_NAME_LEN 13
+#define END_OF_FILE   26
 
-=======
->>>>>>> f013637c3ed95f16fee1d41d1b448961cc2f64da
 //Attribute definitions for file/directory
 #define ATTR_READ_ONLY     0x01
 #define ATTR_HIDDEN        0x02
@@ -238,6 +156,10 @@ unsigned long *dict_clusters;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
+bool find_wrd_in_buff(unsigned char *word);
+unsigned char read_dict_file(unsigned char *file_name);
+bool bin_srch_dict(unsigned char *file_name, unsigned char *word);
+int check_first_full_word(unsigned char *word);
 unsigned char get_boot_sector_data(void);
 unsigned long get_first_sector(unsigned long cluster_number);
 unsigned long get_set_free_cluster(unsigned char tot_or_next, 

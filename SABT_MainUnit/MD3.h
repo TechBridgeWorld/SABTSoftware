@@ -23,9 +23,6 @@
 
 #define PRIME                53
 
-char button_bits;                          // button bits
-int current_state;                         // current state of the mode
-char expected_dot;                         // The expected response from user 
 char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.
 int animals_used_list[11];                 
@@ -38,7 +35,7 @@ int length_current_word;
 // Used to read back the letters in the current word
 int current_word_index;                    
 // Array of animal names (index into it to make code cleaner)
-const char* animal_list[11];               
+/*const */char* animal_list[11];               
 
 void md3_main(void);
 void md3_reset(void);

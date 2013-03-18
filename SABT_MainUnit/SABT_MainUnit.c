@@ -133,8 +133,8 @@ End of test code
     if(ui_mp3_file_pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
       play_mp3_file(file_name);
-	    // KORY CHANGED
-	    ui_mp3_file_pending = false;
+	  // KORY CHANGED
+	  //ui_mp3_file_pending = false;
     }
 
     ui_run_main_of_current_mode();
@@ -168,11 +168,11 @@ ISR(TIMER1_COMPA_vect)
 ISR(USART1_RX_vect)
 {
   // KORY CHANGED
-  if (!ui_mp3_file_pending) 
-  {
+  //if (!ui_mp3_file_pending) 
+  //{
     usart_keypad_received_data = UDR1;
     usart_keypad_data_ready = true;
-  }
+  //}
   
   //set_last_dot(usart_keypad_received_data);
   //set_last_dot2(usart_keypad_received_data);
@@ -246,7 +246,13 @@ void initialize_system(void)
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
-
+  /*read_dict_file((unsigned char *)"wordsEn.txt");
+  if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"dog"))
+     PRINTF((unsigned char *)"THIS WORD IS IN DICT");
+  TX_NEWLINE_PC;
+  if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"zymogenicsdfsf"))
+     PRINTF((unsigned char *)"THIS WORD IS IN DICT");
+  TX_NEWLINE_PC;*/
   request_to_play_mp3_file("INT.MP3");  // Play the welcome message
   
 }

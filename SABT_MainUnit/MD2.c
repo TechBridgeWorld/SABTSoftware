@@ -1,6 +1,6 @@
 /**
  * @file MD2.c
- * @brief mode 2 code
+ * @brief  Mode 2 code - Letter Practice
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
  * @author Kory Stiger (kstiger)

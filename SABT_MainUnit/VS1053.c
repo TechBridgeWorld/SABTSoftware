@@ -198,7 +198,8 @@ unsigned int vs1053_read_command(unsigned char addr)
  */
 void request_to_play_mp3_file(const char* this_file)
 {
-  int i = 0;
+  //PRINTF(this_file);
+  int i = 0, j;
   
   while(i < strlen((char*)file_name))
   {
@@ -208,14 +209,21 @@ void request_to_play_mp3_file(const char* this_file)
   i = 0;
   
   // copy the file name to the global variable
-  while(*this_file != '.')
+  while(this_file[i] != '.')
   {
-    file_name[i++] = *(this_file++);
+    file_name[i] = this_file[i];
+	i ++;
   }
-  file_name[i++] = *(this_file++);
-  file_name[i++] = *(this_file++);
-  file_name[i++] = *(this_file++);
-  file_name[i++] = *(this_file++);
+
+  for(j = 0; j < 4; j ++)
+  {
+    file_name[i] = this_file[i];
+    i ++;
+  }
+
+  //clear out anything that is left
+  for(; i < FILE_NAME_LEN; i ++)
+    file_name[i] = 0;
 
   // Mark that a file is queued to be played by the user interface
   ui_mp3_file_pending = true;
