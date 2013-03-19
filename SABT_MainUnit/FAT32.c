@@ -449,6 +449,9 @@ unsigned char play_mp3_file(unsigned char *file_name)
   unsigned int iAudioByteCnt;
   bool end_of_file=false;
 
+  PRINTF(file_name);
+  TX_NEWLINE_PC;
+
   // KORY CHANGED
   ui_mp3_file_pending=false;
 
@@ -530,9 +533,40 @@ unsigned char play_mp3_file(unsigned char *file_name)
 
 
 /**
- * @brief This function will take in a file_name and read/prints the contents 
+ * @brief This function will set up the initial values for the read_dict_file
+ * @param file_name - unsigned char *, name of the file we are trying to find
+ * @return unsigned char - status of trying to read
+ */
+unsigned char init_read_dict(unsigned char *file_name){
+  unsigned char error;
+  struct dir_Structure *dir;
+
+  dict_clusters = calloc(300,sizeof(unsigned long));
+  dict_cluster_cnt = 0;
+  //unsigned long  dict_clusters[4096];
+    
+
+  error = convert_file_name (file_name); //convert file_name into FAT format
+  if(error) return 2;
+    
+  dir = find_files (GET_FILE, file_name); //get the file location
+    
+  if(dir == 0)
+    return (0);
+    
+  curr_cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
+  done_rd_dict = false;
+
+  return 0;
+
+}
+
+
+
+/**
+ * @brief This function will take in a file_name and read the contents 
  *        of this file.  It will also populate the clusters array with a pointer
- *        to each cluster
+ *        to each cluster.  It will work ten clusters at a time and finish. when get to end.
  * @param file_name - unsigned char *, name of the file we are trying to find
  * @return unsigned char - status of trying to read
  */
@@ -541,7 +575,7 @@ unsigned char read_dict_file(unsigned char *file_name)
     struct dir_Structure *dir;
     unsigned long cluster, file_size, first_sector;
     unsigned char j, error;
-	unsigned long i ;
+	unsigned long i, k;
     bool end_of_file = false;
     int byte_counter = 0;
 	int count = 0;
@@ -549,23 +583,11 @@ unsigned char read_dict_file(unsigned char *file_name)
     //at 4096
 	//@TODO   MUST FREE SOMEWHERE
 	// READ in 281 clusters
-    dict_clusters = calloc(300,sizeof(unsigned long));
-    dict_cluster_cnt = 0;
-    //unsigned long  dict_clusters[4096];
     
-
-    error = convert_file_name (file_name); //convert file_name into FAT format
-    if(error) return 2;
-    
-    dir = find_files (GET_FILE, file_name); //get the file location
-    
-    if(dir == 0)
-        return (0);
-    
-    cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
-    
+    dir = find_files (GET_FILE, file_name);
     file_size = dir->file_size;
-    while(1)
+	cluster = curr_cluster;
+    for(k = 0; k < CLUSTERS_PER_RUN; k++)
     {
         dict_clusters[dict_cluster_cnt] = cluster;
         dict_cluster_cnt ++;
@@ -586,6 +608,7 @@ unsigned char read_dict_file(unsigned char *file_name)
             
             if(end_of_file)
             {
+			  done_rd_dict = true;
 			  PRINTF("read in dictionary");
               TX_NEWLINE_PC;
               return 0;
@@ -596,7 +619,8 @@ unsigned char read_dict_file(unsigned char *file_name)
 			            //PRINTF(buffer);
             //TX_NEWLINE_PC;
         cluster = get_set_next_cluster (cluster, GET, 0);
-        if(cluster == 0) 
+        curr_cluster = cluster;
+		if(cluster == 0) 
         {
             usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
             return 0;
@@ -839,8 +863,8 @@ unsigned char convert_file_name (unsigned char *file_name)
   unsigned char j, k;
 
   //PRINTF("[convert_file_name]file_name:");
-  //PRINTF(file_name);
-  //TX_NEWLINE_PC;
+  PRINTF(file_name);
+  TX_NEWLINE_PC;
 
   for(j = 0; j < FILE_NAME_LEN; j++) {
     if(file_name[j] == '.') 

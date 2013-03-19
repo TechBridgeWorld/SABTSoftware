@@ -24,9 +24,10 @@
 #define _FAT32_H_
 
 //buffer variable
-#define BUFFER_SIZE   512
-#define FILE_NAME_LEN 13
-#define END_OF_FILE   26
+#define BUFFER_SIZE      512
+#define FILE_NAME_LEN    13
+#define END_OF_FILE      26
+#define CLUSTERS_PER_RUN 15
 
 //Attribute definitions for file/directory
 #define ATTR_READ_ONLY     0x01
@@ -152,10 +153,13 @@ unsigned long append_file_location, file_size, append_start_cluster;
 unsigned char free_cluster_count_updated;
 
 //for Text files track all clusters that they contain
+bool done_rd_dict;
+unsigned long curr_cluster;
 unsigned long *dict_clusters;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
+unsigned char init_read_dict(unsigned char *file_name);
 bool find_wrd_in_buff(unsigned char *word);
 unsigned char read_dict_file(unsigned char *file_name);
 bool bin_srch_dict(unsigned char *file_name, unsigned char *word);

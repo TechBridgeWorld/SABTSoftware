@@ -82,8 +82,15 @@ End of test code
   {
     // TODO remove test string
     // DPRINTF("Small waves crashing against the sand%d.", 42);
-
-    if(timer_interrupt)
+    
+	//read in the dict file till done
+    if(!done_rd_dict)
+	{
+	  read_dict_file((unsigned char *)"wordsEn.txt");
+    }
+    
+	
+	if(timer_interrupt)
     {
       timer_interrupt = false;
     //  timer_routine();
@@ -246,9 +253,8 @@ void initialize_system(void)
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
-  /*read_dict_file((unsigned char *)"wordsEn.txt");
-  if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"dog"))
-     PRINTF((unsigned char *)"THIS WORD IS IN DICT");
+  init_read_dict((unsigned char *)"wordsEn.txt");
+  /*
   TX_NEWLINE_PC;
   if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"zymogenicsdfsf"))
      PRINTF((unsigned char *)"THIS WORD IS IN DICT");

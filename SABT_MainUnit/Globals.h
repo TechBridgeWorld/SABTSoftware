@@ -33,7 +33,7 @@ volatile unsigned char number_of_modes;
 volatile unsigned char ui_modes[10];
 
 volatile unsigned char *g_file_to_play;
-unsigned char file_name[13];
+unsigned char g_file_name[FILE_NAME_LEN];
 
 volatile char temp_cnt;
 
