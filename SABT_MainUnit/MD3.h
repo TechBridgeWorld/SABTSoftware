@@ -33,9 +33,9 @@ char entered_letter;                       // Current letter being entered
 // Keeps track of how long the current input word is
 int length_current_word;                   
 // Used to read back the letters in the current word
-int current_word_index;                    
-// Array of animal names (index into it to make code cleaner)
-/*const */char* animal_list[11];               
+int current_word_index;
+//bool to determine state transition
+bool got_input;
 
 void md3_main(void);
 void md3_reset(void);
