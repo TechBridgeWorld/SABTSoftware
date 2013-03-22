@@ -61,8 +61,11 @@ void play_requested_cell(char last_cell)
   // This will hold formatted file to access
   char req_mp3[10];
 
-  sprintf((char*)req_mp3, "MD2_%c.MP3", last_cell);
-  request_to_play_mp3_file(req_mp3);
+  if (last_cell >= 'a' && last_cell <= 'z') {
+    sprintf((char*)req_mp3, "%c.MP3", last_cell);
+    request_to_play_mp3_file(req_mp3);
+  } else
+    request_to_play_mp3_file("INVPAT.MP3");
 }
 
 
@@ -114,7 +117,12 @@ char get_letter_from_bits(char bits)
  */
 void play_requested_bits(char bits)
 {
-  play_requested_cell(get_letter_from_bits(bits));
+  char letter = get_letter_from_bits(bits);
+
+  if (letter == -1)
+    request_to_play_mp3_file("INVPAT.MP3");
+  else
+    play_requested_cell(letter);
 }
 
 /**
@@ -126,7 +134,7 @@ void md2_play_requested_dot(char md2_last_dot)
 {
   // This will hold formatted file to access
   char req_mp3[10];
-  sprintf((char*)req_mp3, "MD2_%c.MP3", md2_last_dot);
+  sprintf((char*)req_mp3, "dot_%c.MP3", md2_last_dot);
   request_to_play_mp3_file(req_mp3);
 }
 
@@ -151,6 +159,11 @@ void md2_reset(void)
 bool check_if_correct(char button_bits, char current_letter)
 {
   char letter_from_bits = get_letter_from_bits(button_bits);
+  
+  char buf[10];
+  sprintf(buf, "%c, %c, %c\r\n", button_bits, current_letter, letter_from_bits);
+  PRINTF(buf);
+  
   return (letter_from_bits == current_letter);
 }
 
@@ -192,7 +205,7 @@ void md2_main(void)
       break;
 
   case STATE_REQUEST_INPUT1:
-      request_to_play_mp3_file("pl_wrt.MP3");
+      request_to_play_mp3_file("pls_wrt.MP3");
       current_state = STATE_REQUEST_INPUT2;
       break;
     
@@ -239,6 +252,8 @@ void md2_main(void)
 
           if(!use_random_letter)
           {
+		    PRINTF("checkifcorrect");
+			TX_NEWLINE_PC;
             if(check_if_correct(button_bits, current_letter))
             {
               request_to_play_mp3_file("good.MP3");
@@ -300,6 +315,7 @@ void md2_main(void)
         }
         else if((last_dot >= '1') && (last_dot <= '6'))
         {
+		  int temp = atoi(&last_dot);
           button_bits |= (1 << (atoi(&last_dot) - 1));
           // TODO change play requested dot to take 1 param
           md2_play_requested_dot(last_dot);

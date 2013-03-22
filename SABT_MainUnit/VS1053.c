@@ -201,9 +201,9 @@ void request_to_play_mp3_file(const char* this_file)
   //PRINTF(this_file);
   int i = 0, j;
   
-  while(i < strlen((char*)file_name))
+  while(i < strlen((char*)g_file_name))
   {
-    file_name[i++] = '\0';
+    g_file_name[i++] = '\0';
   }
 
   i = 0;
@@ -211,19 +211,19 @@ void request_to_play_mp3_file(const char* this_file)
   // copy the file name to the global variable
   while(this_file[i] != '.')
   {
-    file_name[i] = this_file[i];
+    g_file_name[i] = this_file[i];
 	i ++;
   }
 
   for(j = 0; j < 4; j ++)
   {
-    file_name[i] = this_file[i];
+    g_file_name[i] = this_file[i];
     i ++;
   }
 
   //clear out anything that is left
   for(; i < FILE_NAME_LEN; i ++)
-    file_name[i] = 0;
+    g_file_name[i] = 0;
 
   // Mark that a file is queued to be played by the user interface
   ui_mp3_file_pending = true;

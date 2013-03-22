@@ -469,6 +469,9 @@ void ui_run_main_of_current_mode(void)
       case 3:
         md3_main();
         break;
+      /*case 4:
+	    md4_main();
+		break;*/
       default:
         break;
     }

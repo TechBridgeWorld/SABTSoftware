@@ -39,8 +39,10 @@ void md1_play_requested_dot(unsigned char last_dot)
   char buf[10];
 
   // Check for validity of number
-  if (last_dot >= '1' && last_dot <= '6')
-    sprintf(buf, "MD1_%c.MP3", last_dot);
+  if (last_dot >= '1' && last_dot <= '6') {
+    sprintf(buf, "dot_%c.MP3", last_dot);
+    request_to_play_mp3_file(buf);
+  }
 
   // TODO default case?
   // TODO(nick) make sure this works
