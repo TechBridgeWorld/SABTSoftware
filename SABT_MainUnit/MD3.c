@@ -13,6 +13,26 @@
 int md3_current_state;
 char md3_last_dot, last_cell, expected_dot;
 
+
+//@TODO   MAKE THIS BETTER
+char letter_bits_arr[26] =
+{
+    A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS,
+    H_BITS, I_BITS, J_BITS, K_BITS, L_BITS, M_BITS, N_BITS,
+    O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS, U_BITS,
+    V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS
+};
+
+char letter_arr[26] =
+{
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z'
+};
+
+char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
+    "hyena", "pig", "rooster", "sheep", "zebra"};
+
 /**
  * @brief Helper function to choose_animal(). Ensures that the same animal isn't
  *        called twice before going through the entire list first.
@@ -20,14 +40,7 @@ char md3_last_dot, last_cell, expected_dot;
  *               1 means yes (has been used)
  */
 int animal_used(int num) {
-  int i;
-
-  for (i = 0; i < 11; i++) {
-    if (animals_used_list[i] == num)
-      return 1;
-  }
-
-  return 0;
+  return animal_used_list[num];
 }
 
 /**
@@ -44,15 +57,15 @@ int choose_animal()
   int i;
 
   num *= PRIME;
-  num = (abs(num) % 11) + 1;
+  num = (abs(num) % 11);
 
   while(animal_used(num)) 
   {
     num = TCNT1;
     num *= PRIME;
-    num = (abs(num) % 11) + 1;
+    num = (abs(num) % 11);
   }  
-  animals_used_list[animals_used] = num;
+  animals_used_list[num] = 1;
 
   // increment animals_used until we've used all 11 animals then reset everything
   animals_used++;
@@ -73,27 +86,10 @@ int choose_animal()
  */
 void play_requested_dot(void)
 {
-  switch(md3_last_dot)
-  {
-    case '1':
-      request_to_play_mp3_file("MD1_1.MP3");
-      break;
-    case '2':
-      request_to_play_mp3_file("MD1_2.MP3");
-      break;
-    case '3':
-      request_to_play_mp3_file("MD1_3.MP3");
-      break;
-    case '4':
-      request_to_play_mp3_file("MD1_4.MP3");
-      break;
-    case '5':
-      request_to_play_mp3_file("MD1_5.MP3");
-      break;
-    case '6':
-      request_to_play_mp3_file("MD1_6.MP3");
-      break;
-  }
+    // This will hold formatted file to access
+    char req_mp3[10];
+    sprintf((char*)req_mp3, "MD2_%c.MP3", md3_last_dot);
+    request_to_play_mp3_file(req_mp3);
 }
 
 void md3_reset(void)
@@ -102,6 +98,45 @@ void md3_reset(void)
   md3_last_dot = 0;
 }
 
+/**
+ * @brief Changes letter bits into an actual char letter
+ * @param bits - char, bits that correspond to the buttons pressed
+ * @return char - letter that corresponds to buttons pressed
+ *                on error - not found bits, return -1
+ */
+char get_letter_from_bits(char bits)
+{
+    int alphabet_len = 26;
+    int i;
+    
+    for(i = 0; i < alphabet_len; i++){
+        if(letter_bits_arr[i] == bits)
+            return letter_arr[i];
+    }
+    
+    // Return error on failure (letter not present in array)
+    return -1;
+}
+
+/**
+ * @brief Changes letter into letter bits
+ * @param let - char, charachter letter want to change to bits
+ * @return char - letter that corresponds to buttons pressed
+ *                on error - not found bits, return -1
+ */
+char get_bits_from_letters(char let){
+    int alphbt_len = 26;
+    int i;
+    for(i = 0; i < alphbt_len; i ++){
+        if(letter_arr[i] == let)
+            return letter_bits_arr[i];
+        
+        
+    }
+    return -1;
+}
+
+
 /** 
  * @brief Check if the input dot combination is a valid letter
  * @param button_bits - char, holds bits 0-5 that correspond to which buttons have
@@ -109,116 +144,8 @@ void md3_reset(void)
  * @return bool - true if a valid letter, false if not
  */
 bool valid_letter(char button_bits){
-  switch(button_bits)
-  {
-    case A_BITS:
-      entered_letter = 'a';
-      return true;
-      break;
-    case B_BITS:
-      entered_letter = 'b';
-      return true;
-      break;
-    case C_BITS:
-      entered_letter = 'c';
-      return true;
-      break;
-    case D_BITS:
-      entered_letter = 'd';
-      return true;
-      break;
-    case E_BITS:
-      entered_letter = 'e';
-      return true;
-      break;
-    case F_BITS:
-      entered_letter = 'f';
-      return true;
-      break;
-    case G_BITS:
-      entered_letter = 'g';
-      return true;
-      break;
-    case H_BITS:
-      entered_letter = 'h';
-      return true;
-      break;
-    case I_BITS:
-      entered_letter = 'i';
-      return true;
-      break;
-    case J_BITS:
-      entered_letter = 'j';
-      return true;
-      break;
-    case K_BITS:
-      entered_letter = 'k';
-      return true;
-      break;
-    case L_BITS:
-      entered_letter = 'l';
-      return true;
-      break;
-    case M_BITS:
-      entered_letter = 'm';
-      return true;
-      break;
-    case N_BITS:
-      entered_letter = 'n';
-      return true;
-      break;
-    case O_BITS:
-      entered_letter = 'o';
-      return true;
-      break;
-    case P_BITS:
-      entered_letter = 'p';
-      return true;
-      break;
-    case Q_BITS:
-      entered_letter = 'q';
-      return true;
-      break;
-    case R_BITS:
-      entered_letter = 'r';
-      return true;
-      break;
-    case S_BITS:
-      entered_letter = 's';
-      return true;
-      break;
-    case T_BITS:
-      entered_letter = 't';
-      return true;
-      break;
-    case U_BITS:
-      entered_letter = 'u';
-      return true;
-      break;
-    case V_BITS:
-      entered_letter = 'v';
-      return true;
-      break;
-    case W_BITS:
-      entered_letter = 'w';
-      return true;
-      break;
-    case X_BITS:
-      entered_letter = 'x';
-      return true;
-      break;
-    case Y_BITS:
-      entered_letter = 'y';
-      return true;
-      break;
-    case Z_BITS:
-      entered_letter = 'z';
-      return true;
-      break;
-    default:
-      return false;
-      break;
-  }
+  char letter_from_bits = get_letter_from_bits(button_bits);
+  return (letter_from_bits == entered_letter);
 }
 
 /**
@@ -239,19 +166,7 @@ void md3_main(void)
 
       md3_current_state = STATE_REQUEST_INPUT1;
       animals_used = 0;
-
-      // initialize animal_list
-      animal_list[0] = "bee";
-      animal_list[1] = "camel";
-      animal_list[2] = "cat";
-      animal_list[3] = "cow";
-      animal_list[4] = "dog";
-      animal_list[5] = "horse";
-      animal_list[6] = "hyena";
-      animal_list[7] = "pig";
-      animal_list[8] = "rooster";
-      animal_list[9] = "sheep";
-      animal_list[10] = "zebra";
+      got_input = false;
 
       break;
     
@@ -261,7 +176,7 @@ void md3_main(void)
 
       length_current_word = 0;
 
-      animal = animal_list[choose_animal() - 1];
+      animal = animal_list[choose_animal()];
 
       md3_current_state = STATE_REQUEST_INPUT2;
       break;
@@ -278,7 +193,10 @@ void md3_main(void)
       break;
     
     case STATE_WAIT_INPUT:
-      // Progress to next state when md3_input_cell is called below
+      if(got_input){
+          got_input = false;
+          md3_current_state = STATE_PROC_INPUT
+      }
       break;
     
     case STATE_PROC_INPUT:
@@ -371,6 +289,6 @@ void md3_input_cell(char this_cell)
   if(md3_last_dot != 0)
   {
     last_cell = this_cell;
-    md3_current_state = STATE_PROC_INPUT;
+    got_input = true;
   }
 }
