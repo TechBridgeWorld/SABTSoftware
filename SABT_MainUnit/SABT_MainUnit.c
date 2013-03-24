@@ -69,7 +69,7 @@ End of test code
 */
 
   ui_mode_selected = 1; // @TODO remove
-  ui_current_mode = 2;  // @TODO remove after tuesday
+  ui_current_mode = 3;  // @TODO remove after tuesday
 
   //Display the files in the SD card
   //TX_NEWLINE_PC;

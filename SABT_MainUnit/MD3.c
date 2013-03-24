@@ -15,33 +15,11 @@ char md3_last_dot, last_cell, expected_dot;
 
 
 //@TODO   MAKE THIS BETTER
-char letter_bits_arr[26] =
-{
-    A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS,
-    H_BITS, I_BITS, J_BITS, K_BITS, L_BITS, M_BITS, N_BITS,
-    O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS, U_BITS,
-    V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS
-};
-
-char letter_arr[26] =
-{
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-    'w', 'x', 'y', 'z'
-};
-
 char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
     "hyena", "pig", "rooster", "sheep", "zebra"};
 
-/**
- * @brief Helper function to choose_animal(). Ensures that the same animal isn't
- *        called twice before going through the entire list first.
- * @return int - 0 means no (hasn't been used yet)
- *               1 means yes (has been used)
- */
-int animal_used(int num) {
-  return animal_used_list[num];
-}
+int animal_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
+
 
 /**
  * @brief Based off of the internal timer (TCNT1) - we generate
@@ -59,13 +37,28 @@ int choose_animal()
   num *= PRIME;
   num = (abs(num) % 11);
 
-  while(animal_used(num)) 
+   char buf[10];
+  sprintf(buf, "num=%i\r\n", num);
+  PRINTF(buf);
+
+  while(animals_used_list[num]) 
   {
     num = TCNT1;
     num *= PRIME;
     num = (abs(num) % 11);
   }  
+ 
   animals_used_list[num] = 1;
+
+  for(i = 0; i < 11; i ++){
+    sprintf(buf, "arr=%i, ",animals_used_list[i] );
+    PRINTF(buf);
+
+  }
+  TX_NEWLINE_PC;
+  sprintf(buf, "cnt=%i", animals_used+1);
+  PRINTF(buf);
+  TX_NEWLINE_PC;
 
   // increment animals_used until we've used all 11 animals then reset everything
   animals_used++;
@@ -88,7 +81,7 @@ void play_requested_dot(void)
 {
     // This will hold formatted file to access
     char req_mp3[10];
-    sprintf((char*)req_mp3, "MD2_%c.MP3", md3_last_dot);
+    sprintf((char*)req_mp3, "dot_%c.MP3", md3_last_dot);
     request_to_play_mp3_file(req_mp3);
 }
 
@@ -98,45 +91,6 @@ void md3_reset(void)
   md3_last_dot = 0;
 }
 
-/**
- * @brief Changes letter bits into an actual char letter
- * @param bits - char, bits that correspond to the buttons pressed
- * @return char - letter that corresponds to buttons pressed
- *                on error - not found bits, return -1
- */
-char get_letter_from_bits(char bits)
-{
-    int alphabet_len = 26;
-    int i;
-    
-    for(i = 0; i < alphabet_len; i++){
-        if(letter_bits_arr[i] == bits)
-            return letter_arr[i];
-    }
-    
-    // Return error on failure (letter not present in array)
-    return -1;
-}
-
-/**
- * @brief Changes letter into letter bits
- * @param let - char, charachter letter want to change to bits
- * @return char - letter that corresponds to buttons pressed
- *                on error - not found bits, return -1
- */
-char get_bits_from_letters(char let){
-    int alphbt_len = 26;
-    int i;
-    for(i = 0; i < alphbt_len; i ++){
-        if(letter_arr[i] == let)
-            return letter_bits_arr[i];
-        
-        
-    }
-    return -1;
-}
-
-
 /** 
  * @brief Check if the input dot combination is a valid letter
  * @param button_bits - char, holds bits 0-5 that correspond to which buttons have
@@ -145,7 +99,11 @@ char get_bits_from_letters(char let){
  */
 bool valid_letter(char button_bits){
   char letter_from_bits = get_letter_from_bits(button_bits);
-  return (letter_from_bits == entered_letter);
+  if((letter_from_bits >= 'a') && (letter_from_bits <= 'z')){
+    entered_letter = letter_from_bits;
+	return true;
+  }
+  return false;
 }
 
 /**
@@ -174,7 +132,8 @@ void md3_main(void)
       PRINTF("INPUT1\r\n");
       request_to_play_mp3_file("MD3PLS.mp3");
 
-      length_current_word = 0;
+      length_entered_word = 0;
+	  current_word_index = 0;
 
       animal = animal_list[choose_animal()];
 
@@ -195,34 +154,37 @@ void md3_main(void)
     case STATE_WAIT_INPUT:
       if(got_input){
           got_input = false;
-          md3_current_state = STATE_PROC_INPUT
+          md3_current_state = STATE_PROC_INPUT;
       }
       break;
     
     case STATE_PROC_INPUT:
       PRINTF("PROCESS\r\n");
       // set entered_letter in valid_letter(), but return 1 or 0
-      if (valid_letter(last_cell)) {
+
+     if (valid_letter(last_cell)) {
         char buf[16];
-        sprintf(buf, "MD2_%c.mp3", entered_letter);
+        sprintf(buf, "%c.mp3", entered_letter);
         //usart_transmit_string_to_pc((unsigned char*)buf);
         request_to_play_mp3_file(buf);
         md3_current_state = STATE_CHECK_IF_CORRECT;
       } else {
         request_to_play_mp3_file("INVPAT.mp3");
-        md3_current_state = STATE_INVALID_INPUT;
+        md3_current_state = STATE_READ_ENTERED_LETTERS;
       }
       break;
     
-    case STATE_INVALID_INPUT:
+    case STATE_READ_ENTERED_LETTERS:
       PRINTF("INVALID\r\n");
 
-      char buf[16];
-      sprintf(buf, "MD2_%c.mp3", animal[current_word_index]);
-      request_to_play_mp3_file(buf);
-      current_word_index++;
+      if(length_entered_word > 0) {
+        char buf[16];
+        sprintf(buf, "%c.mp3", animal[current_word_index]);
+        request_to_play_mp3_file(buf);
+        current_word_index++;
+      }
 
-      if (current_word_index == length_current_word) {
+      if (current_word_index == length_entered_word) {
         md3_current_state = STATE_WAIT_INPUT;
         current_word_index = 0; 
       }
@@ -230,10 +192,10 @@ void md3_main(void)
     
     case STATE_CHECK_IF_CORRECT:
       PRINTF("CHECK\r\n");
-      if (animal[length_current_word] == entered_letter) {
-        length_current_word++;
+      if (animal[length_entered_word] == entered_letter) {
+        length_entered_word++;
         
-        if (length_current_word != strlen(animal))
+        if (length_entered_word != strlen(animal))
           md3_current_state = STATE_CORRECT_INPUT;
         else
           md3_current_state = STATE_DONE_WITH_CURRENT_ANIMAL;
@@ -245,7 +207,7 @@ void md3_main(void)
     case STATE_WRONG_INPUT:
       PRINTF("WRONG\r\n");
       request_to_play_mp3_file("no.mp3");
-      md3_current_state = STATE_WAIT_INPUT;
+      md3_current_state = STATE_READ_ENTERED_LETTERS;
       break;
     
     case STATE_CORRECT_INPUT:

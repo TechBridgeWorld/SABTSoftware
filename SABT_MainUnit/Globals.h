@@ -46,5 +46,6 @@ void set_last_dot3(char dot);
 
 #define PRINTF(msg) \
   usart_transmit_string_to_pc((unsigned char*)msg);
+#define CHARTOINT(c)     ((c) - '0')
 
 #endif /* _GLOBALS_H_ */

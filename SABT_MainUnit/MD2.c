@@ -161,7 +161,7 @@ bool check_if_correct(char button_bits, char current_letter)
   char letter_from_bits = get_letter_from_bits(button_bits);
   
   char buf[10];
-  sprintf(buf, "%c, %c, %c\r\n", button_bits, current_letter, letter_from_bits);
+  sprintf(buf, "%d, %d, %d\r\n", button_bits, current_letter, letter_from_bits);
   PRINTF(buf);
   
   return (letter_from_bits == current_letter);
@@ -230,15 +230,16 @@ void md2_main(void)
       curr_button += 1;
       
     char bits = get_bits_from_letters(current_letter);
-    char curr_bit = (bits >> (atoi(&curr_button) - 1)) & 1;
+    char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
     //get the bits for each depending on button count - and play sound if bit is set
     if(curr_bit){
          md2_play_requested_dot(curr_button);
     }
     
-    if(atoi(&curr_button) == NUM_BUT)    
-       current_state = STATE_WAIT_INPUT;
-      
+    if(CHARTOINT(curr_button) == NUM_BUT){   
+      current_state = STATE_WAIT_INPUT;
+      curr_button = 0; 
+    }
     break;
 
     case STATE_WAIT_INPUT:
@@ -315,8 +316,7 @@ void md2_main(void)
         }
         else if((last_dot >= '1') && (last_dot <= '6'))
         {
-		  int temp = atoi(&last_dot);
-          button_bits |= (1 << (atoi(&last_dot) - 1));
+          button_bits |= 1 << (CHARTOINT(last_dot) - 1);
           // TODO change play requested dot to take 1 param
           md2_play_requested_dot(last_dot);
         }

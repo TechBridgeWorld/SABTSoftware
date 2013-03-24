@@ -67,6 +67,9 @@ char current_random_letter;
 char use_random_letter;
 char curr_button;
 
+char get_bits_from_letters(char let);
+char get_letter_from_bits(char bits);
+
 void md2_main(void);
 void md2_reset(void);
 void md2_call_mode_yes_answer(void);
