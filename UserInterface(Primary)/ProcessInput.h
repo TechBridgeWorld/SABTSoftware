@@ -15,6 +15,7 @@
 #define INTERFACE_WRITING 2   // writing mode
 
 volatile bool dots_pressed[NUM_DOTS];
+int recently_pressed[NUM_DOTS];
 volatile char interface_type;
 
 char processed_cell_value;

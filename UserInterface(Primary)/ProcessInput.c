@@ -39,39 +39,57 @@ void process_the_dot(void)
   // Left column of dots (4-6)
   if(!(PINC & (1 << UI_BR1))) // Dot1
   {
-    new_dot_detected = true;
-    temp_dot = 1;
+    if(!recently_pressed[0])
+	{
+      new_dot_detected = true;
+      temp_dot = 1;
+	}
   }
 
   if(!(PINC & (1 << UI_BR2))) // Dot2
   {
-    new_dot_detected = true;
-    temp_dot = 2;
+    if(!recently_pressed[1])
+	{
+      new_dot_detected = true;
+      temp_dot = 2;
+	}
   }
 
   if(!(PINC & (1 << UI_BR3))) // Dot3
   {
-    new_dot_detected = true;
-    temp_dot = 3;
+    if(!recently_pressed[2])
+	{
+      new_dot_detected = true;
+      temp_dot = 3;
+	}
   }
 
   // Right column of dots (1-3)
   if(!(PINC & (1 << UI_BR4))) // Dot4
   {
-    new_dot_detected = true;
-    temp_dot = 4;
+    if(!recently_pressed[3])
+	{
+      new_dot_detected = true;
+      temp_dot = 4;
+	}
   }
 
   if(!(PINC & (1 << UI_BR5))) // Dot5
   {
-    new_dot_detected = true;
-    temp_dot = 5;
+    if(!recently_pressed[4])
+	{
+      new_dot_detected = true;
+      temp_dot = 5;
+	}
   }
 
   if(!(PINC & (1 << UI_BR6))) // Dot6
   {
-    new_dot_detected = true;
-    temp_dot = 6;
+    if(!recently_pressed[5])
+	{
+      new_dot_detected = true;
+      temp_dot = 6;
+	}
   }
 
   // We got an actual input
