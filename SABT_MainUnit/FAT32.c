@@ -543,6 +543,9 @@ unsigned char init_read_dict(unsigned char *file_name){
 
   dict_clusters = calloc(300,sizeof(unsigned long));
   dict_cluster_cnt = 0;
+    
+  preceeding_word = calloc(300, sizeof(char));
+    preceeding_word[0] = 0;
   //unsigned long  dict_clusters[4096];
     
 
@@ -579,6 +582,7 @@ unsigned char read_dict_file(unsigned char *file_name)
     bool end_of_file = false;
     int byte_counter = 0;
 	int count = 0;
+    char curr_char = '';
     //clusters needs to be an array - I am not sure of the correct size, so will start
     //at 4096
 	//@TODO   MUST FREE SOMEWHERE
@@ -602,7 +606,9 @@ unsigned char read_dict_file(unsigned char *file_name)
 			    end_of_file = true;
 			  }	
 			}
-
+       
+            //last charachter in this buffer
+            curr_char = buffer[BUFFER_SIZE - 1];
             //number of bytes read at each sector
             byte_counter += BUFFER_SIZE;
             
@@ -618,6 +624,12 @@ unsigned char read_dict_file(unsigned char *file_name)
 		count ++;
 			            //PRINTF(buffer);
             //TX_NEWLINE_PC;
+        //if the buffer ends in a \n, then this cluster starts on its own word
+        if(curr_char == '\n')
+            preceeding_word[dict_cluster_cnt] = 0;
+        else
+            preceeding_word[dict_cluster_cnt] = 1;
+        
         cluster = get_set_next_cluster (cluster, GET, 0);
         curr_cluster = cluster;
 		if(cluster == 0) 
@@ -652,7 +664,7 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 	int cluster;
 	struct dir_Structure *dir;
 	int error;
-	int j =0;
+	int j = 0;
 	word = "dog";
 
     error = convert_file_name (file_name); //convert file_name into FAT format
@@ -682,7 +694,8 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
         sd_read_single_block(first_sector);
         
         //this should return 0 for found, 1 for less then first, 2 for greater then first
-        cmp_wrd = check_first_full_word(word);
+        //2nd argument tells whether or last word in cluster crosses into this cluster
+        cmp_wrd = check_first_full_word(word, preceeding_word[mid]);
 
         
         
@@ -716,29 +729,15 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
     }
     //if you have narrowed it down to the sector that is pointed at by lo
     if(found == false){
-        first_sector = get_first_sector(dict_clusters[lo]);
-        for(j=0; j<sector_per_cluster; j++)
-        {
-            
-            sd_read_single_block(first_sector + j);
-            
-            if(find_wrd_in_buff(word))
-                return true;
-            
-        }
+        if(find_wrd_in_cluster(word, lo))
+            return true;
+        
 
-        first_sector = get_first_sector(dict_clusters[hi]);
-        for(j=0; j<sector_per_cluster; j++)
-        {
-            
-            sd_read_single_block(first_sector + j);
-            
-            if(find_wrd_in_buff(word))
-                return true;
-            
-        }
-
-        //if you get here, that means that you did not have find the word in any part of the cluster it should be in
+        if(find_wrd_in_cluster(word, hi))
+            return true;
+        
+        //if you get here, that means that you did not have find the word in any part of the cluster
+        //it should be in
         return false;
     }
     
@@ -751,71 +750,157 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 
 }
 
+
 /**
- * @brief This should compare/find word in buffer
+ * @brief This should compare/find word in a cluster
  * @param word - unsigned char *, word to compare with the first word
- * @return bool - return whether or not you found value in buffer
+ * @param cluster_number - unsigned long, this is the number of the cluster you
+ *        are searching in
+ * @return bool - return whether or not you found value in cluster
  */
-bool find_wrd_in_buff(unsigned char *word){
-    int i = 0, j = 0;
-    unsigned char *first_word = (unsigned char *)"";
-
-    for(i = 0; i < BUFFER_SIZE; i ++){
-	  PRINTF("\r");
-      while(i < BUFFER_SIZE){
-        if(buffer[i] == '\n'){
-          first_word = (unsigned char *)&buffer[i+1];
-          break;
-		}
-
-		i ++;
-      }
-
-
-      j = 0;
-      while((i + j) < BUFFER_SIZE){
-        //if you find the end of both words at the same time, and have not left
-        //loop yet, need to return true
-        if((word[j] == 0)  && (first_word[j] == '\r')){
-		  PRINTF("FOUND IITT!!\n\r");
-          return true;
+bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind)
+{
+    char i, j, wrd_cnt, fwrd_cnt;
+    unsigned char *first_word, *last_first_word;
+    unsigned long first_sector = get_first_sector(dict_clusters[cluster_arr_ind]);
+    char overlap = preceeding_word[cluster_arr_ind];
+    
+    //read in the first sector in the cluster, find a place to start 
+    sd_read_single_block(first_sector);
+    
+    unsigned char *first_word;
+    if(overlap == 1)
+    {
+        first_word = (unsigned char *)&buffer[0];
+        int i = 0;
+        //find the start of the first word
+        while(i < BUFFER_SIZE)
+        {
+            if(buffer[i] == '\n')
+            {
+                first_word = (unsigned char *)&buffer[i+1];
+                break;
+            }
+            i ++;
         }
-
-        //if not the correct word, break
-        if(word[j] != first_word[j])
-          break;
-        
-          j ++;
-      }
-      //want to start looking for next word where checking failed
-      i += (j);
     }
+    
+    else
+        first_word = (unsigned char *)&buffer[0];
+    
+    wrd_cnt = 0;
+    for(j=0; j<sector_per_cluster; j++)
+    {
+        
+        sd_read_single_block(first_sector + j);
+        //if we are not looking at the first sector, just assign to first value in block
+        if(j > 0)
+            first_word = (unsigned char *)&buffer[0];
+        
+        
+        for(i = 0; i < BUFFER_SIZE; i ++)
+        {
+          fwrd_cnt = 0;
+          while((i + fwrd_cnt) < BUFFER_SIZE)
+          {
+              //if you find the end of both words at the same time, and have not left
+              //loop yet, need to return true
+              if((word[wrd_cnt] == 0)  && (first_word[fwrd_cnt] == '\r'))
+              {
+                  PRINTF("FOUND IITT!!\n\r");
+                  return true;
+              }
+            
+              //if not the correct word, break
+              if(word[wrd_cnt] != first_word[fwrd_cnt])
+              {
+                wrd_cnt = 0;
+                break;
+              }
+              
+            
+              fwrd_cnt ++;
+              wrd_cnt ++;
+          }
+          //want to start looking for next word where checking failed
+          i += (fwrd_cnt);
+        
+        }
+    }
+    //if you get here that means that you have read the whole cluster,
+    //now need to check first part of the next cluster till you get to an end of word
+    //since we are considering overlapping words are responsibility
+    //If we got here, we also have not found the word yet
+    
+    //we have a word that continues over to next cluster
+    if((buffer[buffer_size - 1] != '\n') && (cluster_arr_num != (dict_cluster_cnt -1)))
+    {
+        first_sector = get_first_sector(dict_clusters[cluster_arr_ind + 1]);
+        sd_read_single_block(first_sector);
+        first_word = (unsigned char *)&buffer[0];
+        
+        fwrd_cnt = 0;
+        while((i + fwrd_cnt) < BUFFER_SIZE)
+        {
+            //if you find the end of both words at the same time, and have not left
+            //loop yet, need to return true
+            if((word[wrd_cnt] == 0)  && (first_word[fwrd_cnt] == '\r'))
+            {
+                PRINTF("FOUND IITT!!\n\r");
+                return true;
+            }
+            
+            //if not the correct word, break
+            if(word[wrd_cnt] != first_word[fwrd_cnt])
+            {
+                wrd_cnt = 0;
+                break;
+            }
+            
+            
+            fwrd_cnt ++;
+            wrd_cnt ++;
+        }
+        
+    }
+    
+    //if get here, then you did not find it
     return false;
 }
+
+
 
 /**
  * @brief This should compare/find word with the fist word found in buffer
  * @param word - unsigned char *, word to compare with the first word
+ * @param overlap - char, 1 if word from previous cluster overlaps with this one
+ *                  0 if word from previous cluster does not overlap
  * @return int - 0 if word is same then first word in buffer
  *               1 if word is less then first word in buffer
  *               2 if word is greater then first word in buffer 
  *               -1 error
  */
-int check_first_full_word(unsigned char *word)
+int check_first_full_word(unsigned char *word, char overlap)
 {
 //PRINTF("enter!");
 //			TX_NEWLINE_PC;
-    unsigned char *first_word = (unsigned char *)&buffer[0];
-    int i = 0;
-    //find the start of the first word
-    while(i < BUFFER_SIZE){
-        if(buffer[i] == '\n'){
-           first_word = (unsigned char *)&buffer[i+1];
-           break;
-        }
-        i ++;
+    unsigned char *first_word;
+    if(overlap == 1){
+      first_word = (unsigned char *)&buffer[0];
+      int i = 0;
+      //find the start of the first word
+      while(i < BUFFER_SIZE){
+          if(buffer[i] == '\n'){
+             first_word = (unsigned char *)&buffer[i+1];
+             break;
+          }
+          i ++;
+      }
     }
     
+    else
+      first_word = (unsigned char *)&buffer[0];
+        
     i = 0;
     while(1){
         //if word is greater then first word

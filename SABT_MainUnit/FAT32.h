@@ -156,6 +156,9 @@ unsigned char free_cluster_count_updated;
 bool done_rd_dict;
 unsigned long curr_cluster;
 unsigned long *dict_clusters;
+//will be set to 1 if there is a preceeding word overlapping into this cluster, 0 if this cluster starts
+//word
+unsigned char *preceeding_word;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
