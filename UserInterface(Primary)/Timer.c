@@ -7,7 +7,6 @@
  */
 
 #include "GlobalsUI.h"
-int TmrCntADC;          // TODO what is this
 
 /**
  * @brief Initialize the timer
@@ -23,7 +22,8 @@ void init_timer(void)
   TCCR1B = 0x0D;
   OCR1A = TIMER_INTERRUPT_RATE; // Set timer interrupt rate
   TIMSK1 |= (1<<OCIE1A);        // Enable timer interrupt
-  TmrCntADC = 0;                // TODO what is this?
+  //input_delay = 0;
+  //command_delay = 0;
 }
 
 /**
@@ -40,6 +40,8 @@ ISR(/*TIMER1_COMPA_vect*/ _VECTOR(11)){
  */
 void timer_routine(void)
 {
+  int i = 0;
+
   timer_interrupt = false;
 
   // Toggle LEDs to show action
@@ -55,19 +57,28 @@ void timer_routine(void)
   }
  
   // Handle button presses
-  process_the_dot();
   check_command_buttons();
   run_command_tasks();
-  
-  /*
-  if(TmrCntADC<2)
+  process_the_dot();
+
+  /*input_delay = (input_delay + 1) % TIMER_INPUT_DELAY_RATE;
+  if(input_delay == 0) 
   {
-    TmrCntADC++;
-  } 
-  else
+    process_the_dot();
+  }
+
+  command_delay = (command_delay + 1) % TIMER_COMMAND_DELAY_RATE;
+  if(command_delay == 0)
   {
-    //DetectTheDot();
-    ProcessTheDot();
-    TmrCntADC = 0;
+    check_command_buttons();
+    run_command_tasks();
   }*/
+
+  for (i = 0; i < NUM_DOTS; i++)
+  {
+    if(recently_pressed[i] != 0)
+	{
+		recently_pressed[i] = recently_pressed[i] + 1 % TIMER_PRESS_DELAY_RATE;
+	}
+  }
 }

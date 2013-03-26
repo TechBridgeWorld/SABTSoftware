@@ -229,6 +229,7 @@ void md2_main(void)
   case STATE_BUTT_TO_PRESS_2:
       curr_button += 1;
       
+	  PRINTF(&curr_button);
     char bits = get_bits_from_letters(current_letter);
     char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
     //get the bits for each depending on button count - and play sound if bit is set
@@ -238,7 +239,7 @@ void md2_main(void)
     
     if(CHARTOINT(curr_button) == NUM_BUT){   
       current_state = STATE_WAIT_INPUT;
-      curr_button = 0; 
+      curr_button = '0'; 
     }
     break;
 
