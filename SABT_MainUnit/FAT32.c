@@ -757,6 +757,75 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 
 }
 
+/**
+ * @brief another function to sreach for a word
+ */
+bool find_word_2(unsigned char* word, unsigned long cluster_index)
+{
+  // Vars
+  unsigned long word_index, sector_index; // index into word, sector
+  unsigned long cluster_index;  // Index into cluster
+
+  // First, find out what cluster we need
+  // uses global: dict_clusters
+  unsigned long first_sector = get_first_sector(dict_clusters[cluster_index]);
+  unsigned char* sector_pointer = (unsigned char*)buffer[0]; // Start at the beginning of the buffer
+  char overlap = preceeding_word[cluster_index];
+
+  // Read in the first sector to 'buffer'
+  // uses global: buffer
+  sd_read_single_block(first_sector);
+
+  sector_index = 0;
+  word_index = 0;
+  // Determine where we should begin scanning
+  if (overlap == 1)
+  {
+    while (sector_pointer[sector_index] != '\n') sector_index++;
+    sector_index++; // Start after newline
+  }
+
+  // Loop through all of the sectors in this cluster searching for word
+  for(cluster_index = 0; cluster_index < sector_per_cluster; cluster_index++)
+  {
+    // Repopulate the buffer with the next sector
+    sd_read_single_block(first_sector + cluster_index);
+
+    // Reset the sector index if we overflowed last time
+    // We want to avoid resetting after calculating the first word the first time,
+    // or if we didn't get to the end of the sector for some other reason
+    if (sector_index >= BUFFER_SIZE) sector_index = 0;
+
+    while (sector_index < BUFFER_SIZE)
+    {
+      // Check to see if we've successfully found the word
+      if (word[word_index] == '\0' && sector_pointer[sector_index] == '\r') return true;
+      // If we get to the end of the word in any other way, abort
+      else if (word[word_index] == '\0') return false;
+      // Otherwise, check to see if this is a possible match
+      else if (word[word_index] == sector_pointer[sector_index])
+      {
+        word_index++;
+        sector_index++;
+      }
+      // Otherwise, the word is not a possible match. Advance until we can try again.
+      else
+      {
+        word_index = 0;
+        while(sector_pointer[sector_index] != '\n' && sector_index < BUFFER_SIZE)
+        {
+          sector_index++;
+        }
+        sector_index++; // skip the '\n' before a new word
+      }
+  }
+
+  // If we went throught the entire cluster and couldn't find the word, word not in cluster
+  return false;
+
+  // TODO FIXME not considering overlap at the very end of cluster at the moment.
+}
+
 
 /**
  * @brief This should compare/find word in a cluster
