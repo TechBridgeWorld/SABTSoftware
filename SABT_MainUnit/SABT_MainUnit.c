@@ -86,8 +86,12 @@ End of test code
 	//read in the dict file till done
     if(!done_rd_dict)
 	{
-	  //read_dict_file((unsigned char *)"wordsEn.txt");
+	  read_dict_file((unsigned char *)"wordsEn.txt");
     }
+	else{
+       if(bin_srch_dict((unsigned char *)"wordsEn.txt", "apple"))
+	     PRINTF("YOU FOUND THE WORD\n\r");
+	}
     
 	
 	if(timer_interrupt)
@@ -253,7 +257,7 @@ void initialize_system(void)
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
-  //init_read_dict((unsigned char *)"wordsEn.txt");
+  init_read_dict((unsigned char *)"wordsEn.txt");
   /*
   TX_NEWLINE_PC;
   if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"zymogenicsdfsf"))

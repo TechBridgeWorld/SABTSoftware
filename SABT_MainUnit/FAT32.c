@@ -577,12 +577,12 @@ unsigned char read_dict_file(unsigned char *file_name)
 {
     struct dir_Structure *dir;
     unsigned long cluster, file_size, first_sector;
-    unsigned char j, error;
+    unsigned char j;
 	unsigned long i, k;
     bool end_of_file = false;
     int byte_counter = 0;
 	int count = 0;
-    char curr_char = '';
+    char curr_char = 0;
     //clusters needs to be an array - I am not sure of the correct size, so will start
     //at 4096
 	//@TODO   MUST FREE SOMEWHERE
@@ -664,8 +664,11 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 	int cluster;
 	struct dir_Structure *dir;
 	int error;
-	int j = 0;
-	word = "dog";
+	char buf[10];
+    PRINTF("HEY LOOK OVER HERE DUMBY\n\r");
+	PRINTF(word);
+	TX_NEWLINE_PC;
+
 
     error = convert_file_name (file_name); //convert file_name into FAT format
     if(error) return 2;
@@ -723,19 +726,23 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 			TX_NEWLINE_PC;
             return false;
 		}
-        
-        
-        
     }
+
+    sprintf(buf, "clsts %i %i", lo, hi);
+	PRINTF(buf);
+	TX_NEWLINE_PC;
+
+
     //if you have narrowed it down to the sector that is pointed at by lo
     if(found == false){
         if(find_wrd_in_cluster(word, lo))
             return true;
-        
+        PRINTF("DONE WIHT FIRST\r\n");        
 
         if(find_wrd_in_cluster(word, hi))
             return true;
         
+		PRINTF("DONE WIHT second\r\n"); 
         //if you get here, that means that you did not have find the word in any part of the cluster
         //it should be in
         return false;
@@ -760,19 +767,19 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
  */
 bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind)
 {
-    char i, j, wrd_cnt, fwrd_cnt;
-    unsigned char *first_word, *last_first_word;
+    unsigned long i, j,wrd_cnt, fwrd_cnt;
+    unsigned char *first_word;
     unsigned long first_sector = get_first_sector(dict_clusters[cluster_arr_ind]);
     char overlap = preceeding_word[cluster_arr_ind];
+	char buf[15];
     
     //read in the first sector in the cluster, find a place to start 
     sd_read_single_block(first_sector);
     
-    unsigned char *first_word;
+    i = 0;
     if(overlap == 1)
     {
         first_word = (unsigned char *)&buffer[0];
-        int i = 0;
         //find the start of the first word
         while(i < BUFFER_SIZE)
         {
@@ -788,11 +795,22 @@ bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind)
     else
         first_word = (unsigned char *)&buffer[0];
     
+
+
     wrd_cnt = 0;
     for(j=0; j<sector_per_cluster; j++)
     {
+        //first_sector = get_first_sector(dict_clusters[cluster_arr_ind]);
         
-        sd_read_single_block(first_sector + j);
+		//@TODO- THIS VARIABLE (first_sector) is changing randomly - must figure out why
+		//messes up the whole program
+		sd_read_single_block(first_sector + j);
+		PRINTF("NEW SECOTR\r\n");
+		sprintf(buf, "j=%li",first_sector  +  j);
+		  PRINTF(buf);
+		  TX_NEWLINE_PC;
+        TX_NEWLINE_PC;
+		PRINTF(buffer);
         //if we are not looking at the first sector, just assign to first value in block
         if(j > 0)
             first_word = (unsigned char *)&buffer[0];
@@ -801,46 +819,60 @@ bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind)
         for(i = 0; i < BUFFER_SIZE; i ++)
         {
           fwrd_cnt = 0;
+		  //sprintf(buf, "I=%li",i);
+		  //PRINTF(buf);
+		  //TX_NEWLINE_PC;
           while((i + fwrd_cnt) < BUFFER_SIZE)
           {
               //if you find the end of both words at the same time, and have not left
               //loop yet, need to return true
-              if((word[wrd_cnt] == 0)  && (first_word[fwrd_cnt] == '\r'))
+              if((word[wrd_cnt] == 0)  && (first_word[i + fwrd_cnt] == '\r'))
               {
                   PRINTF("FOUND IITT!!\n\r");
                   return true;
               }
             
+			sprintf(buf, "LETS: %c %i %li %li", word[wrd_cnt], first_word[i+fwrd_cnt], wrd_cnt, i + fwrd_cnt);
+			PRINTF(buf);
+            TX_NEWLINE_PC;
+
               //if not the correct word, break
-              if(word[wrd_cnt] != first_word[fwrd_cnt])
+              if(word[wrd_cnt] != first_word[i + fwrd_cnt])
               {
                 wrd_cnt = 0;
                 break;
               }
               
+			  
             
               fwrd_cnt ++;
               wrd_cnt ++;
           }
           //want to start looking for next word where checking failed
+		  //PRINTF("HEY YOU INCREMENTED I\r\n");
           i += (fwrd_cnt);
+//sprintf(buf, "I=%li",i);
+		  //PRINTF(buf);
+		 // TX_NEWLINE_PC;
         
         }
     }
+
+
     //if you get here that means that you have read the whole cluster,
     //now need to check first part of the next cluster till you get to an end of word
     //since we are considering overlapping words are responsibility
     //If we got here, we also have not found the word yet
     
     //we have a word that continues over to next cluster
-    if((buffer[buffer_size - 1] != '\n') && (cluster_arr_num != (dict_cluster_cnt -1)))
+    if((buffer[BUFFER_SIZE - 1] != '\n') && (cluster_arr_ind != (dict_cluster_cnt -1)))
     {
         first_sector = get_first_sector(dict_clusters[cluster_arr_ind + 1]);
         sd_read_single_block(first_sector);
         first_word = (unsigned char *)&buffer[0];
         
         fwrd_cnt = 0;
-        while((i + fwrd_cnt) < BUFFER_SIZE)
+        while((fwrd_cnt) < BUFFER_SIZE)
         {
             //if you find the end of both words at the same time, and have not left
             //loop yet, need to return true
@@ -882,6 +914,7 @@ bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind)
  */
 int check_first_full_word(unsigned char *word, char overlap)
 {
+  int i;
 //PRINTF("enter!");
 //			TX_NEWLINE_PC;
     unsigned char *first_word;

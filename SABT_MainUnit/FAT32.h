@@ -162,11 +162,12 @@ unsigned char *preceeding_word;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
+bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind);
 unsigned char init_read_dict(unsigned char *file_name);
 bool find_wrd_in_buff(unsigned char *word);
 unsigned char read_dict_file(unsigned char *file_name);
 bool bin_srch_dict(unsigned char *file_name, unsigned char *word);
-int check_first_full_word(unsigned char *word);
+int check_first_full_word(unsigned char *word, char overlap);
 unsigned char get_boot_sector_data(void);
 unsigned long get_first_sector(unsigned long cluster_number);
 unsigned long get_set_free_cluster(unsigned char tot_or_next, 
@@ -192,6 +193,5 @@ void delete_file(unsigned char *file_name);
 void free_memory_update(unsigned char flag, unsigned long size);
 void init_sd_card(bool verb);
 
-int check_first_full_word(unsigned char *word);
 
 #endif /* _FAT32_H_ */
