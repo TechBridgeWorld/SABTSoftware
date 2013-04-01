@@ -78,7 +78,7 @@ void timer_routine(void)
   {
     if(recently_pressed[i] != 0)
 	{
-		recently_pressed[i] = recently_pressed[i] + 1 % TIMER_PRESS_DELAY_RATE;
+		recently_pressed[i] = (recently_pressed[i] + 1) % TIMER_PRESS_DELAY_RATE;
 	}
   }
 }

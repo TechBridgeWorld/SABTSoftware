@@ -162,6 +162,7 @@ unsigned char *preceeding_word;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
+bool find_word_2(unsigned char* word, unsigned long arr_cluster_index);
 bool find_wrd_in_cluster(unsigned char *word, unsigned long cluster_arr_ind);
 unsigned char init_read_dict(unsigned char *file_name);
 bool find_wrd_in_buff(unsigned char *word);

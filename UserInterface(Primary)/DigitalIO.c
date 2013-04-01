@@ -188,7 +188,11 @@ void enter1_task(void)
   set_stat_led2(true);
   mcu_message_payload[0] = ENTER1_PAYLOAD;
   send_packet('D', (char*)&mcu_message_payload, 1);
-  delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();delay10();
+  
+  // TODO fix this
+  delay10();delay10();delay10();delay10();delay10();
+  delay10();delay10();delay10();delay10();delay10();
+  delay10();delay10();delay10();delay10();delay10();
 
   // Send the value of the currently entered cell
   capture_cell_value();

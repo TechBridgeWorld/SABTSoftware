@@ -327,7 +327,7 @@ void md2_main(void)
       
     case STATE_ERROR_1:
       //@TODO- change to pressed
-      request_to_play_mp3_file("press.MP3");
+      request_to_play_mp3_file("u_prssd.MP3");
       current_state = STATE_ERROR_2;
       break;
           

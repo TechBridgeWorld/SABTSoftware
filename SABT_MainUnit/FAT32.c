@@ -735,11 +735,11 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 
     //if you have narrowed it down to the sector that is pointed at by lo
     if(found == false){
-        if(find_wrd_in_cluster(word, lo))
+        if(find_word_2(word, lo))
             return true;
         PRINTF("DONE WIHT FIRST\r\n");        
 
-        if(find_wrd_in_cluster(word, hi))
+        if(find_word_2(word, hi))
             return true;
         
 		PRINTF("DONE WIHT second\r\n"); 
@@ -760,7 +760,7 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 /**
  * @brief another function to sreach for a word
  */
-bool find_word_2(unsigned char* word, unsigned long cluster_index)
+bool find_word_2(unsigned char* word, unsigned long arr_cluster_index)
 {
   // Vars
   unsigned long word_index, sector_index; // index into word, sector
@@ -768,9 +768,9 @@ bool find_word_2(unsigned char* word, unsigned long cluster_index)
 
   // First, find out what cluster we need
   // uses global: dict_clusters
-  unsigned long first_sector = get_first_sector(dict_clusters[cluster_index]);
+  unsigned long first_sector = get_first_sector(dict_clusters[arr_cluster_index]);
   unsigned char* sector_pointer = (unsigned char*)buffer[0]; // Start at the beginning of the buffer
-  char overlap = preceeding_word[cluster_index];
+  char overlap = preceeding_word[arr_cluster_index];
 
   // Read in the first sector to 'buffer'
   // uses global: buffer
@@ -818,6 +818,7 @@ bool find_word_2(unsigned char* word, unsigned long cluster_index)
         }
         sector_index++; // skip the '\n' before a new word
       }
+    }
   }
 
   // If we went throught the entire cluster and couldn't find the word, word not in cluster

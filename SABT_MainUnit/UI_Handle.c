@@ -250,7 +250,7 @@ void ui_control_key_pressed(void)
       TX_NEWLINE_PC; 
       if(!ui_mode_selected) //Then this command is to select the mode
       {
-        if(ui_selected_mode>0)
+        if(ui_selected_mode >= 0)
         {
           ui_mode_selected = true;
           ui_reset_the_current_mode();
@@ -292,8 +292,20 @@ void ui_control_key_pressed(void)
       TX_NEWLINE_PC;
       if(!ui_mode_selected)
       {
-        ui_selected_mode++;
-        if(ui_selected_mode > number_of_modes)
+	    unsigned char buf[8];
+		sprintf(buf, "%d\r\n", number_of_modes);
+		PRINTF(buf);
+
+        sprintf(buf, "%d\r\n", ui_selected_mode);
+		PRINTF(buf);
+
+        //ui_selected_mode = ui_selected_mode + 1 % number_of_modes;
+		ui_selected_mode = ui_selected_mode + 1 > number_of_modes - 1 ? 0 : ui_selected_mode + 1;
+		ui_current_mode = ui_modes[ui_selected_mode];
+		vs1053_skip_play = true;
+		ui_play_intro_current_mode();
+
+        /*if(ui_selected_mode > number_of_modes)
         {
           ui_selected_mode--;
           ui_current_mode = ui_modes[ui_selected_mode - 1];
@@ -303,7 +315,7 @@ void ui_control_key_pressed(void)
           ui_current_mode = ui_modes[ui_selected_mode - 1];
           vs1053_skip_play = true;
           ui_play_intro_current_mode();
-        }
+        }*/
       }
       break;
     case UI_CMD_MREV: // Move backwards in list of modes
@@ -311,7 +323,13 @@ void ui_control_key_pressed(void)
       TX_NEWLINE_PC;
       if(!ui_mode_selected)
       {
-        ui_selected_mode--;
+	    ui_selected_mode = ui_selected_mode - 1 < 0 ? number_of_modes - 1 : ui_selected_mode - 1;
+		ui_current_mode = ui_modes[ui_selected_mode];
+		vs1053_skip_play = true;
+		ui_play_intro_current_mode();
+        //ui_selected_mode--;
+        
+		/*
         if(ui_selected_mode < 1)
         {
           ui_selected_mode = 1;
@@ -322,8 +340,8 @@ void ui_control_key_pressed(void)
           ui_current_mode = ui_modes[ui_selected_mode - 1];
           vs1053_skip_play = true;
           ui_play_intro_current_mode();
-        }  
-      }    
+        }*/ 
+      }
       break;
     case UI_CMD_VOLU: // Volume Up
       //usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
