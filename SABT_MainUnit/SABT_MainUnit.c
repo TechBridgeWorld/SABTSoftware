@@ -82,8 +82,6 @@ End of test code
  // play_mp3_file(g_file_name); 
   //request_to_play_mp3_file("MM.MP3");
   //play_mp3_file(g_file_name);
- 
-
 
 
   while(1)
@@ -248,7 +246,8 @@ void initialize_system(void)
   
   sei();  // sets the interrupt flag (enables interrupts)
 
-  ui_current_mode = 0;  //No mode selected
+  ui_current_mode = 3;  //No mode selected
+  ui_selected_mode = 3;
   TX_NEWLINE_PC;
   usart_transmit_string_to_pc_from_flash (PSTR("SABT testing..."));
   TX_NEWLINE_PC;
@@ -277,6 +276,4 @@ void initialize_system(void)
   TX_NEWLINE_PC;*/
   request_to_play_mp3_file("WELCOME.MP3");  // Play the welcome message
   play_mp3_file(g_file_name);           // Play the welcome message
- 
-  
 }
