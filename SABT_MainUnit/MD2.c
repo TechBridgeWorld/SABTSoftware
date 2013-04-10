@@ -29,6 +29,8 @@ char letter_arr[26] =
   'w', 'x', 'y', 'z'
 };
 
+char used_letter[5] = {0, 0, 0, 0, 0};
+
 /**
  * @brief Sets the given input to the file's last_dot
  * @return Void
@@ -50,6 +52,34 @@ int generate_random_number()
   ret *= PRIME;
   return ret;
 }
+
+/**
+ * @brief given a random number, and that you have 5 letters, looks in used letter to see
+ * if valid
+ * @return int - index into the letters being used
+ */
+int prop_rand_number()
+{
+  int ret_int; 
+  int i;
+
+  ret_int = (generate_random_number() % LET_CLST_SIZE);
+  while(used_letter[ret_int]){ret_int = generate_random_number() % LET_CLST_SIZE;}
+
+  used_letter[ret_int] = 1;
+  used_let_cnt ++;
+
+  //if you find that you ahve used all of the letters, clear both the array and the count
+  if(used_let_cnt == LET_CLST_SIZE){
+    for(i = 0; i < LET_CLST_SIZE; i ++)
+	   used_letter[i] = 0;
+    used_let_cnt = 0;
+  }
+
+  return ret_int;
+
+
+}       
 
 /**
  * @brief  Given a char, in last_cell, play the corresponding letter 
@@ -180,6 +210,7 @@ void setup_initial()
   current_random_letter = 0;
   initial_letter = 'a';
   use_random_letter = 0;
+  used_let_cnt = 0;
 }
 
 /**
@@ -199,7 +230,7 @@ void md2_main(void)
     case SET_LETTER_VALS:
       curr_button = '0';
       current_random_letter = (initial_letter + ((letter_set * 5 
-        + (generate_random_number()%5)) % 26));
+        + (prop_rand_number())) % 26));
       current_letter = (initial_letter + ((letter_set*5 + current_count) % 26));
       current_state = STATE_REQUEST_INPUT1;
       break;

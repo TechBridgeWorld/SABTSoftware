@@ -9,6 +9,8 @@
 #include "Globals.h"
 #include "MD1.h"
 
+char used_number[6] = {0, 0, 0, 0, 0, 0};
+
 /**
  * @brief based off of the internal timer (TCNT1) - we generate
  *        a psuedo-random number. Turn that into a number from 1 - 6
@@ -18,9 +20,31 @@
 char random_number_as_char()
 {
   int num = TCNT1;
+  int i;
   
   num *= PRIME;
-  num = (abs(num) % 6) + 1;
+  num = (abs(num) % 6);
+
+//while you are looking at a full section of teh array
+  while(used_number[num]){
+    num = TCNT1;
+    num *= PRIME;
+    num = (abs(num) % 6);
+  }
+
+  used_number[num] = 1;
+  used_num_cnt ++;
+
+  //if you find that you ahve used all of the letters, clear both the array and the count
+  if(used_num_cnt == NUM_DOTS){
+    for(i = 0; i < NUM_DOTS; i ++)
+	   used_number[i] = 0;
+    used_num_cnt = 0;
+  }
+
+  //change from range 0-5 to 1-6
+  num += 1;
+
 
   // Return the number as a character
   if (num >= 1 && num <= 6) return '0' + num;
@@ -91,7 +115,7 @@ void md1_main(void)
   {
     case STATE_INITIAL:
       PRINTF("[MD1] Entering MD1\n\r");
-
+      used_num_cnt = 0;
       // Play the introductory message for Mode 1
       request_to_play_mp3_file("MD1INT.MP3");
       current_state = STATE_REQUEST_INPUT1;

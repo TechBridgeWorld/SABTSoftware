@@ -22,7 +22,7 @@ void spi_initialize(void)
   DDRB &= ~_BV(MP3_DREQ);
   DDRB = 0xB7;
   SPCR = 0x50; //SPE=1, MSTR=1, SPR1=0, SPR0=0 (Fosc/4)
-  spi_2x();
+  spi_1x();
 }
 
 /**
