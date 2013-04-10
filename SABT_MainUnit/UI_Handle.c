@@ -112,7 +112,7 @@ bool ui_check_modes(void)
     usart_transmit_string_to_pc(&pc_print_content[0]);
   }
   TX_NEWLINE_PC;
-  
+
   return true; 
 }
 
@@ -364,6 +364,11 @@ void ui_control_key_pressed(void)
  */
 void ui_play_intro_current_mode(void)
 {
+  char buf[11];
+  sprintf(buf, "MD%c.MP3", ui_current_mode);
+  request_to_play_mp3_file(buf);
+
+/*
   switch(ui_current_mode)
   {
     case 1:
@@ -378,7 +383,7 @@ void ui_play_intro_current_mode(void)
     default:
       break;
       //request_to_play_mp3_file("ERR1.MP3");
-  }
+  }*/
 }
 
 /**

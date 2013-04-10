@@ -98,11 +98,11 @@ void md1_main(void)
       break;
     case STATE_REQUEST_INPUT1:
       request_to_play_mp3_file("find_dot.MP3");
+      expected_dot = random_number_as_char();
       current_state = STATE_REQUEST_INPUT2;
       break;
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
-      expected_dot = random_number_as_char();
       md1_play_requested_dot(expected_dot);
       current_state = STATE_WAIT_INPUT;
       break;
@@ -129,7 +129,15 @@ void md1_main(void)
   }
 }
 
-void md1_call_mode_yes_answer(void) {}
+/**
+ * @brief in mode 1, enter button just replays the current prompt
+ * @return Void
+ */
+void md1_call_mode_yes_answer(void)
+{
+  request_to_play_mp3_file("find_dot.MP3");
+  current_state = STATE_REQUEST_INPUT2;
+}
 
 void md1_call_mode_no_answer(void) {}
 
