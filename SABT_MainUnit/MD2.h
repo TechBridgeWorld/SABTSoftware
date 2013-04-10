@@ -43,6 +43,7 @@
 #define Y_BITS 0b00111101
 #define Z_BITS 0b00110101
 
+#define LET_CLST_SIZE 5
 
 
 // State definitions
@@ -66,6 +67,7 @@ char current_letter;
 char current_random_letter;
 char use_random_letter;
 char curr_button;
+char used_let_cnt;
 
 char get_bits_from_letters(char let);
 char get_letter_from_bits(char bits);

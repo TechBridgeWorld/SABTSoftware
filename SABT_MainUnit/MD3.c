@@ -15,8 +15,12 @@ char md3_last_dot, last_cell, expected_dot;
 
 
 //@TODO   MAKE THIS BETTER
-char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
-    "hyena", "pig", "rooster", "sheep", "zebra"};
+//char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
+//    "hyena", "pig", "rooster", "sheep", "zebra"};
+
+//@TODO temporarily changed to use only easy animal names
+char *animal_list[11] = {"bee", "bee", "cat", "cat", "dog", "dog",
+    "pig", "pig", "rooster", "rooster", "dog"};
 
 int animal_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
