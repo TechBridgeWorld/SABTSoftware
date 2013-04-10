@@ -345,12 +345,12 @@ void ui_control_key_pressed(void)
       break;
     case UI_CMD_VOLU: // Volume Up
       //usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
-      TX_NEWLINE_PC;
+      //TX_NEWLINE_PC;
       vs1053_increase_vol();
       break;
     case UI_CMD_VOLD: // Volume down
       //usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
-      TX_NEWLINE_PC;
+      //TX_NEWLINE_PC;
       vs1053_decrease_vol();
       break;
     default:

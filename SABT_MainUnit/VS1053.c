@@ -98,7 +98,7 @@ bool vs1053_increase_vol(void)
   // Check for maximum volume setting
   if(vs1053_volume >= 0xFEFE)
   {
-    vs1053_volume = 0xFEFE; 
+    vs1053_volume = 0xFEFE;
   }
   else
   {
@@ -134,7 +134,7 @@ bool vs1053_decrease_vol(void)
     while(vs1053_read_command(0x0B) != vs1053_volume)   // REDO if not written properly
     {
       vs1053_write_command(0x0B, vs1053_volume);        // Set the requested volume
-      if(retry++ > 10 ) return false;
+      if(retry++ > 10) return false;
     }
   }
   return true;
