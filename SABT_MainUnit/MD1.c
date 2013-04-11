@@ -159,8 +159,8 @@ void md1_main(void)
  */
 void md1_call_mode_yes_answer(void)
 {
-  request_to_play_mp3_file("find_dot.MP3");
-  current_state = STATE_REQUEST_INPUT2;
+  //request_to_play_mp3_file("find_dot.MP3");
+  //current_state = STATE_REQUEST_INPUT2;
 }
 
 void md1_call_mode_no_answer(void) {}

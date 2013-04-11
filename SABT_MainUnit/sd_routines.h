@@ -59,7 +59,7 @@
 
 
 volatile unsigned long start_block, total_blocks; 
-volatile unsigned char sdhc_flag, card_type, buffer[BUFFER_SIZE];
+volatile unsigned char sdhc_flag, card_type, buffer[BUFFER_SIZE], dict_buffer[BUFFER_SIZE];
 
 
 unsigned char sd_init(void);

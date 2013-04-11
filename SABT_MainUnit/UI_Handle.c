@@ -365,7 +365,7 @@ void ui_control_key_pressed(void)
 void ui_play_intro_current_mode(void)
 {
   char buf[11];
-  sprintf(buf, "MD%c.MP3", ui_current_mode);
+  sprintf(buf, "MD%i.MP3", ui_current_mode);
   request_to_play_mp3_file(buf);
 
 /*

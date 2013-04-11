@@ -198,7 +198,6 @@ unsigned int vs1053_read_command(unsigned char addr)
  */
 void request_to_play_mp3_file(const char* this_file)
 {
-  //PRINTF(this_file);
   int i = 0, j;
   
   while(i < strlen((char*)g_file_name))

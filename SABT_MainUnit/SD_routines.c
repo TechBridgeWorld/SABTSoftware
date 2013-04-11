@@ -229,6 +229,45 @@ unsigned char sd_read_single_block(unsigned long start_block)
   return 0;
 }
 
+
+/**
+ * @brief Reads a single block from SD card, specifically for the dictionary
+ *        functions
+ *        Reads 512 bytes (SPI Block) from SD Card
+ * @return unsigned char - 0 if no error and response byte if error
+ */
+unsigned char sd_read_single_dict_block(unsigned long start_block)
+{
+  unsigned char response;
+  unsigned int i, retry = 0;
+
+  response = sd_send_command(READ_SINGLE_BLOCK, start_block); //read a Block command
+ 
+  if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
+  
+  SD_CS_ASSERT;
+
+  retry = 0;
+  while(spi_receive() != 0xfe) //wait for start block token 0xfe (0x11111110)
+    if(retry++ > 0xfffe)
+    {
+      SD_CS_DEASSERT; 
+      return 1;
+    } //return if time-out
+
+  for(i = 0; i < 512; i++) //read 512 bytes
+    dict_buffer[i] = spi_receive();
+
+  spi_receive(); //receive incoming CRC (16-bit), CRC is ignored here
+  spi_receive();
+
+  spi_receive(); //extra 8 clock pulses
+  SD_CS_DEASSERT;
+
+  return 0;
+}
+
+
 /**
  * @brief Writes a single block of SD Card. Data that is written is put into the
  *        buffer variables and writes out the 512 charachters.  
