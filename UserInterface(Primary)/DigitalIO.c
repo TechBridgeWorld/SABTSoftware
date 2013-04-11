@@ -161,12 +161,12 @@ void run_command_tasks(void)
     mode2_state = BUTTON_PROCESSED;
   }
   // Flip from reading / writing mode
-  if((vol_down_state >= BUTTON_ON) && (vol_up_state >= BUTTON_ON)) // Flip the keyboard
+  /*if((vol_down_state >= BUTTON_ON) && (vol_up_state >= BUTTON_ON)) // Flip the keyboard
   {
     if(interface_type == INTERFACE_READING) interface_type = INTERFACE_WRITING;
     else interface_type = INTERFACE_READING;
     return;
-  }
+  }*/
   if(vol_up_state == BUTTON_ON)
   {
     vol_up_task();
@@ -185,14 +185,18 @@ void run_command_tasks(void)
  */
 void enter1_task(void)
 {
+  int i = 0;
+
   set_stat_led2(true);
   mcu_message_payload[0] = ENTER1_PAYLOAD;
   send_packet('D', (char*)&mcu_message_payload, 1);
   
   // TODO fix this
-  delay10();delay10();delay10();delay10();delay10();
-  delay10();delay10();delay10();delay10();delay10();
-  delay10();delay10();delay10();delay10();delay10();
+
+  for(i = 0; i < 15; i++)
+  {
+    delay10();
+  }
 
   // Send the value of the currently entered cell
   capture_cell_value();
