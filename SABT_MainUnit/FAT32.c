@@ -940,8 +940,8 @@ unsigned char convert_file_name (unsigned char *file_name)
   char buf[15];
 
   for(j = 0; j < FILE_NAME_LEN; j++) {
-    sprintf(buf, "char = %c\r\n", file_name[j]);
-	PRINTF(buf);
+    //sprintf(buf, "char = %c\r\n", file_name[j]);
+	//PRINTF(buf);
 	if(file_name[j] == '.') 
       break;
   }

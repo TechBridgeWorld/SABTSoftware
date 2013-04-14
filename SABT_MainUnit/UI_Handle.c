@@ -364,11 +364,11 @@ void ui_control_key_pressed(void)
  */
 void ui_play_intro_current_mode(void)
 {
-  char buf[11];
+  /*char buf[11];
   sprintf(buf, "MD%i.MP3", ui_current_mode);
-  request_to_play_mp3_file(buf);
+  request_to_play_mp3_file(buf);*/
 
-/*
+
   switch(ui_current_mode)
   {
     case 1:
@@ -380,10 +380,13 @@ void ui_play_intro_current_mode(void)
     case 3:
       request_to_play_mp3_file("MD3.MP3");
       break;
+	case 4:
+      request_to_play_mp3_file("MD4.MP3");
+      break;
     default:
       break;
       //request_to_play_mp3_file("ERR1.MP3");
-  }*/
+  }
 }
 
 /**
@@ -402,6 +405,9 @@ void ui_call_mode_yes_answer(void)
       break;
     case 3:
       md3_call_mode_yes_answer();
+      break;
+	case 4:
+      md4_call_mode_yes_answer();
       break;
     default:
       break;
@@ -425,6 +431,9 @@ void ui_call_mode_no_answer(void)
     case 3:
       md3_call_mode_no_answer();
       break;
+    case 4:
+      md4_call_mode_no_answer();
+      break;
     default:
       break;
   }
@@ -447,6 +456,9 @@ void ui_input_dot_to_current_mode(char this_dot)
     case 3:
       md3_input_dot(this_dot);
       break;
+	case 4:
+      md4_input_dot(this_dot);
+      break;
     default:
       break;
   }
@@ -468,6 +480,9 @@ void ui_input_cell_to_current_mode(char this_cell)
       break;
     case 3:
       md3_input_cell(this_cell);
+      break;
+    case 4:
+      md4_input_cell(this_cell);
       break;
     default:
       break;
@@ -492,9 +507,9 @@ void ui_run_main_of_current_mode(void)
       case 3:
         md3_main();
         break;
-      /*case 4:
+      case 4:
 	    md4_main();
-		break;*/
+		break;
       default:
         break;
     }
@@ -518,6 +533,9 @@ void ui_reset_the_current_mode(void)
         break;
       case 3:
         md3_reset();
+        break;
+	  case 4:
+        md4_reset();
         break;
       default:
         break;
