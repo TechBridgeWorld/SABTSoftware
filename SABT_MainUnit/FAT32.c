@@ -452,7 +452,6 @@ unsigned char play_mp3_file(unsigned char *file_name)
   PRINTF(file_name);
   TX_NEWLINE_PC;
 
-  // KORY CHANGED
   ui_mp3_file_pending=false;
 
   error = convert_file_name (file_name); //convert file_name into FAT format
@@ -550,15 +549,16 @@ unsigned char init_read_dict(unsigned char *file_name){
 
     
 
-  error = convert_file_name (file_name); //convert file_name into FAT format
+  error = convert_dict_file_name (file_name); //convert file_name into FAT format
   if(error) return 2;
     
-  dir = find_files (GET_FILE, file_name); //get the file location
+  dir = find_files(GET_FILE, dict_file_name); //get the file location
+  dict_dir = dir;
     
   if(dir == 0)
     return (0);
     
-  curr_cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
+  curr_dict_cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
   done_rd_dict = false;
 
   return 0;
@@ -571,10 +571,11 @@ unsigned char init_read_dict(unsigned char *file_name){
  * @brief This function will take in a file_name and read the contents 
  *        of this file.  It will also populate the clusters array with a pointer
  *        to each cluster.  It will work ten clusters at a time and finish. when get to end.
+ *        dict_file_name - is global that stores FAT32 format name of the dicionary (corpus)
  * @param file_name - unsigned char *, name of the file we are trying to find
  * @return unsigned char - status of trying to read
  */
-unsigned char read_dict_file(unsigned char *file_name)
+unsigned char read_dict_file()
 {
     struct dir_Structure *dir;
     unsigned long cluster, file_size, first_sector;
@@ -589,9 +590,9 @@ unsigned char read_dict_file(unsigned char *file_name)
 	//@TODO   MUST FREE SOMEWHERE
 	// READ in 281 clusters
     
-    dir = find_files (GET_FILE, file_name);
+    dir = dict_dir;
     file_size = dir->file_size;
-	cluster = curr_cluster;
+	cluster = curr_dict_cluster;
     for(k = 0; k < CLUSTERS_PER_RUN; k++)
     {
         dict_clusters[dict_cluster_cnt] = cluster;
@@ -631,7 +632,7 @@ unsigned char read_dict_file(unsigned char *file_name)
             preceeding_word[dict_cluster_cnt] = 1;
         
         cluster = get_set_next_cluster (cluster, GET, 0);
-        curr_cluster = cluster;
+        curr_dict_cluster = cluster;
 		if(cluster == 0) 
         {
             usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
@@ -646,13 +647,15 @@ unsigned char read_dict_file(unsigned char *file_name)
  * @brief This function will find the word in the dictionary file
  *        This will find a word accross multiple clusters/sectors.
  *        In a dictionary file, words are seperated by '/n'
+ *        dict_file_name - global that stores the converted FAT32
+ *           format file_name after initialization
  * @param file_name - unsigned char *, file for dictionary look up
  * @param word - unsigned char *, word you are trying to find 
  * @return bool - returns whether or not you have found word
  * @TODO - NEED TO FIX WORD - IT IS GETTTING CORRUPTED
  * @TODO - NEED TO TAKE EDGE CASES OFF of CLUSTERS- WORDS that overlap clusters
  */
-bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
+bool bin_srch_dict(unsigned char *word)
 {
     bool found = false;
     int cluster_cnt = dict_cluster_cnt;
@@ -665,12 +668,7 @@ bool bin_srch_dict(unsigned char *file_name, unsigned char *word)
 	struct dir_Structure *dir;
 	int error;
 
-    error = convert_file_name (file_name); //convert file_name into FAT format
-    if(error) return 2;
-    
-
-
-    dir = find_files (GET_FILE, file_name); //get the file location
+    dir = dict_dir;
     if(dir == 0)
         return (0);
     
@@ -794,7 +792,6 @@ bool find_word_in_cluster(unsigned char *word, unsigned long arr_cluster_index)
     while (sector_index < BUFFER_SIZE)
     {
       // Check to see if we've successfully found the word
-	  //@TODO - ALEX, need to change this back to '/0'
       if (word[word_index] == '\0' && sector_pointer[sector_index] == '\r') return true;
       // If we get to the end of the word in any other way, abort
       else if (word[word_index] == '\0') return false;
@@ -977,14 +974,12 @@ unsigned char convert_file_name (unsigned char *file_name)
     }
     else //filling extension trail with blanks
     {
-      while(k<11)
-      {
-        file_name_fat[k++] = ' ';
-      }
+      file_name_fat[k] = file_name[j];
+	  break;
     }
   }
 
-  for(j = 0; j < 13; j++) //converting small letters to caps
+  for(j = 0; j < FILE_NAME_LEN; j++) //converting small letters to caps
   {
     if((file_name_fat[j] >= 0x61) && (file_name_fat[j] <= 0x7a))
     {
@@ -993,7 +988,7 @@ unsigned char convert_file_name (unsigned char *file_name)
   }
 
 
-  for(j = 0; j < 13; j++)
+  for(j = 0; j < FILE_NAME_LEN; j++)
     file_name[j] = file_name_fat[j];
 
   // Add null terminator to file_name
@@ -1010,6 +1005,103 @@ unsigned char convert_file_name (unsigned char *file_name)
 
   return 0;
 }
+
+
+
+
+/**
+ * @brief Converts the input file_name (which is in FAT format) in the following fashion:
+ *        <file_name.ext> -----> <file_name[padding to 8 chars]ext>
+ *        file_name must be <= 8 chars and ext must be <= 3 chars.
+ *        Thus, INT.MP3 becomes [INT     MP3]. Also, capitalizes lowercase files.
+ *        NEED TO USE THIS FOR DICTIONARY FILES
+ * @param file_name unsigned char* string which contains the file name that needs to be converted
+ * @return unsigned char 1 for failure 0 for victory
+ * @TODO Currently overwrites the passed in buffer so if you pass in the same buffer twice, it 
+ * will have already converted the file_name (specifically removed the '.' which is what the invalid
+ * file check is done off of)
+*/ 
+unsigned char convert_dict_file_name (unsigned char *file_name)
+{
+  unsigned char file_name_dict_fat[FILE_NAME_LEN];
+  unsigned char j, k;
+
+  //PRINTF("[convert_file_name]file_name:");
+  PRINTF(file_name);
+  TX_NEWLINE_PC;
+  char buf[15];
+
+  for(j = 0; j < FILE_NAME_LEN; j++) {
+    //sprintf(buf, "char = %c\r\n", file_name[j]);
+	//PRINTF(buf);
+	if(file_name[j] == '.') 
+      break;
+  }
+
+  
+  // TODO #define 0 ->failure
+  // TODO define magic numbers
+  // 0 = SUCCESS
+  // @TODO better success conditions
+  if (j >= FILE_NAME_LEN)
+    // assume that a string without any dots is already converted
+    return 0;
+
+  // 1 = BAD_EXTENSION
+  if(j>8) {
+    usart_transmit_string_to_pc_from_flash(PSTR("Invalid file_name.")); 
+    return 1;
+  }
+
+  for(k = 0; k < j; k++) //setting file name
+    file_name_dict_fat[k] = file_name[k];
+
+  for(k = j; k <= 7; k++) //filling file name trail with blanks
+    file_name_dict_fat[k] = ' ';
+
+  j++;
+
+  for(k = 8; k < FILE_NAME_LEN; k++) //setting file extention
+  {
+    if(file_name[j] != 0)
+    {
+      file_name_dict_fat[k] = file_name[j++];
+    }
+    else //filling extension trail with blanks
+    {
+      file_name_dict_fat[k] = file_name[j];
+	  break;
+    }
+  }
+
+  for(j = 0; j < FILE_NAME_LEN; j++) //converting small letters to caps
+  {
+    if((file_name_dict_fat[j] >= 0x61) && (file_name_dict_fat[j] <= 0x7a))
+    {
+        file_name_dict_fat[j] -= 0x20;
+    }
+  }
+
+
+  for(j = 0; j < FILE_NAME_LEN; j++)
+    dict_file_name[j] = file_name_dict_fat[j];
+
+  // Add null terminator to file_name
+  //file_name[11] = '\0';
+
+  //PRINTF("[convert_file_dict_name]File name FAT:");
+  //PRINTF(file_name_fat);
+  //TX_NEWLINE_PC;
+
+
+  PRINTF("[convert_dict_file_name]File name after:");
+  PRINTF(dict_file_name);
+  TX_NEWLINE_PC;
+
+  return 0;
+}
+
+
 
 /*
 Modified write file function with replacing all the text with new text given

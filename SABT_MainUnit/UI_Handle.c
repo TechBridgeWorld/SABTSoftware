@@ -364,12 +364,16 @@ void ui_control_key_pressed(void)
  */
 void ui_play_intro_current_mode(void)
 {
-  /*char buf[11];
-  sprintf(buf, "MD%i.MP3", ui_current_mode);
-  request_to_play_mp3_file(buf);*/
+  char buf[11];
+  if(ui_current_mode <= number_of_modes)
+  {
+    sprintf(buf, "MD%i.MP3", ui_current_mode);
+    request_to_play_mp3_file(buf);
+  }
+  else
+    request_to_play_mp3_file("ERR1.MP3");
 
-
-  switch(ui_current_mode)
+  /*switch(ui_current_mode)
   {
     case 1:
       request_to_play_mp3_file("MD1.MP3");
@@ -386,7 +390,7 @@ void ui_play_intro_current_mode(void)
     default:
       break;
       //request_to_play_mp3_file("ERR1.MP3");
-  }
+  }*/
 }
 
 /**
@@ -510,6 +514,9 @@ void ui_run_main_of_current_mode(void)
       case 4:
 	    md4_main();
 		break;
+	  case 5:
+	    md5_main();
+		break;
       default:
         break;
     }
@@ -536,6 +543,9 @@ void ui_reset_the_current_mode(void)
         break;
 	  case 4:
         md4_reset();
+        break;
+      case 5:
+        md5_reset();
         break;
       default:
         break;

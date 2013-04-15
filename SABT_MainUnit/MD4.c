@@ -1,6 +1,6 @@
 /**
  * @file MD4.c
- * @brief Mode 4 code - Hangman
+ * @brief Mode 4 code - Hangman (single player)
  * @author Kory Stiger (kstiger)
  */
 
@@ -149,18 +149,16 @@ void md4_main(void)
       break;
     
     case MD4_STATE_SAY_STATUS:
-      PRINTF("STATUS\r\n");
-
-	  
+      PRINTF("STATUS\r\n");	  
           
       if (input_word_index == strlen(current_word)) {
-	    PRINTF("DONE HERE DONE HERE DONE HERE\r\n");
         input_word_index = 0;
 		if (num_mistakes > 0) {
           request_to_play_mp3_file("and_mstk.mp3");
           md4_current_state = MD4_STATE_SAY_MISTAKES;
         } else
-          md4_current_state = MD4_STATE_ASK_FOR_INPUT;
+		//ALEX CHANGED THIS
+          md4_current_state = MD4_STATE_ASK_FOR_GUESS;
       } else {
         if (input_word[input_word_index] != '0') {
 	      char buf[10];
@@ -181,12 +179,12 @@ void md4_main(void)
 	  char bufff[10];
       sprintf(bufff, "%d_mstks.mp3", num_mistakes);
       request_to_play_mp3_file(bufff);
-          
-      md4_current_state = MD4_STATE_ASK_FOR_INPUT;
+      //ALEX CHANGED THIS    
+      md4_current_state = MD4_STATE_ASK_FOR_GUESS;
           
       break;
 
-    case MD4_STATE_ASK_FOR_INPUT:
+    case MD4_STATE_ASK_FOR_GUESS:
       request_to_play_mp3_file("guess.mp3");
       md4_current_state = MD4_STATE_WAIT_INPUT;
 
@@ -204,7 +202,7 @@ void md4_main(void)
       PRINTF("PROCESS\r\n");
 
       // nothing was entered so we repeat the word
-      if (!last_cell) {
+      if (last_cell == 0) {
 	    md4_current_state = MD4_STATE_EVALUATE_GAME;
       } else if (md4_valid_letter(last_cell)) {  // set entered_letter in valid_letter(), but return true or false
         char buff[7];

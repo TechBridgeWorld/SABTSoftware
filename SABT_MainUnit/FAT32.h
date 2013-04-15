@@ -25,9 +25,10 @@
 
 //buffer variable
 #define BUFFER_SIZE      512
+//BOARD WILL RESET IF NOT SET TO 13
 #define FILE_NAME_LEN    13
 #define END_OF_FILE      26
-#define CLUSTERS_PER_RUN 15
+#define CLUSTERS_PER_RUN 60
 
 //Attribute definitions for file/directory
 #define ATTR_READ_ONLY     0x01
@@ -155,6 +156,10 @@ unsigned char free_cluster_count_updated;
 //for Text files track all clusters that they contain
 bool done_rd_dict;
 unsigned long curr_cluster;
+//global to track where we are in reading in initial dictionary file
+unsigned long curr_dict_cluster;
+//location of the file - do not need to look it up anymore once you have it
+struct dir_Structure *dict_dir;
 unsigned long *dict_clusters;
 //will be set to 1 if there is a preceeding word overlapping into this cluster, 0 if this cluster starts
 //word
@@ -162,11 +167,12 @@ unsigned char *preceeding_word;
 unsigned int dict_cluster_cnt;
 
 //************* functions *************
+unsigned char convert_dict_file_name (unsigned char *file_name);
 bool find_word_in_cluster(unsigned char *word, unsigned long arr_cluster_index);
 unsigned char init_read_dict(unsigned char *file_name);
 bool find_wrd_in_buff(unsigned char *word);
-unsigned char read_dict_file(unsigned char *file_name);
-bool bin_srch_dict(unsigned char *file_name, unsigned char *word);
+unsigned char read_dict_file();
+bool bin_srch_dict(unsigned char *word);
 int check_first_full_word(unsigned char *word, char overlap);
 unsigned char get_boot_sector_data(void);
 unsigned long get_first_sector(unsigned long cluster_number);

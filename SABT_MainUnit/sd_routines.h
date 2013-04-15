@@ -62,6 +62,7 @@ volatile unsigned long start_block, total_blocks;
 volatile unsigned char sdhc_flag, card_type, buffer[BUFFER_SIZE], dict_buffer[BUFFER_SIZE];
 
 
+unsigned char sd_read_single_dict_block(unsigned long start_block);
 unsigned char sd_init(void);
 unsigned char sd_send_command(unsigned char cmd, unsigned long arg);
 unsigned char sd_read_single_block(unsigned long start_block);

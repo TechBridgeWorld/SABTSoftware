@@ -15,5 +15,6 @@
 #include "MD2.h"
 #include "MD3.h"
 #include "MD4.h"
+#include "MD5.h"
 
 #endif /* _MODES_H_ */
