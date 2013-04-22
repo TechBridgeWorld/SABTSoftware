@@ -68,9 +68,6 @@ Code to test the file write section
 End of test code
 */
 
-  //ui_mode_selected = true; // @TODO remove
-  //ui_current_mode = 3;  // @TODO remove after tuesday
-
   //Display the files in the SD card
   //TX_NEWLINE_PC;
   //findFiles(GET_LIST,0);
@@ -142,8 +139,6 @@ End of test code
       timer_interrupt = false;
     //  timer_routine();
     }
-
-    
 
     if(usart_pc_message_ready) //If a message ready from the PC, process it
     {
@@ -234,6 +229,8 @@ void initialize_system(void)
   DDRA = 0xFF;  
   PORTA = 0x00;  
 
+
+
   // Set the data direction register values
   // TODO fill in BV
   DDRD |= _BV(5) | _BV(6) | _BV(7);
@@ -270,9 +267,13 @@ void initialize_system(void)
     TX_NEWLINE_PC;
   }
 
+  //ui_mode_selected = true; // @TODO remove
+  //ui_current_mode = 3;  // @TODO remove after tuesday
+
   //@TODO - what is the difference between these two?
-  ui_current_mode = 0;  //No mode selected
-  ui_selected_mode = number_of_modes - 1;
+  //@TODO - say the first mode that the menu is on
+  ui_current_mode = number_of_modes;  //No mode selected
+  ui_selected_mode = number_of_modes;
   TX_NEWLINE_PC;
 
   init_read_dict((unsigned char *)"wordsEn.txt");
@@ -282,10 +283,10 @@ void initialize_system(void)
      PRINTF((unsigned char *)"THIS WORD IS IN DICT");
   TX_NEWLINE_PC;*/
   request_to_play_mp3_file("WELCOME.MP3"); 
-  /*read_dict_file();  
+  read_dict_file();  
   read_dict_file();
   read_dict_file();
   read_dict_file();
   read_dict_file();
-  */
+  
 }

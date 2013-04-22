@@ -380,9 +380,9 @@ void md2_main(void)
 void md2_call_mode_yes_answer(void)
 {
   //if you have not entered any buttons yet, replay prompt
-  //if(button_bits == 0)
-    //current_state = STATE_REQUEST_INPUT_1;
-  //else
+  if(button_bits == 0)
+    current_state = STATE_REQUEST_INPUT_1;
+  else
     last_dot = ENTER;
 }
 

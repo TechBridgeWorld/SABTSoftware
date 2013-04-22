@@ -157,7 +157,6 @@ void md4_main(void)
           request_to_play_mp3_file("and_mstk.mp3");
           md4_current_state = MD4_STATE_SAY_MISTAKES;
         } else
-		//ALEX CHANGED THIS
           md4_current_state = MD4_STATE_ASK_FOR_GUESS;
       } else {
         if (input_word[input_word_index] != '0') {
@@ -179,7 +178,6 @@ void md4_main(void)
 	  char bufff[10];
       sprintf(bufff, "%d_mstks.mp3", num_mistakes);
       request_to_play_mp3_file(bufff);
-      //ALEX CHANGED THIS    
       md4_current_state = MD4_STATE_ASK_FOR_GUESS;
           
       break;
