@@ -283,10 +283,10 @@ void initialize_system(void)
      PRINTF((unsigned char *)"THIS WORD IS IN DICT");
   TX_NEWLINE_PC;*/
   request_to_play_mp3_file("WELCOME.MP3"); 
-  read_dict_file();  
+  /*read_dict_file();  
   read_dict_file();
   read_dict_file();
   read_dict_file();
   read_dict_file();
-  
+  */
 }

@@ -88,17 +88,28 @@ void vs1053_software_reset(void)
   _delay_ms(20);
 }
 
+
+
+/**
+ * @brief this changes the sound files to make the volume go up.  
+ *        Volume works in reverse for VS1053 - so 0 is hi and FEFE is low
+ * @ref   https://www.sparkfun.com/datasheets/Components/SMD/vs1053.pdf, look
+ *        on page 47
+ * @return bool - did sound file change properly
+ */
 bool vs1053_increase_vol(void)
 {
   int retry = 0;
 
   // Increase the global volume setting
-  vs1053_volume = vs1053_volume + ((uint16_t)(1 << 8) + 1);
+  vs1053_volume = vs1053_volume - VOL_INCR;
   
-  // Check for maximum volume setting
-  if(vs1053_volume >= 0xFEFE)
+  // Check for max volume we are allowing
+  //TODO - WHY IS THIS 0x1010
+  //vs1053_volume is an unsiged, so if you go belove 0, wraps around to high positive
+  if(vs1053_volume <= VOL_INCR)
   {
-    vs1053_volume = 0xFEFE;
+    vs1053_volume = VOL_INCR + 1;
   }
   else
   {
@@ -113,20 +124,24 @@ bool vs1053_increase_vol(void)
 }
 
 /**
- * @brief Decreases the volume on the volume on the sound chip
- * @return bool - whether or not it could complete the required change
+ * @brief this changes the sound files to make the volume go down.  
+ *        Volume works in reverse for VS1053 - so 0 is hi and FEFE is low
+ * @ref   https://www.sparkfun.com/datasheets/Components/SMD/vs1053.pdf, look
+ *        on page 47
+ * @return bool - did sound file change properly
  */
 bool vs1053_decrease_vol(void)
 {
   int retry = 0;
 
-  // Decrease the global volume setting
-  vs1053_volume = vs1053_volume - ((uint16_t)(1 << 8) + 1);
-  
-  // Check for minimum volume
-  if(vs1053_volume <= 0x0101)
+  //Decrease the global volume setting
+  vs1053_volume = vs1053_volume + VOL_INCR;
+
+  // Check for min volume setting
+  //vs1053_volume is an unsiged, so if you go above FFFF, will wrap around to small number
+  if(vs1053_volume >= (MIN_VOL - VOL_INCR))
   {
-    vs1053_volume = 0x0101;
+    vs1053_volume = MIN_VOL - VOL_INCR - 1;
   }
   else
   {
