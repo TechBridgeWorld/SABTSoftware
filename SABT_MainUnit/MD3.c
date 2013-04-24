@@ -166,7 +166,9 @@ void md3_main(void)
       PRINTF("PROCESS\r\n");
       // set entered_letter in valid_letter(), but return 1 or 0
 
-     if (valid_letter(last_cell)) {
+     if (last_cell == 0) {
+	   md3_current_state = STATE_READ_ENTERED_LETTERS;
+     } else if (valid_letter(last_cell)) {
         char buf[16];
         sprintf(buf, "%c.mp3", entered_letter);
         //usart_transmit_string_to_pc((unsigned char*)buf);

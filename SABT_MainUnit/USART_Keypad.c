@@ -43,8 +43,9 @@ void init_usart_keypad(void)
  */
 void usart_keypad_receive_action(void)
 {
+
   usart_keypad_data_ready = false;
-  
+
   // If no header has been found, build it
   if(!usart_ui_header_received)
   {

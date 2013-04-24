@@ -26,7 +26,6 @@
 #include "UI_Handle.h"
 #include "PC_Handle.h"
 
-//#define NUMBER_OF_MODES 3
 #define F_CPU 8000000UL
 
 volatile unsigned char number_of_modes;
@@ -34,6 +33,8 @@ volatile unsigned char ui_modes[10];
 
 volatile unsigned char *g_file_to_play;
 unsigned char g_file_name[FILE_NAME_LEN];
+//used throughout the dict_process
+unsigned char dict_file_name[FILE_NAME_LEN];
 
 volatile char temp_cnt;
 

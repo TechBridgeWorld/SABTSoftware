@@ -12,6 +12,9 @@
 #include <stdbool.h>
 #include <string.h> 
 
+#define MIN_VOL     65278    //0xFEFE
+#define VOL_INCR    1000      
+
 volatile bool vs1053_skip_play;
 
 //Public access functions

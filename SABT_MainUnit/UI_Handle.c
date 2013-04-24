@@ -248,6 +248,7 @@ void ui_control_key_pressed(void)
     case UI_CMD_ENT1: // Enter a mode
       //usart_transmit_string_to_pc_from_flash(PSTR("Enter 1 pressed"));
       TX_NEWLINE_PC; 
+	  // @TODO: the fuck is this
       if(!ui_mode_selected) //Then this command is to select the mode
       {
         if(ui_selected_mode >= 0)
@@ -299,7 +300,7 @@ void ui_control_key_pressed(void)
         sprintf(buf, "%d\r\n", ui_selected_mode);
 		PRINTF(buf);
 
-        //ui_selected_mode = ui_selected_mode + 1 % number_of_modes;
+        //ui_selected_mode = (ui_selected_mode + 1) % number_of_modes;
 		ui_selected_mode = ui_selected_mode + 1 > number_of_modes - 1 ? 0 : ui_selected_mode + 1;
 		ui_current_mode = ui_modes[ui_selected_mode];
 		vs1053_skip_play = true;
@@ -344,13 +345,13 @@ void ui_control_key_pressed(void)
       }
       break;
     case UI_CMD_VOLU: // Volume Up
-      //usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
-      //TX_NEWLINE_PC;
+      usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
+      TX_NEWLINE_PC;
       vs1053_increase_vol();
       break;
     case UI_CMD_VOLD: // Volume down
-      //usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
-      //TX_NEWLINE_PC;
+      usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
+      TX_NEWLINE_PC;
       vs1053_decrease_vol();
       break;
     default:
@@ -365,11 +366,15 @@ void ui_control_key_pressed(void)
 void ui_play_intro_current_mode(void)
 {
   char buf[11];
-  sprintf(buf, "MD%c.MP3", ui_current_mode);
-  request_to_play_mp3_file(buf);
+  if(ui_current_mode <= number_of_modes)
+  {
+    sprintf(buf, "MD%i.MP3", ui_current_mode);
+    request_to_play_mp3_file(buf);
+  }
+  else
+    request_to_play_mp3_file("ERR1.MP3");
 
-/*
-  switch(ui_current_mode)
+  /*switch(ui_current_mode)
   {
     case 1:
       request_to_play_mp3_file("MD1.MP3");
@@ -379,6 +384,9 @@ void ui_play_intro_current_mode(void)
       break;
     case 3:
       request_to_play_mp3_file("MD3.MP3");
+      break;
+	case 4:
+      request_to_play_mp3_file("MD4.MP3");
       break;
     default:
       break;
@@ -403,6 +411,11 @@ void ui_call_mode_yes_answer(void)
     case 3:
       md3_call_mode_yes_answer();
       break;
+	case 4:
+      md4_call_mode_yes_answer();
+      break;
+    case 5:
+	  md5_call_mode_yes_answer();
     default:
       break;
   }
@@ -425,6 +438,11 @@ void ui_call_mode_no_answer(void)
     case 3:
       md3_call_mode_no_answer();
       break;
+    case 4:
+      md4_call_mode_no_answer();
+      break;
+    case 5:
+	  md5_call_mode_no_answer();
     default:
       break;
   }
@@ -447,6 +465,11 @@ void ui_input_dot_to_current_mode(char this_dot)
     case 3:
       md3_input_dot(this_dot);
       break;
+	case 4:
+      md4_input_dot(this_dot);
+      break;
+    case 5:
+	  md5_input_dot(this_dot);
     default:
       break;
   }
@@ -469,6 +492,11 @@ void ui_input_cell_to_current_mode(char this_cell)
     case 3:
       md3_input_cell(this_cell);
       break;
+    case 4:
+      md4_input_cell(this_cell);
+      break;
+    case 5:
+	  md5_input_cell(this_cell);
     default:
       break;
   }
@@ -492,9 +520,12 @@ void ui_run_main_of_current_mode(void)
       case 3:
         md3_main();
         break;
-      /*case 4:
+      case 4:
 	    md4_main();
-		break;*/
+		break;
+	  case 5:
+	    md5_main();
+		break;
       default:
         break;
     }
@@ -518,6 +549,12 @@ void ui_reset_the_current_mode(void)
         break;
       case 3:
         md3_reset();
+        break;
+	  case 4:
+        md4_reset();
+        break;
+      case 5:
+        md5_reset();
         break;
       default:
         break;

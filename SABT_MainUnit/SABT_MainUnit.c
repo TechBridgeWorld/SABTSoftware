@@ -68,9 +68,6 @@ Code to test the file write section
 End of test code
 */
 
-  //ui_mode_selected = true; // @TODO remove
-  //ui_current_mode = 3;  // @TODO remove after tuesday
-
   //Display the files in the SD card
   //TX_NEWLINE_PC;
   //findFiles(GET_LIST,0);
@@ -90,23 +87,6 @@ End of test code
     // DPRINTF("Small waves crashing against the sand%d.", 42);
     
 	//read in the dict file till done
-
-    if(!done_rd_dict)
-	{
-	  //read_dict_file((unsigned char *)"wordsEn.txt");
-    }
-	else{
-    //   if(bin_srch_dict((unsigned char *)"wordsEn.txt", "apple"))
-	 //    PRINTF("YOU FOUND THE WORD\n\r");
-	}
-    
-	
-	if(timer_interrupt)
-    {
-      timer_interrupt = false;
-    //  timer_routine();
-    }
-
     // check to see if we've received data from UI board
     // if true, process the single byte
     if(usart_keypad_data_ready)
@@ -138,6 +118,28 @@ End of test code
       */
     }
 
+
+
+    if(!done_rd_dict && !ui_mp3_file_pending  && !usart_keypad_data_ready
+	   && !usart_pc_data_ready)
+	{
+	  //read_dict_file();
+    }
+	/*else{
+      if(bin_srch_dict("zyzzyvas")){
+	    PRINTF("YOU FOUDN IT!!!\n\r");
+      }
+      else{ 
+	    PRINTF("THAT WORD AINT IN THEre !!!\r\n");
+      }
+	}*/
+	
+	if(timer_interrupt)
+    {
+      timer_interrupt = false;
+    //  timer_routine();
+    }
+
     if(usart_pc_message_ready) //If a message ready from the PC, process it
     {
       pc_parse_message();
@@ -151,10 +153,6 @@ End of test code
     if(ui_mp3_file_pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
       play_mp3_file(g_file_name);
-
-	
-	  // KORY CHANGED
-	  //ui_mp3_file_pending = false;
     }
 
     ui_run_main_of_current_mode();
@@ -231,6 +229,8 @@ void initialize_system(void)
   DDRA = 0xFF;  
   PORTA = 0x00;  
 
+
+
   // Set the data direction register values
   // TODO fill in BV
   DDRD |= _BV(5) | _BV(6) | _BV(7);
@@ -246,9 +246,7 @@ void initialize_system(void)
   
   sei();  // sets the interrupt flag (enables interrupts)
 
-  ui_current_mode = 3;  //No mode selected
-  ui_selected_mode = 3;
-  TX_NEWLINE_PC;
+
   usart_transmit_string_to_pc_from_flash (PSTR("SABT testing..."));
   TX_NEWLINE_PC;
 
@@ -268,12 +266,27 @@ void initialize_system(void)
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
   }
-  //init_read_dict((unsigned char *)"wordsEn.txt");
+
+  //ui_mode_selected = true; // @TODO remove
+  //ui_current_mode = 3;  // @TODO remove after tuesday
+
+  //@TODO - what is the difference between these two?
+  //@TODO - say the first mode that the menu is on
+  ui_current_mode = number_of_modes;  //No mode selected
+  ui_selected_mode = number_of_modes;
+  TX_NEWLINE_PC;
+
+  init_read_dict((unsigned char *)"wordsEn.txt");
   /*
   TX_NEWLINE_PC;
   if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"zymogenicsdfsf"))
      PRINTF((unsigned char *)"THIS WORD IS IN DICT");
   TX_NEWLINE_PC;*/
-  request_to_play_mp3_file("WELCOME.MP3");  // Play the welcome message
-  play_mp3_file(g_file_name);           // Play the welcome message
+  request_to_play_mp3_file("WELCOME.MP3"); 
+  /*read_dict_file();  
+  read_dict_file();
+  read_dict_file();
+  read_dict_file();
+  read_dict_file();
+  */
 }

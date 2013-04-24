@@ -67,30 +67,6 @@ void md1_play_requested_dot(unsigned char last_dot)
     sprintf(buf, "dot_%c.MP3", last_dot);
     request_to_play_mp3_file(buf);
   }
-
-  // TODO default case?
-  // TODO(nick) make sure this works
-  /*switch(last_dot)
-  {
-    case '1':
-      request_to_play_mp3_file("MD1_1.MP3");
-      break;
-    case '2':
-      request_to_play_mp3_file("MD1_2.MP3");
-      break;
-    case '3':
-      request_to_play_mp3_file("MD1_3.MP3");
-      break;
-    case '4':
-      request_to_play_mp3_file("MD1_4.MP3");
-      break;
-    case '5':
-      request_to_play_mp3_file("MD1_5.MP3");
-      break;
-    case '6':
-      request_to_play_mp3_file("MD1_6.MP3");
-      break;
-  }*/
 }
 
 /**

@@ -37,6 +37,7 @@ void init_usart_pc(void)
 unsigned char usart_pc_receive_action(void)
 {
   usart_pc_data_ready = false;
+  
   message_count++;
 
   // Received an entire line; process it

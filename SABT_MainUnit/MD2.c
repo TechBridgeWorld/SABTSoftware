@@ -373,11 +373,17 @@ void md2_main(void)
 
 /**
  * @brief this function will be called when enter is pressed during mode
+ *        if no dots have been pressed yet, it will replay prompt, if they have
+ *        the enter will confirm dots pressed as letter input 
  * @return Void
  */
 void md2_call_mode_yes_answer(void)
 {
-  last_dot = ENTER;
+  //if you have not entered any buttons yet, replay prompt
+  if(button_bits == 0)
+    current_state = STATE_REQUEST_INPUT_1;
+  else
+    last_dot = ENTER;
 }
 
 void md2_call_mode_no_answer(void)
