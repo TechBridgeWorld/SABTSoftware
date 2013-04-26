@@ -29,6 +29,8 @@
 #define FILE_NAME_LEN    13
 #define END_OF_FILE      26
 #define CLUSTERS_PER_RUN 60
+#define MAX_NUM_CLUSTERS 512  //max number of clusters that can be in teh dictionary file you are using 
+                              //MAKE SURE TO ABIDE BY IT
 
 //Attribute definitions for file/directory
 #define ATTR_READ_ONLY     0x01
@@ -164,6 +166,7 @@ unsigned long *dict_clusters;
 //will be set to 1 if there is a preceeding word overlapping into this cluster, 0 if this cluster starts
 //word
 unsigned char *preceeding_word;
+//global to track total number clusters read in 
 unsigned int dict_cluster_cnt;
 
 //************* functions *************

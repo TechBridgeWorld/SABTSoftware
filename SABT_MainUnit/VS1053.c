@@ -16,7 +16,6 @@ volatile unsigned char temp4;
 volatile unsigned char temp5;
 volatile unsigned char temp_address;
 
-volatile uint16_t vs1053_volume;
 
 /**
  * @brief initialize the audio codec
@@ -139,8 +138,12 @@ bool vs1053_decrease_vol(void)
 
   // Check for min volume setting
   //vs1053_volume is an unsiged, so if you go above FFFF, will wrap around to small number
+  //Min_vol is assigned based off of testing.  IF you go down by more then 9, vol_INCR, when set at
+  //1000. Sound will go up for 4 down presses before becoming completely quiet.  
+  //make sure not to let this happen
   if(vs1053_volume >= (MIN_VOL - VOL_INCR))
   {
+    PRINTF("OVERFLOW\n\r");
     vs1053_volume = MIN_VOL - VOL_INCR - 1;
   }
   else

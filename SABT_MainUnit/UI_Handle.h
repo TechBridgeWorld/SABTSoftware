@@ -24,7 +24,7 @@
 volatile bool ui_mp3_file_pending;
 volatile bool ui_mode_selected;
 volatile char ui_current_mode;
-volatile char ui_selected_mode;
+volatile int ui_selected_mode;
 
 //Dealing with the user data
 bool ui_check_modes(void);

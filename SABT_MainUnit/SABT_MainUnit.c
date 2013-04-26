@@ -227,7 +227,7 @@ void initialize_system(void)
   timer_interrupt = false;      // Clear the timer interrupt flag
   PORTA = 0x00;
   DDRA = 0xFF;  
-  PORTA = 0x00;  
+  PORTA = 0x00;
 
 
 
@@ -252,6 +252,8 @@ void initialize_system(void)
 
   init_sd_card(true);
 
+  //say that we are not playing a sound file
+  playing_sound = false;
 
   message_count = 0;
   valid_message = true;  
@@ -277,16 +279,10 @@ void initialize_system(void)
   TX_NEWLINE_PC;
 
   init_read_dict((unsigned char *)"wordsEn.txt");
-  /*
-  TX_NEWLINE_PC;
-  if(bin_srch_dict((unsigned char *)"wordsEn.txt", (unsigned char *)"zymogenicsdfsf"))
-     PRINTF((unsigned char *)"THIS WORD IS IN DICT");
-  TX_NEWLINE_PC;*/
+  
+  /*while(!done_rd_dict){
+    read_dict_file();
+	PRINTF("HEY");
+  }/*
   request_to_play_mp3_file("WELCOME.MP3"); 
-  /*read_dict_file();  
-  read_dict_file();
-  read_dict_file();
-  read_dict_file();
-  read_dict_file();
-  */
 }

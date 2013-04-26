@@ -31,6 +31,9 @@
 volatile unsigned char number_of_modes;
 volatile unsigned char ui_modes[10];
 
+//indicates whether or not we are currently playing a sound file
+bool playing_sound;
+
 volatile unsigned char *g_file_to_play;
 unsigned char g_file_name[FILE_NAME_LEN];
 //used throughout the dict_process

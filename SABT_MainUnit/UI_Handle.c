@@ -294,10 +294,10 @@ void ui_control_key_pressed(void)
       if(!ui_mode_selected)
       {
 	    unsigned char buf[8];
-		sprintf(buf, "%d\r\n", number_of_modes);
+		sprintf((char *)buf, "%d\r\n", number_of_modes);
 		PRINTF(buf);
 
-        sprintf(buf, "%d\r\n", ui_selected_mode);
+        sprintf((char *)buf, "%d\r\n", ui_selected_mode);
 		PRINTF(buf);
 
         //ui_selected_mode = (ui_selected_mode + 1) % number_of_modes;
@@ -345,14 +345,20 @@ void ui_control_key_pressed(void)
       }
       break;
     case UI_CMD_VOLU: // Volume Up
-      usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
-      TX_NEWLINE_PC;
-      vs1053_increase_vol();
+	  //only increase sound if you are not playing a sound
+	  if(!playing_sound){
+	    usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
+        TX_NEWLINE_PC;
+        vs1053_increase_vol();
+	  }
       break;
     case UI_CMD_VOLD: // Volume down
-      usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
-      TX_NEWLINE_PC;
-      vs1053_decrease_vol();
+	  //only increase sound if you are not playing a sound
+	  if(!playing_sound){
+        usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
+        TX_NEWLINE_PC;
+        vs1053_decrease_vol();
+	  }
       break;
     default:
       break;

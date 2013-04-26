@@ -449,6 +449,8 @@ unsigned char play_mp3_file(unsigned char *file_name)
   unsigned int iAudioByteCnt;
   bool end_of_file=false;
 
+  playing_sound = true;
+
   PRINTF(file_name);
   TX_NEWLINE_PC;
 
@@ -513,7 +515,8 @@ unsigned char play_mp3_file(unsigned char *file_name)
         }
       }
       if(end_of_file)
-      {
+      { 
+	    playing_sound = false;
         return 0;
       }
 
@@ -522,10 +525,13 @@ unsigned char play_mp3_file(unsigned char *file_name)
     cluster = get_set_next_cluster (cluster, GET, 0);
     if(cluster == 0) 
     {
+	  playing_sound = false;
       usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
       return 0;
     }
   }
+
+  playing_sound = false;
   return 0;
 }
 
@@ -541,13 +547,12 @@ unsigned char init_read_dict(unsigned char *file_name){
   struct dir_Structure *dir;
 
   //@TODO - 300 only works for the current dictionary -need to make different / better
-  dict_clusters = calloc(300,sizeof(unsigned long));
+  dict_clusters = calloc(MAX_NUM_CLUSTERS,sizeof(unsigned long));
   dict_cluster_cnt = 0;
     
-  preceeding_word = calloc(300, sizeof(char));
+  preceeding_word = calloc(MAX_NUM_CLUSTERS, sizeof(char));
   preceeding_word[0] = 0;
 
-    
 
   error = convert_dict_file_name (file_name); //convert file_name into FAT format
   if(error) return 2;
@@ -666,7 +671,6 @@ bool bin_srch_dict(unsigned char *word)
 	int mid;
 	int cluster;
 	struct dir_Structure *dir;
-	int error;
 
     dir = dict_dir;
     if(dir == 0)
@@ -934,7 +938,6 @@ unsigned char convert_file_name (unsigned char *file_name)
   //PRINTF("[convert_file_name]file_name:");
   PRINTF(file_name);
   TX_NEWLINE_PC;
-  char buf[15];
 
   for(j = 0; j < FILE_NAME_LEN; j++) {
     //sprintf(buf, "char = %c\r\n", file_name[j]);
@@ -1029,7 +1032,6 @@ unsigned char convert_dict_file_name (unsigned char *file_name)
   //PRINTF("[convert_file_name]file_name:");
   PRINTF(file_name);
   TX_NEWLINE_PC;
-  char buf[15];
 
   for(j = 0; j < FILE_NAME_LEN; j++) {
     //sprintf(buf, "char = %c\r\n", file_name[j]);

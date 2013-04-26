@@ -116,7 +116,7 @@ void md5_main(void)
 	    player1_word[input_word_index] = '\0';
 
         //@todo - find better way to inlude dictionary file name
-	    if (bin_srch_dict(player1_word)) {
+	    if (bin_srch_dict((unsigned char *)player1_word)) {
 		  // valid word so move on to player 2's turn
           request_to_play_mp3_file("fnd_wrd.mp3"); // @TODO "valid word, please hand device to player 2 and press enter when ready"
 		  input_word_index = 0;
