@@ -1,0 +1,719 @@
+\hypertarget{_f_a_t32_8h}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-F\-A\-T32.h File Reference}
+\label{_f_a_t32_8h}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-F\-A\-T32.\-h@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-F\-A\-T32.\-h}}
+}
+
+
+F\-A\-T32 implementation of S\-D card 
+
+ $\ast$$\ast$$\ast$$\ast$ R\-O\-U\-T\-I\-N\-E\-S F\-O\-R F\-A\-T32 I\-M\-P\-L\-E\-M\-A\-T\-A\-T\-I\-O\-N O\-F S\-D C\-A\-R\-D $\ast$$\ast$$\ast$$\ast$$\ast$ 
+
+ Controller\-: A\-Tmega32 (Clock\-: 8 Mhz-\/internal) Compiler \-: A\-V\-R-\/\-G\-C\-C (win\-A\-V\-R with A\-V\-R\-Studio) Version \-: 2.\-3 Author \-: C\-C Dharmani, Chennai (India) www.\-dharmanitech.\-com Date \-: 08 May 2010 
+
+  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_m_b_rinfo___structure}{M\-B\-Rinfo\-\_\-\-Structure}
+\item 
+struct \hyperlink{structpartition_info___structure}{partition\-Info\-\_\-\-Structure}
+\item 
+struct \hyperlink{struct_b_s___structure}{B\-S\-\_\-\-Structure}
+\item 
+struct \hyperlink{struct_f_s_info___structure}{F\-S\-Info\-\_\-\-Structure}
+\item 
+struct \hyperlink{structdir___structure}{dir\-\_\-\-Structure}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_f_a_t32_8h_a6b20d41d6252e9871430c242cb1a56e7}{\#define {\bfseries B\-U\-F\-F\-E\-R\-\_\-\-S\-I\-Z\-E}~512}\label{_f_a_t32_8h_a6b20d41d6252e9871430c242cb1a56e7}
+
+\item 
+\hypertarget{_f_a_t32_8h_afddfc0468a0fb0d80c116b5e16b9be17}{\#define {\bfseries F\-I\-L\-E\-\_\-\-N\-A\-M\-E\-\_\-\-L\-E\-N}~13}\label{_f_a_t32_8h_afddfc0468a0fb0d80c116b5e16b9be17}
+
+\item 
+\hypertarget{_f_a_t32_8h_a7252abca9c1ab5f4ef517b87e5ab12bb}{\#define {\bfseries E\-N\-D\-\_\-\-O\-F\-\_\-\-F\-I\-L\-E}~26}\label{_f_a_t32_8h_a7252abca9c1ab5f4ef517b87e5ab12bb}
+
+\item 
+\hypertarget{_f_a_t32_8h_a6968a36ff6a2c093132e36c05b79307e}{\#define {\bfseries C\-L\-U\-S\-T\-E\-R\-S\-\_\-\-P\-E\-R\-\_\-\-R\-U\-N}~60}\label{_f_a_t32_8h_a6968a36ff6a2c093132e36c05b79307e}
+
+\item 
+\hypertarget{_f_a_t32_8h_a8e3194d0503dff1d236db39e4b9e22cf}{\#define {\bfseries M\-A\-X\-\_\-\-N\-U\-M\-\_\-\-C\-L\-U\-S\-T\-E\-R\-S}~512}\label{_f_a_t32_8h_a8e3194d0503dff1d236db39e4b9e22cf}
+
+\item 
+\hypertarget{_f_a_t32_8h_aef018487342a3344aa32ee15ddcb4410}{\#define {\bfseries A\-T\-T\-R\-\_\-\-R\-E\-A\-D\-\_\-\-O\-N\-L\-Y}~0x01}\label{_f_a_t32_8h_aef018487342a3344aa32ee15ddcb4410}
+
+\item 
+\hypertarget{_f_a_t32_8h_a42249a182dc832d4647b67281c2ffc90}{\#define {\bfseries A\-T\-T\-R\-\_\-\-H\-I\-D\-D\-E\-N}~0x02}\label{_f_a_t32_8h_a42249a182dc832d4647b67281c2ffc90}
+
+\item 
+\hypertarget{_f_a_t32_8h_a1c1250075cd2ca065a67a44fc9fc3222}{\#define {\bfseries A\-T\-T\-R\-\_\-\-S\-Y\-S\-T\-E\-M}~0x04}\label{_f_a_t32_8h_a1c1250075cd2ca065a67a44fc9fc3222}
+
+\item 
+\hypertarget{_f_a_t32_8h_ab14d118689e61ffb3e29f83d38f1f135}{\#define {\bfseries A\-T\-T\-R\-\_\-\-V\-O\-L\-U\-M\-E\-\_\-\-I\-D}~0x08}\label{_f_a_t32_8h_ab14d118689e61ffb3e29f83d38f1f135}
+
+\item 
+\hypertarget{_f_a_t32_8h_afa13d3c1c60925f7b1e639233a799860}{\#define {\bfseries A\-T\-T\-R\-\_\-\-D\-I\-R\-E\-C\-T\-O\-R\-Y}~0x10}\label{_f_a_t32_8h_afa13d3c1c60925f7b1e639233a799860}
+
+\item 
+\hypertarget{_f_a_t32_8h_a1b257aa7e0fdd8b11372edf885302176}{\#define {\bfseries A\-T\-T\-R\-\_\-\-A\-R\-C\-H\-I\-V\-E}~0x20}\label{_f_a_t32_8h_a1b257aa7e0fdd8b11372edf885302176}
+
+\item 
+\hypertarget{_f_a_t32_8h_a4530dded7bddf70573cbc1fc4515367e}{\#define {\bfseries A\-T\-T\-R\-\_\-\-L\-O\-N\-G\-\_\-\-N\-A\-M\-E}~0x0f}\label{_f_a_t32_8h_a4530dded7bddf70573cbc1fc4515367e}
+
+\item 
+\hypertarget{_f_a_t32_8h_a708effadc6982b89faaf84eab0d56d76}{\#define {\bfseries D\-I\-R\-\_\-\-E\-N\-T\-R\-Y\-\_\-\-S\-I\-Z\-E}~0x32}\label{_f_a_t32_8h_a708effadc6982b89faaf84eab0d56d76}
+
+\item 
+\hypertarget{_f_a_t32_8h_a2b7cf2a3641be7b89138615764d60ba3}{\#define {\bfseries E\-M\-P\-T\-Y}~0x00}\label{_f_a_t32_8h_a2b7cf2a3641be7b89138615764d60ba3}
+
+\item 
+\hypertarget{_f_a_t32_8h_ab792dfd97ab00abb6a5fc20191a9e952}{\#define {\bfseries D\-E\-L\-E\-T\-E\-D}~0xe5}\label{_f_a_t32_8h_ab792dfd97ab00abb6a5fc20191a9e952}
+
+\item 
+\hypertarget{_f_a_t32_8h_a982a66f513611f7f83ebfa4b4ecf1df9}{\#define {\bfseries G\-E\-T}~0}\label{_f_a_t32_8h_a982a66f513611f7f83ebfa4b4ecf1df9}
+
+\item 
+\hypertarget{_f_a_t32_8h_a59da1d65e87a723efe808dbabb4fc205}{\#define {\bfseries S\-E\-T}~1}\label{_f_a_t32_8h_a59da1d65e87a723efe808dbabb4fc205}
+
+\item 
+\hypertarget{_f_a_t32_8h_ada74e7db007a68e763f20c17f2985356}{\#define {\bfseries R\-E\-A\-D}~0}\label{_f_a_t32_8h_ada74e7db007a68e763f20c17f2985356}
+
+\item 
+\hypertarget{_f_a_t32_8h_ab64044259d5a2440725279dc7801f33e}{\#define {\bfseries V\-E\-R\-I\-F\-Y}~1}\label{_f_a_t32_8h_ab64044259d5a2440725279dc7801f33e}
+
+\item 
+\hypertarget{_f_a_t32_8h_a97fe5470fb1ac167c713671655ff3e52}{\#define {\bfseries A\-D\-D}~0}\label{_f_a_t32_8h_a97fe5470fb1ac167c713671655ff3e52}
+
+\item 
+\hypertarget{_f_a_t32_8h_ab9959e75e26bc66b3733ddc04de6b4cf}{\#define {\bfseries R\-E\-M\-O\-V\-E}~1}\label{_f_a_t32_8h_ab9959e75e26bc66b3733ddc04de6b4cf}
+
+\item 
+\hypertarget{_f_a_t32_8h_ab811d8c6ff3a505312d3276590444289}{\#define {\bfseries L\-O\-W}~0}\label{_f_a_t32_8h_ab811d8c6ff3a505312d3276590444289}
+
+\item 
+\hypertarget{_f_a_t32_8h_a5bb885982ff66a2e0a0a45a8ee9c35e2}{\#define {\bfseries H\-I\-G\-H}~1}\label{_f_a_t32_8h_a5bb885982ff66a2e0a0a45a8ee9c35e2}
+
+\item 
+\hypertarget{_f_a_t32_8h_a06dfea051e603d2b87c6f5df322838e7}{\#define {\bfseries T\-O\-T\-A\-L\-\_\-\-F\-R\-E\-E}~1}\label{_f_a_t32_8h_a06dfea051e603d2b87c6f5df322838e7}
+
+\item 
+\hypertarget{_f_a_t32_8h_a4adc951e93b4d0152fbd792c9fbee411}{\#define {\bfseries N\-E\-X\-T\-\_\-\-F\-R\-E\-E}~2}\label{_f_a_t32_8h_a4adc951e93b4d0152fbd792c9fbee411}
+
+\item 
+\hypertarget{_f_a_t32_8h_a0cc54057c5dc1d7b693f95420adedf72}{\#define {\bfseries G\-E\-T\-\_\-\-L\-I\-S\-T}~0}\label{_f_a_t32_8h_a0cc54057c5dc1d7b693f95420adedf72}
+
+\item 
+\hypertarget{_f_a_t32_8h_adf1ff268922f8fc22293d87c75017085}{\#define {\bfseries G\-E\-T\-\_\-\-F\-I\-L\-E}~1}\label{_f_a_t32_8h_adf1ff268922f8fc22293d87c75017085}
+
+\item 
+\hypertarget{_f_a_t32_8h_abbbe5949f3c1f72e439924f8cf503509}{\#define {\bfseries D\-E\-L\-E\-T\-E}~2}\label{_f_a_t32_8h_abbbe5949f3c1f72e439924f8cf503509}
+
+\item 
+\hypertarget{_f_a_t32_8h_a59adc4c82490d23754cd39c2fb99b0da}{\#define {\bfseries E\-O\-F}~0x0fffffff}\label{_f_a_t32_8h_a59adc4c82490d23754cd39c2fb99b0da}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned char \hyperlink{_f_a_t32_8h_a69f3b1c224984f969a61156bbf873be0}{convert\-\_\-dict\-\_\-file\-\_\-name} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em Converts the input file\-\_\-name (which is in F\-A\-T format) in the following fashion\-: $<$file\-\_\-name.\-ext$>$ -\/-\/---$>$ $<$file\-\_\-name\mbox{[}padding to 8 chars\mbox{]}ext$>$ file\-\_\-name must be $<$= 8 chars and ext must be $<$= 3 chars. Thus, I\-N\-T.\-M\-P3 becomes \mbox{[}I\-N\-T M\-P3\mbox{]}. Also, capitalizes lowercase files. N\-E\-E\-D T\-O U\-S\-E T\-H\-I\-S F\-O\-R D\-I\-C\-T\-I\-O\-N\-A\-R\-Y F\-I\-L\-E\-S. \end{DoxyCompactList}\item 
+bool \hyperlink{_f_a_t32_8h_ab3d65a85276171e88f37b7b252955a42}{find\-\_\-word\-\_\-in\-\_\-cluster} (unsigned char $\ast$word, unsigned long arr\-\_\-cluster\-\_\-index)
+\begin{DoxyCompactList}\small\item\em This should compare/find word in a cluster. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_a63478aff0331310319318b66664f7afa}{init\-\_\-read\-\_\-dict} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em This function will set up the initial values for the read\-\_\-dict\-\_\-file. \end{DoxyCompactList}\item 
+\hypertarget{_f_a_t32_8h_a21cf9885db05fd221578b59a370446c8}{bool {\bfseries find\-\_\-wrd\-\_\-in\-\_\-buff} (unsigned char $\ast$word)}\label{_f_a_t32_8h_a21cf9885db05fd221578b59a370446c8}
+
+\item 
+unsigned char \hyperlink{_f_a_t32_8h_ac454bde39b7debb34613774e62f9e7e7}{read\-\_\-dict\-\_\-file} ()
+\begin{DoxyCompactList}\small\item\em This function will take in a file\-\_\-name and read the contents of this file. It will also populate the clusters array with a pointer to each cluster. It will work ten clusters at a time and finish. when get to end. dict\-\_\-file\-\_\-name -\/ is global that stores F\-A\-T32 format name of the dicionary (corpus) \end{DoxyCompactList}\item 
+bool \hyperlink{_f_a_t32_8h_a68f9def89a13b2a8ee77d0e6802c3200}{bin\-\_\-srch\-\_\-dict} (unsigned char $\ast$word)
+\begin{DoxyCompactList}\small\item\em This function will find the word in the dictionary file This will find a word accross multiple clusters/sectors. In a dictionary file, words are seperated by '/n' dict\-\_\-file\-\_\-name -\/ global that stores the converted F\-A\-T32 format file\-\_\-name after initialization. \end{DoxyCompactList}\item 
+int \hyperlink{_f_a_t32_8h_af0bc9fccc2071d670d7f9f0329927ef9}{check\-\_\-first\-\_\-full\-\_\-word} (unsigned char $\ast$word, char overlap)
+\begin{DoxyCompactList}\small\item\em This should compare/find word with the fist word found in buffer. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_a0587e9e598c7e432e8fee6d058a703d0}{get\-\_\-boot\-\_\-sector\-\_\-data} (void)
+\begin{DoxyCompactList}\small\item\em Reads in data data from boot sector and checks to make sure that it is the F\-A\-T32 standard. \end{DoxyCompactList}\item 
+unsigned long \hyperlink{_f_a_t32_8h_af49072cf75b51e5c9404731b80ff3251}{get\-\_\-first\-\_\-sector} (unsigned long cluster\-\_\-number)
+\begin{DoxyCompactList}\small\item\em calculates the first sector address of any given cluster \end{DoxyCompactList}\item 
+unsigned long \hyperlink{_f_a_t32_8h_a79cd72aafb9123924d03c32b142a5da3}{get\-\_\-set\-\_\-free\-\_\-cluster} (unsigned char tot\-\_\-or\-\_\-next, unsigned char get\-\_\-set, unsigned long fs\-\_\-entry)
+\begin{DoxyCompactList}\small\item\em Function is used to get or set next free cluster or total free clusters in F\-Sinfo sector of S\-D card. \end{DoxyCompactList}\item 
+struct \hyperlink{structdir___structure}{dir\-\_\-\-Structure} $\ast$ \hyperlink{_f_a_t32_8h_aaf6ca7504d811ec6eaeec3c956268905}{find\-\_\-files} (unsigned char flag, unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em function gets D\-I\-R/\-F\-I\-L\-E list or a single file address or deletes specified file. Will find starting location for the file. Globals used in this function append\-File\-Sector, append\-File\-Location, append\-Start\-Cluster, file\-\_\-size \end{DoxyCompactList}\item 
+unsigned long \hyperlink{_f_a_t32_8h_ad3017a77f2f3ed1d73fb3037c3fd8bab}{get\-\_\-set\-\_\-next\-\_\-cluster} (unsigned long cluster\-\_\-number, unsigned char get\-\_\-set, unsigned long cluster\-\_\-entry)
+\begin{DoxyCompactList}\small\item\em get cluster entry value from F\-A\-T to find out the next cluster in chain \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_ac8cb7adc69f0f6c74323c9787985d00c}{read\-\_\-file} (unsigned char flag, unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em Can act as a reader or verifier depending on the flag sent in in flag If it is V\-E\-R\-I\-F\-Y-\/ just wil let you know if the file is there. If it is read then it actually reads in the contents of the file. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_a8c96f44d9a0ff816c4c6014a2e8704f2}{read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents} (unsigned char $\ast$file\-\_\-name, unsigned char $\ast$data\-\_\-string)
+\begin{DoxyCompactList}\small\item\em This file just reads in data from the given file\-\_\-name if it can find and and process the file. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_a38d39066745f8c2344018681f9c52596}{play\-\_\-mp3\-\_\-file} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em This function plays a given M\-P3 files, until\-: \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_f_a_t32_8h_ae2a1a55c092202dca9d8fdf11b5e89a4}{convert\-\_\-file\-\_\-name} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em Converts the input file\-\_\-name (which is in F\-A\-T format) in the following fashion\-: $<$file\-\_\-name.\-ext$>$ -\/-\/---$>$ $<$file\-\_\-name\mbox{[}padding to 8 chars\mbox{]}ext$>$ file\-\_\-name must be $<$= 8 chars and ext must be $<$= 3 chars. Thus, I\-N\-T.\-M\-P3 becomes \mbox{[}I\-N\-T M\-P3\mbox{]}. Also, capitalizes lowercase files. \end{DoxyCompactList}\item 
+int \hyperlink{_f_a_t32_8h_aa83af1ea22376368b315b207ab46dcbf}{replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with} (unsigned char $\ast$file\-\_\-name, unsigned char $\ast$file\-\_\-content)
+\begin{DoxyCompactList}\small\item\em reads the data in file\-\_\-content into buffer and uses the function \hyperlink{_s_d__routines_8c_afab09a6f5c04b61e6395dc31067a68a7}{sd\-\_\-write\-\_\-single\-\_\-block()} to put the value in buffer onto the S\-D card Data you are writing in M\-U\-S\-T E\-N\-D I\-N \$. If not garbage will be written in. \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_a0f4bdda6077a5c56fdc5989caa389084}{write\-\_\-file} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em function creates a file in F\-A\-T32 format in the root directory if given file name does not exists. If it already exists then append data to end \end{DoxyCompactList}\item 
+\hypertarget{_f_a_t32_8h_aeb61f5e9dccf174a66670607ae989be9}{void {\bfseries append\-\_\-file} (void)}\label{_f_a_t32_8h_aeb61f5e9dccf174a66670607ae989be9}
+
+\item 
+unsigned long \hyperlink{_f_a_t32_8h_aefba151078da780c5d91c9a7d8364228}{search\-\_\-next\-\_\-free\-\_\-cluster} (unsigned long start\-\_\-cluster)
+\begin{DoxyCompactList}\small\item\em function searches for the next free cluster in the root directory starting at specified cluster \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_a697106564d0ee2b113b097797d50c206}{memory\-\_\-statistics} (void)
+\begin{DoxyCompactList}\small\item\em function displays the total memory and free memory of S\-D Card using U\-A\-R\-T N\-O\-T\-E\-: this routine can take upto 15sec for 1\-G\-B card (@1\-M\-Hz clock) it tries to read from S\-D whether a free cluster count is stored, if it is stored then it will return immediately. Otherwise it will count the total number of free clusters, which takes time \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_a8411ccb68b243b86ae5020f6b2fb0c29}{display\-\_\-memory} (unsigned char flag, unsigned long memory)
+\begin{DoxyCompactList}\small\item\em function converts the unsigned long value of memory into text string and send ot U\-A\-R\-T \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_af503ee4b755b95d74fb526a0e62fb9f2}{delete\-\_\-file} (unsigned char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em function deletes the specified file in the root directory \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_a50f5f08df3e1508aea90f8fa393994ca}{free\-\_\-memory\-\_\-update} (unsigned char flag, unsigned long size)
+\begin{DoxyCompactList}\small\item\em function updates the free memory count in F\-Sinfo sector. Whenever a file is deleted or created, this function will be called to A\-D\-D or R\-E\-M\-O\-V\-E clusters occupied by teh file \end{DoxyCompactList}\item 
+void \hyperlink{_f_a_t32_8h_af14162f696746d833a0d39b933eb213f}{init\-\_\-sd\-\_\-card} (bool verb)
+\begin{DoxyCompactList}\small\item\em Checks the S\-D card, communicates with computer to let know what type of card and sets up the rest of the S\-D card. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_f_a_t32_8h_a42552bc499faffb455ef26fe3dbf9235}{volatile unsigned long {\bfseries first\-\_\-data\-\_\-sector}}\label{_f_a_t32_8h_a42552bc499faffb455ef26fe3dbf9235}
+
+\item 
+\hypertarget{_f_a_t32_8h_acdeedaa8d864cc45f23952c53295dd19}{volatile unsigned long {\bfseries root\-\_\-cluster}}\label{_f_a_t32_8h_acdeedaa8d864cc45f23952c53295dd19}
+
+\item 
+\hypertarget{_f_a_t32_8h_a917e5bef6b7252c6fa5ac47014242e45}{volatile unsigned long {\bfseries total\-\_\-clusters}}\label{_f_a_t32_8h_a917e5bef6b7252c6fa5ac47014242e45}
+
+\item 
+\hypertarget{_f_a_t32_8h_a3e7fb8485eea18005d00743530852e30}{volatile unsigned int {\bfseries bytes\-\_\-per\-\_\-sector}}\label{_f_a_t32_8h_a3e7fb8485eea18005d00743530852e30}
+
+\item 
+\hypertarget{_f_a_t32_8h_a8356998688590930a38839c2a4139d71}{volatile unsigned int {\bfseries sector\-\_\-per\-\_\-cluster}}\label{_f_a_t32_8h_a8356998688590930a38839c2a4139d71}
+
+\item 
+\hypertarget{_f_a_t32_8h_a48581b7486d47357e57e591b2f1f5c50}{volatile unsigned int {\bfseries reserved\-\_\-sector\-\_\-count}}\label{_f_a_t32_8h_a48581b7486d47357e57e591b2f1f5c50}
+
+\item 
+\hypertarget{_f_a_t32_8h_aa41ee81cf9781264c63f9e373b1179f4}{unsigned long {\bfseries unused\-\_\-sectors}}\label{_f_a_t32_8h_aa41ee81cf9781264c63f9e373b1179f4}
+
+\item 
+\hypertarget{_f_a_t32_8h_a790fcfecc08473351b15d704fcfe9ac6}{unsigned long {\bfseries append\-\_\-file\-\_\-sector}}\label{_f_a_t32_8h_a790fcfecc08473351b15d704fcfe9ac6}
+
+\item 
+\hypertarget{_f_a_t32_8h_a5e76b4726a950043e44cf69904474fa9}{unsigned long {\bfseries append\-\_\-file\-\_\-location}}\label{_f_a_t32_8h_a5e76b4726a950043e44cf69904474fa9}
+
+\item 
+\hypertarget{_f_a_t32_8h_a72affc1cc3ea4453465c3976158285f8}{unsigned long {\bfseries file\-\_\-size}}\label{_f_a_t32_8h_a72affc1cc3ea4453465c3976158285f8}
+
+\item 
+\hypertarget{_f_a_t32_8h_aa6079124b7efc55b0f568349ea19d453}{unsigned long {\bfseries append\-\_\-start\-\_\-cluster}}\label{_f_a_t32_8h_aa6079124b7efc55b0f568349ea19d453}
+
+\item 
+\hypertarget{_f_a_t32_8h_a795eafe40ada7bd2e626b19ced20a3f1}{unsigned char {\bfseries free\-\_\-cluster\-\_\-count\-\_\-updated}}\label{_f_a_t32_8h_a795eafe40ada7bd2e626b19ced20a3f1}
+
+\item 
+\hypertarget{_f_a_t32_8h_a0d183c9e20562bacbf59d29f34155850}{bool {\bfseries done\-\_\-rd\-\_\-dict}}\label{_f_a_t32_8h_a0d183c9e20562bacbf59d29f34155850}
+
+\item 
+\hypertarget{_f_a_t32_8h_af4f1de3c074eeeb1c6bb0369ffd9a944}{unsigned long {\bfseries curr\-\_\-cluster}}\label{_f_a_t32_8h_af4f1de3c074eeeb1c6bb0369ffd9a944}
+
+\item 
+\hypertarget{_f_a_t32_8h_a0f3be3240adf0d029d151158cf911350}{unsigned long {\bfseries curr\-\_\-dict\-\_\-cluster}}\label{_f_a_t32_8h_a0f3be3240adf0d029d151158cf911350}
+
+\item 
+\hypertarget{_f_a_t32_8h_ad1d423da723ff01bf10d2b500806270d}{struct \hyperlink{structdir___structure}{dir\-\_\-\-Structure} $\ast$ {\bfseries dict\-\_\-dir}}\label{_f_a_t32_8h_ad1d423da723ff01bf10d2b500806270d}
+
+\item 
+\hypertarget{_f_a_t32_8h_a479e745e093edebd055040cb8e969d91}{unsigned long $\ast$ {\bfseries dict\-\_\-clusters}}\label{_f_a_t32_8h_a479e745e093edebd055040cb8e969d91}
+
+\item 
+\hypertarget{_f_a_t32_8h_aa0cae793ff0ba9707f7d95b404d52250}{unsigned char $\ast$ {\bfseries preceeding\-\_\-word}}\label{_f_a_t32_8h_aa0cae793ff0ba9707f7d95b404d52250}
+
+\item 
+\hypertarget{_f_a_t32_8h_a4e71adb74450290fbfe4da9100e388cf}{unsigned int {\bfseries dict\-\_\-cluster\-\_\-cnt}}\label{_f_a_t32_8h_a4e71adb74450290fbfe4da9100e388cf}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+F\-A\-T32 implementation of S\-D card 
+
+ $\ast$$\ast$$\ast$$\ast$ R\-O\-U\-T\-I\-N\-E\-S F\-O\-R F\-A\-T32 I\-M\-P\-L\-E\-M\-A\-T\-A\-T\-I\-O\-N O\-F S\-D C\-A\-R\-D $\ast$$\ast$$\ast$$\ast$$\ast$ 
+
+ Controller\-: A\-Tmega32 (Clock\-: 8 Mhz-\/internal) Compiler \-: A\-V\-R-\/\-G\-C\-C (win\-A\-V\-R with A\-V\-R\-Studio) Version \-: 2.\-3 Author \-: C\-C Dharmani, Chennai (India) www.\-dharmanitech.\-com Date \-: 08 May 2010 
+
+ \begin{DoxyAuthor}{Author}
+C\-C Dharmani, Chennai (India) 
+
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger)
+\end{DoxyAuthor}
+Link to the Post\-: \href{http://www.dharmanitech.com/2009/01/sd-card-interfacing-with-atmega8-fat32.html}{\tt http\-://www.\-dharmanitech.\-com/2009/01/sd-\/card-\/interfacing-\/with-\/atmega8-\/fat32.\-html} 
+
+\subsection{Function Documentation}
+\hypertarget{_f_a_t32_8h_a68f9def89a13b2a8ee77d0e6802c3200}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!bin\-\_\-srch\-\_\-dict@{bin\-\_\-srch\-\_\-dict}}
+\index{bin\-\_\-srch\-\_\-dict@{bin\-\_\-srch\-\_\-dict}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{bin\-\_\-srch\-\_\-dict}]{\setlength{\rightskip}{0pt plus 5cm}bool bin\-\_\-srch\-\_\-dict (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{word}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a68f9def89a13b2a8ee77d0e6802c3200}
+
+
+This function will find the word in the dictionary file This will find a word accross multiple clusters/sectors. In a dictionary file, words are seperated by '/n' dict\-\_\-file\-\_\-name -\/ global that stores the converted F\-A\-T32 format file\-\_\-name after initialization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, file for dictionary look up \\
+\hline
+{\em word} & -\/ unsigned char $\ast$, word you are trying to find \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ returns whether or not you have found word  -\/ N\-E\-E\-D T\-O F\-I\-X W\-O\-R\-D -\/ I\-T I\-S G\-E\-T\-T\-T\-I\-N\-G C\-O\-R\-R\-U\-P\-T\-E\-D  -\/ N\-E\-E\-D T\-O T\-A\-K\-E E\-D\-G\-E C\-A\-S\-E\-S O\-F\-F of C\-L\-U\-S\-T\-E\-R\-S-\/ W\-O\-R\-D\-S that overlap clusters 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_af0bc9fccc2071d670d7f9f0329927ef9}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!check\-\_\-first\-\_\-full\-\_\-word@{check\-\_\-first\-\_\-full\-\_\-word}}
+\index{check\-\_\-first\-\_\-full\-\_\-word@{check\-\_\-first\-\_\-full\-\_\-word}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{check\-\_\-first\-\_\-full\-\_\-word}]{\setlength{\rightskip}{0pt plus 5cm}int check\-\_\-first\-\_\-full\-\_\-word (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{word, }
+\item[{char}]{overlap}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_af0bc9fccc2071d670d7f9f0329927ef9}
+
+
+This should compare/find word with the fist word found in buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & -\/ unsigned char $\ast$, word to compare with the first word \\
+\hline
+{\em overlap} & -\/ char, 1 if word from previous cluster overlaps with this one 0 if word from previous cluster does not overlap \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ 0 if word is same then first word in buffer 1 if word is less then first word in buffer 2 if word is greater then first word in buffer -\/1 error 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a69f3b1c224984f969a61156bbf873be0}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!convert\-\_\-dict\-\_\-file\-\_\-name@{convert\-\_\-dict\-\_\-file\-\_\-name}}
+\index{convert\-\_\-dict\-\_\-file\-\_\-name@{convert\-\_\-dict\-\_\-file\-\_\-name}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{convert\-\_\-dict\-\_\-file\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char convert\-\_\-dict\-\_\-file\-\_\-name (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a69f3b1c224984f969a61156bbf873be0}
+
+
+Converts the input file\-\_\-name (which is in F\-A\-T format) in the following fashion\-: $<$file\-\_\-name.\-ext$>$ -\/-\/---$>$ $<$file\-\_\-name\mbox{[}padding to 8 chars\mbox{]}ext$>$ file\-\_\-name must be $<$= 8 chars and ext must be $<$= 3 chars. Thus, I\-N\-T.\-M\-P3 becomes \mbox{[}I\-N\-T M\-P3\mbox{]}. Also, capitalizes lowercase files. N\-E\-E\-D T\-O U\-S\-E T\-H\-I\-S F\-O\-R D\-I\-C\-T\-I\-O\-N\-A\-R\-Y F\-I\-L\-E\-S. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & unsigned char$\ast$ string which contains the file name that needs to be converted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 1 for failure 0 for victory  Currently overwrites the passed in buffer so if you pass in the same buffer twice, it will have already converted the file\-\_\-name (specifically removed the '.' which is what the invalid file check is done off of) 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_ae2a1a55c092202dca9d8fdf11b5e89a4}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!convert\-\_\-file\-\_\-name@{convert\-\_\-file\-\_\-name}}
+\index{convert\-\_\-file\-\_\-name@{convert\-\_\-file\-\_\-name}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{convert\-\_\-file\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char convert\-\_\-file\-\_\-name (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_ae2a1a55c092202dca9d8fdf11b5e89a4}
+
+
+Converts the input file\-\_\-name (which is in F\-A\-T format) in the following fashion\-: $<$file\-\_\-name.\-ext$>$ -\/-\/---$>$ $<$file\-\_\-name\mbox{[}padding to 8 chars\mbox{]}ext$>$ file\-\_\-name must be $<$= 8 chars and ext must be $<$= 3 chars. Thus, I\-N\-T.\-M\-P3 becomes \mbox{[}I\-N\-T M\-P3\mbox{]}. Also, capitalizes lowercase files. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & unsigned char$\ast$ string which contains the file name that needs to be converted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 1 for failure 0 for victory  Currently overwrites the passed in buffer so if you pass in the same buffer twice, it will have already converted the file\-\_\-name (specifically removed the '.' which is what the invalid file check is done off of) 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_af503ee4b755b95d74fb526a0e62fb9f2}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!delete\-\_\-file@{delete\-\_\-file}}
+\index{delete\-\_\-file@{delete\-\_\-file}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{delete\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}void delete\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_af503ee4b755b95d74fb526a0e62fb9f2}
+
+
+function deletes the specified file in the root directory 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, file name of file that you want deleted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a8411ccb68b243b86ae5020f6b2fb0c29}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!display\-\_\-memory@{display\-\_\-memory}}
+\index{display\-\_\-memory@{display\-\_\-memory}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{display\-\_\-memory}]{\setlength{\rightskip}{0pt plus 5cm}void display\-\_\-memory (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{flag, }
+\item[{unsigned long}]{memory}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a8411ccb68b243b86ae5020f6b2fb0c29}
+
+
+function converts the unsigned long value of memory into text string and send ot U\-A\-R\-T 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag} & -\/ unsigned char, if H\-I\-G\-H -\/ memory will be displayed in K\-Bytes. else in Bytes \\
+\hline
+{\em memory} & -\/ unsigned long, memory value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_aaf6ca7504d811ec6eaeec3c956268905}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!find\-\_\-files@{find\-\_\-files}}
+\index{find\-\_\-files@{find\-\_\-files}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{find\-\_\-files}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf dir\-\_\-\-Structure}$\ast$ find\-\_\-files (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{flag, }
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{_f_a_t32_8h_aaf6ca7504d811ec6eaeec3c956268905}
+
+
+function gets D\-I\-R/\-F\-I\-L\-E list or a single file address or deletes specified file. Will find starting location for the file. Globals used in this function append\-File\-Sector, append\-File\-Location, append\-Start\-Cluster, file\-\_\-size 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag} & -\/ unsigned char, can be G\-E\-T\-\_\-\-L\-I\-S\-T, G\-E\-T\-\_\-\-F\-I\-L\-E or D\-E\-L\-E\-T\-E \\
+\hline
+{\em file\-\_\-name} & -\/ unsinged char $\ast$, pointer to the file name to operate on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+struct \hyperlink{structdir___structure}{dir\-\_\-\-Structure} $\ast$ -\/ first cluster of file if flag = G\-E\-T\-\_\-\-F\-I\-L\-E print file/dir list if flag = G\-E\-T\-\_\-\-L\-I\-S\-T. Delete file if flag = D\-E\-L\-E\-T\-E 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_ab3d65a85276171e88f37b7b252955a42}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!find\-\_\-word\-\_\-in\-\_\-cluster@{find\-\_\-word\-\_\-in\-\_\-cluster}}
+\index{find\-\_\-word\-\_\-in\-\_\-cluster@{find\-\_\-word\-\_\-in\-\_\-cluster}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{find\-\_\-word\-\_\-in\-\_\-cluster}]{\setlength{\rightskip}{0pt plus 5cm}bool find\-\_\-word\-\_\-in\-\_\-cluster (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{word, }
+\item[{unsigned long}]{arr\-\_\-cluster\-\_\-index}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_ab3d65a85276171e88f37b7b252955a42}
+
+
+This should compare/find word in a cluster. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & -\/ unsigned char $\ast$, word to compare with the first word \\
+\hline
+{\em arr\-\_\-cluster\-\_\-index} & -\/ unsigned long, this is the number of the cluster you are searching in \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ return whether or not you found value in cluster 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a50f5f08df3e1508aea90f8fa393994ca}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!free\-\_\-memory\-\_\-update@{free\-\_\-memory\-\_\-update}}
+\index{free\-\_\-memory\-\_\-update@{free\-\_\-memory\-\_\-update}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{free\-\_\-memory\-\_\-update}]{\setlength{\rightskip}{0pt plus 5cm}void free\-\_\-memory\-\_\-update (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{flag, }
+\item[{unsigned long}]{size}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a50f5f08df3e1508aea90f8fa393994ca}
+
+
+function updates the free memory count in F\-Sinfo sector. Whenever a file is deleted or created, this function will be called to A\-D\-D or R\-E\-M\-O\-V\-E clusters occupied by teh file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag} & -\/ unsigned char, can be A\-D\-D or R\-E\-M\-O\-V\-E \\
+\hline
+{\em size} & -\/ unsigned long, file size in Bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a0587e9e598c7e432e8fee6d058a703d0}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!get\-\_\-boot\-\_\-sector\-\_\-data@{get\-\_\-boot\-\_\-sector\-\_\-data}}
+\index{get\-\_\-boot\-\_\-sector\-\_\-data@{get\-\_\-boot\-\_\-sector\-\_\-data}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{get\-\_\-boot\-\_\-sector\-\_\-data}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char get\-\_\-boot\-\_\-sector\-\_\-data (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a0587e9e598c7e432e8fee6d058a703d0}
+
+
+Reads in data data from boot sector and checks to make sure that it is the F\-A\-T32 standard. 
+
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ return 0 on successful read return 1 on error of file system or if not read properly 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_af49072cf75b51e5c9404731b80ff3251}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!get\-\_\-first\-\_\-sector@{get\-\_\-first\-\_\-sector}}
+\index{get\-\_\-first\-\_\-sector@{get\-\_\-first\-\_\-sector}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{get\-\_\-first\-\_\-sector}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long get\-\_\-first\-\_\-sector (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{cluster\-\_\-number}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_af49072cf75b51e5c9404731b80ff3251}
+
+
+calculates the first sector address of any given cluster 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cluster\-\_\-number} & -\/ unsigned long, cluster number on which first sector found \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsgined long -\/ first secotr address 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a79cd72aafb9123924d03c32b142a5da3}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!get\-\_\-set\-\_\-free\-\_\-cluster@{get\-\_\-set\-\_\-free\-\_\-cluster}}
+\index{get\-\_\-set\-\_\-free\-\_\-cluster@{get\-\_\-set\-\_\-free\-\_\-cluster}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{get\-\_\-set\-\_\-free\-\_\-cluster}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long get\-\_\-set\-\_\-free\-\_\-cluster (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{tot\-\_\-or\-\_\-next, }
+\item[{unsigned char}]{get\-\_\-set, }
+\item[{unsigned long}]{fs\-\_\-entry}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a79cd72aafb9123924d03c32b142a5da3}
+
+
+Function is used to get or set next free cluster or total free clusters in F\-Sinfo sector of S\-D card. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tot\-\_\-or\-\_\-next} & -\/ unsigned char, can be either T\-O\-T\-A\-L\-\_\-\-F\-R\-E\-E or N\-E\-X\-T\-\_\-\-F\-R\-E\-E \\
+\hline
+{\em get\-\_\-set} & -\/ unsigned char, flag that can be G\-E\-T or S\-Et \\
+\hline
+{\em fs\-\_\-entry} & -\/ unsigned long, new F\-S entry when arg2 is S\-E\-T or 0 when G\-E\-T \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned long -\/ next free cluster if arg1 is N\-E\-X\-T\-\_\-\-F\-R\-E\-E and arg2 is G\-E\-T total \# of free clusters if arg1 is T\-O\-T\-A\-L\-\_\-\-F\-R\-E\-E and arg2 G\-E\-T. 0xffffffff if any error or arg2 is Set 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_ad3017a77f2f3ed1d73fb3037c3fd8bab}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!get\-\_\-set\-\_\-next\-\_\-cluster@{get\-\_\-set\-\_\-next\-\_\-cluster}}
+\index{get\-\_\-set\-\_\-next\-\_\-cluster@{get\-\_\-set\-\_\-next\-\_\-cluster}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{get\-\_\-set\-\_\-next\-\_\-cluster}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long get\-\_\-set\-\_\-next\-\_\-cluster (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{cluster\-\_\-number, }
+\item[{unsigned char}]{get\-\_\-set, }
+\item[{unsigned long}]{cluster\-\_\-entry}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_ad3017a77f2f3ed1d73fb3037c3fd8bab}
+
+
+get cluster entry value from F\-A\-T to find out the next cluster in chain 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cluster\-\_\-number} & -\/ unsinged long, current cluster number \\
+\hline
+{\em get\-\_\-set} & -\/ unsigned char, get -\/ if next sector is to be got, and set if next sector is to be set \\
+\hline
+{\em cluster\-\_\-entry} & -\/ unsigned long, next cluster number if arg2 = Set, else = 0 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsinged long -\/ next cluster number if arg2 = get, else 0 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a63478aff0331310319318b66664f7afa}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!init\-\_\-read\-\_\-dict@{init\-\_\-read\-\_\-dict}}
+\index{init\-\_\-read\-\_\-dict@{init\-\_\-read\-\_\-dict}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{init\-\_\-read\-\_\-dict}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char init\-\_\-read\-\_\-dict (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a63478aff0331310319318b66664f7afa}
+
+
+This function will set up the initial values for the read\-\_\-dict\-\_\-file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, name of the file we are trying to find \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ status of trying to read 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_af14162f696746d833a0d39b933eb213f}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!init\-\_\-sd\-\_\-card@{init\-\_\-sd\-\_\-card}}
+\index{init\-\_\-sd\-\_\-card@{init\-\_\-sd\-\_\-card}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{init\-\_\-sd\-\_\-card}]{\setlength{\rightskip}{0pt plus 5cm}void init\-\_\-sd\-\_\-card (
+\begin{DoxyParamCaption}
+\item[{bool}]{verbose}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_af14162f696746d833a0d39b933eb213f}
+
+
+Checks the S\-D card, communicates with computer to let know what type of card and sets up the rest of the S\-D card. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em verbose} & bool Determines whether of not you are communicating found data to the computer www.\-dharmanitech.\-com \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a697106564d0ee2b113b097797d50c206}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!memory\-\_\-statistics@{memory\-\_\-statistics}}
+\index{memory\-\_\-statistics@{memory\-\_\-statistics}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{memory\-\_\-statistics}]{\setlength{\rightskip}{0pt plus 5cm}void memory\-\_\-statistics (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a697106564d0ee2b113b097797d50c206}
+
+
+function displays the total memory and free memory of S\-D Card using U\-A\-R\-T N\-O\-T\-E\-: this routine can take upto 15sec for 1\-G\-B card (@1\-M\-Hz clock) it tries to read from S\-D whether a free cluster count is stored, if it is stored then it will return immediately. Otherwise it will count the total number of free clusters, which takes time 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a38d39066745f8c2344018681f9c52596}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!play\-\_\-mp3\-\_\-file@{play\-\_\-mp3\-\_\-file}}
+\index{play\-\_\-mp3\-\_\-file@{play\-\_\-mp3\-\_\-file}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{play\-\_\-mp3\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char play\-\_\-mp3\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a38d39066745f8c2344018681f9c52596}
+
+
+This function plays a given M\-P3 files, until\-: 
+
+\begin{DoxyVerb}     1. The files reach the end of file
+     2. Stop playing command issued from the controller
+\end{DoxyVerb}
+ 
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsighed char $\ast$, simply name of the file to operate on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ return 0 on success return 2 on error converting file\-\_\-name 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a8c96f44d9a0ff816c4c6014a2e8704f2}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents@{read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents}}
+\index{read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents@{read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char read\-\_\-and\-\_\-retrieve\-\_\-file\-\_\-contents (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name, }
+\item[{unsigned char $\ast$}]{data\-\_\-string}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a8c96f44d9a0ff816c4c6014a2e8704f2}
+
+
+This file just reads in data from the given file\-\_\-name if it can find and and process the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & char $\ast$ That contains the file name of what you want to read data\-\_\-string char $\ast$ Where the data is put, can store 100 bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ number where 0 means success 1 means that you could not convert file\-\_\-name 2 means file does not exists 3 will mean inability to read a cluster 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_ac454bde39b7debb34613774e62f9e7e7}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!read\-\_\-dict\-\_\-file@{read\-\_\-dict\-\_\-file}}
+\index{read\-\_\-dict\-\_\-file@{read\-\_\-dict\-\_\-file}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{read\-\_\-dict\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char read\-\_\-dict\-\_\-file (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_ac454bde39b7debb34613774e62f9e7e7}
+
+
+This function will take in a file\-\_\-name and read the contents of this file. It will also populate the clusters array with a pointer to each cluster. It will work ten clusters at a time and finish. when get to end. dict\-\_\-file\-\_\-name -\/ is global that stores F\-A\-T32 format name of the dicionary (corpus) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, name of the file we are trying to find \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ status of trying to read 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_ac8cb7adc69f0f6c74323c9787985d00c}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!read\-\_\-file@{read\-\_\-file}}
+\index{read\-\_\-file@{read\-\_\-file}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{read\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char read\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{flag, }
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_ac8cb7adc69f0f6c74323c9787985d00c}
+
+
+Can act as a reader or verifier depending on the flag sent in in flag If it is V\-E\-R\-I\-F\-Y-\/ just wil let you know if the file is there. If it is read then it actually reads in the contents of the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag} & -\/ unsigned char, flag=R\-E\-A\-D then to read file from S\-D card and send contents to U\-A\-R\-T. if flag=V\-E\-R\-I\-F\-Y then functions will verify whether a specified file is already existing \\
+\hline
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, the file you are reading or verifying \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char -\/ returns 0 on success returns 1 if files already exists and flag = Verify returns 2 on error converting\-File\-Name 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_aa83af1ea22376368b315b207ab46dcbf}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with@{replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with}}
+\index{replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with@{replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with}]{\setlength{\rightskip}{0pt plus 5cm}int replace\-\_\-the\-\_\-contents\-\_\-of\-\_\-this\-\_\-file\-\_\-with (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name, }
+\item[{unsigned char $\ast$}]{file\-\_\-content}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_aa83af1ea22376368b315b207ab46dcbf}
+
+
+reads the data in file\-\_\-content into buffer and uses the function \hyperlink{_s_d__routines_8c_afab09a6f5c04b61e6395dc31067a68a7}{sd\-\_\-write\-\_\-single\-\_\-block()} to put the value in buffer onto the S\-D card Data you are writing in M\-U\-S\-T E\-N\-D I\-N \$. If not garbage will be written in. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, This contains the file to replace data in \\
+\hline
+{\em file\-\_\-content} & -\/ unsighed char $\ast$, What to put into file\-\_\-name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ returns 0 if the file exists you are trying to overwrite returns 1 if the file does not exist 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_aefba151078da780c5d91c9a7d8364228}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!search\-\_\-next\-\_\-free\-\_\-cluster@{search\-\_\-next\-\_\-free\-\_\-cluster}}
+\index{search\-\_\-next\-\_\-free\-\_\-cluster@{search\-\_\-next\-\_\-free\-\_\-cluster}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{search\-\_\-next\-\_\-free\-\_\-cluster}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long search\-\_\-next\-\_\-free\-\_\-cluster (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{start\-\_\-cluster}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_aefba151078da780c5d91c9a7d8364228}
+
+
+function searches for the next free cluster in the root directory starting at specified cluster 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\-\_\-cluster} & -\/ unsinged long, starting cluster \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+usigned long, the number of the next free cluster 
+\end{DoxyReturn}
+\hypertarget{_f_a_t32_8h_a0f4bdda6077a5c56fdc5989caa389084}{\index{F\-A\-T32.\-h@{F\-A\-T32.\-h}!write\-\_\-file@{write\-\_\-file}}
+\index{write\-\_\-file@{write\-\_\-file}!FAT32.h@{F\-A\-T32.\-h}}
+\subsubsection[{write\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}void write\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{_f_a_t32_8h_a0f4bdda6077a5c56fdc5989caa389084}
+
+
+function creates a file in F\-A\-T32 format in the root directory if given file name does not exists. If it already exists then append data to end 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-\_\-name} & -\/ unsigned char $\ast$, this is the name of the file to write to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

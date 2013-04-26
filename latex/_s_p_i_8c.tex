@@ -1,0 +1,161 @@
+\hypertarget{_s_p_i_8c}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-S\-P\-I.c File Reference}
+\label{_s_p_i_8c}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-S\-P\-I.\-c@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-S\-P\-I.\-c}}
+}
+
+
+Sets up the Seriel Peripheral Interface At\-A\-Tmega1284\-P(\-Preferred).pdf This says that The Serial Peripheral Interface (S\-P\-I) allows high speedsynchronous data transfer between the A\-Tmega1284\-P and peripheral devices or between several A\-V\-R devices.  
+
+
+{\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_s_p_i_8c_a03527aaed7b13e6426f79ae49bda99db}{spi\-\_\-initialize} (void)
+\begin{DoxyCompactList}\small\item\em Initilizes variables for S\-P\-I. \end{DoxyCompactList}\item 
+void \hyperlink{_s_p_i_8c_a8fe3d40d7c325d17dffa3fdff4b6a60b}{spi\-\_\-deselect\-\_\-all} (void)
+\begin{DoxyCompactList}\small\item\em Deselects all from the S\-P\-I. \end{DoxyCompactList}\item 
+void \hyperlink{_s_p_i_8c_a92279a2f744dddbd3074e82b5f478186}{spi\-\_\-select\-\_\-sd} (void)
+\begin{DoxyCompactList}\small\item\em Selects all from the S\-P\-I. \end{DoxyCompactList}\item 
+void \hyperlink{_s_p_i_8c_a9c75b15217c796d3ca957280346493f0}{spi\-\_\-select\-\_\-mp3\-\_\-data} (void)
+\begin{DoxyCompactList}\small\item\em Selects M\-P3 data for the S\-P\-I. \end{DoxyCompactList}\item 
+void \hyperlink{_s_p_i_8c_a0348e9504934f59c132ca62679cb56cd}{spi\-\_\-select\-\_\-mp3\-\_\-cmd} (void)
+\begin{DoxyCompactList}\small\item\em Selects M\-P3 cmd for the S\-P\-I. \end{DoxyCompactList}\item 
+void \hyperlink{_s_p_i_8c_ad4239312814823937eafbb7fd1a240b8}{spi\-\_\-2x} (void)
+\item 
+void \hyperlink{_s_p_i_8c_a11ba3b2db29c7fa491ddb842a0c33534}{spi\-\_\-1x} (void)
+\item 
+unsigned char \hyperlink{_s_p_i_8c_a1bbc6432cfd403547f2f117016999b0c}{spi\-\_\-transmit} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Transmits data -\/ N\-O\-T S\-U\-R\-E H\-O\-W. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{_s_p_i_8c_aa4a98c5a19effde43d902e64982d0d70}{spi\-\_\-receive} (void)
+\begin{DoxyCompactList}\small\item\em Recieves data -\/ N\-O\-T S\-U\-R\-E H\-O\-W. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sets up the Seriel Peripheral Interface At\-A\-Tmega1284\-P(\-Preferred).pdf This says that The Serial Peripheral Interface (S\-P\-I) allows high speedsynchronous data transfer between the A\-Tmega1284\-P and peripheral devices or between several A\-V\-R devices. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_s_p_i_8c_a11ba3b2db29c7fa491ddb842a0c33534}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-1x@{spi\-\_\-1x}}
+\index{spi\-\_\-1x@{spi\-\_\-1x}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-1x}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-1x (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a11ba3b2db29c7fa491ddb842a0c33534}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_ad4239312814823937eafbb7fd1a240b8}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-2x@{spi\-\_\-2x}}
+\index{spi\-\_\-2x@{spi\-\_\-2x}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-2x}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-2x (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_ad4239312814823937eafbb7fd1a240b8}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a8fe3d40d7c325d17dffa3fdff4b6a60b}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-deselect\-\_\-all@{spi\-\_\-deselect\-\_\-all}}
+\index{spi\-\_\-deselect\-\_\-all@{spi\-\_\-deselect\-\_\-all}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-deselect\-\_\-all}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-deselect\-\_\-all (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a8fe3d40d7c325d17dffa3fdff4b6a60b}
+
+
+Deselects all from the S\-P\-I. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a03527aaed7b13e6426f79ae49bda99db}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-initialize@{spi\-\_\-initialize}}
+\index{spi\-\_\-initialize@{spi\-\_\-initialize}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-initialize}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-initialize (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a03527aaed7b13e6426f79ae49bda99db}
+
+
+Initilizes variables for S\-P\-I. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_aa4a98c5a19effde43d902e64982d0d70}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-receive@{spi\-\_\-receive}}
+\index{spi\-\_\-receive@{spi\-\_\-receive}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-receive}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char spi\-\_\-receive (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_aa4a98c5a19effde43d902e64982d0d70}
+
+
+Recieves data -\/ N\-O\-T S\-U\-R\-E H\-O\-W. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a0348e9504934f59c132ca62679cb56cd}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-select\-\_\-mp3\-\_\-cmd@{spi\-\_\-select\-\_\-mp3\-\_\-cmd}}
+\index{spi\-\_\-select\-\_\-mp3\-\_\-cmd@{spi\-\_\-select\-\_\-mp3\-\_\-cmd}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-select\-\_\-mp3\-\_\-cmd}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-select\-\_\-mp3\-\_\-cmd (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a0348e9504934f59c132ca62679cb56cd}
+
+
+Selects M\-P3 cmd for the S\-P\-I. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a9c75b15217c796d3ca957280346493f0}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-select\-\_\-mp3\-\_\-data@{spi\-\_\-select\-\_\-mp3\-\_\-data}}
+\index{spi\-\_\-select\-\_\-mp3\-\_\-data@{spi\-\_\-select\-\_\-mp3\-\_\-data}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-select\-\_\-mp3\-\_\-data}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-select\-\_\-mp3\-\_\-data (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a9c75b15217c796d3ca957280346493f0}
+
+
+Selects M\-P3 data for the S\-P\-I. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a92279a2f744dddbd3074e82b5f478186}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-select\-\_\-sd@{spi\-\_\-select\-\_\-sd}}
+\index{spi\-\_\-select\-\_\-sd@{spi\-\_\-select\-\_\-sd}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-select\-\_\-sd}]{\setlength{\rightskip}{0pt plus 5cm}void spi\-\_\-select\-\_\-sd (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a92279a2f744dddbd3074e82b5f478186}
+
+
+Selects all from the S\-P\-I. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_s_p_i_8c_a1bbc6432cfd403547f2f117016999b0c}{\index{S\-P\-I.\-c@{S\-P\-I.\-c}!spi\-\_\-transmit@{spi\-\_\-transmit}}
+\index{spi\-\_\-transmit@{spi\-\_\-transmit}!SPI.c@{S\-P\-I.\-c}}
+\subsubsection[{spi\-\_\-transmit}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char spi\-\_\-transmit (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{data}
+\end{DoxyParamCaption}
+)}}\label{_s_p_i_8c_a1bbc6432cfd403547f2f117016999b0c}
+
+
+Transmits data -\/ N\-O\-T S\-U\-R\-E H\-O\-W. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

@@ -1,0 +1,328 @@
+\hypertarget{_m_d2_8c}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D2.c File Reference}
+\label{_m_d2_8c}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D2.\-c@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D2.\-c}}
+}
+
+
+Mode 2 code -\/ Letter Practice.  
+
+
+{\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Modes.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{_m_d2_8c_a104809f1d3195d061f4d72146c8fe1b0}{generate\-\_\-random\-\_\-number} ()
+\begin{DoxyCompactList}\small\item\em generates a psuedo random number based on the system clock \end{DoxyCompactList}\item 
+int \hyperlink{_m_d2_8c_affc450e2a07107a6d797f00a20fdcd4c}{prop\-\_\-rand\-\_\-number} ()
+\begin{DoxyCompactList}\small\item\em given a random number, and that you have 5 letters, looks in used letter to see if valid \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_a1816666dbc106a30bc0e556ed8ee5ad2}{play\-\_\-requested\-\_\-cell} (char last\-\_\-cell)
+\begin{DoxyCompactList}\small\item\em Given a char, in last\-\_\-cell, play the corresponding letter sound file. \end{DoxyCompactList}\item 
+char \hyperlink{_m_d2_8c_a30ab0c8706a306995fad6db88c0c87b8}{get\-\_\-bits\-\_\-from\-\_\-letters} (char let)
+\begin{DoxyCompactList}\small\item\em Changes letter into letter bits. \end{DoxyCompactList}\item 
+char \hyperlink{_m_d2_8c_ab1d2abac056a5a2d9e4f1def59dc3ef2}{get\-\_\-letter\-\_\-from\-\_\-bits} (char bits)
+\begin{DoxyCompactList}\small\item\em Changes letter bits into an actual char letter. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_a045f865e5530abebb5ecddf1ff532b01}{play\-\_\-requested\-\_\-bits} (char bits)
+\begin{DoxyCompactList}\small\item\em Given a bitmask, in last\-\_\-cell, play the corresponding letter sound file. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_a7a97e1b6b29823208c3a8256e047d2d2}{md2\-\_\-play\-\_\-requested\-\_\-dot} (char md2\-\_\-last\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em Given a char, in last\-\_\-cell, play the corresponding number sound file. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_a78d07280610c39823c201afa5e54242f}{md2\-\_\-reset} (void)
+\begin{DoxyCompactList}\small\item\em Reset the current state. \end{DoxyCompactList}\item 
+bool \hyperlink{_m_d2_8c_aae51393a7584080667b62fc4b53434fc}{check\-\_\-if\-\_\-correct} (char button\-\_\-bits, char current\-\_\-letter)
+\begin{DoxyCompactList}\small\item\em compares button\-\_\-bits and what current\-\_\-letter is to see if they correspond \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_a1a11b0200d6a3cce5e404d3913910714}{setup\-\_\-initial} ()
+\begin{DoxyCompactList}\small\item\em This function sets up in the initial values needed to make the program work. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_afc32a95b38adb5f06826c6bbad135382}{md2\-\_\-main} (void)
+\begin{DoxyCompactList}\small\item\em Step through the main stages in the code. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_ad2660ae3f919b36ac315773f5e83310c}{md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer} (void)
+\begin{DoxyCompactList}\small\item\em this function will be called when enter is pressed during mode if no dots have been pressed yet, it will replay prompt, if they have the enter will confirm dots pressed as letter input \end{DoxyCompactList}\item 
+\hypertarget{_m_d2_8c_ae751ad5a56f5bc39a40c2a1726f72e96}{void {\bfseries md2\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer} (void)}\label{_m_d2_8c_ae751ad5a56f5bc39a40c2a1726f72e96}
+
+\item 
+void \hyperlink{_m_d2_8c_afc7cfe03bf4ea945f3aaf64f953cf8cd}{md2\-\_\-input\-\_\-dot} (char this\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em Set the dot the from input. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d2_8c_ab06b998b7fc36b2f77ab84b46bd1d338}{md2\-\_\-input\-\_\-cell} (char this\-\_\-cell)
+\begin{DoxyCompactList}\small\item\em handle cell input \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_m_d2_8c_a412684a98bd841cd75d9a7d6cfc6cd91}{int {\bfseries current\-\_\-state}}\label{_m_d2_8c_a412684a98bd841cd75d9a7d6cfc6cd91}
+
+\item 
+\hypertarget{_m_d2_8c_a0bfb0f4f7ae7ef00bacbf0c60032ed19}{char {\bfseries last\-\_\-cell}}\label{_m_d2_8c_a0bfb0f4f7ae7ef00bacbf0c60032ed19}
+
+\item 
+\hypertarget{_m_d2_8c_a5a35a776449e8db858883c127ddb719f}{char {\bfseries md2\-\_\-last\-\_\-dot}}\label{_m_d2_8c_a5a35a776449e8db858883c127ddb719f}
+
+\item 
+char {\bfseries letter\-\_\-bits\-\_\-arr} \mbox{[}26\mbox{]}
+\item 
+char {\bfseries letter\-\_\-arr} \mbox{[}26\mbox{]}
+\item 
+\hypertarget{_m_d2_8c_a05a376d4777bc640e35e72ae96000c50}{char {\bfseries used\-\_\-letter} \mbox{[}5\mbox{]} = \{0, 0, 0, 0, 0\}}\label{_m_d2_8c_a05a376d4777bc640e35e72ae96000c50}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Mode 2 code -\/ Letter Practice. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_m_d2_8c_aae51393a7584080667b62fc4b53434fc}{\index{M\-D2.\-c@{M\-D2.\-c}!check\-\_\-if\-\_\-correct@{check\-\_\-if\-\_\-correct}}
+\index{check\-\_\-if\-\_\-correct@{check\-\_\-if\-\_\-correct}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{check\-\_\-if\-\_\-correct}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-if\-\_\-correct (
+\begin{DoxyParamCaption}
+\item[{char}]{button\-\_\-bits, }
+\item[{char}]{current\-\_\-letter}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_aae51393a7584080667b62fc4b53434fc}
+
+
+compares button\-\_\-bits and what current\-\_\-letter is to see if they correspond 
+
+
+\begin{DoxyParams}{Parameters}
+{\em button\-\_\-bits} & -\/ char, holds bits 0-\/5 that correspond to which buttons have have been pressed \\
+\hline
+{\em current\-\_\-letter} & -\/ char, letter that the bits should be matching \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ return true if they match, and false, if they do not 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a104809f1d3195d061f4d72146c8fe1b0}{\index{M\-D2.\-c@{M\-D2.\-c}!generate\-\_\-random\-\_\-number@{generate\-\_\-random\-\_\-number}}
+\index{generate\-\_\-random\-\_\-number@{generate\-\_\-random\-\_\-number}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{generate\-\_\-random\-\_\-number}]{\setlength{\rightskip}{0pt plus 5cm}int generate\-\_\-random\-\_\-number (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a104809f1d3195d061f4d72146c8fe1b0}
+
+
+generates a psuedo random number based on the system clock 
+
+\begin{DoxyReturn}{Returns}
+int-\/ random number 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a30ab0c8706a306995fad6db88c0c87b8}{\index{M\-D2.\-c@{M\-D2.\-c}!get\-\_\-bits\-\_\-from\-\_\-letters@{get\-\_\-bits\-\_\-from\-\_\-letters}}
+\index{get\-\_\-bits\-\_\-from\-\_\-letters@{get\-\_\-bits\-\_\-from\-\_\-letters}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{get\-\_\-bits\-\_\-from\-\_\-letters}]{\setlength{\rightskip}{0pt plus 5cm}char get\-\_\-bits\-\_\-from\-\_\-letters (
+\begin{DoxyParamCaption}
+\item[{char}]{let}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a30ab0c8706a306995fad6db88c0c87b8}
+
+
+Changes letter into letter bits. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em let} & -\/ char, charachter letter want to change to bits \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char -\/ letter that corresponds to buttons pressed on error -\/ not found bits, return -\/1 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_ab1d2abac056a5a2d9e4f1def59dc3ef2}{\index{M\-D2.\-c@{M\-D2.\-c}!get\-\_\-letter\-\_\-from\-\_\-bits@{get\-\_\-letter\-\_\-from\-\_\-bits}}
+\index{get\-\_\-letter\-\_\-from\-\_\-bits@{get\-\_\-letter\-\_\-from\-\_\-bits}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{get\-\_\-letter\-\_\-from\-\_\-bits}]{\setlength{\rightskip}{0pt plus 5cm}char get\-\_\-letter\-\_\-from\-\_\-bits (
+\begin{DoxyParamCaption}
+\item[{char}]{bits}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_ab1d2abac056a5a2d9e4f1def59dc3ef2}
+
+
+Changes letter bits into an actual char letter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bits} & -\/ char, bits that correspond to the buttons pressed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char -\/ letter that corresponds to buttons pressed on error -\/ not found bits, return -\/1 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_ad2660ae3f919b36ac315773f5e83310c}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}}
+\index{md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_ad2660ae3f919b36ac315773f5e83310c}
+
+
+this function will be called when enter is pressed during mode if no dots have been pressed yet, it will replay prompt, if they have the enter will confirm dots pressed as letter input 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_ab06b998b7fc36b2f77ab84b46bd1d338}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-input\-\_\-cell@{md2\-\_\-input\-\_\-cell}}
+\index{md2\-\_\-input\-\_\-cell@{md2\-\_\-input\-\_\-cell}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-input\-\_\-cell}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-input\-\_\-cell (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-cell}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_ab06b998b7fc36b2f77ab84b46bd1d338}
+
+
+handle cell input 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this\-\_\-cell} & the input cell \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_afc7cfe03bf4ea945f3aaf64f953cf8cd}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-input\-\_\-dot@{md2\-\_\-input\-\_\-dot}}
+\index{md2\-\_\-input\-\_\-dot@{md2\-\_\-input\-\_\-dot}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-input\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-input\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_afc7cfe03bf4ea945f3aaf64f953cf8cd}
+
+
+Set the dot the from input. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_afc32a95b38adb5f06826c6bbad135382}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-main@{md2\-\_\-main}}
+\index{md2\-\_\-main@{md2\-\_\-main}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-main}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-main (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_afc32a95b38adb5f06826c6bbad135382}
+
+
+Step through the main stages in the code. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a7a97e1b6b29823208c3a8256e047d2d2}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-play\-\_\-requested\-\_\-dot@{md2\-\_\-play\-\_\-requested\-\_\-dot}}
+\index{md2\-\_\-play\-\_\-requested\-\_\-dot@{md2\-\_\-play\-\_\-requested\-\_\-dot}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-play\-\_\-requested\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-play\-\_\-requested\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{char}]{md2\-\_\-last\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a7a97e1b6b29823208c3a8256e047d2d2}
+
+
+Given a char, in last\-\_\-cell, play the corresponding number sound file. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a78d07280610c39823c201afa5e54242f}{\index{M\-D2.\-c@{M\-D2.\-c}!md2\-\_\-reset@{md2\-\_\-reset}}
+\index{md2\-\_\-reset@{md2\-\_\-reset}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{md2\-\_\-reset}]{\setlength{\rightskip}{0pt plus 5cm}void md2\-\_\-reset (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a78d07280610c39823c201afa5e54242f}
+
+
+Reset the current state. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a045f865e5530abebb5ecddf1ff532b01}{\index{M\-D2.\-c@{M\-D2.\-c}!play\-\_\-requested\-\_\-bits@{play\-\_\-requested\-\_\-bits}}
+\index{play\-\_\-requested\-\_\-bits@{play\-\_\-requested\-\_\-bits}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{play\-\_\-requested\-\_\-bits}]{\setlength{\rightskip}{0pt plus 5cm}void play\-\_\-requested\-\_\-bits (
+\begin{DoxyParamCaption}
+\item[{char}]{bits}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a045f865e5530abebb5ecddf1ff532b01}
+
+
+Given a bitmask, in last\-\_\-cell, play the corresponding letter sound file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bits} & -\/ char, bitmask that should representa braile letter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a1816666dbc106a30bc0e556ed8ee5ad2}{\index{M\-D2.\-c@{M\-D2.\-c}!play\-\_\-requested\-\_\-cell@{play\-\_\-requested\-\_\-cell}}
+\index{play\-\_\-requested\-\_\-cell@{play\-\_\-requested\-\_\-cell}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{play\-\_\-requested\-\_\-cell}]{\setlength{\rightskip}{0pt plus 5cm}void play\-\_\-requested\-\_\-cell (
+\begin{DoxyParamCaption}
+\item[{char}]{last\-\_\-cell}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a1816666dbc106a30bc0e556ed8ee5ad2}
+
+
+Given a char, in last\-\_\-cell, play the corresponding letter sound file. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_affc450e2a07107a6d797f00a20fdcd4c}{\index{M\-D2.\-c@{M\-D2.\-c}!prop\-\_\-rand\-\_\-number@{prop\-\_\-rand\-\_\-number}}
+\index{prop\-\_\-rand\-\_\-number@{prop\-\_\-rand\-\_\-number}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{prop\-\_\-rand\-\_\-number}]{\setlength{\rightskip}{0pt plus 5cm}int prop\-\_\-rand\-\_\-number (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_affc450e2a07107a6d797f00a20fdcd4c}
+
+
+given a random number, and that you have 5 letters, looks in used letter to see if valid 
+
+\begin{DoxyReturn}{Returns}
+int -\/ index into the letters being used 
+\end{DoxyReturn}
+\hypertarget{_m_d2_8c_a1a11b0200d6a3cce5e404d3913910714}{\index{M\-D2.\-c@{M\-D2.\-c}!setup\-\_\-initial@{setup\-\_\-initial}}
+\index{setup\-\_\-initial@{setup\-\_\-initial}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{setup\-\_\-initial}]{\setlength{\rightskip}{0pt plus 5cm}void setup\-\_\-initial (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_m_d2_8c_a1a11b0200d6a3cce5e404d3913910714}
+
+
+This function sets up in the initial values needed to make the program work. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\hypertarget{_m_d2_8c_af4ce6658feffeb1b145e5df69cf031ac}{\index{M\-D2.\-c@{M\-D2.\-c}!letter\-\_\-arr@{letter\-\_\-arr}}
+\index{letter\-\_\-arr@{letter\-\_\-arr}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{letter\-\_\-arr}]{\setlength{\rightskip}{0pt plus 5cm}char letter\-\_\-arr\mbox{[}26\mbox{]}}}\label{_m_d2_8c_af4ce6658feffeb1b145e5df69cf031ac}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+= 
+\{
+  \textcolor{charliteral}{'a'}, \textcolor{charliteral}{'b'}, \textcolor{charliteral}{'c'}, \textcolor{charliteral}{'d'}, \textcolor{charliteral}{'e'}, \textcolor{charliteral}{'f'}, \textcolor{charliteral}{'g'}, \textcolor{charliteral}{'h'}, \textcolor{charliteral}{'i'}, \textcolor{charliteral}{'j'}, \textcolor{charliteral}{'k'}, 
+  \textcolor{charliteral}{'l'}, \textcolor{charliteral}{'m'}, \textcolor{charliteral}{'n'}, \textcolor{charliteral}{'o'}, \textcolor{charliteral}{'p'}, \textcolor{charliteral}{'q'}, \textcolor{charliteral}{'r'}, \textcolor{charliteral}{'s'}, \textcolor{charliteral}{'t'}, \textcolor{charliteral}{'u'}, \textcolor{charliteral}{'v'}, 
+  \textcolor{charliteral}{'w'}, \textcolor{charliteral}{'x'}, \textcolor{charliteral}{'y'}, \textcolor{charliteral}{'z'}
+\}
+\end{DoxyCode}
+\hypertarget{_m_d2_8c_a363c157a07304c865115a6950464d124}{\index{M\-D2.\-c@{M\-D2.\-c}!letter\-\_\-bits\-\_\-arr@{letter\-\_\-bits\-\_\-arr}}
+\index{letter\-\_\-bits\-\_\-arr@{letter\-\_\-bits\-\_\-arr}!MD2.c@{M\-D2.\-c}}
+\subsubsection[{letter\-\_\-bits\-\_\-arr}]{\setlength{\rightskip}{0pt plus 5cm}char letter\-\_\-bits\-\_\-arr\mbox{[}26\mbox{]}}}\label{_m_d2_8c_a363c157a07304c865115a6950464d124}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+= 
+\{
+  A\_BITS, B\_BITS, C\_BITS, D\_BITS, E\_BITS, F\_BITS, G\_BITS, 
+  H\_BITS, I\_BITS, J\_BITS, K\_BITS, L\_BITS, M\_BITS, N\_BITS, 
+  O\_BITS, P\_BITS, Q\_BITS, R\_BITS, S\_BITS, T\_BITS, U\_BITS, 
+  V\_BITS, W\_BITS, X\_BITS, Y\_BITS, Z\_BITS
+\}
+\end{DoxyCode}

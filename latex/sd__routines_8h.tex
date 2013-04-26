@@ -1,0 +1,241 @@
+\hypertarget{sd__routines_8h}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/sd\-\_\-routines.h File Reference}
+\label{sd__routines_8h}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/sd\-\_\-routines.\-h@{S\-A\-B\-T\-\_\-\-Main\-Unit/sd\-\_\-routines.\-h}}
+}
+
+
+definitions for S\-D card stuff  
+
+
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{sd__routines_8h_a4c9caedf210e9e4e61475e4e86293123}{\#define {\bfseries F\-A\-T\-\_\-\-T\-E\-S\-T\-I\-N\-G\-\_\-\-O\-N\-L\-Y}}\label{sd__routines_8h_a4c9caedf210e9e4e61475e4e86293123}
+
+\item 
+\hypertarget{sd__routines_8h_ab42aba8ac59f4a88718f351bf6e30874}{\#define {\bfseries S\-D\-\_\-\-C\-S\-\_\-\-A\-S\-S\-E\-R\-T}~P\-O\-R\-T\-B \&= $\sim$0x01}\label{sd__routines_8h_ab42aba8ac59f4a88718f351bf6e30874}
+
+\item 
+\hypertarget{sd__routines_8h_ac13a5b7ed7d2ee96da07f2b2ae9249fe}{\#define {\bfseries S\-D\-\_\-\-C\-S\-\_\-\-D\-E\-A\-S\-S\-E\-R\-T}~P\-O\-R\-T\-B $|$= 0x01}\label{sd__routines_8h_ac13a5b7ed7d2ee96da07f2b2ae9249fe}
+
+\item 
+\hypertarget{sd__routines_8h_a939c1c73db7a96767f5d06dfe7591b01}{\#define {\bfseries G\-O\-\_\-\-I\-D\-L\-E\-\_\-\-S\-T\-A\-T\-E}~0}\label{sd__routines_8h_a939c1c73db7a96767f5d06dfe7591b01}
+
+\item 
+\hypertarget{sd__routines_8h_a2397afdad46162ab52c4008d8f5dab23}{\#define {\bfseries S\-E\-N\-D\-\_\-\-O\-P\-\_\-\-C\-O\-N\-D}~1}\label{sd__routines_8h_a2397afdad46162ab52c4008d8f5dab23}
+
+\item 
+\hypertarget{sd__routines_8h_a01bcf82717d75d8ccf0a8664d431738d}{\#define {\bfseries S\-E\-N\-D\-\_\-\-I\-F\-\_\-\-C\-O\-N\-D}~8}\label{sd__routines_8h_a01bcf82717d75d8ccf0a8664d431738d}
+
+\item 
+\hypertarget{sd__routines_8h_a85a884eec438d450dc1c05e8d9d29044}{\#define {\bfseries S\-E\-N\-D\-\_\-\-C\-S\-D}~9}\label{sd__routines_8h_a85a884eec438d450dc1c05e8d9d29044}
+
+\item 
+\hypertarget{sd__routines_8h_a0f220568605a0eaa9a5cbb3d3cc82408}{\#define {\bfseries S\-T\-O\-P\-\_\-\-T\-R\-A\-N\-S\-M\-I\-S\-S\-I\-O\-N}~12}\label{sd__routines_8h_a0f220568605a0eaa9a5cbb3d3cc82408}
+
+\item 
+\hypertarget{sd__routines_8h_a7f98c79059221d788e2219865d770648}{\#define {\bfseries S\-E\-N\-D\-\_\-\-S\-T\-A\-T\-U\-S}~13}\label{sd__routines_8h_a7f98c79059221d788e2219865d770648}
+
+\item 
+\hypertarget{sd__routines_8h_a2f0756e65bb52b5d7e7934ce1d5ec0da}{\#define {\bfseries S\-E\-T\-\_\-\-B\-L\-O\-C\-K\-\_\-\-L\-E\-N}~16}\label{sd__routines_8h_a2f0756e65bb52b5d7e7934ce1d5ec0da}
+
+\item 
+\hypertarget{sd__routines_8h_a078b4c06f187324dd4e14cf59a6c87c2}{\#define {\bfseries R\-E\-A\-D\-\_\-\-S\-I\-N\-G\-L\-E\-\_\-\-B\-L\-O\-C\-K}~17}\label{sd__routines_8h_a078b4c06f187324dd4e14cf59a6c87c2}
+
+\item 
+\hypertarget{sd__routines_8h_ac1b68c53e7902f7197cd9f52b163bda1}{\#define {\bfseries R\-E\-A\-D\-\_\-\-M\-U\-L\-T\-I\-P\-L\-E\-\_\-\-B\-L\-O\-C\-K\-S}~18}\label{sd__routines_8h_ac1b68c53e7902f7197cd9f52b163bda1}
+
+\item 
+\hypertarget{sd__routines_8h_ae24d09e65670aa853aa83889b55a92a0}{\#define {\bfseries W\-R\-I\-T\-E\-\_\-\-S\-I\-N\-G\-L\-E\-\_\-\-B\-L\-O\-C\-K}~24}\label{sd__routines_8h_ae24d09e65670aa853aa83889b55a92a0}
+
+\item 
+\hypertarget{sd__routines_8h_a8cf5245e676d5405878f2af647491553}{\#define {\bfseries W\-R\-I\-T\-E\-\_\-\-M\-U\-L\-T\-I\-P\-L\-E\-\_\-\-B\-L\-O\-C\-K\-S}~25}\label{sd__routines_8h_a8cf5245e676d5405878f2af647491553}
+
+\item 
+\hypertarget{sd__routines_8h_a0fe84e05b768d0f4b0f98a7f48a19f7f}{\#define {\bfseries E\-R\-A\-S\-E\-\_\-\-B\-L\-O\-C\-K\-\_\-\-S\-T\-A\-R\-T\-\_\-\-A\-D\-D\-R}~32}\label{sd__routines_8h_a0fe84e05b768d0f4b0f98a7f48a19f7f}
+
+\item 
+\hypertarget{sd__routines_8h_ade170f78d275c9bfd354e726e12435e2}{\#define {\bfseries E\-R\-A\-S\-E\-\_\-\-B\-L\-O\-C\-K\-\_\-\-E\-N\-D\-\_\-\-A\-D\-D\-R}~33}\label{sd__routines_8h_ade170f78d275c9bfd354e726e12435e2}
+
+\item 
+\hypertarget{sd__routines_8h_ae9177be3107326be877417b3b02e3a83}{\#define {\bfseries E\-R\-A\-S\-E\-\_\-\-S\-E\-L\-E\-C\-T\-E\-D\-\_\-\-B\-L\-O\-C\-K\-S}~38}\label{sd__routines_8h_ae9177be3107326be877417b3b02e3a83}
+
+\item 
+\hypertarget{sd__routines_8h_a38e73c548131f1fd3f8acdad82fd44fb}{\#define {\bfseries S\-D\-\_\-\-S\-E\-N\-D\-\_\-\-O\-P\-\_\-\-C\-O\-N\-D}~41}\label{sd__routines_8h_a38e73c548131f1fd3f8acdad82fd44fb}
+
+\item 
+\hypertarget{sd__routines_8h_acdb057504ceebb40cb4a5df3197a8fb5}{\#define {\bfseries A\-P\-P\-\_\-\-C\-M\-D}~55}\label{sd__routines_8h_acdb057504ceebb40cb4a5df3197a8fb5}
+
+\item 
+\hypertarget{sd__routines_8h_a9903337fbf33e03e1a9182fbca009313}{\#define {\bfseries R\-E\-A\-D\-\_\-\-O\-C\-R}~58}\label{sd__routines_8h_a9903337fbf33e03e1a9182fbca009313}
+
+\item 
+\hypertarget{sd__routines_8h_a5104895f45f0891d5bedef91b7dd4a92}{\#define {\bfseries C\-R\-C\-\_\-\-O\-N\-\_\-\-O\-F\-F}~59}\label{sd__routines_8h_a5104895f45f0891d5bedef91b7dd4a92}
+
+\item 
+\hypertarget{sd__routines_8h_ad76d1750a6cdeebd506bfcd6752554d2}{\#define {\bfseries O\-N}~1}\label{sd__routines_8h_ad76d1750a6cdeebd506bfcd6752554d2}
+
+\item 
+\hypertarget{sd__routines_8h_a29e413f6725b2ba32d165ffaa35b01e5}{\#define {\bfseries O\-F\-F}~0}\label{sd__routines_8h_a29e413f6725b2ba32d165ffaa35b01e5}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned char \hyperlink{sd__routines_8h_a64f3a68fc9cfc95bbda437592ff3a2a6}{sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block} (unsigned long start\-\_\-block)
+\begin{DoxyCompactList}\small\item\em Reads a single block from S\-D card, specifically for the dictionary functions Reads 512 bytes (S\-P\-I Block) from S\-D Card. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{sd__routines_8h_a0a681fcbc07448bdb08c75e10fca4af9}{sd\-\_\-init} (void)
+\begin{DoxyCompactList}\small\item\em initializes the S\-D/\-S\-D\-H\-C card in S\-P\-I mode \end{DoxyCompactList}\item 
+unsigned char \hyperlink{sd__routines_8h_a2bb80ce9c4325fd3d74357a0d1f3c774}{sd\-\_\-send\-\_\-command} (unsigned char cmd, unsigned long arg)
+\begin{DoxyCompactList}\small\item\em sends a command to the S\-D card \end{DoxyCompactList}\item 
+unsigned char \hyperlink{sd__routines_8h_ad97a66ef102070864c562fc1f9dd2853}{sd\-\_\-read\-\_\-single\-\_\-block} (unsigned long start\-\_\-block)
+\begin{DoxyCompactList}\small\item\em Reads a single block from S\-D card Reads 512 bytes (S\-P\-I Block) from S\-D Card. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{sd__routines_8h_afab09a6f5c04b61e6395dc31067a68a7}{sd\-\_\-write\-\_\-single\-\_\-block} (unsigned long start\-\_\-block)
+\begin{DoxyCompactList}\small\item\em Writes a single block of S\-D Card. Data that is written is put into the buffer variables and writes out the 512 charachters. \end{DoxyCompactList}\item 
+\hypertarget{sd__routines_8h_adf2a138d5cc1696aaa834c84bc1a120a}{unsigned char {\bfseries sd\-\_\-read\-\_\-multiple\-\_\-blocks} (unsigned long start\-\_\-block, unsigned long total\-\_\-blocks)}\label{sd__routines_8h_adf2a138d5cc1696aaa834c84bc1a120a}
+
+\item 
+\hypertarget{sd__routines_8h_a2dec6c8204e8482c09e44b5be1cd5486}{unsigned char {\bfseries sd\-\_\-write\-\_\-multiple\-\_\-blocks} (unsigned long start\-\_\-block, unsigned long total\-\_\-blocks)}\label{sd__routines_8h_a2dec6c8204e8482c09e44b5be1cd5486}
+
+\item 
+unsigned char \hyperlink{sd__routines_8h_ac4660d167a705fb41f22d17c7bddf4c0}{sd\-\_\-erase} (unsigned long start\-\_\-block, unsigned long total\-\_\-blocks)
+\begin{DoxyCompactList}\small\item\em Erases the specified no. of blocks of S\-D card. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{sd__routines_8h_a1fb68947b4d9dcfab320266d660be380}{volatile unsigned long {\bfseries start\-\_\-block}}\label{sd__routines_8h_a1fb68947b4d9dcfab320266d660be380}
+
+\item 
+\hypertarget{sd__routines_8h_a17339c6c804acb676da44e78fb7526ff}{volatile unsigned long {\bfseries total\-\_\-blocks}}\label{sd__routines_8h_a17339c6c804acb676da44e78fb7526ff}
+
+\item 
+\hypertarget{sd__routines_8h_a2398f0379c5e72f8131726e8c263c15c}{volatile unsigned char {\bfseries sdhc\-\_\-flag}}\label{sd__routines_8h_a2398f0379c5e72f8131726e8c263c15c}
+
+\item 
+\hypertarget{sd__routines_8h_a63b0a1d91cc8719633973ef78235b84c}{volatile unsigned char {\bfseries card\-\_\-type}}\label{sd__routines_8h_a63b0a1d91cc8719633973ef78235b84c}
+
+\item 
+\hypertarget{sd__routines_8h_af2fb111059befaf62d26d5eecc521ac6}{volatile unsigned char {\bfseries buffer} \mbox{[}B\-U\-F\-F\-E\-R\-\_\-\-S\-I\-Z\-E\mbox{]}}\label{sd__routines_8h_af2fb111059befaf62d26d5eecc521ac6}
+
+\item 
+\hypertarget{sd__routines_8h_a142ee7ffc5576b1034724aad401b020e}{volatile unsigned char {\bfseries dict\-\_\-buffer} \mbox{[}B\-U\-F\-F\-E\-R\-\_\-\-S\-I\-Z\-E\mbox{]}}\label{sd__routines_8h_a142ee7ffc5576b1034724aad401b020e}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+definitions for S\-D card stuff \begin{DoxyAuthor}{Author}
+C\-C Dharmani, Chennai (India) 
+
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger)
+\end{DoxyAuthor}
+
+
+ $\ast$$\ast$$\ast$$\ast$$\ast$$\ast$ F\-U\-N\-C\-T\-I\-O\-N\-S F\-O\-R S\-D R\-A\-W D\-A\-T\-A T\-R\-A\-N\-S\-F\-E\-R $\ast$$\ast$$\ast$$\ast$$\ast$$\ast$$\ast$ 
+
+ Controller\-: A\-Tmega32 (Clock\-: 8 Mhz-\/internal) Compiler \-: A\-V\-R-\/\-G\-C\-C (win\-A\-V\-R with A\-V\-R\-Studio) Version \-: 2.\-3 Author \-: C\-C Dharmani, Chennai (India) www.\-dharmanitech.\-com Date \-: 08 May 2010 
+
+
+
+\subsection{Function Documentation}
+\hypertarget{sd__routines_8h_ac4660d167a705fb41f22d17c7bddf4c0}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-erase@{sd\-\_\-erase}}
+\index{sd\-\_\-erase@{sd\-\_\-erase}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-erase}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-erase (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{start\-\_\-block, }
+\item[{unsigned long}]{total\-\_\-blocks}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_ac4660d167a705fb41f22d17c7bddf4c0}
+
+
+Erases the specified no. of blocks of S\-D card. 
+
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ 0 if no error and response byte if error 
+\end{DoxyReturn}
+\hypertarget{sd__routines_8h_a0a681fcbc07448bdb08c75e10fca4af9}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-init@{sd\-\_\-init}}
+\index{sd\-\_\-init@{sd\-\_\-init}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-init (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_a0a681fcbc07448bdb08c75e10fca4af9}
+
+
+initializes the S\-D/\-S\-D\-H\-C card in S\-P\-I mode 
+
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ return 0 if no error and response byte otherwise 
+\end{DoxyReturn}
+\hypertarget{sd__routines_8h_ad97a66ef102070864c562fc1f9dd2853}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-read\-\_\-single\-\_\-block@{sd\-\_\-read\-\_\-single\-\_\-block}}
+\index{sd\-\_\-read\-\_\-single\-\_\-block@{sd\-\_\-read\-\_\-single\-\_\-block}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-read\-\_\-single\-\_\-block}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-read\-\_\-single\-\_\-block (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{start\-\_\-block}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_ad97a66ef102070864c562fc1f9dd2853}
+
+
+Reads a single block from S\-D card Reads 512 bytes (S\-P\-I Block) from S\-D Card. 
+
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ 0 if no error and response byte if error 
+\end{DoxyReturn}
+\hypertarget{sd__routines_8h_a64f3a68fc9cfc95bbda437592ff3a2a6}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block@{sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block}}
+\index{sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block@{sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-read\-\_\-single\-\_\-dict\-\_\-block (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{start\-\_\-block}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_a64f3a68fc9cfc95bbda437592ff3a2a6}
+
+
+Reads a single block from S\-D card, specifically for the dictionary functions Reads 512 bytes (S\-P\-I Block) from S\-D Card. 
+
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ 0 if no error and response byte if error 
+\end{DoxyReturn}
+\hypertarget{sd__routines_8h_a2bb80ce9c4325fd3d74357a0d1f3c774}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-send\-\_\-command@{sd\-\_\-send\-\_\-command}}
+\index{sd\-\_\-send\-\_\-command@{sd\-\_\-send\-\_\-command}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-send\-\_\-command}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-send\-\_\-command (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{cmd, }
+\item[{unsigned long}]{arg}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_a2bb80ce9c4325fd3d74357a0d1f3c774}
+
+
+sends a command to the S\-D card 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & -\/ unsigned char, command to send to the S\-D card \\
+\hline
+{\em arg} & -\/ unsigned long, argument of the command sent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ response byte 
+\end{DoxyReturn}
+\hypertarget{sd__routines_8h_afab09a6f5c04b61e6395dc31067a68a7}{\index{sd\-\_\-routines.\-h@{sd\-\_\-routines.\-h}!sd\-\_\-write\-\_\-single\-\_\-block@{sd\-\_\-write\-\_\-single\-\_\-block}}
+\index{sd\-\_\-write\-\_\-single\-\_\-block@{sd\-\_\-write\-\_\-single\-\_\-block}!sd_routines.h@{sd\-\_\-routines.\-h}}
+\subsubsection[{sd\-\_\-write\-\_\-single\-\_\-block}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char sd\-\_\-write\-\_\-single\-\_\-block (
+\begin{DoxyParamCaption}
+\item[{unsigned long}]{start\-\_\-block}
+\end{DoxyParamCaption}
+)}}\label{sd__routines_8h_afab09a6f5c04b61e6395dc31067a68a7}
+
+
+Writes a single block of S\-D Card. Data that is written is put into the buffer variables and writes out the 512 charachters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\-\_\-block} & -\/ unsigned long, describes which block you want to right \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char -\/ 0 if no error response byte will be sent if an error 
+\end{DoxyReturn}

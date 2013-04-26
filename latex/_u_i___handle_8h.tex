@@ -1,0 +1,252 @@
+\hypertarget{_u_i___handle_8h}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-I\-\_\-\-Handle.h File Reference}
+\label{_u_i___handle_8h}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-I\-\_\-\-Handle.\-h@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-I\-\_\-\-Handle.\-h}}
+}
+
+
+Handle U\-I-\/\-M\-C\-U interactions.  
+
+
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_u_i___handle_8h_a48496cc904030eb039fa6a5ffe0570a0}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-N\-O\-N\-E}~0}\label{_u_i___handle_8h_a48496cc904030eb039fa6a5ffe0570a0}
+
+\item 
+\hypertarget{_u_i___handle_8h_aa310b41a88eb8169f40431d1965daa37}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-E\-N\-T1}~1}\label{_u_i___handle_8h_aa310b41a88eb8169f40431d1965daa37}
+
+\item 
+\hypertarget{_u_i___handle_8h_a369183a6db9fe049f795c458247d5680}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-E\-N\-T2}~2}\label{_u_i___handle_8h_a369183a6db9fe049f795c458247d5680}
+
+\item 
+\hypertarget{_u_i___handle_8h_ad989a753fefe5ee1549309a34e843dfe}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-M\-F\-O\-R}~3}\label{_u_i___handle_8h_ad989a753fefe5ee1549309a34e843dfe}
+
+\item 
+\hypertarget{_u_i___handle_8h_a74c02673afcc0b0767b4e28acf43e2a8}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-M\-R\-E\-V}~4}\label{_u_i___handle_8h_a74c02673afcc0b0767b4e28acf43e2a8}
+
+\item 
+\hypertarget{_u_i___handle_8h_a53fd37621ab3724d7f83d73b60745c5e}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-V\-O\-L\-U}~5}\label{_u_i___handle_8h_a53fd37621ab3724d7f83d73b60745c5e}
+
+\item 
+\hypertarget{_u_i___handle_8h_ac5fb47b09ce2ccb83b6992a2f69fad51}{\#define {\bfseries U\-I\-\_\-\-C\-M\-D\-\_\-\-V\-O\-L\-D}~6}\label{_u_i___handle_8h_ac5fb47b09ce2ccb83b6992a2f69fad51}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{_u_i___handle_8h_aadaad5e62c9a3a43940457ed4bad522f}{ui\-\_\-check\-\_\-modes} (void)
+\begin{DoxyCompactList}\small\item\em reads modes from M\-O\-D\-E\-S.\-D\-A\-T file and tells computer how many modes and what they are \end{DoxyCompactList}\item 
+uint16\-\_\-t \hyperlink{_u_i___handle_8h_a94da055e88197fdae1366d624a871dc5}{ui\-\_\-calculate\-\_\-crc} (unsigned char $\ast$message)
+\begin{DoxyCompactList}\small\item\em calculate C\-R\-C (cyclic redundancy check) \end{DoxyCompactList}\item 
+bool \hyperlink{_u_i___handle_8h_a457e19b0cbbc64e8970cda53accdd5b8}{ui\-\_\-parse\-\_\-message} (bool mp3\-\_\-is\-\_\-playing)
+\begin{DoxyCompactList}\small\item\em Reads a message in U\-S\-A\-R\-T\-\_\-\-U\-I\-\_\-\-Received\-Packet. Then determines what type of message it has received. It then interacts with the mode accordingly and sends a message of recieval at the end. \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_ac90f47cd5b778e0b112f2494db6957d4}{ui\-\_\-control\-\_\-key\-\_\-pressed} (void)
+\begin{DoxyCompactList}\small\item\em Handle pressing command buttons (mode control, enter/exit, volume control) \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_a1e79cc9b8722ce71b1285a2132ef1023}{ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode} (void)
+\begin{DoxyCompactList}\small\item\em play the M\-P3 associated with the current mode \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_a207eac1ba517df26ff3b5deea799c45e}{ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer} (void)
+\begin{DoxyCompactList}\small\item\em input the enter button to the current mode \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_a373442cbdabc3cb89fbe72677272c524}{ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer} (void)
+\begin{DoxyCompactList}\small\item\em input the exit command to the current mode \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_ae71b0669c8480771ee3e73ddfe88863e}{ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode} (char this\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em input a dot to the current mode \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_a88b16911bf1176a3838c2b56eff021eb}{ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode} (char this\-\_\-cell)
+\begin{DoxyCompactList}\small\item\em input a cell to the current mode \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_af86d472509e274ec92b8f34ff7f07fbd}{ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode} (void)
+\begin{DoxyCompactList}\small\item\em Decides which of the three U\-I modes to go into based on ui\-\_\-current\-\_\-mode. \end{DoxyCompactList}\item 
+void \hyperlink{_u_i___handle_8h_a90617f7166ec3808830c902a1be82702}{ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode} (void)
+\begin{DoxyCompactList}\small\item\em input the reset command to the current mode \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_u_i___handle_8h_ab541c88b1e37b1b6ffe532f410bcad05}{volatile bool {\bfseries ui\-\_\-mp3\-\_\-file\-\_\-pending}}\label{_u_i___handle_8h_ab541c88b1e37b1b6ffe532f410bcad05}
+
+\item 
+\hypertarget{_u_i___handle_8h_ab141498a99f844ba61c250a46f220128}{volatile bool {\bfseries ui\-\_\-mode\-\_\-selected}}\label{_u_i___handle_8h_ab141498a99f844ba61c250a46f220128}
+
+\item 
+\hypertarget{_u_i___handle_8h_a2b58d997539c867dc542ac85d51bba95}{volatile char {\bfseries ui\-\_\-current\-\_\-mode}}\label{_u_i___handle_8h_a2b58d997539c867dc542ac85d51bba95}
+
+\item 
+\hypertarget{_u_i___handle_8h_a1074c24b4dc5ea6ed6b18c026af83272}{volatile int {\bfseries ui\-\_\-selected\-\_\-mode}}\label{_u_i___handle_8h_a1074c24b4dc5ea6ed6b18c026af83272}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle U\-I-\/\-M\-C\-U interactions. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_u_i___handle_8h_a94da055e88197fdae1366d624a871dc5}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-calculate\-\_\-crc@{ui\-\_\-calculate\-\_\-crc}}
+\index{ui\-\_\-calculate\-\_\-crc@{ui\-\_\-calculate\-\_\-crc}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-calculate\-\_\-crc}]{\setlength{\rightskip}{0pt plus 5cm}uint16\-\_\-t ui\-\_\-calculate\-\_\-crc (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{message}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a94da055e88197fdae1366d624a871dc5}
+
+
+calculate C\-R\-C (cyclic redundancy check) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & message (?) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+C\-R\-C value 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a373442cbdabc3cb89fbe72677272c524}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer@{ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer}}
+\index{ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer@{ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a373442cbdabc3cb89fbe72677272c524}
+
+
+input the exit command to the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a207eac1ba517df26ff3b5deea799c45e}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}}
+\index{ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a207eac1ba517df26ff3b5deea799c45e}
+
+
+input the enter button to the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_aadaad5e62c9a3a43940457ed4bad522f}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-check\-\_\-modes@{ui\-\_\-check\-\_\-modes}}
+\index{ui\-\_\-check\-\_\-modes@{ui\-\_\-check\-\_\-modes}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-check\-\_\-modes}]{\setlength{\rightskip}{0pt plus 5cm}bool ui\-\_\-check\-\_\-modes (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_aadaad5e62c9a3a43940457ed4bad522f}
+
+
+reads modes from M\-O\-D\-E\-S.\-D\-A\-T file and tells computer how many modes and what they are 
+
+\begin{DoxyReturn}{Returns}
+bool -\/ return true on succesful completion of transmission, false on failure 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_ac90f47cd5b778e0b112f2494db6957d4}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-control\-\_\-key\-\_\-pressed@{ui\-\_\-control\-\_\-key\-\_\-pressed}}
+\index{ui\-\_\-control\-\_\-key\-\_\-pressed@{ui\-\_\-control\-\_\-key\-\_\-pressed}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-control\-\_\-key\-\_\-pressed}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-control\-\_\-key\-\_\-pressed (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_ac90f47cd5b778e0b112f2494db6957d4}
+
+
+Handle pressing command buttons (mode control, enter/exit, volume control) 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a88b16911bf1176a3838c2b56eff021eb}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode@{ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode}}
+\index{ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode@{ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-input\-\_\-cell\-\_\-to\-\_\-current\-\_\-mode (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-cell}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a88b16911bf1176a3838c2b56eff021eb}
+
+
+input a cell to the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_ae71b0669c8480771ee3e73ddfe88863e}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode@{ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode}}
+\index{ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode@{ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-input\-\_\-dot\-\_\-to\-\_\-current\-\_\-mode (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_ae71b0669c8480771ee3e73ddfe88863e}
+
+
+input a dot to the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a457e19b0cbbc64e8970cda53accdd5b8}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-parse\-\_\-message@{ui\-\_\-parse\-\_\-message}}
+\index{ui\-\_\-parse\-\_\-message@{ui\-\_\-parse\-\_\-message}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-parse\-\_\-message}]{\setlength{\rightskip}{0pt plus 5cm}bool ui\-\_\-parse\-\_\-message (
+\begin{DoxyParamCaption}
+\item[{bool}]{mp3\-\_\-is\-\_\-playing}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a457e19b0cbbc64e8970cda53accdd5b8}
+
+
+Reads a message in U\-S\-A\-R\-T\-\_\-\-U\-I\-\_\-\-Received\-Packet. Then determines what type of message it has received. It then interacts with the mode accordingly and sends a message of recieval at the end. 
+
+U\-I string\-: \mbox{[}U\mbox{]}\mbox{[}I\mbox{]}\mbox{[}msglen\mbox{]}\mbox{[}msg\-\_\-number\mbox{]}\mbox{[}msgtype\mbox{]}\mbox{[}payload\mbox{]}\mbox{[}C\-R\-C1\mbox{]}\mbox{[}C\-R\-C2\mbox{]} msgtypes\-: 
+\begin{DoxyParams}{Parameters}
+{\em Is\-Playing} & -\/ bool determines whether or not an M\-P3 Files is playing \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ returns true if succesfully parsed, understood, and used message 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a1e79cc9b8722ce71b1285a2132ef1023}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode@{ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode}}
+\index{ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode@{ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-play\-\_\-intro\-\_\-current\-\_\-mode (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a1e79cc9b8722ce71b1285a2132ef1023}
+
+
+play the M\-P3 associated with the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_a90617f7166ec3808830c902a1be82702}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode@{ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode}}
+\index{ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode@{ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-reset\-\_\-the\-\_\-current\-\_\-mode (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_a90617f7166ec3808830c902a1be82702}
+
+
+input the reset command to the current mode 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_i___handle_8h_af86d472509e274ec92b8f34ff7f07fbd}{\index{U\-I\-\_\-\-Handle.\-h@{U\-I\-\_\-\-Handle.\-h}!ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode@{ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode}}
+\index{ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode@{ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode}!UI_Handle.h@{U\-I\-\_\-\-Handle.\-h}}
+\subsubsection[{ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}void ui\-\_\-run\-\_\-main\-\_\-of\-\_\-current\-\_\-mode (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_i___handle_8h_af86d472509e274ec92b8f34ff7f07fbd}
+
+
+Decides which of the three U\-I modes to go into based on ui\-\_\-current\-\_\-mode. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

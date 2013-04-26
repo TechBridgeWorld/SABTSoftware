@@ -1,0 +1,57 @@
+\hypertarget{_p_c___handle_8c}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-P\-C\-\_\-\-Handle.c File Reference}
+\label{_p_c___handle_8c}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-P\-C\-\_\-\-Handle.\-c@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-P\-C\-\_\-\-Handle.\-c}}
+}
+
+
+This file deals with interacting with the P\-C, send/ receive messages. It also allows you to overwrite the modes used in the function.  
+
+
+{\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_p_c___handle_8c_a05402208552afd86d984f4c0ec1997b1}{pc\-\_\-parse\-\_\-message} ()
+\begin{DoxyCompactList}\small\item\em This fucntion reads the message in U\-S\-A\-R\-T\-\_\-\-P\-C\-\_\-\-Recieved\-Packet. It determines its type and sends the appropriate message to P\-C The two possibilities are that you sent 'x' -\/ P\-C\-\_\-\-C\-M\-D\-\_\-\-I\-N\-I\-T -\/ this just gets response from the system. The other message is 'M' -\/ P\-C\-\_\-\-C\-M\-D\-\_\-\-N\-E\-W\-M\-O\-D\-E\-S this message type will change the mode file. \end{DoxyCompactList}\item 
+void \hyperlink{_p_c___handle_8c_ad790666f0aa55550f0856da23f35539f}{pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file} (void)
+\begin{DoxyCompactList}\small\item\em This function will replace the M\-O\-D\-E\-S.\-D\-A\-T file with new modes from the message variable U\-S\-A\-R\-T\-\_\-\-P\-C\-\_\-\-Recieved\-Packet. The message size can at most be 20 charachters -\/ writing\-\_\-file\-\_\-content. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This file deals with interacting with the P\-C, send/ receive messages. It also allows you to overwrite the modes used in the function. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_p_c___handle_8c_a05402208552afd86d984f4c0ec1997b1}{\index{P\-C\-\_\-\-Handle.\-c@{P\-C\-\_\-\-Handle.\-c}!pc\-\_\-parse\-\_\-message@{pc\-\_\-parse\-\_\-message}}
+\index{pc\-\_\-parse\-\_\-message@{pc\-\_\-parse\-\_\-message}!PC_Handle.c@{P\-C\-\_\-\-Handle.\-c}}
+\subsubsection[{pc\-\_\-parse\-\_\-message}]{\setlength{\rightskip}{0pt plus 5cm}void pc\-\_\-parse\-\_\-message (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_p_c___handle_8c_a05402208552afd86d984f4c0ec1997b1}
+
+
+This fucntion reads the message in U\-S\-A\-R\-T\-\_\-\-P\-C\-\_\-\-Recieved\-Packet. It determines its type and sends the appropriate message to P\-C The two possibilities are that you sent 'x' -\/ P\-C\-\_\-\-C\-M\-D\-\_\-\-I\-N\-I\-T -\/ this just gets response from the system. The other message is 'M' -\/ P\-C\-\_\-\-C\-M\-D\-\_\-\-N\-E\-W\-M\-O\-D\-E\-S this message type will change the mode file. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_p_c___handle_8c_ad790666f0aa55550f0856da23f35539f}{\index{P\-C\-\_\-\-Handle.\-c@{P\-C\-\_\-\-Handle.\-c}!pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file@{pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file}}
+\index{pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file@{pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file}!PC_Handle.c@{P\-C\-\_\-\-Handle.\-c}}
+\subsubsection[{pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}void pc\-\_\-requests\-\_\-to\-\_\-modify\-\_\-modes\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_p_c___handle_8c_ad790666f0aa55550f0856da23f35539f}
+
+
+This function will replace the M\-O\-D\-E\-S.\-D\-A\-T file with new modes from the message variable U\-S\-A\-R\-T\-\_\-\-P\-C\-\_\-\-Recieved\-Packet. The message size can at most be 20 charachters -\/ writing\-\_\-file\-\_\-content. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
