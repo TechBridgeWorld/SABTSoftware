@@ -8,9 +8,18 @@ To develop the Stand Alone Braille Tutor, follow these steps.
 - Windows XP or later
 - AVR Studio 4. Later versions may also work, but this guide assumes the use of AVR Studio 4. 
 - An AVR JTAGICE mkII programmer.
+- Two USB tpe A to USB type B cables.
+- Headphones or a speaker system with analog input.
 - Git or Github for Windows.
 
 ### Downloading the project from GitHub
+
+1. Download and install Github for Windows. This can be obtained from windows.github.com. 
+2. Obtain access to the repository at https://github.com/CMU-15-239/SABTSoftware.
+3. Click the "Clone in Windows" button and choose a location for the repository. This guide will assume the repository is copied to Documents\SABTSoftware.
+
+### Setting up the hardware
+1. Obtain the SABT Main Control Unit and one of the SABT User Interface boards. You will also need the JTAGICE mkII programmer, two USB (type A to type B) cables, and headphones or a speaker with an analog input.
 
 ## Template:
 
