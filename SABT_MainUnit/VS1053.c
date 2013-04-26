@@ -28,7 +28,7 @@ volatile unsigned char temp_address;
 unsigned char vs1053_initialize(void)
 {
   unsigned char retry;
-  
+
   spi_deselect_all();
   SPI_PORT &= ~_BV(MP3_RESET);    // De assert RESET line (Chip in the reset state)
   _delay_ms(20);                  // Hold for 20ms
@@ -41,14 +41,12 @@ unsigned char vs1053_initialize(void)
   {
     // Set PLL register to 3.5 (preferred for normal operation)
     vs1053_write_command(0x03,0x9800);
-    
+
     if(retry++ > 10 ) return 1;     // try this 10 times
   }
 
   _delay_ms(20);
-  
-  //vs1053_write_command(0x05,0x000A);        // Set low sample rate
-  
+
   retry = 0;
   while(vs1053_read_command(0x0B) != 0xFEFE)  // REDO if not written properly
   {
@@ -75,8 +73,7 @@ unsigned char vs1053_initialize(void)
 
   _delay_ms(20);
   vs1053_software_reset();
-  //_delay_ms(20);
-  
+
   spi_2x();
   return 0;
 }
@@ -88,7 +85,6 @@ void vs1053_software_reset(void)
 }
 
 
-//@TODO -  NEED TO fix so that it does not break if you press sound button during sound file
 /**
  * @brief this changes the sound files to make the volume go up.  
  *        Volume works in reverse for VS1053 - so 0 is hi and FEFE is low
@@ -104,8 +100,7 @@ bool vs1053_increase_vol(void)
   vs1053_volume = vs1053_volume - VOL_INCR;
   
   // Check for max volume we are allowing
-  //TODO - WHY IS THIS 0x1010
-  //vs1053_volume is an unsiged, so if you go belove 0, wraps around to high positive
+  //vs1053_volume is an unsigned, so if you go belove 0, wraps around to high positive
   if(vs1053_volume <= VOL_INCR)
   {
     vs1053_volume = VOL_INCR + 1;
@@ -137,13 +132,12 @@ bool vs1053_decrease_vol(void)
   vs1053_volume = vs1053_volume + VOL_INCR;
 
   // Check for min volume setting
-  //vs1053_volume is an unsiged, so if you go above FFFF, will wrap around to small number
+  //vs1053_volume is an unsigned, so if you go above FFFF, will wrap around to small number
   //Min_vol is assigned based off of testing.  IF you go down by more then 9, vol_INCR, when set at
   //1000. Sound will go up for 4 down presses before becoming completely quiet.  
   //make sure not to let this happen
   if(vs1053_volume >= (MIN_VOL - VOL_INCR))
   {
-    PRINTF("OVERFLOW\n\r");
     vs1053_volume = MIN_VOL - VOL_INCR - 1;
   }
   else
@@ -217,19 +211,19 @@ unsigned int vs1053_read_command(unsigned char addr)
 void request_to_play_mp3_file(const char* this_file)
 {
   int i = 0, j;
-  
+
   while(i < strlen((char*)g_file_name))
   {
     g_file_name[i++] = '\0';
   }
 
   i = 0;
-  
+
   // copy the file name to the global variable
   while(this_file[i] != '.')
   {
     g_file_name[i] = this_file[i];
-	i ++;
+    i++;
   }
 
   for(j = 0; j < 4; j ++)

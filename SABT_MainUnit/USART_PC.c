@@ -37,7 +37,7 @@ void init_usart_pc(void)
 unsigned char usart_pc_receive_action(void)
 {
   usart_pc_data_ready = false;
-  
+
   message_count++;
 
   // Received an entire line; process it
@@ -50,7 +50,7 @@ unsigned char usart_pc_receive_action(void)
       PRINTF((unsigned char *)"SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
-  
+
   // if header not yet received, build it
   if(!usart_pc_header_received)
   {
@@ -64,14 +64,9 @@ unsigned char usart_pc_receive_action(void)
       usart_pc_received_packet[0] = usart_pc_prefix[0];
       usart_pc_received_packet[1] = usart_pc_prefix[1];
       usart_pc_receive_msgcnt = 2;
-      //usart_pc_length_received=false;
-      //usart_received_payload_len=usart_pc_received_data;
-      //usart_pc_received_packet[usart_pc_receive_msgcnt]=usart_pc_received_data;
-      //usart_pc_length_received=true;
-      //usart_pc_receive_msgcnt++;
     }
     else if(((usart_pc_prefix[0] != 'P') || (usart_pc_prefix[1] != 'C')) &&
-            (message_count == 2))
+        (message_count == 2))
     {
       valid_message = false;
     }
@@ -84,44 +79,10 @@ unsigned char usart_pc_receive_action(void)
       usart_received_payload_len = usart_pc_receive_msgcnt;
       usart_pc_message_ready = true;
       usart_pc_header_received = false;
-      //usart_pc_length_received=false;
     }
     usart_pc_received_packet[usart_pc_receive_msgcnt++] = usart_pc_received_data;
   }
 
-/*
-  else if(!usart_pc_length_received)
-  {    
-    if(usart_pc_receive_msgcnt==2)
-    {
-      usart_received_payload_len=usart_pc_received_data;
-      if(usart_received_payload_len=='x') //If this is 'z', then this is the init port detect message >> Proceed with a port reply.
-      {
-        usart_pc_message_ready=false;
-        usart_pc_header_received=false;
-        usart_pc_length_received=false;
-        return 'z';
-      }
-      usart_pc_received_packet[usart_pc_receive_msgcnt]=usart_pc_received_data;
-      usart_pc_length_received=true;
-      usart_pc_receive_msgcnt++;
-    }
-    else
-    {
-      usart_pc_header_received=false;
-    }
-  }
-  else
-  {
-    usart_pc_received_packet[usart_pc_receive_msgcnt++]=usart_pc_received_data;
-    if(usart_pc_receive_msgcnt==usart_received_payload_len) //full message has been received
-    {
-      usart_pc_message_ready=true;
-      usart_pc_header_received=false;
-      usart_pc_length_received=false;
-    }
-  }    
-*/
   return 0;
 }
 
@@ -144,7 +105,7 @@ void usart_transmit_byte_to_pc(unsigned char data)
 void usart_transmit_string_to_pc_from_flash(char* str_data)
 {
   while (pgm_read_byte(&(*str_data)))
-   usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));
+    usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));
 }
 
 /**
@@ -156,5 +117,5 @@ void usart_transmit_string_to_pc_from_flash(char* str_data)
 void usart_transmit_string_to_pc(unsigned char* str_data)
 {
   while (*str_data)
-   usart_transmit_byte_to_pc(*str_data++);
+    usart_transmit_byte_to_pc(*str_data++);
 }

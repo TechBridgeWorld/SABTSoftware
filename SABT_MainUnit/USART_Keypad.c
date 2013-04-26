@@ -52,7 +52,7 @@ void usart_keypad_receive_action(void)
     usart_ui_prefix[2] = usart_keypad_received_data;
     usart_ui_prefix[0] = usart_ui_prefix[1];
     usart_ui_prefix[1] = usart_ui_prefix[2];
-    
+
     if((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I'))
     {
       usart_ui_header_received = true;
@@ -60,11 +60,6 @@ void usart_keypad_receive_action(void)
       usart_ui_received_packet[1] = usart_ui_prefix[1];
       usart_ui_receive_msgcnt = 2;
       usart_ui_length_received = false;
-      // TODO why is this commented out / remove
-      //usart_ui_received_payload_len=usart_keypad_received_data;
-      //usart_ui_received_packet[usart_ui_receive_msgcnt]=usart_keypad_received_data;
-      //USART_UI_length_reveived=true;
-      //usart_ui_receive_msgcnt++;
     }
   }
   // Get the length of the payload
@@ -116,7 +111,7 @@ void usart_transmit_byte_to_keypad(unsigned char data)
 void usart_transmit_string_to_keypad_from_flash(char* string)
 {
   while (pgm_read_byte(&(*string)))
-   usart_transmit_byte_to_keypad(pgm_read_byte(&(*string++)));
+    usart_transmit_byte_to_keypad(pgm_read_byte(&(*string++)));
 }
 
 /**
@@ -127,5 +122,5 @@ void usart_transmit_string_to_keypad_from_flash(char* string)
 void usart_transmit_string_to_keypad(unsigned char* string)
 {
   while (*string)
-   usart_transmit_byte_to_keypad(*string++);
+    usart_transmit_byte_to_keypad(*string++);
 }

@@ -12,7 +12,7 @@ int md4_current_state;
 char md4_last_dot, last_cell, expected_dot;
 
 char *item_list[11] = {"rock", "tree", "sky", "apple", "car", "dog",
-    "cat", "water", "floor", "leaf", "road"};
+  "cat", "water", "floor", "leaf", "road"};
 
 int items_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
@@ -31,19 +31,6 @@ int choose_word()
   char buf[10];
   sprintf(buf, "num=%i\r\n", num);
   PRINTF(buf);
-
-  while(items_used_list[num]) 
-  {
-    num = TCNT1;
-    num *= PRIME;
-    num = (abs(num) % 11);
-  }  
- 
-  items_used_list[num] = 1;
-
-  for(i = 0; i < 11; i ++){
-    sprintf(buf, "arr=%i, ",items_used_list[i] );
-    PRINTF(buf);
 
   }
   TX_NEWLINE_PC;
@@ -69,17 +56,17 @@ int choose_word()
  *                false failure (doesn't find a match)
  */
 bool place_letter() {
-    int i;
-    bool found_match = false;
-    
-    for (i = 0; i < strlen(current_word); i++) {
-        if (entered_letter == current_word[i]) {
-            input_word[i] = entered_letter;
-            found_match = true;
-        }
+  int i;
+  bool found_match = false;
+
+  for (i = 0; i < strlen(current_word); i++) {
+    if (entered_letter == current_word[i]) {
+      input_word[i] = entered_letter;
+      found_match = true;
     }
-    
-    return found_match;
+  }
+
+  return found_match;
 }
 
 /** 
@@ -92,7 +79,7 @@ bool md4_valid_letter(char button_bits){
   char letter_from_bits = get_letter_from_bits(button_bits);
   if((letter_from_bits >= 'a') && (letter_from_bits <= 'z')){
     entered_letter = letter_from_bits;
-	return true;
+    return true;
   }
   return false;
 }
@@ -105,10 +92,10 @@ bool md4_valid_letter(char button_bits){
  */
 void md4_play_requested_dot(void)
 {
-    // This will hold formatted file to access
-    char req_mp3[10];
-    sprintf((char*)req_mp3, "dot_%c.MP3", md4_last_dot);
-    request_to_play_mp3_file(req_mp3);
+  // This will hold formatted file to access
+  char req_mp3[10];
+  sprintf((char*)req_mp3, "dot_%c.MP3", md4_last_dot);
+  request_to_play_mp3_file(req_mp3);
 }
 
 void md4_reset(void)
@@ -126,82 +113,70 @@ void md4_main(void)
   switch(md4_current_state)
   {
     case MD4_STATE_INITIAL:
-      PRINTF("INITIAL\r\n");
       request_to_play_mp3_file("MD4INT.mp3");
 
       md4_current_state = MD4_STATE_CHOOSE_WORD;
-
       break;
-    
+
     case MD4_STATE_CHOOSE_WORD:
-      PRINTF("CHOOSING\r\n");
       current_word = item_list[choose_word()];
       input_word_index = 0;
       num_mistakes = 0;
-	  game_status = 0;
-      
-	  int i;
-	  for (i = 0; i < 11; i++) {
+      game_status = 0;
+
+      int i;
+      for (i = 0; i < 11; i++) {
         input_word[i] = '0';
-	  }
-          
+      }
+
       md4_current_state = MD4_STATE_SAY_STATUS;
       break;
-    
+
     case MD4_STATE_SAY_STATUS:
-      PRINTF("STATUS\r\n");	  
-          
       if (input_word_index == strlen(current_word)) {
         input_word_index = 0;
-		if (num_mistakes > 0) {
+        if (num_mistakes > 0) {
           request_to_play_mp3_file("and_mstk.mp3");
           md4_current_state = MD4_STATE_SAY_MISTAKES;
         } else
           md4_current_state = MD4_STATE_ASK_FOR_GUESS;
       } else {
         if (input_word[input_word_index] != '0') {
-	      char buf[10];
+          char buf[10];
           sprintf(buf, "%c.mp3", input_word[input_word_index]);
           request_to_play_mp3_file(buf);
         } else {
           request_to_play_mp3_file("blank.mp3");
         }
-    
+
         input_word_index++;
-	  }
-      
+      }
       break;
 
     case MD4_STATE_SAY_MISTAKES:
-      PRINTF("MISTAKES\r\n");
-      
-	  char bufff[10];
+      char bufff[10];
       sprintf(bufff, "%d_mstks.mp3", num_mistakes);
       request_to_play_mp3_file(bufff);
       md4_current_state = MD4_STATE_ASK_FOR_GUESS;
-          
       break;
 
     case MD4_STATE_ASK_FOR_GUESS:
       request_to_play_mp3_file("guess.mp3");
       md4_current_state = MD4_STATE_WAIT_INPUT;
-
-	  break;
+      break;
 
     case MD4_STATE_WAIT_INPUT:
       if(got_input){
-          got_input = false;
-          md4_current_state = MD4_STATE_PROC_INPUT;
+        got_input = false;
+        md4_current_state = MD4_STATE_PROC_INPUT;
       }
-    
       break;
-    
+
     case MD4_STATE_PROC_INPUT:
-      PRINTF("PROCESS\r\n");
 
       // nothing was entered so we repeat the word
       if (last_cell == 0) {
-	    md4_current_state = MD4_STATE_EVALUATE_GAME;
+        md4_current_state = MD4_STATE_EVALUATE_GAME;
       } else if (md4_valid_letter(last_cell)) {  // set entered_letter in valid_letter(), but return true or false
         char buff[7];
         sprintf(buff, "%c.mp3", entered_letter);
@@ -212,12 +187,9 @@ void md4_main(void)
         num_mistakes++;
         md4_current_state = MD4_STATE_EVALUATE_GAME;
       }
-
       break;
-    
-    case MD4_STATE_CHECK_MATCH:
-      PRINTF("CHECKING\r\n");
 
+    case MD4_STATE_CHECK_MATCH:
       // place_letter() returns true if the letter guessed is found in
       // the word, false otherwise. If true, it will place the entered_letter
       // into input_word.
@@ -227,37 +199,34 @@ void md4_main(void)
         request_to_play_mp3_file("no.mp3");
         num_mistakes++;
       }
-          
-      md4_current_state = MD4_STATE_EVALUATE_GAME;
 
+      md4_current_state = MD4_STATE_EVALUATE_GAME;
       break;
 
     case MD4_STATE_EVALUATE_GAME:       
-	  PRINTF("EVAL\r\n");   
 
       if (!strncmp(input_word, current_word, strlen(current_word))) {
-	    game_status = 1;
+        game_status = 1;
         request_to_play_mp3_file("you_win.mp3");  // "you have guessed the word!"
       } else if (num_mistakes == 7) {
-	    game_status = 1;
+        game_status = 1;
         request_to_play_mp3_file("you_lose.mp3"); // "you have made 7 mistakes the word you missed was"
       }
-    
-	  if (game_status == 0) {
-	    request_to_play_mp3_file("so_far.mp3");
-        md4_current_state = MD4_STATE_SAY_STATUS;
-	  } else if (game_status == 1) {
-        md4_current_state = MD4_STATE_READ_WORD;
-	  }
 
-      break;   
+      if (game_status == 0) {
+        request_to_play_mp3_file("so_far.mp3");
+        md4_current_state = MD4_STATE_SAY_STATUS;
+      } else if (game_status == 1) {
+        md4_current_state = MD4_STATE_READ_WORD;
+      }
+
+      break;
 
     case MD4_STATE_READ_WORD:
-      PRINTF("READ\r\n");
-          
+
       if (input_word_index == strlen(current_word)) {
         input_word_index = 0;
-		request_to_play_mp3_file("new_word.mp3");
+        request_to_play_mp3_file("new_word.mp3");
         md4_current_state = MD4_STATE_CHOOSE_WORD;
       } else {
         char nom[10];
@@ -265,22 +234,19 @@ void md4_main(void)
         request_to_play_mp3_file(nom);
 
         input_word_index++;
-	  }
+      }
 
-	  break;
+      break;
   }
 }
 
-void md4_call_mode_yes_answer(void)
-{
-}
+void md4_call_mode_yes_answer(void){}
 
-void md4_call_mode_no_answer(void)
-{
-}
+void md4_call_mode_no_answer(void){}
 
 /**
  * @brief  Set the dot the from input
+ * @param this_dot the input dot
  * @return Void
  */
 void md4_input_dot(char this_dot)
@@ -290,7 +256,8 @@ void md4_input_dot(char this_dot)
 }
 
 /**
- * @brief
+ * @brief handle cell input
+ * @param this_cell the input cell
  * @return Void
  */
 void md4_input_cell(char this_cell)

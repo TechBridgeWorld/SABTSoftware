@@ -91,7 +91,7 @@ unsigned char spi_transmit(unsigned char data)
 {
   // Start transmission
   SPDR = data;
-  
+
   // Wait for transmission complete
   while(!(SPSR & (1 << SPIF)));
   data = SPDR;

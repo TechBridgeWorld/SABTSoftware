@@ -67,6 +67,7 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - In the Animal Game, users wanted to be able to skip animals.
 - A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
 - Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
+- One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
 
 ## Doxygen Documentation  
 Documentation at http://cmu-15-239.github.com/SABTSoftware/
