@@ -23,6 +23,17 @@ See the programming guide - SABT\_programming\_guide.pdf.
 ### Loading the software binaries onto the SABT hardware
 See the programming guide - SABT\_programming\_guide.pdf.
 
+## Project Components
+This project is made up of 4 different physical boards, and 4 corresponding codebases.
+### SABT\_MainUnit
+This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
+### UserInterface(Primary)
+This folder contains all of the code for the first user interface board - the board with just six large braille dots. Open SABT\_Primary.aps in AVR Studio 4.
+### UserInterface(Intermediate)
+No work has been done yet in this folder, but it should contain the file SABT\_Intermediate.aps, and handle the intermediate user interface board.
+### UserInterface(Advanced)
+No work has been done yet in this folder, but it should contain the file SABT\_Advanced.aps, and handle the advanced user interface board.
+
 ## Current issues and pitfalls
 - We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
 - Pressing a volume button while an mp3 file is playing breaks the system.
