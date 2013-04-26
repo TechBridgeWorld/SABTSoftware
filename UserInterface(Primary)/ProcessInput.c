@@ -35,8 +35,6 @@ void process_the_dot(void)
 
   // PINC: the address of where dots are stored
 
-  // TODO condense all of this
-
   // Left column of dots (4-6)
   if(!(PINC & (1 << UI_BR1))) // Dot1
   {
@@ -120,93 +118,6 @@ void process_the_dot(void)
     // Send the packet (form A = dot input)
     send_packet('A', (char*)&mcu_message_payload, 3);
   }
-
-  /*uint8_t temp_dot = 0;
-  bool new_dot_detected = false;
-
-  // PINC: the address of where dots are stored
-
-  // TODO condense all of this
-
-  // Left column of dots (4-6)
-  if(!(PINC & (1 << UI_BR1))) // Dot1
-  {
-    if(!recently_pressed[0])
-	{
-      new_dot_detected = true;
-      temp_dot = 1;
-	}
-  }
-
-  if(!(PINC & (1 << UI_BR2))) // Dot2
-  {
-    if(!recently_pressed[1])
-	{
-      new_dot_detected = true;
-      temp_dot = 2;
-	}
-  }
-
-  if(!(PINC & (1 << UI_BR3))) // Dot3
-  {
-    if(!recently_pressed[2])
-	{
-      new_dot_detected = true;
-      temp_dot = 3;
-	}
-  }
-
-  // Right column of dots (1-3)
-  if(!(PINC & (1 << UI_BR4))) // Dot4
-  {
-    if(!recently_pressed[3])
-	{
-      new_dot_detected = true;
-      temp_dot = 4;
-	}
-  }
-
-  if(!(PINC & (1 << UI_BR5))) // Dot5
-  {
-    if(!recently_pressed[4])
-	{
-      new_dot_detected = true;
-      temp_dot = 5;
-	}
-  }
-
-  if(!(PINC & (1 << UI_BR6))) // Dot6
-  {
-    if(!recently_pressed[5])
-	{
-      new_dot_detected = true;
-      temp_dot = 6;
-	}
-  }
-
-  // We got an actual input
-  if(new_dot_detected)
-  {
-    // Switch to the correct dot formation (writing mode)
-    if(temp_dot > 3) temp_dot -= 3;
-    else temp_dot += 3;
-
-    //if(pi_last_dot_pressed == temp_dot) return;
-
-    pi_last_dot_pressed = temp_dot;
-    dots_pressed[temp_dot - 1] = true;
-
-    // Send the numeral of the dot pressed (as character)
-    mcu_message_payload[0] = '0' + pi_last_dot_pressed;
-
-    // The next two characters are for the row / column position of the braille
-    // cell. The primary board only has 1 cell, so these are both '1'
-    mcu_message_payload[1] = '1';
-    mcu_message_payload[2] = '1';
-
-    // Send the packet (form A = dot input)
-    send_packet('A', (char*)&mcu_message_payload, 3);
-  }*/
 }
 
 /**

@@ -10,14 +10,10 @@
 #define _TIMER_H_
 
 #define TIMER_INTERRUPT_RATE    780  //390
-//#define TIMER_COMMAND_DELAY_RATE  3     // Number of interrupts before we process commands
 #define TIMER_PRESS_DELAY_RATE    10     // Number of interrupts before we process inputs
 
 volatile bool timer_interrupt;  // Indicate interrupt should be processed
 volatile bool led_toggle;       // Toggle LEDs on and off
-
-//volatile int command_delay;
-//volatile int input_delay;
 
 void init_timer(void);
 void timer_routine(void);

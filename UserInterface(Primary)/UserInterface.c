@@ -16,19 +16,23 @@ void initialize_ui(void);
  * @brief debugging function to add delay
  * @return Void
  */
-void delay10(void)
+void delay(void)
 {
   int i = 0;
   int j = 0;
 
   for(i = 0; i < 100; i++){
     for(j = 0; j < 100; j++){
-      //DDRD &= ~_BV(UI_VOLDOWN);
     }
   }
   return;
 }
 
+/**
+ * @brief interrupt handler 
+ * @TODO - NEED TO FIGURE OUT WHAT INTERRUPT
+ * @return Void
+ */
 ISR(_VECTOR(20)){
   transmit_complete = true;
   set_stat_led2(true);
@@ -39,7 +43,7 @@ ISR(_VECTOR(20)){
  * Executes an infinite loop, should never return
  * @return Void
  */
-int main(void)//
+int main(void)
 {
   // Set up interfaces 
   initialize_ui();

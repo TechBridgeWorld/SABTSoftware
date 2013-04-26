@@ -283,6 +283,7 @@ void initialize_system(void)
   /*while(!done_rd_dict){
     read_dict_file();
 	PRINTF("HEY");
-  }/*
+  }(/
+
   request_to_play_mp3_file("WELCOME.MP3"); 
 }

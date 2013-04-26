@@ -29,7 +29,7 @@ void init_usart_mcu(void)
  * Fires when we receive data from the MCU.
  * @return Void
  */
-ISR(/* USART0_RX_vect */ _VECTOR(18))
+ISR(_VECTOR(18))
 {
   usart_mcu_received_data = UDR0;
   usart_mcu_data_ready = true;
@@ -37,14 +37,11 @@ ISR(/* USART0_RX_vect */ _VECTOR(18))
 
 /**
  * @brief receive action sent from PC
- * @TODO: why is line commented out / how does it work
- * @TODO: does the UI board ever directly get PC input?
  * @return Void
  */
 void usart_pc_receive_action(void)
 {
   usart_mcu_data_ready = false;
-  //USART_transmitByteToMCU(USART_PC_Received_Data);
 }
 
 /**
