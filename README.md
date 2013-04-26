@@ -31,6 +31,13 @@ TODO: Finish this part on the lab computer (binary location)
 
 ## Opportunities for further development
 - Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
+- Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
+- From user testing, we found that some users entered dots very quickly. It would be very helpful to have either some mechanism to skip MP3s (if a user already knows the prompt) or some way to adjust the speed of the MP3 playback.
+- The Animal Game could be expanded to include more animal sounds, and to include a variety of animals such that all of the letters are tested at some point.
+- In the Animal Game, users wanted to be able to skip animals.
+- A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
+- Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
+
 
 ## Template:
 
