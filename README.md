@@ -13,13 +13,24 @@ To develop the Stand Alone Braille Tutor, follow these steps.
 - Git or Github for Windows.
 
 ### Downloading the project from GitHub
-
 1. Download and install Github for Windows. This can be obtained from windows.github.com. 
 2. Obtain access to the repository at https://github.com/CMU-15-239/SABTSoftware.
 3. Click the "Clone in Windows" button and choose a location for the repository. This guide will assume the repository is copied to Documents\SABTSoftware.
 
-### Setting up the hardware
+TODO: Finish this part on the lab computer
+### Compiling the software
+1. In AVR Studio 4, open Documents\SABTSoftware\SABT\_MainUnit\...
+
+TODO: Finish this part on the lab computer (binary location)
+### Loading the software binaries onto the SABT hardware
 1. Obtain the SABT Main Control Unit and one of the SABT User Interface boards. You will also need the JTAGICE mkII programmer, two USB (type A to type B) cables, and headphones or a speaker with an analog input.
+2. Remove all of the casing from the two boards.
+3. Connect...
+
+## Current Issues and Pitfalls
+
+## Opportunities for further development
+- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, if in letter practice
 
 ## Template:
 
