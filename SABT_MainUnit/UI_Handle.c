@@ -91,15 +91,11 @@ bool ui_check_modes(void)
     i++;    
   }
 
-  usart_transmit_string_to_pc_from_flash(PSTR("Number of modes selected: "));
-
   pc_print_content[0] = 0;
   pc_print_content[1] = 0;
 
   // Print the number of modes found to a string
   sprintf((char*)&pc_print_content[0], "%d", number_of_modes);
-  usart_transmit_string_to_pc(&pc_print_content[0]);
-  TX_NEWLINE_PC;
 
   // Send the actual modes
   usart_transmit_string_to_pc_from_flash(PSTR("And the modes are; "));

@@ -70,6 +70,9 @@ void md5_reset(void)
  */
 void md5_main(void)
 {
+  char huff[10];
+  char bufff[10];
+  int i;
   switch(md5_current_state)
   {
     case MD5_STATE_INITIAL:
@@ -79,7 +82,6 @@ void md5_main(void)
       break;
 
     case MD5_STATE_SETUP_VARS:
-      int i;
       for (i = 0; i < MAX_LEN + 1; i++) {
         player1_word[i] = '0';
         input_word[i] = '0';
@@ -162,7 +164,6 @@ void md5_main(void)
       break;
 
     case MD5_STATE_SAY_STATUS:
-      char huff[10];
       sprintf(huff, "%s\r\n", player1_word);
       PRINTF(huff);
       if (input_word_index == strlen(player1_word)) {
@@ -186,7 +187,6 @@ void md5_main(void)
       break;
 
     case MD5_STATE_SAY_MISTAKES:
-      char bufff[10];
       sprintf(bufff, "%d_mstks.mp3", num_mistakes);
       request_to_play_mp3_file(bufff);
       md5_current_state = MD5_STATE_ASK_FOR_GUESS;

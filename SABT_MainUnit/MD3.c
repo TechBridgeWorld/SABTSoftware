@@ -114,6 +114,7 @@ bool valid_letter(char button_bits){
  */
 void md3_main(void)
 {
+  char animal_file[16];
   switch(md3_current_state)
   {
     case STATE_INITIAL:
@@ -140,7 +141,6 @@ void md3_main(void)
 
     case STATE_REQUEST_INPUT2:
 
-      char animal_file[16];
       sprintf(animal_file, "%s.mp3", animal);
       request_to_play_mp3_file(animal_file);
 

@@ -32,7 +32,6 @@ int choose_word()
   sprintf(buf, "num=%i\r\n", num);
   PRINTF(buf);
 
-  }
   TX_NEWLINE_PC;
   sprintf(buf, "cnt=%i", items_used+1);
   PRINTF(buf);
@@ -110,6 +109,7 @@ void md4_reset(void)
  */
 void md4_main(void)
 {
+  char bufff[10];
   switch(md4_current_state)
   {
     case MD4_STATE_INITIAL:
@@ -154,7 +154,6 @@ void md4_main(void)
       break;
 
     case MD4_STATE_SAY_MISTAKES:
-      char bufff[10];
       sprintf(bufff, "%d_mstks.mp3", num_mistakes);
       request_to_play_mp3_file(bufff);
       md4_current_state = MD4_STATE_ASK_FOR_GUESS;
