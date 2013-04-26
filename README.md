@@ -8,7 +8,7 @@ To develop the Stand Alone Braille Tutor, follow these steps.
 - Windows XP or later
 - AVR Studio 4. Later versions may also work, but this guide assumes the use of AVR Studio 4. 
 - An AVR JTAGICE mkII programmer.
-- Two USB tpe A to USB type B cables.
+- Two USB type A to USB type B cables.
 - Headphones or a speaker system with analog input.
 - Git or Github for Windows.
 
@@ -30,7 +30,7 @@ TODO: Finish this part on the lab computer (binary location)
 ## Current Issues and Pitfalls
 
 ## Opportunities for further development
-- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, if in letter practice
+- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
 
 ## Template:
 
