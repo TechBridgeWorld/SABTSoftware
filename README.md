@@ -55,7 +55,7 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
 - Pressing a volume button while an mp3 file is playing breaks the system.
 - We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is:
-```
+```c
 ../FAT32.c: In function 'read_and_retrieve_file_contents':
 ../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function
 ```
