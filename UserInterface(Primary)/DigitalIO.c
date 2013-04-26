@@ -50,7 +50,6 @@ void initialize_digital_io(void)
 /**
  * @brief determine whether command buttons have been pressed
  * @return Void
- * TODO document each step / if statement here
  */
 void check_command_buttons(void)
 {
@@ -160,13 +159,6 @@ void run_command_tasks(void)
     mode2_task();
     mode2_state = BUTTON_PROCESSED;
   }
-  // Flip from reading / writing mode
-  /*if((vol_down_state >= BUTTON_ON) && (vol_up_state >= BUTTON_ON)) // Flip the keyboard
-  {
-    if(interface_type == INTERFACE_READING) interface_type = INTERFACE_WRITING;
-    else interface_type = INTERFACE_READING;
-    return;
-  }*/
   if(vol_up_state == BUTTON_ON)
   {
     vol_up_task();
@@ -191,11 +183,11 @@ void enter1_task(void)
   mcu_message_payload[0] = ENTER1_PAYLOAD;
   send_packet('D', (char*)&mcu_message_payload, 1);
   
-  // TODO fix this
-
+  //@TODO fix this --- THIS MAKES IT WORK. FIND BETTER WAY TO DO THIS
+  
   for(i = 0; i < 15; i++)
   {
-    delay10();
+    delay();
   }
 
   // Send the value of the currently entered cell

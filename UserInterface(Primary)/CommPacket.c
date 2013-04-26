@@ -89,7 +89,6 @@ bool mcu_compile_packet(char cmd, char* payload, int payload_length)
  * @param payload the message
  * @param payload_length length of the message
  * @return Void
- * @TODO: make sure sent packages can't race / be garbled
  */
 void send_packet(char cmd, char* payload, int payload_length)
 {

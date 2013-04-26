@@ -13,7 +13,6 @@
  * @return Void
  * The timer is set up in compare mode - an interrupt fires when the counter
  * value is the same as the value in OCR1A
- * TODO enumerate the ports being set
  */
 void init_timer(void)
 {
@@ -22,15 +21,13 @@ void init_timer(void)
   TCCR1B = 0x0D;
   OCR1A = TIMER_INTERRUPT_RATE; // Set timer interrupt rate
   TIMSK1 |= (1<<OCIE1A);        // Enable timer interrupt
-  //input_delay = 0;
-  //command_delay = 0;
 }
 
 /**
  * @brief interrupt handler for TIMER1_COMPA_vect
  * @return Void
  */
-ISR(/*TIMER1_COMPA_vect*/ _VECTOR(11)){
+ISR(_VECTOR(11)){
   timer_interrupt = true;
 };
 
@@ -60,19 +57,6 @@ void timer_routine(void)
   check_command_buttons();
   run_command_tasks();
   process_the_dot();
-
-  /*input_delay = (input_delay + 1) % TIMER_INPUT_DELAY_RATE;
-  if(input_delay == 0) 
-  {
-    process_the_dot();
-  }
-
-  command_delay = (command_delay + 1) % TIMER_COMMAND_DELAY_RATE;
-  if(command_delay == 0)
-  {
-    check_command_buttons();
-    run_command_tasks();
-  }*/
 
   for (i = 0; i < NUM_DOTS; i++)
   {
