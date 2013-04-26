@@ -1,0 +1,162 @@
+\hypertarget{_m_d1_8c}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D1.c File Reference}
+\label{_m_d1_8c}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D1.\-c@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D1.\-c}}
+}
+
+
+Mode 1 code -\/ Dot Practice.  
+
+
+{\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}M\-D1.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{_m_d1_8c_a4dc745bc4066253d3030a0c693f179cf}{random\-\_\-number\-\_\-as\-\_\-char} ()
+\begin{DoxyCompactList}\small\item\em based off of the internal timer (T\-C\-N\-T1) -\/ we generate a psuedo-\/random number. Turn that into a number from 1 -\/ 6 return the charachter of that number; \end{DoxyCompactList}\item 
+void \hyperlink{_m_d1_8c_a6cca24722d7ca23202fcf6901ca1cdc7}{md1\-\_\-play\-\_\-requested\-\_\-dot} (unsigned char last\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em echo the number of the dot pressed \end{DoxyCompactList}\item 
+void \hyperlink{_m_d1_8c_ab69636e331ff676ce1683c15c86dba01}{md1\-\_\-reset} (void)
+\begin{DoxyCompactList}\small\item\em Reset mode 1 to starting state Should be useful for error handling. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d1_8c_a952027a148f5f447bb88c2c32b19d6ac}{md1\-\_\-main} (void)
+\begin{DoxyCompactList}\small\item\em main code for Mode 1 Prompts the user to press a certain random dot, gives feedback based on whether they pressed the correct dot \end{DoxyCompactList}\item 
+void \hyperlink{_m_d1_8c_ab1fa64c3242a436528fa06ce9160ed87}{md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer} (void)
+\begin{DoxyCompactList}\small\item\em in mode 1, enter button just replays the current prompt \end{DoxyCompactList}\item 
+\hypertarget{_m_d1_8c_a97b75e73802c5d9060e55975b899a8b6}{void {\bfseries md1\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer} (void)}\label{_m_d1_8c_a97b75e73802c5d9060e55975b899a8b6}
+
+\item 
+void \hyperlink{_m_d1_8c_aff71fdb659b55926eede0e4976c17e22}{md1\-\_\-input\-\_\-dot} (char this\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em register dot input Sets the program to S\-T\-A\-T\-E\-\_\-\-P\-R\-O\-C\-\_\-\-I\-N\-P\-U\-T \end{DoxyCompactList}\item 
+void \hyperlink{_m_d1_8c_a9d71a38f412eb2920062c7bfb5c284ee}{md1\-\_\-input\-\_\-cell} (char this\-\_\-cell)
+\begin{DoxyCompactList}\small\item\em register cell input \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_m_d1_8c_ac4641e5eeba4f7792bdcf5f2f66fa789}{char {\bfseries used\-\_\-number} \mbox{[}6\mbox{]} = \{0, 0, 0, 0, 0, 0\}}\label{_m_d1_8c_ac4641e5eeba4f7792bdcf5f2f66fa789}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Mode 1 code -\/ Dot Practice. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_m_d1_8c_ab1fa64c3242a436528fa06ce9160ed87}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}}
+\index{md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer@{md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_ab1fa64c3242a436528fa06ce9160ed87}
+
+
+in mode 1, enter button just replays the current prompt 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_a9d71a38f412eb2920062c7bfb5c284ee}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-input\-\_\-cell@{md1\-\_\-input\-\_\-cell}}
+\index{md1\-\_\-input\-\_\-cell@{md1\-\_\-input\-\_\-cell}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-input\-\_\-cell}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-input\-\_\-cell (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-cell}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_a9d71a38f412eb2920062c7bfb5c284ee}
+
+
+register cell input 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this\-\_\-cell} & the cell being input \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_aff71fdb659b55926eede0e4976c17e22}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-input\-\_\-dot@{md1\-\_\-input\-\_\-dot}}
+\index{md1\-\_\-input\-\_\-dot@{md1\-\_\-input\-\_\-dot}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-input\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-input\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_aff71fdb659b55926eede0e4976c17e22}
+
+
+register dot input Sets the program to S\-T\-A\-T\-E\-\_\-\-P\-R\-O\-C\-\_\-\-I\-N\-P\-U\-T 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this\-\_\-dot} & the dot being input \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_a952027a148f5f447bb88c2c32b19d6ac}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-main@{md1\-\_\-main}}
+\index{md1\-\_\-main@{md1\-\_\-main}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-main}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-main (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_a952027a148f5f447bb88c2c32b19d6ac}
+
+
+main code for Mode 1 Prompts the user to press a certain random dot, gives feedback based on whether they pressed the correct dot 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_a6cca24722d7ca23202fcf6901ca1cdc7}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-play\-\_\-requested\-\_\-dot@{md1\-\_\-play\-\_\-requested\-\_\-dot}}
+\index{md1\-\_\-play\-\_\-requested\-\_\-dot@{md1\-\_\-play\-\_\-requested\-\_\-dot}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-play\-\_\-requested\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-play\-\_\-requested\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{last\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_a6cca24722d7ca23202fcf6901ca1cdc7}
+
+
+echo the number of the dot pressed 
+
+
+\begin{DoxyParams}{Parameters}
+{\em last\-\_\-dot} & -\/ unsigned char. Which dot to play \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_ab69636e331ff676ce1683c15c86dba01}{\index{M\-D1.\-c@{M\-D1.\-c}!md1\-\_\-reset@{md1\-\_\-reset}}
+\index{md1\-\_\-reset@{md1\-\_\-reset}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{md1\-\_\-reset}]{\setlength{\rightskip}{0pt plus 5cm}void md1\-\_\-reset (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_ab69636e331ff676ce1683c15c86dba01}
+
+
+Reset mode 1 to starting state Should be useful for error handling. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d1_8c_a4dc745bc4066253d3030a0c693f179cf}{\index{M\-D1.\-c@{M\-D1.\-c}!random\-\_\-number\-\_\-as\-\_\-char@{random\-\_\-number\-\_\-as\-\_\-char}}
+\index{random\-\_\-number\-\_\-as\-\_\-char@{random\-\_\-number\-\_\-as\-\_\-char}!MD1.c@{M\-D1.\-c}}
+\subsubsection[{random\-\_\-number\-\_\-as\-\_\-char}]{\setlength{\rightskip}{0pt plus 5cm}char random\-\_\-number\-\_\-as\-\_\-char (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_m_d1_8c_a4dc745bc4066253d3030a0c693f179cf}
+
+
+based off of the internal timer (T\-C\-N\-T1) -\/ we generate a psuedo-\/random number. Turn that into a number from 1 -\/ 6 return the charachter of that number; 
+
+\begin{DoxyReturn}{Returns}
+char -\/ charachter representation of a number from 1 -\/ 6 
+\end{DoxyReturn}

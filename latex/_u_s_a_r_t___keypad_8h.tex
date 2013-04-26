@@ -1,0 +1,163 @@
+\hypertarget{_u_s_a_r_t___keypad_8h}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-S\-A\-R\-T\-\_\-\-Keypad.h File Reference}
+\label{_u_s_a_r_t___keypad_8h}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+}
+
+
+handle U\-S\-A\-R\-T-\/\-U\-I interactions  
+
+
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_a35cd67ba7bb0db8105eb6267467535d7}{\#define {\bfseries C\-H\-A\-R}~0}\label{_u_s_a_r_t___keypad_8h_a35cd67ba7bb0db8105eb6267467535d7}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_afeeffe52c8fd59db7c61cf8b02042dbf}{\#define {\bfseries I\-N\-T}~1}\label{_u_s_a_r_t___keypad_8h_afeeffe52c8fd59db7c61cf8b02042dbf}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_acaa7b8a7167a8214f499c71c413ddcca}{\#define {\bfseries L\-O\-N\-G}~2}\label{_u_s_a_r_t___keypad_8h_acaa7b8a7167a8214f499c71c413ddcca}
+
+\item 
+\#define {\bfseries T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_u_s_a_r_t___keypad_8h_acbbdad60a7af57cee352a66bac180a34}{init\-\_\-usart\-\_\-keypad} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the baud communication over U\-S\-A\-R\-T. \end{DoxyCompactList}\item 
+void \hyperlink{_u_s_a_r_t___keypad_8h_a696a3a6dee4fbf795a8a3f1de4eb2d7a}{usart\-\_\-keypad\-\_\-receive\-\_\-action} (void)
+\begin{DoxyCompactList}\small\item\em Receives message stored in globabl usart\-\_\-keypad\-\_\-received\-\_\-data Then proceeds to decode message, use its value, and allow for more messages to be sent. usart\-\_\-ui\-\_\-prefix -\/ mini shift register which shifts from 2 -\/$>$ 1 -\/$>$ 0 Transfers data from U\-S\-A\-R\-T\-\_\-\-Keypad\-\_\-\-Reiceved\-\_\-\-Data-\/$>$usart\-\_\-ui\-\_\-received\-\_\-packet tech\-\_\-report.\-pdf. \end{DoxyCompactList}\item 
+void \hyperlink{_u_s_a_r_t___keypad_8h_a008865a248e3a0cccd35640444700fa6}{usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad} (unsigned char)
+\begin{DoxyCompactList}\small\item\em Transmits byte data from M\-C --$>$ U\-I over U\-D\-R1. \end{DoxyCompactList}\item 
+void \hyperlink{_u_s_a_r_t___keypad_8h_a17169d1cc97b5d733ed5ddbbe8d51f78}{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad} (unsigned char $\ast$)
+\begin{DoxyCompactList}\small\item\em Transmits string data from M\-C --$>$ U\-I over U\-D\-R1. \end{DoxyCompactList}\item 
+void \hyperlink{_u_s_a_r_t___keypad_8h_a6714b1861dbaf5ac7f618181d82de081}{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash} (char $\ast$)
+\begin{DoxyCompactList}\small\item\em Transmits string data from M\-C Flash --$>$ U\-I over U\-D\-R1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_a1f3512a13fd61e593c1a2f0afee3c3ad}{volatile char {\bfseries usart\-\_\-keypad\-\_\-received\-\_\-data}}\label{_u_s_a_r_t___keypad_8h_a1f3512a13fd61e593c1a2f0afee3c3ad}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_a13f951f16f74418e3b04a8dee2cdb03b}{volatile char {\bfseries usart\-\_\-keypad\-\_\-data\-\_\-to\-\_\-transmit}}\label{_u_s_a_r_t___keypad_8h_a13f951f16f74418e3b04a8dee2cdb03b}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_a3b8b21bb09923d4908c077ee853fa2f1}{volatile bool {\bfseries usart\-\_\-keypad\-\_\-data\-\_\-ready}}\label{_u_s_a_r_t___keypad_8h_a3b8b21bb09923d4908c077ee853fa2f1}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_adf94f6d36956fac281fb9b9c2c0c63cd}{volatile bool {\bfseries usart\-\_\-ui\-\_\-message\-\_\-ready}}\label{_u_s_a_r_t___keypad_8h_adf94f6d36956fac281fb9b9c2c0c63cd}
+
+\item 
+\hypertarget{_u_s_a_r_t___keypad_8h_a81925481c476ad4277b99d8d4fe475d7}{volatile unsigned char {\bfseries usart\-\_\-ui\-\_\-received\-\_\-packet} \mbox{[}20\mbox{]}}\label{_u_s_a_r_t___keypad_8h_a81925481c476ad4277b99d8d4fe475d7}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+handle U\-S\-A\-R\-T-\/\-U\-I interactions \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{_u_s_a_r_t___keypad_8h_a28a315dc3ac0544a92e44703a4c83471}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P@{T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P}}
+\index{T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P@{T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\-X\-\_\-\-N\-E\-W\-L\-I\-N\-E\-\_\-\-K\-P}}\label{_u_s_a_r_t___keypad_8h_a28a315dc3ac0544a92e44703a4c83471}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\{ \hyperlink{_u_s_a_r_t___keypad_8c_a7602ce6da64d44da388a23d48520c26b}{usart\_transmit\_byte\_to\_keypad}(0x0d); \(\backslash\)
+                        usart\_transmit\_byte\_to\_keypad(0x0a);\}
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\hypertarget{_u_s_a_r_t___keypad_8h_acbbdad60a7af57cee352a66bac180a34}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!init\-\_\-usart\-\_\-keypad@{init\-\_\-usart\-\_\-keypad}}
+\index{init\-\_\-usart\-\_\-keypad@{init\-\_\-usart\-\_\-keypad}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{init\-\_\-usart\-\_\-keypad}]{\setlength{\rightskip}{0pt plus 5cm}void init\-\_\-usart\-\_\-keypad (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_s_a_r_t___keypad_8h_acbbdad60a7af57cee352a66bac180a34}
+
+
+Initializes the baud communication over U\-S\-A\-R\-T. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_s_a_r_t___keypad_8h_a696a3a6dee4fbf795a8a3f1de4eb2d7a}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!usart\-\_\-keypad\-\_\-receive\-\_\-action@{usart\-\_\-keypad\-\_\-receive\-\_\-action}}
+\index{usart\-\_\-keypad\-\_\-receive\-\_\-action@{usart\-\_\-keypad\-\_\-receive\-\_\-action}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{usart\-\_\-keypad\-\_\-receive\-\_\-action}]{\setlength{\rightskip}{0pt plus 5cm}void usart\-\_\-keypad\-\_\-receive\-\_\-action (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_u_s_a_r_t___keypad_8h_a696a3a6dee4fbf795a8a3f1de4eb2d7a}
+
+
+Receives message stored in globabl usart\-\_\-keypad\-\_\-received\-\_\-data Then proceeds to decode message, use its value, and allow for more messages to be sent. usart\-\_\-ui\-\_\-prefix -\/ mini shift register which shifts from 2 -\/$>$ 1 -\/$>$ 0 Transfers data from U\-S\-A\-R\-T\-\_\-\-Keypad\-\_\-\-Reiceved\-\_\-\-Data-\/$>$usart\-\_\-ui\-\_\-received\-\_\-packet tech\-\_\-report.\-pdf. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_s_a_r_t___keypad_8h_a008865a248e3a0cccd35640444700fa6}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad@{usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad}}
+\index{usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad@{usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad}]{\setlength{\rightskip}{0pt plus 5cm}void usart\-\_\-transmit\-\_\-byte\-\_\-to\-\_\-keypad (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{data}
+\end{DoxyParamCaption}
+)}}\label{_u_s_a_r_t___keypad_8h_a008865a248e3a0cccd35640444700fa6}
+
+
+Transmits byte data from M\-C --$>$ U\-I over U\-D\-R1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ unsigned char, byte to transmit to U\-I \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_s_a_r_t___keypad_8h_a17169d1cc97b5d733ed5ddbbe8d51f78}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad@{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad}}
+\index{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad@{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad}]{\setlength{\rightskip}{0pt plus 5cm}void usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}}\label{_u_s_a_r_t___keypad_8h_a17169d1cc97b5d733ed5ddbbe8d51f78}
+
+
+Transmits string data from M\-C --$>$ U\-I over U\-D\-R1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & -\/ char$\ast$, String to transmit to U\-I \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_u_s_a_r_t___keypad_8h_a6714b1861dbaf5ac7f618181d82de081}{\index{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}!usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash@{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash}}
+\index{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash@{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash}!USART_Keypad.h@{U\-S\-A\-R\-T\-\_\-\-Keypad.\-h}}
+\subsubsection[{usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash}]{\setlength{\rightskip}{0pt plus 5cm}void usart\-\_\-transmit\-\_\-string\-\_\-to\-\_\-keypad\-\_\-from\-\_\-flash (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}}\label{_u_s_a_r_t___keypad_8h_a6714b1861dbaf5ac7f618181d82de081}
+
+
+Transmits string data from M\-C Flash --$>$ U\-I over U\-D\-R1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & -\/ char$\ast$, String to transmit to U\-I \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

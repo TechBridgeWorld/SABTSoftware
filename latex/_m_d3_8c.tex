@@ -1,0 +1,178 @@
+\hypertarget{_m_d3_8c}{\section{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D3.c File Reference}
+\label{_m_d3_8c}\index{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D3.\-c@{S\-A\-B\-T\-\_\-\-Main\-Unit/\-M\-D3.\-c}}
+}
+
+
+Mode 3 code -\/ Animal Game.  
+
+
+{\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Modes.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}letter\-\_\-globals.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{_m_d3_8c_a15ee0bb8d8ede4ef3346ec392b1d2b5b}{choose\-\_\-animal} ()
+\begin{DoxyCompactList}\small\item\em Based off of the internal timer (T\-C\-N\-T1) -\/ we generate a psuedo-\/random number. Turn that into a number from 1 -\/ 11 which corresponds to 1 of 11 different animals. Check which animals have been played already to be sure to play all of the different animals before repeating the list. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d3_8c_ad134799c59f6161ec582c4d76f427f8b}{play\-\_\-requested\-\_\-dot} (void)
+\begin{DoxyCompactList}\small\item\em Given a char, in last\-\_\-cell, play the corresponding number sound file. \end{DoxyCompactList}\item 
+\hypertarget{_m_d3_8c_a064beed25bd855826847e283f299652a}{void {\bfseries md3\-\_\-reset} (void)}\label{_m_d3_8c_a064beed25bd855826847e283f299652a}
+
+\item 
+bool \hyperlink{_m_d3_8c_a236712cb281cbc382677740705597f9b}{valid\-\_\-letter} (char button\-\_\-bits)
+\begin{DoxyCompactList}\small\item\em Check if the input dot combination is a valid letter. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d3_8c_ab964d6722c950cd47f5df9637fab25bb}{md3\-\_\-main} (void)
+\begin{DoxyCompactList}\small\item\em Step through the main stages in the code. Note \-: We need 2 S\-T\-A\-T\-E\-\_\-\-R\-E\-Q\-U\-E\-S\-T\-\_\-\-I\-N\-P\-U\-T states because request\-\_\-to\-\_\-play\-\_\-mp3\-\_\-file cannot handle 2 calls in quick succession. \end{DoxyCompactList}\item 
+\hypertarget{_m_d3_8c_a4f4349c6659032406efcbc7b64aa8cb5}{void {\bfseries md3\-\_\-call\-\_\-mode\-\_\-yes\-\_\-answer} (void)}\label{_m_d3_8c_a4f4349c6659032406efcbc7b64aa8cb5}
+
+\item 
+\hypertarget{_m_d3_8c_a21959dfb85a7490888cef4172dec336b}{void {\bfseries md3\-\_\-call\-\_\-mode\-\_\-no\-\_\-answer} (void)}\label{_m_d3_8c_a21959dfb85a7490888cef4172dec336b}
+
+\item 
+void \hyperlink{_m_d3_8c_a35811859179a64fbc34d8830754c9e78}{md3\-\_\-input\-\_\-dot} (char this\-\_\-dot)
+\begin{DoxyCompactList}\small\item\em Set the dot the from input. \end{DoxyCompactList}\item 
+void \hyperlink{_m_d3_8c_af8192feb6f17bf4c2ba5e7265d995d59}{md3\-\_\-input\-\_\-cell} (char this\-\_\-cell)
+\begin{DoxyCompactList}\small\item\em handle cell input \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_m_d3_8c_adaafefed1fb68b83cf11989a404e31ea}{int {\bfseries md3\-\_\-current\-\_\-state}}\label{_m_d3_8c_adaafefed1fb68b83cf11989a404e31ea}
+
+\item 
+\hypertarget{_m_d3_8c_a10f3d74e9206efc9da0a23533c4cb82a}{char {\bfseries md3\-\_\-last\-\_\-dot}}\label{_m_d3_8c_a10f3d74e9206efc9da0a23533c4cb82a}
+
+\item 
+\hypertarget{_m_d3_8c_a0bfb0f4f7ae7ef00bacbf0c60032ed19}{char {\bfseries last\-\_\-cell}}\label{_m_d3_8c_a0bfb0f4f7ae7ef00bacbf0c60032ed19}
+
+\item 
+\hypertarget{_m_d3_8c_ad2aa26273e1424dbc54fd1b73071d4fb}{char {\bfseries expected\-\_\-dot}}\label{_m_d3_8c_ad2aa26273e1424dbc54fd1b73071d4fb}
+
+\item 
+char $\ast$ {\bfseries animal\-\_\-list} \mbox{[}11\mbox{]}
+\item 
+\hypertarget{_m_d3_8c_a59d20e216b754bced7b8e54ae62ecf82}{int {\bfseries animal\-\_\-used\-\_\-list} \mbox{[}11\mbox{]} = \{0,0,0,0,0,0,0,0,0,0,0\}}\label{_m_d3_8c_a59d20e216b754bced7b8e54ae62ecf82}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Mode 3 code -\/ Animal Game. \begin{DoxyAuthor}{Author}
+Nick La\-Grow (nlagrow) 
+
+Alex Etling (petling) 
+
+Kory Stiger (kstiger) 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{_m_d3_8c_a15ee0bb8d8ede4ef3346ec392b1d2b5b}{\index{M\-D3.\-c@{M\-D3.\-c}!choose\-\_\-animal@{choose\-\_\-animal}}
+\index{choose\-\_\-animal@{choose\-\_\-animal}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{choose\-\_\-animal}]{\setlength{\rightskip}{0pt plus 5cm}int choose\-\_\-animal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_a15ee0bb8d8ede4ef3346ec392b1d2b5b}
+
+
+Based off of the internal timer (T\-C\-N\-T1) -\/ we generate a psuedo-\/random number. Turn that into a number from 1 -\/ 11 which corresponds to 1 of 11 different animals. Check which animals have been played already to be sure to play all of the different animals before repeating the list. 
+
+\begin{DoxyReturn}{Returns}
+int -\/ number between 1 -\/ 11 corresponding to the animal file to play 
+\end{DoxyReturn}
+\hypertarget{_m_d3_8c_af8192feb6f17bf4c2ba5e7265d995d59}{\index{M\-D3.\-c@{M\-D3.\-c}!md3\-\_\-input\-\_\-cell@{md3\-\_\-input\-\_\-cell}}
+\index{md3\-\_\-input\-\_\-cell@{md3\-\_\-input\-\_\-cell}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{md3\-\_\-input\-\_\-cell}]{\setlength{\rightskip}{0pt plus 5cm}void md3\-\_\-input\-\_\-cell (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-cell}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_af8192feb6f17bf4c2ba5e7265d995d59}
+
+
+handle cell input 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this\-\_\-cell} & the entered cell \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d3_8c_a35811859179a64fbc34d8830754c9e78}{\index{M\-D3.\-c@{M\-D3.\-c}!md3\-\_\-input\-\_\-dot@{md3\-\_\-input\-\_\-dot}}
+\index{md3\-\_\-input\-\_\-dot@{md3\-\_\-input\-\_\-dot}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{md3\-\_\-input\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void md3\-\_\-input\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{char}]{this\-\_\-dot}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_a35811859179a64fbc34d8830754c9e78}
+
+
+Set the dot the from input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this\-\_\-dot} & the entered dot \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d3_8c_ab964d6722c950cd47f5df9637fab25bb}{\index{M\-D3.\-c@{M\-D3.\-c}!md3\-\_\-main@{md3\-\_\-main}}
+\index{md3\-\_\-main@{md3\-\_\-main}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{md3\-\_\-main}]{\setlength{\rightskip}{0pt plus 5cm}void md3\-\_\-main (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_ab964d6722c950cd47f5df9637fab25bb}
+
+
+Step through the main stages in the code. Note \-: We need 2 S\-T\-A\-T\-E\-\_\-\-R\-E\-Q\-U\-E\-S\-T\-\_\-\-I\-N\-P\-U\-T states because request\-\_\-to\-\_\-play\-\_\-mp3\-\_\-file cannot handle 2 calls in quick succession. 
+
+\begin{DoxyReturn}{Returns}
+Void  record M\-D3\-I\-N\-T.\-M\-P3 
+\end{DoxyReturn}
+\hypertarget{_m_d3_8c_ad134799c59f6161ec582c4d76f427f8b}{\index{M\-D3.\-c@{M\-D3.\-c}!play\-\_\-requested\-\_\-dot@{play\-\_\-requested\-\_\-dot}}
+\index{play\-\_\-requested\-\_\-dot@{play\-\_\-requested\-\_\-dot}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{play\-\_\-requested\-\_\-dot}]{\setlength{\rightskip}{0pt plus 5cm}void play\-\_\-requested\-\_\-dot (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_ad134799c59f6161ec582c4d76f427f8b}
+
+
+Given a char, in last\-\_\-cell, play the corresponding number sound file. 
+
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\hypertarget{_m_d3_8c_a236712cb281cbc382677740705597f9b}{\index{M\-D3.\-c@{M\-D3.\-c}!valid\-\_\-letter@{valid\-\_\-letter}}
+\index{valid\-\_\-letter@{valid\-\_\-letter}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{valid\-\_\-letter}]{\setlength{\rightskip}{0pt plus 5cm}bool valid\-\_\-letter (
+\begin{DoxyParamCaption}
+\item[{char}]{button\-\_\-bits}
+\end{DoxyParamCaption}
+)}}\label{_m_d3_8c_a236712cb281cbc382677740705597f9b}
+
+
+Check if the input dot combination is a valid letter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em button\-\_\-bits} & -\/ char, holds bits 0-\/5 that correspond to which buttons have have been pressed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ true if a valid letter, false if not 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\hypertarget{_m_d3_8c_abe3f7fc2e87df2c5ddb4e7b9217e2ea9}{\index{M\-D3.\-c@{M\-D3.\-c}!animal\-\_\-list@{animal\-\_\-list}}
+\index{animal\-\_\-list@{animal\-\_\-list}!MD3.c@{M\-D3.\-c}}
+\subsubsection[{animal\-\_\-list}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ animal\-\_\-list\mbox{[}11\mbox{]}}}\label{_m_d3_8c_abe3f7fc2e87df2c5ddb4e7b9217e2ea9}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+= \{\textcolor{stringliteral}{"bee"}, \textcolor{stringliteral}{"camel"}, \textcolor{stringliteral}{"cat"}, \textcolor{stringliteral}{"cow"}, \textcolor{stringliteral}{"dog"}, \textcolor{stringliteral}{"horse"},
+    \textcolor{stringliteral}{"hyena"}, \textcolor{stringliteral}{"pig"}, \textcolor{stringliteral}{"rooster"}, \textcolor{stringliteral}{"sheep"}, \textcolor{stringliteral}{"zebra"}\}
+\end{DoxyCode}
