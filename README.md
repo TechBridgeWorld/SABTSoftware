@@ -1,5 +1,14 @@
 # Stand Alone Braille Tutor
 
+## Understanding the documentation
+[This is What the SABT does]
+
+To best understand this project, read the following documents, ideally in this order:
+- This Readme
+- The programming guide (SABT\_programming\_guide.pdf)
+- The doxygen documentation found in the html folder (start with index.html)
+- In code comments
+
 ## Setting up the project
 
 To develop the Stand Alone Braille Tutor, follow these steps.
