@@ -27,80 +27,75 @@ unsigned char sd_init(void)
 
   for(i = 0; i < 10; i++)
     spi_transmit(0xff);   //80 clock pulses spent before sending the first command
-    SD_CS_ASSERT;
-    do
+  SD_CS_ASSERT;
+  do
+  {
+    response = sd_send_command(GO_IDLE_STATE, 0); //send 'reset & go idle' command
+    retry++;
+    if(retry>0x20)
+      return 1;   //time out, card not detected
+  } while(response != 0x01);
+
+  SD_CS_DEASSERT;
+  spi_transmit (0xff);
+  spi_transmit (0xff);
+
+  retry = 0;
+
+  sd_version = 2; //default set to SD compliance with ver2.x; 
+  //this may change after checking the next command
+  do
+  {
+    // Check power supply status, mendatory for SDHC card
+    response = sd_send_command(SEND_IF_COND, 0x000001AA); 
+    retry++;
+    if(retry > 0xfe) 
     {
-       response = sd_send_command(GO_IDLE_STATE, 0); //send 'reset & go idle' command
-       retry++;
-       if(retry>0x20) 
-         return 1;   //time out, card not detected
-    } while(response != 0x01);
-
-    SD_CS_DEASSERT;
-    spi_transmit (0xff);
-    spi_transmit (0xff);
-
-    retry = 0;
-
-    sd_version = 2; //default set to SD compliance with ver2.x; 
-        //this may change after checking the next command
-    do
-    {
-      // Check power supply status, mendatory for SDHC card
-      response = sd_send_command(SEND_IF_COND, 0x000001AA); 
-      retry++;
-      if(retry > 0xfe) 
-      {
-        //TX_NEWLINE;
-        sd_version = 1;
-        card_type = 1;
-        break;
-       } //time out
+      sd_version = 1;
+      card_type = 1;
+      break;
     }
-    while(response != 0x01);
-    
-    retry = 0;
-    
+  }
+  while(response != 0x01);
+
+  retry = 0;
+
+  do
+  {
+    // CMD55, must be sent before sending any ACMD command
+    response = sd_send_command(APP_CMD,0); 
+    response = sd_send_command(SD_SEND_OP_COND,0x40000000); // ACMD41
+
+    retry++;
+    if(retry > 0xfe)
+    {
+      return 2;  //time out, card initialization failed
+    }
+  }
+  while(response != 0x00);
+
+
+  retry = 0;
+  sdhc_flag = 0;
+
+  if (sd_version == 2)
+  {
     do
     {
-      // CMD55, must be sent before sending any ACMD command
-      response = sd_send_command(APP_CMD,0); 
-      response = sd_send_command(SD_SEND_OP_COND,0x40000000); // ACMD41
-
+      response = sd_send_command(READ_OCR,0);
       retry++;
       if(retry > 0xfe)
       {
-        //TX_NEWLINE;
-        return 2;  //time out, card initialization failed
-      }
+        card_type = 0;
+        break;
+      } //time out
     }
     while(response != 0x00);
-
-
-    retry = 0;
-    sdhc_flag = 0;
-
-    if (sd_version == 2)
-    {
-      do
-      {
-        response = sd_send_command(READ_OCR,0);
-        retry++;
-        if(retry > 0xfe)
-        {
-          //TX_NEWLINE;
-          card_type = 0;
-          break;
-        } //time out
-      }
-      while(response != 0x00);
 
     if(sdhc_flag == 1) card_type = 2;
     else card_type = 3;
   }
 
-  //sd_send_command(CRC_ON_OFF, OFF); //disable CRC; deafault - CRC disabled in SPI mode
-  //sd_send_command(SET_BLOCK_LEN, 512); //set block size to 512; default size is 512
   return 0; //successful return
 }
 
@@ -122,14 +117,14 @@ unsigned char sd_send_command(unsigned char cmd, unsigned long arg)
 
   if(sdhc_flag == 0)    
     if(cmd == READ_SINGLE_BLOCK     ||
-       cmd == READ_MULTIPLE_BLOCKS  ||
-       cmd == WRITE_SINGLE_BLOCK    ||
-       cmd == WRITE_MULTIPLE_BLOCKS ||
-       cmd == ERASE_BLOCK_START_ADDR|| 
-       cmd == ERASE_BLOCK_END_ADDR ) 
+        cmd == READ_MULTIPLE_BLOCKS  ||
+        cmd == WRITE_SINGLE_BLOCK    ||
+        cmd == WRITE_MULTIPLE_BLOCKS ||
+        cmd == ERASE_BLOCK_START_ADDR|| 
+        cmd == ERASE_BLOCK_END_ADDR ) 
     {
       arg = arg << 9;
-    }     
+    }
 
   SD_CS_ASSERT;
 
@@ -172,13 +167,13 @@ unsigned char sd_send_command(unsigned char cmd, unsigned long arg)
 unsigned char sd_erase (unsigned long start_block, unsigned long total_blocks)
 {
   unsigned char response;
-  
+
   // Send starting block address
   response = sd_send_command(ERASE_BLOCK_START_ADDR, start_block); 
 
   if(response != 0x00) //check for SD status: 0x00 - OK (No flags set)
     return response;
- 
+
   // Send end block address
   response = sd_send_command(ERASE_BLOCK_END_ADDR, (start_block + total_blocks - 1));
 
@@ -204,9 +199,9 @@ unsigned char sd_read_single_block(unsigned long start_block)
   unsigned int i, retry = 0;
 
   response = sd_send_command(READ_SINGLE_BLOCK, start_block); //read a Block command
- 
+
   if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
-  
+
   SD_CS_ASSERT;
 
   retry = 0;
@@ -242,9 +237,9 @@ unsigned char sd_read_single_dict_block(unsigned long start_block)
   unsigned int i, retry = 0;
 
   response = sd_send_command(READ_SINGLE_BLOCK, start_block); //read a Block command
- 
+
   if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
-  
+
   SD_CS_ASSERT;
 
   retry = 0;
@@ -279,9 +274,9 @@ unsigned char sd_write_single_block(unsigned long start_block)
 {
   unsigned char response;
   unsigned int i, retry = 0;
-  
+
   response = sd_send_command(WRITE_SINGLE_BLOCK, start_block); //write a Block command
-  
+
   if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
   SD_CS_ASSERT;
 
@@ -318,7 +313,7 @@ unsigned char sd_write_single_block(unsigned long start_block)
       SD_CS_DEASSERT; 
       return 1;
     }
-  
+
   SD_CS_DEASSERT;
 
   return 0;
@@ -332,7 +327,7 @@ unsigned char sd_write_single_block(unsigned long start_block)
  * @return unsigned char - 0 if no error and response byte if error
  */
 unsigned char sd_read_multiple_blocks (unsigned long start_block, 
-                                       unsigned long total_blocks)
+    unsigned long total_blocks)
 {
   unsigned char response;
   unsigned int i, retry = 0;
@@ -340,7 +335,7 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
   retry = 0;
 
   response = sd_send_command(READ_MULTIPLE_BLOCKS, start_block); //write a Block command
-  
+
   if(response != 0x00) return response; //check for SD status: 0x00 - OK (No flags set)
 
   SD_CS_ASSERT;
@@ -356,16 +351,12 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
       } //return if time-out
 
     for(i = 0; i < 512; i++) //read 512 bytes
-    buffer[i] = spi_receive();
-    
+      buffer[i] = spi_receive();
+
     spi_receive(); //receive incoming CRC (16-bit), CRC is ignored here
     spi_receive();
 
     spi_receive(); //extra 8 cycles
-    TX_NEWLINE;
-    //TODO what is transmitString_F?
-    transmitString_F(PSTR(" --------- "));
-    TX_NEWLINE;
 
     for(i = 0; i < 512; i++) //send the block to UART
     {
@@ -373,9 +364,6 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
       transmit_byte(buffer[i]);
     }
 
-    TX_NEWLINE;
-    transmitString_F(PSTR(" --------- "));
-    TX_NEWLINE;
     total_blocks--;
   }
 
@@ -391,7 +379,7 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
  * @return unsigned char - response byte
  */
 unsigned char sd_write_multiple_blocks(unsigned long start_block, 
-                                       unsigned long total_blocks)
+    unsigned long total_blocks)
 {
   unsigned char response, data;
   unsigned int i, retry = 0;
@@ -446,7 +434,7 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
       SD_CS_DEASSERT;             //AAA='110'-data rejected due to write error
       return response;
     }
-    
+
     while(!spi_receive()) //wait for SD card to complete writing and get idle
       if(retry++ > 0xfffe)
       {
@@ -457,10 +445,10 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
     spi_receive(); //extra 8 bits
     block_counter++;
   }
-  
+
   spi_transmit(0xfd); //send 'stop transmission token'
   retry = 0;
-  
+
   while(!spi_receive()) //wait for SD card to complete writing and get idle
     if(retry++ > 0xfffe)
     {
@@ -470,7 +458,7 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
 
   SD_CS_DEASSERT;
   spi_transmit(0xff); //just spend 8 clock cycle delay before reasserting the CS signal
-  
+
   // re assertion of the CS signal is required to verify if card is still busy
   SD_CS_ASSERT; 
 
@@ -482,7 +470,7 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
     }
 
   SD_CS_DEASSERT;
-  
+
   return 0;
 }
 

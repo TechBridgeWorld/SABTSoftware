@@ -17,18 +17,14 @@
  *        response from the system. The other message is 'M' - PC_CMD_NEWMODES
  *        this message type will change the mode file
  * @return Void
-  */
+ */
 void pc_parse_message()
 {
   unsigned char message_type;
-  
+
   usart_pc_message_ready = false;
   message_type = usart_pc_received_packet[2];
-  
-  PRINTF("the character found was: ");
-  usart_transmit_byte_to_pc(message_type);
-  TX_NEWLINE_PC; 
-  
+
   switch(message_type)
   {
     // Send a confirmation that the board received the message
@@ -36,11 +32,11 @@ void pc_parse_message()
       usart_transmit_string_to_pc_from_flash(PSTR("SABT-v2.1"));
       TX_NEWLINE_PC;      
       break;
-    // Modify the current modes
+      // Modify the current modes
     case PC_CMD_NEWMODES:
       pc_requests_to_modify_modes_file();
       break;
-    // Incorrect message type
+      // Incorrect message type
     default:
       PRINTF("SABT-INCORRECT MESSAGE TYPE! MUST BE 'M' OR 'x'.\r\n");
       break;
@@ -57,7 +53,7 @@ void pc_requests_to_modify_modes_file(void)
 {
   const char* modes_file = "MODES.DAT";
   unsigned char writing_file_content[20];
-  
+
   // Clear the buffer
   int t = 0;
   for(t = 0; t < 20; t++)
@@ -77,11 +73,11 @@ void pc_requests_to_modify_modes_file(void)
         (unsigned char*)modes_file, writing_file_content) == 0)
   {
     usart_transmit_string_to_pc_from_flash(PSTR("SABT-OK"));
-    TX_NEWLINE_PC;      
+    TX_NEWLINE_PC;
   }
   else
   {
     usart_transmit_string_to_pc_from_flash(PSTR("SABT-FAIL"));
-    TX_NEWLINE_PC;  
+    TX_NEWLINE_PC;
   }
 }

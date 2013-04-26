@@ -21,11 +21,11 @@ char random_number_as_char()
 {
   int num = TCNT1;
   int i;
-  
+
   num *= PRIME;
   num = (abs(num) % 6);
 
-//while you are looking at a full section of teh array
+  //while you are looking at a full section of teh array
   while(used_number[num]){
     num = TCNT1;
     num *= PRIME;
@@ -38,7 +38,7 @@ char random_number_as_char()
   //if you find that you ahve used all of the letters, clear both the array and the count
   if(used_num_cnt == NUM_DOTS){
     for(i = 0; i < NUM_DOTS; i ++)
-	   used_number[i] = 0;
+      used_number[i] = 0;
     used_num_cnt = 0;
   }
 
@@ -48,7 +48,7 @@ char random_number_as_char()
 
   // Return the number as a character
   if (num >= 1 && num <= 6) return '0' + num;
-  
+
   // Default behavior, could not generate a valid char
   return '0';
 }
@@ -144,7 +144,7 @@ void md1_call_mode_no_answer(void) {}
 /**
  * @brief register dot input
  *        Sets the program to STATE_PROC_INPUT
- * @param thisDot the dot being input
+ * @param this_dot the dot being input
  * @return Void
  */
 void md1_input_dot(char this_dot)
@@ -153,4 +153,9 @@ void md1_input_dot(char this_dot)
   current_state = STATE_PROC_INPUT;
 }
 
+/**
+ * @brief register cell input
+ * @param this_cell the cell being input
+ * @return void
+ */
 void md1_input_cell(char this_cell) {}

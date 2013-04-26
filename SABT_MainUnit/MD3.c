@@ -14,13 +14,8 @@ int md3_current_state;
 char md3_last_dot, last_cell, expected_dot;
 
 
-//@TODO   MAKE THIS BETTER
-//char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
-//    "hyena", "pig", "rooster", "sheep", "zebra"};
-
-//@TODO temporarily changed to use only easy animal names
-char *animal_list[11] = {"bee", "bee", "cat", "cat", "dog", "dog",
-    "pig", "pig", "rooster", "rooster", "dog"};
+char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
+    "hyena", "pig", "rooster", "sheep", "zebra"};
 
 int animal_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
@@ -41,7 +36,7 @@ int choose_animal()
   num *= PRIME;
   num = (abs(num) % 11);
 
-   char buf[10];
+  char buf[10];
   sprintf(buf, "num=%i\r\n", num);
   PRINTF(buf);
 
@@ -50,8 +45,8 @@ int choose_animal()
     num = TCNT1;
     num *= PRIME;
     num = (abs(num) % 11);
-  }  
- 
+  }
+
   animals_used_list[num] = 1;
 
   for(i = 0; i < 11; i ++){
@@ -83,10 +78,10 @@ int choose_animal()
  */
 void play_requested_dot(void)
 {
-    // This will hold formatted file to access
-    char req_mp3[10];
-    sprintf((char*)req_mp3, "dot_%c.MP3", md3_last_dot);
-    request_to_play_mp3_file(req_mp3);
+  // This will hold formatted file to access
+  char req_mp3[10];
+  sprintf((char*)req_mp3, "dot_%c.MP3", md3_last_dot);
+  request_to_play_mp3_file(req_mp3);
 }
 
 void md3_reset(void)
@@ -105,7 +100,7 @@ bool valid_letter(char button_bits){
   char letter_from_bits = get_letter_from_bits(button_bits);
   if((letter_from_bits >= 'a') && (letter_from_bits <= 'z')){
     entered_letter = letter_from_bits;
-	return true;
+    return true;
   }
   return false;
 }
@@ -131,21 +126,19 @@ void md3_main(void)
       got_input = false;
 
       break;
-    
+
     case STATE_REQUEST_INPUT1:
-      PRINTF("INPUT1\r\n");
       request_to_play_mp3_file("MD3PLS.mp3");
 
       length_entered_word = 0;
-	  current_word_index = 0;
+      current_word_index = 0;
 
       animal = animal_list[choose_animal()];
 
       md3_current_state = STATE_REQUEST_INPUT2;
       break;
-    
+
     case STATE_REQUEST_INPUT2:
-      PRINTF("INPUT2\r\n");
 
       char animal_file[16];
       sprintf(animal_file, "%s.mp3", animal);
@@ -154,24 +147,22 @@ void md3_main(void)
       md3_current_state = STATE_WAIT_INPUT;
 
       break;
-    
+
     case STATE_WAIT_INPUT:
       if(got_input){
-          got_input = false;
-          md3_current_state = STATE_PROC_INPUT;
+        got_input = false;
+        md3_current_state = STATE_PROC_INPUT;
       }
       break;
-    
+
     case STATE_PROC_INPUT:
-      PRINTF("PROCESS\r\n");
       // set entered_letter in valid_letter(), but return 1 or 0
 
-     if (last_cell == 0) {
-	   md3_current_state = STATE_READ_ENTERED_LETTERS;
-     } else if (valid_letter(last_cell)) {
+      if (last_cell == 0) {
+        md3_current_state = STATE_READ_ENTERED_LETTERS;
+      } else if (valid_letter(last_cell)) {
         char buf[16];
         sprintf(buf, "%c.mp3", entered_letter);
-        //usart_transmit_string_to_pc((unsigned char*)buf);
         request_to_play_mp3_file(buf);
         md3_current_state = STATE_CHECK_IF_CORRECT;
       } else {
@@ -179,9 +170,8 @@ void md3_main(void)
         md3_current_state = STATE_READ_ENTERED_LETTERS;
       }
       break;
-    
+
     case STATE_READ_ENTERED_LETTERS:
-      PRINTF("INVALID\r\n");
 
       if(length_entered_word > 0) {
         char buf[16];
@@ -195,12 +185,11 @@ void md3_main(void)
         current_word_index = 0; 
       }
       break;
-    
+
     case STATE_CHECK_IF_CORRECT:
-      PRINTF("CHECK\r\n");
       if (animal[length_entered_word] == entered_letter) {
         length_entered_word++;
-        
+
         if (length_entered_word != strlen(animal))
           md3_current_state = STATE_CORRECT_INPUT;
         else
@@ -209,37 +198,31 @@ void md3_main(void)
         md3_current_state = STATE_WRONG_INPUT;
       }
       break;
-    
+
     case STATE_WRONG_INPUT:
-      PRINTF("WRONG\r\n");
       request_to_play_mp3_file("no.mp3");
       md3_current_state = STATE_READ_ENTERED_LETTERS;
       break;
-    
+
     case STATE_CORRECT_INPUT:
-      PRINTF("CORRECT\r\n");
       request_to_play_mp3_file("good.mp3");
       md3_current_state = STATE_WAIT_INPUT;
       break;
-    
+
     case STATE_DONE_WITH_CURRENT_ANIMAL:
-      PRINTF("DONE\r\n");
       request_to_play_mp3_file("nc_wrk.mp3");
       md3_current_state = STATE_REQUEST_INPUT1;
       break;
   }
 }
 
-void md3_call_mode_yes_answer(void)
-{
-}
+void md3_call_mode_yes_answer(void){}
 
-void md3_call_mode_no_answer(void)
-{
-}
+void md3_call_mode_no_answer(void){}
 
 /**
  * @brief  Set the dot the from input
+ * @param this_dot the entered dot
  * @return Void
  */
 void md3_input_dot(char this_dot)
@@ -249,7 +232,8 @@ void md3_input_dot(char this_dot)
 }
 
 /**
- * @brief
+ * @brief handle cell input
+ * @param this_cell the entered cell
  * @return Void
  */
 void md3_input_cell(char this_cell)

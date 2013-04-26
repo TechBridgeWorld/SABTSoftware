@@ -43,11 +43,6 @@ volatile char temp_cnt;
 
 volatile bool playing_mp3;
 
-//TODO remove
-void set_last_dot(char dot);
-void set_last_dot2(char dot);
-void set_last_dot3(char dot);
-
 #define PRINTF(msg) \
   usart_transmit_string_to_pc((unsigned char*)msg);
 #define CHARTOINT(c)     ((c) - '0')

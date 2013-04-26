@@ -13,7 +13,7 @@ int current_state;
 char last_cell;
 char md2_last_dot;
 
-//@TODO   MAKE THIS BETTER
+// Contains bit representations of each of the letters
 char letter_bits_arr[26] = 
 {
   A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, 
@@ -30,16 +30,6 @@ char letter_arr[26] =
 };
 
 char used_letter[5] = {0, 0, 0, 0, 0};
-
-/**
- * @brief Sets the given input to the file's last_dot
- * @return Void
- */
-void set_last_dot2(char dot)
-{
-  last_dot = dot;
-}
-
 
 /**
  * @brief generates a psuedo random number based on the system clock
@@ -72,14 +62,12 @@ int prop_rand_number()
   //if you find that you ahve used all of the letters, clear both the array and the count
   if(used_let_cnt == LET_CLST_SIZE){
     for(i = 0; i < LET_CLST_SIZE; i ++)
-	   used_letter[i] = 0;
+      used_letter[i] = 0;
     used_let_cnt = 0;
   }
 
   return ret_int;
-
-
-}       
+}
 
 /**
  * @brief  Given a char, in last_cell, play the corresponding letter 
@@ -107,14 +95,12 @@ void play_requested_cell(char last_cell)
  *                on error - not found bits, return -1
  */
 char get_bits_from_letters(char let){
-    int alphbt_len = 26;
-    int i;
-    for(i = 0; i < alphbt_len; i ++){
-        if(letter_arr[i] == let)
-            return letter_bits_arr[i];
-        
-        
-    }
+  int alphbt_len = 26;
+  int i;
+  for(i = 0; i < alphbt_len; i ++){
+    if(letter_arr[i] == let)
+      return letter_bits_arr[i];
+  }
   return -1;
 }
 
@@ -129,7 +115,7 @@ char get_letter_from_bits(char bits)
 {
   int alphabet_len = 26;
   int i;
-  
+
   for(i = 0; i < alphabet_len; i++){
     if(letter_bits_arr[i] == bits)
       return letter_arr[i];
@@ -189,11 +175,11 @@ void md2_reset(void)
 bool check_if_correct(char button_bits, char current_letter)
 {
   char letter_from_bits = get_letter_from_bits(button_bits);
-  
+
   char buf[10];
   sprintf(buf, "%d, %d, %d\r\n", button_bits, current_letter, letter_from_bits);
   PRINTF(buf);
-  
+
   return (letter_from_bits == current_letter);
 }
 
@@ -226,20 +212,20 @@ void md2_main(void)
       request_to_play_mp3_file("MD2INT.MP3");
       current_state = SET_LETTER_VALS;
       break;
-    
+
     case SET_LETTER_VALS:
       curr_button = '0';
       current_random_letter = (initial_letter + ((letter_set * 5 
-        + (prop_rand_number())) % 26));
+              + (prop_rand_number())) % 26));
       current_letter = (initial_letter + ((letter_set*5 + current_count) % 26));
       current_state = STATE_REQUEST_INPUT1;
       break;
 
-  case STATE_REQUEST_INPUT1:
+    case STATE_REQUEST_INPUT1:
       request_to_play_mp3_file("pls_wrt.MP3");
       current_state = STATE_REQUEST_INPUT2;
       break;
-    
+
     case STATE_REQUEST_INPUT2:
       if(use_random_letter){
         play_requested_cell(current_random_letter);
@@ -251,28 +237,28 @@ void md2_main(void)
         current_state = STATE_BUTT_TO_PRESS_1;
       }
       break;
-          
+
     case STATE_BUTT_TO_PRESS_1:
       request_to_play_mp3_file("press.MP3");
       current_state = STATE_BUTT_TO_PRESS_2;
-    break;
+      break;
 
-  case STATE_BUTT_TO_PRESS_2:
+    case STATE_BUTT_TO_PRESS_2:
       curr_button += 1;
-      
-	  PRINTF(&curr_button);
-    char bits = get_bits_from_letters(current_letter);
-    char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
-    //get the bits for each depending on button count - and play sound if bit is set
-    if(curr_bit){
-         md2_play_requested_dot(curr_button);
-    }
-    
-    if(CHARTOINT(curr_button) == NUM_BUT){   
-      current_state = STATE_WAIT_INPUT;
-      curr_button = '0'; 
-    }
-    break;
+
+      PRINTF(&curr_button);
+      char bits = get_bits_from_letters(current_letter);
+      char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
+      //get the bits for each depending on button count - and play sound if bit is set
+      if(curr_bit){
+        md2_play_requested_dot(curr_button);
+      }
+
+      if(CHARTOINT(curr_button) == NUM_BUT){   
+        current_state = STATE_WAIT_INPUT;
+        curr_button = '0'; 
+      }
+      break;
 
     case STATE_WAIT_INPUT:
       if(last_dot != 0)
@@ -285,8 +271,8 @@ void md2_main(void)
 
           if(!use_random_letter)
           {
-		    PRINTF("checkifcorrect");
-			TX_NEWLINE_PC;
+            PRINTF("checkifcorrect");
+            TX_NEWLINE_PC;
             if(check_if_correct(button_bits, current_letter))
             {
               request_to_play_mp3_file("good.MP3");
@@ -319,7 +305,7 @@ void md2_main(void)
             if(check_if_correct(button_bits, current_random_letter))
             {
               request_to_play_mp3_file("good.MP3");
-              
+
               // If you have successfully completed this letter set
               if(random_count == 4)
               {
@@ -349,19 +335,17 @@ void md2_main(void)
         else if((last_dot >= '1') && (last_dot <= '6'))
         {
           button_bits |= 1 << (CHARTOINT(last_dot) - 1);
-          // TODO change play requested dot to take 1 param
           md2_play_requested_dot(last_dot);
         }
         last_dot = 0;      
       }
       break;
-      
+
     case STATE_ERROR_1:
-      //@TODO- change to pressed
       request_to_play_mp3_file("u_prssd.MP3");
       current_state = STATE_ERROR_2;
       break;
-          
+
     case STATE_ERROR_2:
       play_requested_bits(button_bits);
       button_bits = 0;
@@ -398,11 +382,11 @@ void md2_input_dot(char this_dot)
 {
   last_dot = this_dot;
   md2_last_dot = this_dot;
-  //current_state = 3;
 }
 
 /**
- * @brief  
+ * @brief handle cell input
+ * @param this_cell the input cell
  * @return Void
  */
 void md2_input_cell(char this_cell)
@@ -410,6 +394,5 @@ void md2_input_cell(char this_cell)
   if(md2_last_dot != 0)
   {
     last_cell = this_cell;
-    //current_state=2;
   }
 }
