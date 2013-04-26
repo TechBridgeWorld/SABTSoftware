@@ -27,6 +27,7 @@ See the programming guide - SABT\_programming\_guide.pdf.
 There are four different boards that compose the SABT - the Main Control Unit and
 one of three User Interface boards. The Main Control Unit is used in conjunction with one of the other three boards to make an interface suitable for the user's skill level.
 ### Main Control Unit (MCU)
+This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
 The MCU handles the following:
 - Provides connection (via USB cable) to a PC for debugging purposes / mode
   selection
@@ -36,31 +37,26 @@ The MCU handles the following:
 - Handles different Modes
 
 ### Primary User Interface Board (Primary UI)
+This folder contains all of the code for the first user interface board - the board with just six large braille dots. Open SABT\_Primary.aps in AVR Studio 4.
 - Consists of six large braille dots, essentially one large cell
 - Has volume control buttons, mode control buttons, enter buttons
 - Transmits signals to MCU when a button is pressed for processing by the MCU
 
 ### Intermediate User Interface Board (Intermediate UI)
+No work has been done yet in this folder, but it should contain the file SABT\_Intermediate.aps, and handle the intermediate user interface board.
 - Consists of three large braille cells and two rows of actual sized braille
   cells (16 cells per row)
 
 ### Advanced User Interface Board (Advanced UI)
-- Consists of six rows of braille cells (16 cells per row)
-## Project Components
-### SABT\_MainUnit
-This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
-### UserInterface(Primary)
-This folder contains all of the code for the first user interface board - the board with just six large braille dots. Open SABT\_Primary.aps in AVR Studio 4.
-### UserInterface(Intermediate)
-No work has been done yet in this folder, but it should contain the file SABT\_Intermediate.aps, and handle the intermediate user interface board.
-### UserInterface(Advanced)
 No work has been done yet in this folder, but it should contain the file SABT\_Advanced.aps, and handle the advanced user interface board.
+- Consists of six rows of braille cells (16 cells per row)
 
 ## Current issues and pitfalls
 - We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
 - Pressing a volume button while an mp3 file is playing breaks the system.
-- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is: ```../FAT32.c: In function 'read_and_retrieve_file_contents':
-../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
+- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is: 
+```../FAT32.c: In function 'read_and_retrieve_file_contents':```
+```../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
 
 ## Opportunities for further development
 - The Intermediate and Advanced user interface boards need to be developed in their entirety.
@@ -71,11 +67,6 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - In the Animal Game, users wanted to be able to skip animals.
 - A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
 - Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
-
-
-## Menu System
-Because the SABT is designed for blind / visually impaired users, the menu
-system provides a design challenge 
 
 ## Doxygen Documentation  
 Documentation at http://cmu-15-239.github.com/SABTSoftware/
