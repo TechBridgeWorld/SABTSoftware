@@ -17,19 +17,18 @@ To develop the Stand Alone Braille Tutor, follow these steps.
 2. Obtain access to the repository at https://github.com/CMU-15-239/SABTSoftware.
 3. Click the "Clone in Windows" button and choose a location for the repository. This guide will assume the repository is copied to Documents\SABTSoftware.
 
-TODO: Finish this part on the lab computer
 ### Compiling the software
-1. In AVR Studio 4, open Documents\SABTSoftware\SABT\_MainUnit\...
+See the programming guide - SABT\_programming\_guide.pdf.
 
-TODO: Finish this part on the lab computer (binary location)
 ### Loading the software binaries onto the SABT hardware
-1. Obtain the SABT Main Control Unit and one of the SABT User Interface boards. You will also need the JTAGICE mkII programmer, two USB (type A to type B) cables, and headphones or a speaker with an analog input.
-2. Remove all of the casing from the two boards.
-3. Connect...
+See the programming guide - SABT\_programming\_guide.pdf.
 
-## Current Issues and Pitfalls
+## Current issues and pitfalls
+- We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
+- Pressing a volume button while an mp3 file is playing breaks the system.
 
 ## Opportunities for further development
+- The Intermediate and Advanced user interface boards need to be developed in their entirety.
 - Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
 - Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
 - From user testing, we found that some users entered dots very quickly. It would be very helpful to have either some mechanism to skip MP3s (if a user already knows the prompt) or some way to adjust the speed of the MP3 playback.
@@ -37,7 +36,6 @@ TODO: Finish this part on the lab computer (binary location)
 - In the Animal Game, users wanted to be able to skip animals.
 - A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
 - Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
-
 
 ## Template:
 
