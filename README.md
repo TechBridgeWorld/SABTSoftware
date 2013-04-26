@@ -54,9 +54,23 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 ## Current issues and pitfalls
 - We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
 - Pressing a volume button while an mp3 file is playing breaks the system.
-- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is: 
+- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is:
 ```../FAT32.c: In function 'read_and_retrieve_file_contents':```
 ```../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
+
+##Description of SABT MAIN Code
+Main function is located in SABT_MainUnit.c.  This is where the function starts, in the main() function. The rest of the files are spread throughout the SABT_MainUnit Project. You will have to find the files you need. Here are the steps the code follows once it enters main:
+
+1. It calls initialize system
+  a. This call initializes all inputs form hardware, interrupts, SD card, sound player and global variables
+2. The function enters an infinite while loop (functional loop).  
+  a. It first checks if any inputs are ready to be read (where you determine is something is ready to be read based on an interrupt setting a variable). If it is, it reads values into a buffer
+  b. It then checks for inputs from the PC
+  c. If a timer interrupt has fired, reset the timer interrupt
+  d. Check if the message you are reading in from either the PC or the UI board are ready to be interpreted, and interpret them if they are
+  e. If there is a sound file that has been queued up, must then play that sound file by reading from the SD card and sending the data to the VS1053 sound file. 
+  f. The function then checks if you have set one of the modes as the current mode. If you have then you must enter and execute a step in that mode.
+  g. Step into the mode and take a single step down the mode. This usually involves interpreting any messages that have been received. Using this input to move down the mode. You then queue a sound file to play to tell the user what they have done. 
 
 ## Opportunities for further development
 - The Intermediate and Advanced user interface boards need to be developed in their entirety.
@@ -70,4 +84,4 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
 
 ## Doxygen Documentation  
-Documentation at http://cmu-15-239.github.com/SABTSoftware/
+The most recent Doxygen documentation can be found in the 'html' folder as 'index.html'.
