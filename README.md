@@ -23,100 +23,9 @@ See the programming guide - SABT\_programming\_guide.pdf.
 ### Loading the software binaries onto the SABT hardware
 See the programming guide - SABT\_programming\_guide.pdf.
 
-## Project Components
-This project is made up of 4 different physical boards, and 4 corresponding codebases.
-### SABT\_MainUnit
-This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
-### UserInterface(Primary)
-This folder contains all of the code for the first user interface board - the board with just six large braille dots. Open SABT\_Primary.aps in AVR Studio 4.
-### UserInterface(Intermediate)
-No work has been done yet in this folder, but it should contain the file SABT\_Intermediate.aps, and handle the intermediate user interface board.
-### UserInterface(Advanced)
-No work has been done yet in this folder, but it should contain the file SABT\_Advanced.aps, and handle the advanced user interface board.
-
-## Current issues and pitfalls
-- We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
-- Pressing a volume button while an mp3 file is playing breaks the system.
-
-## Opportunities for further development
-- The Intermediate and Advanced user interface boards need to be developed in their entirety.
-- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
-- Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
-- From user testing, we found that some users entered dots very quickly. It would be very helpful to have either some mechanism to skip MP3s (if a user already knows the prompt) or some way to adjust the speed of the MP3 playback.
-- The Animal Game could be expanded to include more animal sounds, and to include a variety of animals such that all of the letters are tested at some point.
-- In the Animal Game, users wanted to be able to skip animals.
-- A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
-- Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
-
-## Template:
-
-Please provide details for as many sections that apply to your specific project. For sections that do not apply, simply indicate the phrase N/A. 
-
-1. Provide instructions on how to checkout the code from the current repository and where to place it on the local machine (e.g., C:\MyProject).
-
-2. List the platforms on which the project can compiled and built (Windows, Linux, Mac OS).
-
-3. Since the project may be multifaceted, provide a list of the different components included in this project along with a description of each one stating its purpose and how it interacts with the other components.
-
-4. Specify the tools needed to compile and build the project including compilers and/or IDEs. (e.g., Java SDK 1.6, gcc 4.3.2 on the Linux platform, Eclipse Juno, Visual Studio 10, etc...).
-
-5. List any additional libraries that are needed for compiling, building and running the code (e.g., Boost C++ Library 1.53.0, Android API 15).
-
-6. Specify the locations where these tools can be acquired (e.g., URLs, FTP sites, local CMU servers).
-
-7. Indicate the location where these tools need to be installed on the local machine for project compilation, building and execution.
-
-8. Indicate if there are any project config files, what they are used for and provide information on where these files need to be located on the local machine.
-
-9. Specify any settings within these config files for compiling, building and/or execution (e.g., BASEPATH=C:\Users\Bob\myProject\).
-
-10. Provide instructions on how to compile and build the project using the specified tool(s) from item 4 (e.g., startup Eclipse, import project X, right click on file Main and select Run as -> Java Application) and also specify any compiler/build configuration settings (paths of include files and other dependencies).
-
-11. Indicate the target platform on which the binary (or binaries) are intended to run (e.g., Windows, Android Device, Custom hardware).
-
-12. Indicate if the application requires any input files that are read and processed when the application executes (e.g., XML Files, text files, image files, etc).
-
-13. Specify the locations where these input files can be obtained if not already included in the project (e.g., URL, CMU Serves, etc...).
-
-14. Specify the locations where these input files need to reside on the local machine when the application executes.
-
-15. Indicate if the application generates output files.
-
-16. Specify the location of where these output files will be written.
-
-17. If using external hardware or mobile device, provide instructions on how this device needs to be connected to the computer.
-
-18. Regarding mobile devices and/or external hardware, indicate if any of the generated binaries from item 10 need to be installed on this device and provide instructions on how to install these binaries.
-
-19. Specify any settings on the computer for the device (e.g., the COM port).
-
-20. Provide instructions on how to run the application on the external hardware, mobile device and/or computer.
-
-21. If the mobile device requires interaction with the computer, provide instructions on how this interaction should work from an end user standpoint (i.e., first run application A on the laptop computer, then lunch program B on the mobile device, next you should see a screen indicating a connection was made, etc...).
-
-22. List any known bugs, configuration issues or other pitfalls to look out for when compiling, building and/or running the application.
-    
-23. Provide a list of future features/capabilities that you would like to see included in the existing tool.
-
-
-## Overview
-The Stand Alone Braille Tutor (hereafter SABT) is a device that helps blind
-users learn to write braille through audio feedback and accessible controls.
-
-## Current Progress
-Currently, the primary board is the only board with significant software. The
-MCU and Primary UI boards can communicate between themselves and the PC in order
-to play some very basic games.
-### Current Games (Primary UI)
-- Dot practice
- - The SABT prompts the user to press a numbered dot (1-6). If the button
-   pressed is correct, the SABT replies 'Good' and prompts the user to find
-   another dot. If incorrect, the board replies 'No' and the user must find the
-   correct dot.
-
 ## Components
-There are two different boards that compose the SABT - the Main Control Unit and
-one of three User Interface boards.
+There are four different boards that compose the SABT - the Main Control Unit and
+one of three User Interface boards. The Main Control Unit is used in conjunction with one of the other three boards to make an interface suitable for the user's skill level.
 ### Main Control Unit (MCU)
 The MCU handles the following:
 - Provides connection (via USB cable) to a PC for debugging purposes / mode
@@ -137,6 +46,32 @@ The MCU handles the following:
 
 ### Advanced User Interface Board (Advanced UI)
 - Consists of six rows of braille cells (16 cells per row)
+## Project Components
+### SABT\_MainUnit
+This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
+### UserInterface(Primary)
+This folder contains all of the code for the first user interface board - the board with just six large braille dots. Open SABT\_Primary.aps in AVR Studio 4.
+### UserInterface(Intermediate)
+No work has been done yet in this folder, but it should contain the file SABT\_Intermediate.aps, and handle the intermediate user interface board.
+### UserInterface(Advanced)
+No work has been done yet in this folder, but it should contain the file SABT\_Advanced.aps, and handle the advanced user interface board.
+
+## Current issues and pitfalls
+- We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
+- Pressing a volume button while an mp3 file is playing breaks the system.
+- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is: ```../FAT32.c: In function 'read_and_retrieve_file_contents':
+../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
+
+## Opportunities for further development
+- The Intermediate and Advanced user interface boards need to be developed in their entirety.
+- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
+- Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
+- From user testing, we found that some users entered dots very quickly. It would be very helpful to have either some mechanism to skip MP3s (if a user already knows the prompt) or some way to adjust the speed of the MP3 playback.
+- The Animal Game could be expanded to include more animal sounds, and to include a variety of animals such that all of the letters are tested at some point.
+- In the Animal Game, users wanted to be able to skip animals.
+- A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
+- Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
+
 
 ## Menu System
 Because the SABT is designed for blind / visually impaired users, the menu
