@@ -95,4 +95,4 @@ Main function is located in SABT_MainUnit.c.  This is where the function starts,
 - One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
 
 ## Doxygen Documentation  
-The most recent Doxygen documentation can be found in the 'html' folder as 'index.html'.
+The most recent Doxygen documentation can be found at cmu-15-239.github.io/SABTSoftware/ 
