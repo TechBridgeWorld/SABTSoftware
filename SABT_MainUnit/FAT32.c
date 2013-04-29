@@ -959,17 +959,6 @@ unsigned char convert_file_name (unsigned char *file_name)
   for(j = 0; j < FILE_NAME_LEN; j++)
     file_name[j] = file_name_fat[j];
 
-  // Add null terminator to file_name
-  //file_name[11] = '\0';
-
-  //PRINTF("[convert_file_name]File name FAT:");
-  //PRINTF(file_name_fat);
-  //TX_NEWLINE_PC;
-
-
-  PRINTF("[convert_file_name]File name after:");
-  PRINTF(file_name);
-  TX_NEWLINE_PC;
 
   return 0;
 }
