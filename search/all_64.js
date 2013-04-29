@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['deletefile',['deleteFile',['../_f_a_t32_8c.html#aae257afc618304098844252c3d71b788',1,'deleteFile(unsigned char *fileName):&#160;FAT32.c'],['../_f_a_t32_8h.html#aae257afc618304098844252c3d71b788',1,'deleteFile(unsigned char *fileName):&#160;FAT32.c']]],
+  ['delete_5ffile',['delete_file',['../_f_a_t32_8c.html#af503ee4b755b95d74fb526a0e62fb9f2',1,'delete_file(unsigned char *file_name):&#160;FAT32.c'],['../_f_a_t32_8h.html#af503ee4b755b95d74fb526a0e62fb9f2',1,'delete_file(unsigned char *file_name):&#160;FAT32.c']]],
   ['dir_5fstructure',['dir_Structure',['../structdir___structure.html',1,'']]],
-  ['displaymemory',['displayMemory',['../_f_a_t32_8c.html#ac038c8795e541cbd5a33eda705b01934',1,'displayMemory(unsigned char flag, unsigned long memory):&#160;FAT32.c'],['../_f_a_t32_8h.html#ac038c8795e541cbd5a33eda705b01934',1,'displayMemory(unsigned char flag, unsigned long memory):&#160;FAT32.c']]]
+  ['display_5fmemory',['display_memory',['../_f_a_t32_8c.html#a8411ccb68b243b86ae5020f6b2fb0c29',1,'display_memory(unsigned char flag, unsigned long memory):&#160;FAT32.c'],['../_f_a_t32_8h.html#a8411ccb68b243b86ae5020f6b2fb0c29',1,'display_memory(unsigned char flag, unsigned long memory):&#160;FAT32.c']]]
 ];
