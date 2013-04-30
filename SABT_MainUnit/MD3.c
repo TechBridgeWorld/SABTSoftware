@@ -40,7 +40,7 @@ int choose_animal()
   sprintf(buf, "num=%i\r\n", num);
   PRINTF(buf);
 
-  while(animals_used_list[num]) 
+  while(animals_used_list[num])
   {
     num = TCNT1;
     num *= PRIME;
@@ -49,11 +49,12 @@ int choose_animal()
 
   animals_used_list[num] = 1;
 
-  for(i = 0; i < 11; i ++){
+  for(i = 0; i < 11; i ++)
+  {
     sprintf(buf, "arr=%i, ",animals_used_list[i] );
     PRINTF(buf);
-
   }
+
   TX_NEWLINE_PC;
   sprintf(buf, "cnt=%i", animals_used+1);
   PRINTF(buf);
@@ -96,12 +97,16 @@ void md3_reset(void)
  *        have been pressed
  * @return bool - true if a valid letter, false if not
  */
-bool valid_letter(char button_bits){
+bool valid_letter(char button_bits)
+{
   char letter_from_bits = get_letter_from_bits(button_bits);
-  if((letter_from_bits >= 'a') && (letter_from_bits <= 'z')){
+
+  if((letter_from_bits >= 'a') && (letter_from_bits <= 'z'))
+  {
     entered_letter = letter_from_bits;
     return true;
   }
+
   return false;
 }
 
@@ -118,24 +123,17 @@ void md3_main(void)
   switch(md3_current_state)
   {
     case STATE_INITIAL:
-      PRINTF("INITIAL\r\n");
-      //request_to_play_mp3_file("MD2INT.MP3");
       request_to_play_mp3_file("MD3INT.mp3");
-
       md3_current_state = STATE_REQUEST_INPUT1;
       animals_used = 0;
       got_input = false;
-
       break;
 
     case STATE_REQUEST_INPUT1:
       request_to_play_mp3_file("MD3PLS.mp3");
-
       length_entered_word = 0;
       current_word_index = 0;
-
       animal = animal_list[choose_animal()];
-
       md3_current_state = STATE_REQUEST_INPUT2;
       break;
 
@@ -145,11 +143,11 @@ void md3_main(void)
       request_to_play_mp3_file(animal_file);
 
       md3_current_state = STATE_WAIT_INPUT;
-
       break;
 
     case STATE_WAIT_INPUT:
-      if(got_input){
+      if(got_input)
+      {
         got_input = false;
         md3_current_state = STATE_PROC_INPUT;
       }
@@ -157,44 +155,49 @@ void md3_main(void)
 
     case STATE_PROC_INPUT:
       // set entered_letter in valid_letter(), but return 1 or 0
-
-      if (last_cell == 0) {
+      if (last_cell == 0)
+      {
         md3_current_state = STATE_READ_ENTERED_LETTERS;
-      } else if (valid_letter(last_cell)) {
+      } else if (valid_letter(last_cell))
+      {
         char buf[16];
         sprintf(buf, "%c.mp3", entered_letter);
         request_to_play_mp3_file(buf);
         md3_current_state = STATE_CHECK_IF_CORRECT;
-      } else {
+      } else 
+      {
         request_to_play_mp3_file("INVPAT.mp3");
         md3_current_state = STATE_READ_ENTERED_LETTERS;
       }
       break;
 
     case STATE_READ_ENTERED_LETTERS:
-
-      if(length_entered_word > 0) {
+      if(length_entered_word > 0)
+      {
         char buf[16];
         sprintf(buf, "%c.mp3", animal[current_word_index]);
         request_to_play_mp3_file(buf);
         current_word_index++;
       }
 
-      if (current_word_index == length_entered_word) {
+      if (current_word_index == length_entered_word)
+      {
         md3_current_state = STATE_WAIT_INPUT;
         current_word_index = 0; 
       }
       break;
 
     case STATE_CHECK_IF_CORRECT:
-      if (animal[length_entered_word] == entered_letter) {
+      if (animal[length_entered_word] == entered_letter)
+      {
         length_entered_word++;
 
         if (length_entered_word != strlen(animal))
           md3_current_state = STATE_CORRECT_INPUT;
         else
           md3_current_state = STATE_DONE_WITH_CURRENT_ANIMAL;
-      } else {
+      } else 
+      {
         md3_current_state = STATE_WRONG_INPUT;
       }
       break;
@@ -216,12 +219,24 @@ void md3_main(void)
   }
 }
 
-void md3_call_mode_yes_answer(void){}
-
-void md3_call_mode_no_answer(void){}
+/**
+ * @brief Handle enter button presses in mode 3
+ * @return Void
+ */
+void md3_call_mode_yes_answer(void)
+{
+}
 
 /**
- * @brief  Set the dot the from input
+ * @brief Handle exit buton presses in this mode
+ * @return Void
+ */
+void md3_call_mode_no_answer(void)
+{
+}
+
+/**
+ * @brief Set the dot the from input
  * @param this_dot the entered dot
  * @return Void
  */
