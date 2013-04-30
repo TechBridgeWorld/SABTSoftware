@@ -1,7 +1,10 @@
 # Stand Alone Braille Tutor
 
 ## Understanding the documentation
-[This is What the SABT does]
+The SABT was designed to help blind students learn to write using a slate and stylus.
+Historically, visually impaired students have been restricted to learning braille through the outdated slate and stylus method. This method is slow and tedious, has a long feedback cycle, and requires resources that are not always readily available. An affordable technological solution is much needed in this sector.
+Although commonplace to us, personal computers are a rare luxury item in developing countries. In addition, electrical power cannot be counted on due to often unstable power grids. The only reasonable option is a battery powered device.
+Easy to use and providing immediate feedback, the Stand Alone Braille Tutor is a completely self sufficient package aimed to ease and accelerate the braille learning process. Running on simply four AA batteries and coming with three different skill level interfaces, this device will be able to help a wide variety of users across the globe.
 
 To best understand this project, read the following documents, ideally in this order:
 - This Readme

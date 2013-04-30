@@ -25,8 +25,9 @@ char random_number_as_char()
   num *= PRIME;
   num = (abs(num) % 6);
 
-  //while you are looking at a full section of teh array
-  while(used_number[num]){
+  //while you are looking at a full section of the array
+  while(used_number[num])
+  {
     num = TCNT1;
     num *= PRIME;
     num = (abs(num) % 6);
@@ -35,8 +36,9 @@ char random_number_as_char()
   used_number[num] = 1;
   used_num_cnt ++;
 
-  //if you find that you ahve used all of the letters, clear both the array and the count
-  if(used_num_cnt == NUM_DOTS){
+  //if you find that you have used all of the letters, clear both the array and the count
+  if(used_num_cnt == NUM_DOTS)
+  {
     for(i = 0; i < NUM_DOTS; i ++)
       used_number[i] = 0;
     used_num_cnt = 0;
@@ -44,7 +46,6 @@ char random_number_as_char()
 
   //change from range 0-5 to 1-6
   num += 1;
-
 
   // Return the number as a character
   if (num >= 1 && num <= 6) return '0' + num;
@@ -55,7 +56,7 @@ char random_number_as_char()
 
 /**
  * @brief echo the number of the dot pressed
- * @param last_dot - unsigned char.   Which dot to play 
+ * @param last_dot - unsigned char. Which dot to play
  * @return Void
  */
 void md1_play_requested_dot(unsigned char last_dot)
@@ -63,7 +64,8 @@ void md1_play_requested_dot(unsigned char last_dot)
   char buf[10];
 
   // Check for validity of number
-  if (last_dot >= '1' && last_dot <= '6') {
+  if (last_dot >= '1' && last_dot <= '6')
+  {
     sprintf(buf, "dot_%c.MP3", last_dot);
     request_to_play_mp3_file(buf);
   }
@@ -122,7 +124,7 @@ void md1_main(void)
         request_to_play_mp3_file("good.MP3");
         last_dot = 0;
         current_state = STATE_REQUEST_INPUT1;
-      }      
+      }
       break;
     default:
       break;

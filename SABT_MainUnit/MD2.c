@@ -14,7 +14,7 @@ char last_cell;
 char md2_last_dot;
 
 // Contains bit representations of each of the letters
-char letter_bits_arr[26] = 
+char letter_bits_arr[26] =
 {
   A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, 
   H_BITS, I_BITS, J_BITS, K_BITS, L_BITS, M_BITS, N_BITS, 
@@ -50,7 +50,7 @@ int generate_random_number()
  */
 int prop_rand_number()
 {
-  int ret_int; 
+  int ret_int;
   int i;
 
   ret_int = (generate_random_number() % LET_CLST_SIZE);
@@ -60,7 +60,8 @@ int prop_rand_number()
   used_let_cnt ++;
 
   //if you find that you ahve used all of the letters, clear both the array and the count
-  if(used_let_cnt == LET_CLST_SIZE){
+  if(used_let_cnt == LET_CLST_SIZE)
+  {
     for(i = 0; i < LET_CLST_SIZE; i ++)
       used_letter[i] = 0;
     used_let_cnt = 0;
@@ -79,14 +80,13 @@ void play_requested_cell(char last_cell)
   // This will hold formatted file to access
   char req_mp3[10];
 
-  if (last_cell >= 'a' && last_cell <= 'z') {
+  if (last_cell >= 'a' && last_cell <= 'z')
+  {
     sprintf((char*)req_mp3, "%c.MP3", last_cell);
     request_to_play_mp3_file(req_mp3);
   } else
     request_to_play_mp3_file("INVPAT.MP3");
 }
-
-
 
 /**
  * @brief Changes letter into letter bits
@@ -94,10 +94,13 @@ void play_requested_cell(char last_cell)
  * @return char - letter that corresponds to buttons pressed 
  *                on error - not found bits, return -1
  */
-char get_bits_from_letters(char let){
+char get_bits_from_letters(char let)
+{
   int alphbt_len = 26;
   int i;
-  for(i = 0; i < alphbt_len; i ++){
+
+  for(i = 0; i < alphbt_len; i ++)
+  {
     if(letter_arr[i] == let)
       return letter_bits_arr[i];
   }
@@ -116,7 +119,8 @@ char get_letter_from_bits(char bits)
   int alphabet_len = 26;
   int i;
 
-  for(i = 0; i < alphabet_len; i++){
+  for(i = 0; i < alphabet_len; i++)
+  {
     if(letter_bits_arr[i] == bits)
       return letter_arr[i];
   }
@@ -150,6 +154,7 @@ void md2_play_requested_dot(char md2_last_dot)
 {
   // This will hold formatted file to access
   char req_mp3[10];
+  
   sprintf((char*)req_mp3, "dot_%c.MP3", md2_last_dot);
   request_to_play_mp3_file(req_mp3);
 }
@@ -175,8 +180,8 @@ void md2_reset(void)
 bool check_if_correct(char button_bits, char current_letter)
 {
   char letter_from_bits = get_letter_from_bits(button_bits);
-
   char buf[10];
+
   sprintf(buf, "%d, %d, %d\r\n", button_bits, current_letter, letter_from_bits);
   PRINTF(buf);
 
@@ -254,7 +259,8 @@ void md2_main(void)
         md2_play_requested_dot(curr_button);
       }
 
-      if(CHARTOINT(curr_button) == NUM_BUT){   
+      if(CHARTOINT(curr_button) == NUM_BUT)
+      {
         current_state = STATE_WAIT_INPUT;
         curr_button = '0'; 
       }
@@ -329,7 +335,7 @@ void md2_main(void)
             {
               request_to_play_mp3_file("no.MP3");
               current_state = STATE_ERROR_1;
-            }  
+            }
           }
         }
         else if((last_dot >= '1') && (last_dot <= '6'))
@@ -337,7 +343,7 @@ void md2_main(void)
           button_bits |= 1 << (CHARTOINT(last_dot) - 1);
           md2_play_requested_dot(last_dot);
         }
-        last_dot = 0;      
+        last_dot = 0;
       }
       break;
 
