@@ -71,6 +71,7 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - Volume sound files are not of uniform volume. Some are louder and some are softer then others. Look to standardize these sound files or even change them based off of User testing. 
 - Dictionary is currently read in all at once before any sound files are played. Each time through the loop a number of dictionary nodes are read in.  This number is stored in the value CLUSTERS_PER_RUN which is set to 60 currently.  The value is set in the header file FAT32.h.
 - Currently volume can only go down 9 steps before stopping. This is because there is a kink in the volume system. If you continue to press volume down after 9 presses (based on current step sizes) the volume goes up for three, then goes completely silent.  This is documented in the file VS1053.c.
+- The file that currently contains the write version of the braille dots, which will be used to compare if a braille cell is valid, is letter_globals.h
 - We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is:
 ```c
 ../FAT32.c: In function 'read_and_retrieve_file_contents':
