@@ -66,11 +66,15 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 ## Current issues and pitfalls
 - We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
 - Pressing a volume button while an mp3 file is playing breaks the system.
+- In digitalIO.c, in the Primary Board's code base, we use a function called delay().  The reason for this is that we are sending two things in a row in this function. If the delay() function is not used, both transfers will not work.  Look to fix the use of this.
+- AT the end of the dictionary file, you must have a line of ++++++++, so that the dictionary parser knows where to stop.
+- Volume sound files are not of uniform volume. Some are louder and some are softer then others. Look to standardize these sound files or even change them based off of User testing. 
+- Dictionary is currently read in all at once before any sound files are played. Each time through the loop a number of dictionary nodes are read in.  This number is stored in the value CLUSTERS_PER_RUN which is set to 60 currently.  The value is set in the header file FAT32.h.
+- Currently volume can only go down 9 steps before stopping. This is because there is a kink in the volume system. If you continue to press volume down after 9 presses (based on current step sizes) the volume goes up for three, then goes completely silent.  This is documented in the file VS1053.c.
 - We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is:
 ```c
 ../FAT32.c: In function 'read_and_retrieve_file_contents':
-../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function
-```
+../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
 
 ##Description of SABT MAIN Code
 Main function is located in SABT_MainUnit.c.  This is where the function starts, in the main() function. The rest of the files are spread throughout the SABT_MainUnit Project. You will have to find the files you need. Here are the steps the code follows once it enters main:
@@ -96,6 +100,7 @@ Main function is located in SABT_MainUnit.c.  This is where the function starts,
 - A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
 - Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
 - One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
+- Look to create a blank game, that responds to values in a file on the SD card. The idea is that we cannot infinitely add new games to the main board, due to lack of memory.  What we need instead is a blank FSM that can read controls from an SD card file to move through states, store values, and play sound files.  Would allow for app development community. 
 
 ## Doxygen Documentation  
 The most recent Doxygen documentation can be found at cmu-15-239.github.io/SABTSoftware/ 
