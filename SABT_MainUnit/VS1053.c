@@ -120,7 +120,7 @@ bool vs1053_increase_vol(void)
 /**
  * @brief this changes the sound files to make the volume go down.  
  *        Volume works in reverse for VS1053 - so 0 is hi and FEFE is low
- * @ref   https://www.sparkfun.com/datasheets/Components/SMD/vs1053.pdf, look
+ * @ref   https://www.sparkfun.com/datasheets/Components/SMD/vs1053.pdf look
  *        on page 47
  * @return bool - did sound file change properly
  */
