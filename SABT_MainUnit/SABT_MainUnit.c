@@ -192,6 +192,9 @@ void initialize_system(void)
   ui_current_mode = number_of_modes;  //No mode selected
   ui_selected_mode = number_of_modes;
 
+  // please wait for the dictionary file to load
+  play_mp3_file("WAIT.MP3");
+
   init_read_dict((unsigned char *)"wordsEn.txt");
 
   while(!done_rd_dict){
