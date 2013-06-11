@@ -10,7 +10,8 @@
 #define __VS1053_H__
 
 #include <stdbool.h>
-#include <string.h> 
+#include <string.h>
+#include <stdint.h>
 
 #define MIN_VOL     19280    //0x2828 + 9000(base 10)
 #define VOL_INCR    1000     //Min_vol is assigned based off of testing.  IF you go down by more then 9, vol_INCR, when set at

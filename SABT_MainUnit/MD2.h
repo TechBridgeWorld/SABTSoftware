@@ -58,7 +58,7 @@
 #define STATE_BUTT_TO_PRESS_1 8   //play press sound before telling which buttons to press
 #define STATE_BUTT_TO_PRESS_2 9   //play each of the buttons requested 
 
-char button_bits;
+static char button_bits;
 char letter_set;
 char random_count;
 char current_count;

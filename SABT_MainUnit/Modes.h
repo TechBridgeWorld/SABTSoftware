@@ -16,5 +16,6 @@
 #include "MD3.h"
 #include "MD4.h"
 #include "MD5.h"
+#include "MD6.h" //Free play
 
 #endif /* _MODES_H_ */
