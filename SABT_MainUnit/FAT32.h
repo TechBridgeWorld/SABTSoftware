@@ -190,6 +190,7 @@ unsigned char read_file(unsigned char flag, unsigned char *file_name);
 unsigned char read_and_retrieve_file_contents(unsigned char *file_name,
                                               unsigned char *data_string);
 unsigned char play_mp3_file(unsigned char *file_name);
+unsigned char play_beep();
 unsigned char convert_file_name(unsigned char *file_name);
 int replace_the_contents_of_this_file_with(unsigned char *file_name,
                                            unsigned char *file_content);
