@@ -177,8 +177,9 @@ void initialize_system(void)
 
   message_count = 0;
   valid_message = true;  
-
-  if(!ui_check_modes())
+  
+  /* TODO BANDAID FIX TO BYPASS FUNCTION */
+  /*if(!ui_check_modes())
   {
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file not found"));
     TX_NEWLINE_PC; 
@@ -187,10 +188,16 @@ void initialize_system(void)
   {
     usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
     TX_NEWLINE_PC;
-  }
+  }*/
 
+  number_of_modes = 6;
   ui_current_mode = number_of_modes;  //No mode selected
   ui_selected_mode = number_of_modes;
+
+  for (int i = 0; i < number_of_modes; i++) {
+    ui_modes[i] = i+1;
+  }
+
 
   // please wait for the dictionary file to load
   play_mp3_file("WAIT.MP3");
