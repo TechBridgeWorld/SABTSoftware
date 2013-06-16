@@ -21,7 +21,6 @@
 
 int current_state;               // current state of the mode
 char expected_dot;               // The expected response from user 
-static char last_dot;                   // char representing last big dot pressed
 char used_num_cnt;
 
 void md1_main(void);

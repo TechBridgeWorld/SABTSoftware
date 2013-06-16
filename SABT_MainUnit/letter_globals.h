@@ -4,8 +4,6 @@
  *  @author Kory Stiger (kstiger)
  */
 
-#define ENTER 140
-
 #define A_BITS 0b00000001
 #define B_BITS 0b00000011
 #define C_BITS 0b00001001

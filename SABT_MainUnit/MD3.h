@@ -23,7 +23,7 @@
 
 #define PRIME                53
 
-static char last_dot;                             // char representing last big dot pressed
+                            // char representing last big dot pressed
 // Int array representing the animals that have been used already.
 int animals_used_list[11];                 
 // Keeps track of number of animals used in current rotation

@@ -45,6 +45,14 @@ volatile bool playing_mp3;
 
 #define PRINTF(msg) \
   usart_transmit_string_to_pc((unsigned char*)msg);
+
+#define SENDBYTE(msg) \
+  usart_transmit_byte_to_pc((unsigned char)msg);
+
+#define MAX_FILENAME_SIZE 13 //8 + 1 + 3 + 1
+  
+#define NEWLINE	PRINTF("\n\r");
+
 #define CHARTOINT(c)     ((c) - '0')
 
 #endif /* _GLOBALS_H_ */

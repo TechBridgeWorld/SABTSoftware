@@ -9,9 +9,11 @@
 #include "Globals.h"
 #include "Modes.h"
 
+static char button_bits;
 int current_state;
 char last_cell;
 char md2_last_dot;
+static char last_dot;                   // char representing last big dot pressed
 
 // Contains bit representations of each of the letters
 char letter_bits_arr[26] =
@@ -386,6 +388,8 @@ void md2_call_mode_no_answer(void)
  */
 void md2_input_dot(char this_dot)
 {
+  SENDBYTE(this_dot);
+  PRINTF("\n\r");
   last_dot = this_dot;
   md2_last_dot = this_dot;
 }

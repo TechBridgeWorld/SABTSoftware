@@ -7,6 +7,7 @@
  */
 
 #include "Globals.h"
+#include "audio.h"
 
 volatile bool timer_interrupt;
 volatile bool LED_STAT;
@@ -89,6 +90,10 @@ int main(void)
     if(ui_mp3_file_pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
     {
       play_mp3_file(g_file_name);
+    }
+
+    if (playlist_empty == false) {
+      play_next_mp3();
     }
 
     ui_run_main_of_current_mode();
@@ -190,7 +195,7 @@ void initialize_system(void)
     TX_NEWLINE_PC;
   }*/
 
-  number_of_modes = 6;
+  number_of_modes = 7;
   ui_current_mode = number_of_modes;  //No mode selected
   ui_selected_mode = number_of_modes;
 
@@ -200,7 +205,7 @@ void initialize_system(void)
 
 
   // please wait for the dictionary file to load
-  play_mp3_file("WAIT.MP3");
+  play_mp3_file((unsigned char*)"WAIT.MP3");
 
   init_read_dict((unsigned char *)"wordsEn.txt");
 

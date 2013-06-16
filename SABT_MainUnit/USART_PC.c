@@ -118,4 +118,5 @@ void usart_transmit_string_to_pc(unsigned char* str_data)
 {
   while (*str_data)
     usart_transmit_byte_to_pc(*str_data++);
+  usart_transmit_byte_to_pc(0);
 }

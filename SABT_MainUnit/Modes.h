@@ -17,5 +17,6 @@
 #include "MD4.h"
 #include "MD5.h"
 #include "MD6.h" //Free play
+#include "MD7.h" //Hindi Braille
 
 #endif /* _MODES_H_ */

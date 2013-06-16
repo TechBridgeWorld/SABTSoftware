@@ -30,7 +30,7 @@ bool ui_check_modes(void)
   unsigned char file_content[100];
   unsigned char mode_id[3];
   // TODO should pc_print_content be of length 4?
-  unsigned char pc_print_content[2];
+  unsigned char pc_print_content[10];
   int i = 0, mode_number = 0;
   bool parsing_mode_descriptor;
   const char* modes_file = "MODES.DAT";
@@ -49,12 +49,13 @@ bool ui_check_modes(void)
   }
 
   // Print file contents to debug stream
-  usart_transmit_string_to_pc(&file_content[0]);
+  PRINTF(file_content);
   TX_NEWLINE_PC;
 
   parsing_mode_descriptor = false;
 
   i = 0;
+
   // '$' signifies end of file, <i> signifies mode i active
   while(file_content[i] != '$')
   {
@@ -98,11 +99,12 @@ bool ui_check_modes(void)
   sprintf((char*)&pc_print_content[0], "%d", number_of_modes);
 
   // Send the actual modes
-  usart_transmit_string_to_pc_from_flash(PSTR("And the modes are; "));
+  PRINTF("And the modes are: ");
+  PRINTF(pc_print_content);
   for(i = 0; i < number_of_modes; i++)
   {
     sprintf((char*)&pc_print_content[0], "%d, ", ui_modes[i]);
-    usart_transmit_string_to_pc(&pc_print_content[0]);
+    PRINTF(pc_print_content);
   }
   TX_NEWLINE_PC;
 
@@ -252,17 +254,25 @@ void ui_control_key_pressed(void)
     
     case UI_CMD_ENT2: // Exit a mode
       //This might be an exit from mode command or "NO" command in the mode
+      PRINTF("Received CANCEL from keypad");
+      NEWLINE;
       if(ui_mode_selected) 
       {
+        PRINTF("A mode is selected");
+        NEWLINE;
         // If the next byte is 'E', this is exit command 
         // (when the user pressed E2 for more than 5 secs)
         if(usart_ui_received_packet[6] == 69) 
         {
+          PRINTF("Long press detected, going to main menu");
+          NEWLINE;
           ui_mode_selected = false;
           request_to_play_mp3_file("MM.MP3");
         }
         else //Then this a "NO" answer, call the mode function for this
         {
+          PRINTF("Short press detected, calling mode NO function");
+          NEWLINE;
           ui_call_mode_no_answer();
         }
       }
@@ -353,6 +363,9 @@ void ui_call_mode_yes_answer(void)
     case 6:
       md6_call_mode_yes_answer();
       break;
+    case 7:
+      md7_call_mode_yes_answer();
+      break;
     default:
       break;
   }
@@ -383,6 +396,9 @@ void ui_call_mode_no_answer(void)
       break;
     case 6:
       md6_call_mode_no_answer();
+      break;
+    case 7:
+      md7_call_mode_no_answer();
       break;
     default:
       break;
@@ -415,6 +431,9 @@ void ui_input_dot_to_current_mode(char this_dot)
     case 6:
       md6_input_dot(this_dot);
       break;
+    case 7:
+      md7_input_dot(this_dot);
+      break;
     default:
       break;
   }
@@ -445,6 +464,9 @@ void ui_input_cell_to_current_mode(char this_cell)
       break;
     case 6:
       md6_input_cell(this_cell);
+      break;
+    case 7:
+      md7_input_cell(this_cell);
       break;
     default:
       break;
@@ -478,6 +500,9 @@ void ui_run_main_of_current_mode(void)
       case 6:
         md6_main();
         break;
+      case 7:
+        md7_main();
+        break;
       default:
         break;
     }
@@ -510,6 +535,9 @@ void ui_reset_the_current_mode(void)
         break;
       case 6:
         md6_reset();
+        break;
+      case 7:
+        md7_reset();
         break;
       default:
         break;

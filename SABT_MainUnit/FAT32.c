@@ -355,7 +355,7 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
   unsigned long cluster, byteCounter = 0, file_size, first_sector;
   unsigned int k;
   unsigned char j, error;
-  unsigned int num_bytes_read;
+  unsigned int num_bytes_read = 0;
   bool end_of_file = false;
 
   error = convert_file_name (file_name);    //convert file_name into FAT format
@@ -1170,7 +1170,7 @@ void write_file (unsigned char *file_name)
     while(1)
     {
       next_cluster = get_set_next_cluster (cluster, GET, 0);
-      if(next_cluster == EOF) break;
+      if(next_cluster == FAT32_EOF) break;
       cluster = next_cluster;
       cluster_count++;
     }
@@ -1191,7 +1191,7 @@ void write_file (unsigned char *file_name)
     // No free cluster
     if(cluster == 0) return;
 
-    get_set_next_cluster(cluster, SET, EOF);   //last cluster of the file, marked EOF
+    get_set_next_cluster(cluster, SET, FAT32_EOF);   //last cluster of the file, marked FAT32_FAT32_EOF
 
     first_cluster_high = (unsigned int) ((cluster & 0xffff0000) >> 16 );
     first_cluster_low = (unsigned int) ( cluster & 0x0000ffff);
@@ -1284,7 +1284,7 @@ void write_file (unsigned char *file_name)
     if(cluster == 0) return;
 
     get_set_next_cluster(prev_cluster, SET, cluster);
-    get_set_next_cluster(cluster, SET, EOF);   //last cluster of the file, marked EOF
+    get_set_next_cluster(cluster, SET, FAT32_EOF);   //last cluster of the file, marked FAT32_FAT32_EOF
   }
 
   get_set_free_cluster (NEXT_FREE, SET, cluster); //update FSinfo next free cluster entry
@@ -1352,14 +1352,14 @@ void write_file (unsigned char *file_name)
     {
       // This situation will occur when total files in root is a multiple of 
       // (32*sector_per_cluster)
-      if(cluster == EOF)   
+      if(cluster == FAT32_EOF)   
       {  
         // Find next cluster for root directory entries
         cluster = search_next_free_cluster(prev_cluster);
         // Link the new cluster of root to the previous cluster
         get_set_next_cluster(prev_cluster, SET, cluster);
         // Set the new cluster as end of the root directory
-        get_set_next_cluster(cluster, SET, EOF);
+        get_set_next_cluster(cluster, SET, FAT32_EOF);
       } 
       else return;
     }

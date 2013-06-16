@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "MD1.h"
 
+static char last_dot;                   // char representing last big dot pressed
 char used_number[6] = {0, 0, 0, 0, 0, 0};
 
 /**
@@ -151,6 +152,8 @@ void md1_call_mode_no_answer(void) {}
  */
 void md1_input_dot(char this_dot)
 {
+  SENDBYTE(this_dot);
+  PRINTF("\n\r");
   last_dot = this_dot;
   current_state = STATE_PROC_INPUT;
 }
