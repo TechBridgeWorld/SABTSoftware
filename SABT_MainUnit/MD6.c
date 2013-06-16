@@ -37,7 +37,7 @@ void md6_main(void) {
     
     case MD6_STATE_INITIAL:
       PRINTF("MD6 Free Play\n\r");
-      request_to_play_mp3_file("MD6INT.MP3");
+      request_to_play_mp3_file("MD6_INT.mp3");
       next_state = MD6_STATE_ACCEPT_DOTS;
       break;
 

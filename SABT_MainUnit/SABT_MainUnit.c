@@ -152,6 +152,8 @@ ISR(USART0_RX_vect)
  */
 void initialize_system(void)
 {
+  // please wait for the dictionary file to load
+
   ui_mp3_file_pending = false;
   timer_interrupt = false;      // Clear the timer interrupt flag
   PORTA = 0x00;
@@ -203,15 +205,14 @@ void initialize_system(void)
     ui_modes[i] = i+1;
   }
 
-
-  // please wait for the dictionary file to load
-  play_mp3_file((unsigned char*)"WAIT.MP3");
-
   init_read_dict((unsigned char *)"wordsEn.txt");
+  play_mp3_file((unsigned char*)"SYS_INIT.mp3");
 
   while(!done_rd_dict){
     read_dict_file();
   }
 
-  request_to_play_mp3_file("WELCOME.MP3"); 
+  play_mp3("SYS_","WELC");
+  play_mp3("SYS_","MINT");
+  play_mp3("SYS_","MINS");
 }
