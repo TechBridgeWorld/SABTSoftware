@@ -8,9 +8,10 @@
 
 #include "Globals.h"
 #include "Modes.h"
-#include "letter_globals.h"
+#include "audio.h"
 
 int md3_current_state;
+static int game_mode = 0;
 char md3_last_dot, last_cell, expected_dot;
 
 
@@ -120,17 +121,21 @@ bool valid_letter(char button_bits)
 void md3_main(void)
 {
   char animal_file[16];
+  char animal_sound[16];
+  char spell_letter[8];
   switch(md3_current_state)
   {
     case STATE_INITIAL:
-      request_to_play_mp3_file("MD3INT.mp3");
-      md3_current_state = STATE_REQUEST_INPUT1;
+      play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
+	  game_mode = 0;
+      md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       animals_used = 0;
       got_input = false;
       break;
 
     case STATE_REQUEST_INPUT1:
-      request_to_play_mp3_file("MD3PLS.mp3");
+	  if (game_mode == 1) play_mp3("MD3_","PLSA");
+	  else if (game_mode == 2) play_mp3("MD3_","PLSB");
       length_entered_word = 0;
       current_word_index = 0;
       animal = animal_list[choose_animal()];
@@ -139,34 +144,47 @@ void md3_main(void)
 
     case STATE_REQUEST_INPUT2:
 
-      sprintf(animal_file, "%s.mp3", animal);
-      request_to_play_mp3_file(animal_file);
+      if (game_mode == 1) play_mp3(NULL,animal);
+      else if (game_mode == 2) { sprintf(animal_file, "N%s.mp3", animal);
+	  play_mp3(NULL,animal_file);}
 
       md3_current_state = STATE_WAIT_INPUT;
       break;
 
     case STATE_WAIT_INPUT:
+	 
       if(got_input)
       {
-        got_input = false;
+        got_input = false;		
         md3_current_state = STATE_PROC_INPUT;
       }
       break;
 
     case STATE_PROC_INPUT:
       // set entered_letter in valid_letter(), but return 1 or 0
+	  
       if (last_cell == 0)
       {
         md3_current_state = STATE_READ_ENTERED_LETTERS;
       } else if (valid_letter(last_cell))
       {
         char buf[16];
-        sprintf(buf, "%c.mp3", entered_letter);
-        request_to_play_mp3_file(buf);
+        sprintf(buf, "%c", entered_letter);
         md3_current_state = STATE_CHECK_IF_CORRECT;
+		if (!game_mode)
+	    {
+		if (entered_letter == 'a') game_mode = 1;
+	    else if (entered_letter == 'b') game_mode = 2;
+		else {
+		    md3_current_state = STATE_WAIT_INPUT;
+			break;
+		}
+		md3_current_state = STATE_REQUEST_INPUT1;
+	    }
+		play_mp3(NULL,buf);
       } else 
       {
-        request_to_play_mp3_file("INVPAT.mp3");
+        play_mp3(NULL,"INVPAT");
         md3_current_state = STATE_READ_ENTERED_LETTERS;
       }
       break;
@@ -175,8 +193,8 @@ void md3_main(void)
       if(length_entered_word > 0)
       {
         char buf[16];
-        sprintf(buf, "%c.mp3", animal[current_word_index]);
-        request_to_play_mp3_file(buf);
+        sprintf(buf, "%c", animal[current_word_index]);
+        play_mp3(NULL,buf);
         current_word_index++;
       }
 
@@ -203,19 +221,41 @@ void md3_main(void)
       break;
 
     case STATE_WRONG_INPUT:
-      request_to_play_mp3_file("no.mp3");
+      play_mp3(NULL,"no");
       md3_current_state = STATE_READ_ENTERED_LETTERS;
       break;
 
     case STATE_CORRECT_INPUT:
-      request_to_play_mp3_file("good.mp3");
+      play_mp3(NULL,"good");	  
       md3_current_state = STATE_WAIT_INPUT;
       break;
 
     case STATE_DONE_WITH_CURRENT_ANIMAL:
-      request_to_play_mp3_file("nc_wrk.mp3");
-      md3_current_state = STATE_REQUEST_INPUT1;
+	  play_mp3(NULL,"good");
+	  play_mp3(NULL,"nc_wrk");
+	  if (game_mode == 1) {
+      	for (int count = 0; count < strlen(animal); count++) {
+			sprintf(spell_letter,"%c",animal[count]);
+			play_mp3(NULL,spell_letter);
+		}  	  	
+	  }
+	  md3_current_state = STATE_PLAY_SOUND; 
       break;
+
+    case STATE_SELECT_MODE:
+	  play_mp3("MD3_","MSEL");
+	  md3_current_state = STATE_WAIT_INPUT;
+	  break;
+ 
+    case STATE_PLAY_SOUND:
+	  sprintf(animal_sound, "N%s", animal);
+	  play_mp3(NULL,animal_sound);
+	  if (game_mode == 2){
+		  play_mp3("MD3_","SAYS");
+		  play_mp3(NULL,animal);
+		  }
+	  md3_current_state = STATE_REQUEST_INPUT1;
+	  break;
   }
 }
 

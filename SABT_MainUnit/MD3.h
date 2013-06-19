@@ -20,10 +20,12 @@
 #define STATE_WRONG_INPUT              7          // User input is valid but wrong
 #define STATE_CORRECT_INPUT            8          // User input is correct
 #define STATE_DONE_WITH_CURRENT_ANIMAL 9   // Finished current animal correctly
+#define STATE_SELECT_MODE			   10 
+#define STATE_PLAY_SOUND			   11
 
 #define PRIME                53
 
-                            // char representing last big dot pressed
+//static char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.
 int animals_used_list[11];                 
 // Keeps track of number of animals used in current rotation
@@ -36,6 +38,10 @@ int length_entered_word;
 int current_word_index;
 //bool to determine state transition
 bool got_input;
+//stores the sub-mode the game is played in 
+
+//mode selected or not
+
 
 void md3_main(void);
 void md3_reset(void);
