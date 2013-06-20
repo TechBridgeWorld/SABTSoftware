@@ -12,7 +12,7 @@
 #include "alphabet.h"
 #include "Globals.h"
 
-#define MAX_PLAYLIST_SIZE 16
+#define MAX_PLAYLIST_SIZE 32
 
 // Playlist supports quening some files at a time with filenames of up to 13
 //	characters

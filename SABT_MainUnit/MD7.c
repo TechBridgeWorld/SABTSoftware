@@ -7,6 +7,7 @@
 
 #include "audio.h"
 #include "common.h"
+#include "script_common.h"
 #include "Globals.h"
 
 /* *NOTE* - For new language modules, replace this header file with the header
@@ -19,11 +20,12 @@
 #define STATE_PROMPT		0x02
 #define STATE_INPUT			0x03
 #define STATE_CHECK 		0x04
-#define STATE_ADVANCE 	0x05
+#define STATE_NEXT 			0x05
 #define STATE_INCORRECT 0x06
 #define STATE_TRYAGAIN 	0x07
 #define STATE_SKIP			0x08
 #define STATE_START			0x09
+#define STATE_PREV			0x0B
 
 /*	Submodes
  *	The mode has 2 submodes - a sequential LEARN submode that teaches the
@@ -35,6 +37,9 @@
 //State magic numbers
 #define	PLAY_MODE_SIZE 				5
 #define MAX_INCORRECT_TRIES		3
+
+//Update this macro to refer to script length from script header file
+#define SCRIPT_LENGTH					DEVANAGARI_SCRIPT_LEN
 
 //Script and language configuration
 /* *NOTE* - After adding a new header file and language files on the SD card,
@@ -50,14 +55,20 @@ static char next_state = STATE_START;
 static char submode;
 static char button_bits;
 static char last_dot;
+static short learn_flags[SCRIPT_LENGTH];
 static short play_indices[PLAY_MODE_SIZE];
+static short play_flags[PLAY_MODE_SIZE];
 static short current_index;
 static alphabet_t* current_alphabet;
 static alphabet_t* input_alphabet;
 static short correct_count;
 static short incorrect_count;
 static short incorrect_tries;
-//static char debug[10];
+static short* flag_array;
+static short bound;
+static char com_mp3[5];
+static char debug[64];
+static char correct = 0;
 
 /**
  * @brief Resets mode state variables to default values
@@ -68,8 +79,12 @@ void reset_state() {
 	submode = SUBMODE_NONE;
 	button_bits = 0b00000000;
 	last_dot = 0b00000000;
+	for (int i = 0; i < SCRIPT_LENGTH; i++) {
+		learn_flags[i] = 0;
+	}
 	for (int i = 0; i < PLAY_MODE_SIZE; i++) {
 		play_indices[i] = 0;
+		play_flags[i] = 0;
 	}
 	current_index = 0;
 	current_alphabet = NULL;
@@ -77,6 +92,10 @@ void reset_state() {
 	correct_count = 0;
 	incorrect_count = 0;
 	incorrect_tries = 0;
+	flag_array = NULL;
+	bound = 0;
+	strcpy(com_mp3,"");
+	correct = 0;
 	PRINTF("State variables reset\n\r");
 }
 
@@ -102,18 +121,19 @@ void md7_main(void) {
 			switch (last_dot) {
 				case 0:
 					play_mp3(mode_fileset, "MENU");
+					incorrect_tries = 0;
 					last_dot = 1;
 					break;
 
 				case 1:
 					break;
 
-
 				case '1':
 					submode = SUBMODE_LEARN;
 					PRINTF("** LEARN submode **\n\r");
 					next_state = STATE_INIT;
 					last_dot = 0;
+					incorrect_tries = 0;
 					break;
 
 				case '2':
@@ -121,12 +141,17 @@ void md7_main(void) {
 					PRINTF("** PLAY submode **\n\r");
 					next_state = STATE_INIT;
 					last_dot = 0;
+					incorrect_tries = 0;
 					break;
 
 				default:
+					incorrect_tries++;
 					play_mp3(lang_fileset, "INVP");
-					next_state = STATE_MENU;
-					last_dot = 0;
+					if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+						last_dot = 0;
+					} else {
+						last_dot = 1;
+					}
 					break;
 			}
 			break;
@@ -147,7 +172,8 @@ void md7_main(void) {
 					play_mp3(mode_fileset, "PINT");
 					PRINTF("Initialising play letter array: ");
 					for (int i = 0; i < PLAY_MODE_SIZE; i++) {
-						play_indices[i] = timer_rand() % this_script->length;
+						play_indices[i] = timer_rand() % SCRIPT_LENGTH;
+						play_flags[i] = 0;
 						PRINTF((this_script->alphabets[play_indices[i]]).sound);
 						PRINTF(", ");
 					}
@@ -189,16 +215,34 @@ void md7_main(void) {
 		case STATE_INPUT:
 			//Adds new dots to bit pattern and proceeds to check when ENTER is
 			//	pressed
-			if (last_dot != 0) {
-				if (last_dot >= '1' && last_dot <= '6') {
-					 PRINTF("Dot added: ");
-					 SENDBYTE(last_dot);
-					 PRINTF("\n\r");
-					 button_bits = add_dot(button_bits, last_dot);
-					 play_dot(lang_fileset, last_dot);
-				} else if (last_dot == ENTER) {
-						next_state = STATE_CHECK;
-				}
+			switch (last_dot) {
+				case 0:
+					break;
+
+				case ENTER:
+					next_state = STATE_CHECK;
+					break;
+
+				case LEFT:
+					play_mp3(mode_fileset, "NEXT");
+					next_state = STATE_PREV;
+					break;
+
+				case RIGHT:
+					play_mp3(mode_fileset, "NEXT");
+					correct = 0;
+					next_state = STATE_NEXT;
+					break;
+
+				default:
+					if (last_dot >= '1' && last_dot <= '6') {
+						 PRINTF("Dot added: ");
+						 SENDBYTE(last_dot);
+						 PRINTF("\n\r");
+						 button_bits = add_dot(button_bits, last_dot);
+						 play_dot(lang_fileset, last_dot);
+					}
+					break;
 			}
 			last_dot = 0;
 			break;
@@ -206,54 +250,46 @@ void md7_main(void) {
 		//Checks cell input from user
 		case STATE_CHECK:
 			PRINTF("STATE_CHECK\n\r");
-			input_alphabet = get_alphabet_by_bits(button_bits, this_script);
-			if (is_same_alphabet(current_alphabet, input_alphabet)) {
-				correct_count++;
-				incorrect_tries = 0;
-				play_mp3(mode_fileset, "CORR");
-				next_state = STATE_ADVANCE;
+
+			//When user presses no dots and presses ENTER, prompt again
+			if (button_bits == 0x00) {
+				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+					play_mp3(mode_fileset, "PLSP");
+					switch (submode) {
+						case SUBMODE_LEARN:
+							play_mp3(mode_fileset, "LINT");
+							break;
+						case SUBMODE_PLAY:
+							play_mp3(mode_fileset, "PINT");
+							break;
+						default:
+							break;
+					}
+					next_state = STATE_PROMPT;
+				} else {
+					incorrect_tries++;
+					play_mp3(lang_fileset, "INVP");
+					next_state = STATE_INPUT;
+				}
 			} else {
-				incorrect_tries++;
-				play_input_error(lang_fileset, button_bits);
-				next_state = STATE_INCORRECT;
+				//Otherwise check alphabet
+				input_alphabet = get_alphabet_by_bits(button_bits, this_script);
+				if (is_same_alphabet(current_alphabet, input_alphabet)) {
+					play_mp3(mode_fileset, "CORR");
+					if (correct_count + 1 < bound)
+						play_mp3(mode_fileset, "NEXT");
+					incorrect_tries = 0;
+					correct = 1;
+					last_dot = RIGHT;
+					next_state = STATE_NEXT;
+				} else {
+					incorrect_tries++;
+					play_mp3(lang_fileset, "INVP");
+					next_state = STATE_INCORRECT;
+				}
 			}
 			break;
 
-		//If user input matches current alphabet
-		case STATE_ADVANCE:
-			PRINTF("STATE_ADVANCE\n\r");
-			//If correct, then check if target for submode achieved otherwise just
-			//	proceed to next letter
-			current_index++;
-			switch (submode) {
-				case SUBMODE_LEARN:
-					if (current_index >= this_script->length) {
-						play_mp3(mode_fileset, "LCOM");
-						next_state = STATE_TRYAGAIN;
-					} else {
-						play_mp3(mode_fileset, "NEXT");
-						current_alphabet = &((this_script->alphabets)[current_index]);
-						next_state = STATE_PROMPT;
-					}
-					break; 
-
-				case SUBMODE_PLAY:
-					if (current_index >= PLAY_MODE_SIZE) {
-						play_mp3(mode_fileset, "PCOM");
-						next_state = STATE_TRYAGAIN;
-					} else {
-						play_mp3(mode_fileset, "NEXT");
-						current_alphabet =
-							&(this_script->alphabets[play_indices[current_index]]);
-						next_state = STATE_PROMPT; 
-					}
-					break;
-
-				default:
-					break;
-			}
-			break;
-			
 		//If user input does not match current alphabet
 		case STATE_INCORRECT:
 			PRINTF("STATE_INCORRECT\n\r");
@@ -305,8 +341,10 @@ void md7_main(void) {
 					break;
 				
 				case '1':
-					next_state = STATE_ADVANCE;
-					last_dot = 0;
+					next_state = STATE_NEXT;
+					play_mp3(mode_fileset, "NEXT");
+					correct = 0;
+					last_dot = RIGHT;
 					break;
 
 				case '2':
@@ -315,9 +353,198 @@ void md7_main(void) {
 					last_dot = 0;
 					break;
 
+				case '3':
+					play_alphabet(lang_fileset, current_alphabet);
+					next_state = STATE_PROMPT;
+					last_dot = 0;
+					break;
+
+				case LEFT:
+					next_state = STATE_PREV;
+					break;
+
+				case RIGHT:
+					correct = 0;
+					next_state = STATE_NEXT;
+					break;
+
 				default:
 					play_mp3(lang_fileset, "INVP");
 					last_dot = 0;
+					break;
+			}
+			break;
+
+		case STATE_NEXT:
+			switch(last_dot) {
+
+				case 0:
+					break;
+
+				case RIGHT:
+					PRINTF("Next alphabet");
+					NEWLINE;
+
+					switch (submode) {
+						case SUBMODE_LEARN:
+							flag_array = learn_flags;
+							bound = SCRIPT_LENGTH;
+							strcpy(com_mp3, "LCOM");
+							break;
+
+						case SUBMODE_PLAY:
+							flag_array = play_flags;
+							bound = PLAY_MODE_SIZE;
+							strcpy(com_mp3, "PCOM");
+							break;
+
+						default: 
+							break;
+					}
+
+					//If correct, mark index as completed
+					if (correct == 1) {
+						flag_array[current_index] = 1;
+						correct_count++;
+					}
+					sprintf(debug, "Correct count: %d", correct_count);
+					PRINTF(debug);
+					NEWLINE;
+
+					//If # of correct entries == length of script/play array,
+					//	then submode complete
+					if (correct_count == bound) {
+						play_mp3(mode_fileset, com_mp3);
+						next_state = STATE_TRYAGAIN;
+					} else {
+						//Loop till an index not yet completed is found
+						for (int i = PLUS_ONE_MOD(current_index, bound);
+									i != current_index;
+									i = PLUS_ONE_MOD(i, bound)) {
+							sprintf(debug, "i = %d", i);
+							PRINTF(debug);
+							NEWLINE;
+							sprintf(debug, "array[i] = %d", flag_array[i]);
+							PRINTF(debug);
+							NEWLINE;
+							if (flag_array[i] == 0) {
+								current_index = i;
+								break;
+							}
+						}
+						sprintf(debug, "Current index: %d", current_index);
+						PRINTF(debug);
+						NEWLINE;
+
+						switch (submode) {
+							case SUBMODE_LEARN:
+								current_alphabet = &((this_script->alphabets)[current_index]);
+								break;
+
+							case SUBMODE_PLAY:
+								current_alphabet =
+									&(this_script->alphabets[play_indices[current_index]]);
+								break;
+
+							default:
+								break;
+						}
+
+						//If just scrolling through letters, play sound
+						if (correct == 0) {
+							play_alphabet(lang_fileset, current_alphabet);
+						} else {
+							next_state = STATE_PROMPT;
+							correct = 0;
+						}
+					}
+					last_dot = 0;
+					break;
+
+				case ENTER:
+					last_dot = 0;
+					next_state = STATE_PROMPT;
+					break;
+
+				case LEFT:
+					next_state = STATE_PREV;
+					break;
+
+				default:
+					break;
+			}
+			break;
+
+		case STATE_PREV:
+			switch (last_dot) {
+				case LEFT:
+					PRINTF("Previous alphabet");
+					NEWLINE;
+					
+					switch (submode) {
+						case SUBMODE_LEARN:
+							flag_array = learn_flags;
+							bound = SCRIPT_LENGTH;
+							strcpy(com_mp3, "LCOM");
+							break;
+
+						case SUBMODE_PLAY:
+							flag_array = play_flags;
+							bound = PLAY_MODE_SIZE;
+							strcpy(com_mp3, "PCOM");
+							break;
+
+						default:
+							break;
+					}
+
+					//Loop till an index not yet completed is found
+					for (int i = MINUS_ONE_MOD(current_index, bound);
+								i != current_index;
+								i = MINUS_ONE_MOD(i, bound)) {
+						sprintf(debug, "i = %d", i);
+						PRINTF(debug);
+						NEWLINE;
+						sprintf(debug, "array[i] = %d", flag_array[i]);
+						PRINTF(debug);
+						NEWLINE;
+						if (flag_array[i] == 0) {
+							current_index = i;
+							break;
+						}
+					}
+					sprintf(debug, "Current index: %d", current_index);
+					PRINTF(debug);
+					NEWLINE;
+
+					switch (submode) {
+						case SUBMODE_LEARN:
+							current_alphabet = &((this_script->alphabets)[current_index]);
+							break;
+
+						case SUBMODE_PLAY:
+							current_alphabet =
+								&(this_script->alphabets[play_indices[current_index]]);
+							break;
+
+						default:
+							break;
+					}
+					play_alphabet(lang_fileset, current_alphabet);
+					last_dot = 0;
+					break;
+
+				case RIGHT:
+					correct = 0;
+					next_state = STATE_NEXT;
+					break;
+
+				case ENTER:
+					last_dot = 0;
+					next_state = STATE_PROMPT;
+					break;
+
+				default:
 					break;
 			}
 			break;
@@ -359,4 +586,12 @@ void md7_input_dot(char this_dot) {
 
 void md7_input_cell(char this_cell) {
 	/* TODO  */
+}
+
+void md7_call_mode_left() {
+	last_dot = LEFT;
+}
+
+void md7_call_mode_right() {
+	last_dot = RIGHT;
 }

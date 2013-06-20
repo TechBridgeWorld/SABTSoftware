@@ -287,6 +287,8 @@ void ui_control_key_pressed(void)
         ui_current_mode = ui_modes[ui_selected_mode];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
+      } else {
+        ui_call_mode_right();
       }
       break;
     
@@ -297,6 +299,8 @@ void ui_control_key_pressed(void)
         ui_current_mode = ui_modes[ui_selected_mode];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
+      } else {
+        ui_call_mode_left();
       }
       break;
 
@@ -542,5 +546,36 @@ void ui_reset_the_current_mode(void)
       default:
         break;
     }
+  }
+}
+
+
+/**
+ * @brief Calls left button handler in mode
+ * @param void
+ * @return void
+ */
+void ui_call_mode_left(void) {
+  switch (ui_current_mode) {
+    case 7:
+      md7_call_mode_left();
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief Calls right button handler in mode
+ * @param void
+ * @return void
+ */
+void ui_call_mode_right(void) {
+  switch (ui_current_mode) {
+    case 7:
+      md7_call_mode_right();
+      break;
+    default:
+      break;
   }
 }

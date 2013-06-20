@@ -40,6 +40,8 @@ void ui_input_dot_to_current_mode(char this_dot);
 void ui_input_cell_to_current_mode(char this_cell);
 void ui_run_main_of_current_mode(void);
 void ui_reset_the_current_mode(void);
+void ui_call_mode_left(void);
+void ui_call_mode_right(void);
 
 //MP3 play related functions
 //void RequestToPlayMP3file(const char* thisFile);

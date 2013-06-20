@@ -22,9 +22,9 @@
 #define DEV_AI				0b00001100
 #define DEV_O					0b00010101
 #define DEV_AU				0b00101010
-#define DEV_A_N				0b00000110
-#define DEV_AH_				0b00000100
-#define DEV__AM_			0b00100000
+#define DEV_A_N				0b00110000
+#define DEV_AH_				0b00100000
+#define DEV__AM_			0b00000100
 #define DEV_KA				0b00000101
 #define DEV_KHA				0b00101000
 #define DEV_GA				0b00011011
@@ -35,7 +35,7 @@
 #define DEV_JA				0b00011010
 #define DEV_JHA				0b00110100
 #define	DEV___NA			0b00010010
-#define DEV_T_A				0b00111110
+#define DEV_T_A				0b00011110
 #define DEV_T_HA			0b00111010
 #define DEV_D_A				0b00101011
 #define DEV_D_HA			0b00111111
@@ -80,7 +80,7 @@ alphabet_t devanagari_alphabets[] = {
 	{DEV_KHA, "KHA"},
 	{DEV_GA, "GA"},
 	{DEV_GHA, "GHA"},
-	{DEV__NA, "NA"},
+	{DEV__NA, "_NA"},
 	{DEV_CA, "CA"},
 	{DEV_CHA, "CHA"},
 	{DEV_JA, "JA"},
