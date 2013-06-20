@@ -51,6 +51,7 @@ volatile char mode1_state;
 volatile char mode2_state;
 volatile char vol_up_state;
 volatile char vol_down_state;
+volatile char length_press;
 
 void initialize_digital_io(void);
 void check_command_buttons(void);
