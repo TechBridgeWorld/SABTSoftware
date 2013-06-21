@@ -8,6 +8,7 @@
 
 #include "GlobalsUI.h"
 
+int i = 0;
 /**
  * @brief initialize the IO ports
  * @return Void
@@ -20,6 +21,7 @@ void initialize_digital_io(void)
   mode2_state = BUTTON_OFF;
   vol_up_state = BUTTON_OFF;
   vol_down_state = BUTTON_OFF;
+  length_press = BUTTON_OFF;
     
   // Clear the DDRC bits
   DDRC &= ~_BV(UI_BR1);  
@@ -71,10 +73,18 @@ void check_command_buttons(void)
   {
     if(enter2_state == BUTTON_OFF)
     {
-      _delay_ms(100);
       if(!(PINB & (1 << UI_ENTER2)))
-      {
+      { 
+        while (i < 18){
+		   if(!(PINB & (1 << UI_ENTER2))){ 
+		       _delay_ms(100);
+			   i ++;
+		   }
+		   else break;
+		}
+		if (i == 18) length_press = BUTTON_ON;
         enter2_state = BUTTON_ON;
+		i = 0;   
       }
     }
   }
@@ -202,7 +212,9 @@ void enter2_task(void)
 {
   set_stat_led2(false);
   mcu_message_payload[0] = ENTER2_PAYLOAD;
-  mcu_message_payload[1] = 'E';
+  if (length_press == BUTTON_ON) mcu_message_payload[1] = 'E';
+  else mcu_message_payload[1] = 'S';
+  length_press = BUTTON_PROCESSED;
   send_packet('D', (char*)&mcu_message_payload, 2);
 }
 

@@ -273,6 +273,11 @@ void md3_call_mode_yes_answer(void)
  */
 void md3_call_mode_no_answer(void)
 {
+      play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
+	  game_mode = 0;
+      md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
+      animals_used = 0;
+      got_input = false;
 }
 
 /**
