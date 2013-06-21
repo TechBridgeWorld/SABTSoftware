@@ -7,6 +7,7 @@
  */
 
 #include "Globals.h"
+#include "audio.h"
 
 // The volume is controlled by 2 bytes - the MSB controls the left
 // audio channel and the LSB controls the right audio channel
@@ -131,6 +132,7 @@ bool vs1053_increase_vol(void)
 
   sprintf(debug, "Volume: %x\n\r", stereo_volume);
   PRINTF(debug);
+  play_mp3("SYS_","VOL");
 
   return true;
 }
@@ -168,6 +170,7 @@ bool vs1053_decrease_vol(void)
 
   sprintf(debug, "Volume: %x\n\r", stereo_volume);
   PRINTF(debug);
+  play_mp3("SYS_","VOL");
 
   return true;
 }
