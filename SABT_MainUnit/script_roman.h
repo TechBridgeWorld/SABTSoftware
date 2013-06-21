@@ -70,6 +70,7 @@ static alphabet_t roman_alphabets[] = {
  
 static script_t script_roman = {
 	ROMAN_SCRIPT_LEN,
+	"",
 	roman_alphabets
 };
 

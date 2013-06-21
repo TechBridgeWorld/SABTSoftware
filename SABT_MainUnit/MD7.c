@@ -12,7 +12,7 @@
 
 /* *NOTE* - For new language modules, replace this header file with the header
 						for the new script */
-#include "script_devanagari.h"
+#include "script_hindi.h"
 
 //Mode states
 #define STATE_MENU			0x00
@@ -38,14 +38,15 @@
 #define	PLAY_MODE_SIZE 				5
 #define MAX_INCORRECT_TRIES		3
 
+#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
+
 //Update this macro to refer to script length from script header file
-#define SCRIPT_LENGTH					DEVANAGARI_SCRIPT_LEN
 
 //Script and language configuration
 /* *NOTE* - After adding a new header file and language files on the SD card,
  						edit the following 3 variables */
-static script_t* this_script = &script_devanagari;
-static char lang_fileset[5] = "HIN_";
+static script_t* this_script = &script_hindi;
+static char* lang_fileset = script_hindi.fileset;
 static char mode_fileset[5] = "MD7_";
 
 /* Defines initial state for mode state machine */
@@ -69,6 +70,7 @@ static short bound;
 static char com_mp3[5];
 static char debug[64];
 static char correct = 0;
+static char cancel = 0;
 
 /**
  * @brief Resets mode state variables to default values
@@ -234,6 +236,18 @@ void md7_main(void) {
 					next_state = STATE_NEXT;
 					break;
 
+				case CANCEL:
+					// Press CANCEL once to delete last character, press CANCEL again
+					// to 
+					if (cancel == 0) {
+						play_mp3(mode_fileset, "CANC");
+						button_bits = 0x00;
+						cancel = 1;
+					} else {
+						next_state = STATE_INIT;
+					}
+					break;
+
 				default:
 					if (last_dot >= '1' && last_dot <= '6') {
 						 PRINTF("Dot added: ");
@@ -268,7 +282,7 @@ void md7_main(void) {
 					next_state = STATE_PROMPT;
 				} else {
 					incorrect_tries++;
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(mode_fileset, "INVP");
 					next_state = STATE_INPUT;
 				}
 			} else {
@@ -314,7 +328,7 @@ void md7_main(void) {
 					break;
 
 				case '1':
-					next_state = STATE_START;
+					next_state = STATE_INIT;
 					last_dot = 0;
 					break;
 
@@ -563,21 +577,7 @@ void md7_call_mode_yes_answer(void) {
 }
 
 void md7_call_mode_no_answer(void) {
-	PRINTF("Received CANCEL signal");
-	NEWLINE;
-	if (next_state == STATE_INPUT) {
-		PRINTF("Switching to mode submenu");
-		NEWLINE;
-		next_state = STATE_MENU;
-	} else if (next_state == STATE_MENU) {
-		PRINTF("To implement: QUIT");
-		NEWLINE;
-		/* TODO - Quit mode */
-	} else {
-		PRINTF("Setting last_dot");
-		NEWLINE;
-		last_dot = CANCEL;
-	}
+	last_dot = CANCEL;
 }
 
 void md7_input_dot(char this_dot) {

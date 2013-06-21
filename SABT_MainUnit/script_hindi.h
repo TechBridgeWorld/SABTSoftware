@@ -1,17 +1,20 @@
 /**
- *  @file script_devanagari.h
- *  @brief Bit patterns representing alphabets of the Devanagari script
+ *  @file script_hindi.h
+ *  @brief Bit patterns representing alphabets of the Hindi script
  *  @author Vivek Nair (viveknai)
  */
 
-#ifndef _SCRIPT_DEVANAGARI_H_
-#define _SCRIPT_DEVANAGARI_H_
+#ifndef _SCRIPT_HINDI_H_
+#define _SCRIPT_HINDI_H_
 
 #include "alphabet.h"
 #include "script_common.h"
 
+#define SCRIPT_HINDI_FILESET "HIN_"
+#define SCRIPT_HINDI_LENGTH 46
+
 // Devanagari script bit patterns
-// NOTE: Only a subset of all Devanagari alphabets is represented here
+// NOTE: Only a subset of all Hindi# alphabets is represented here
 #define DEV_A 				0b00000001
 #define DEV_A_				0b00011100
 #define DEV_I					0b00001010
@@ -59,10 +62,8 @@
 #define DEV_SA 				0b00001110
 #define DEV_HA				0b00010011
 
-#define DEVANAGARI_SCRIPT_LEN 46
-
 // Devanagari script array
-alphabet_t devanagari_alphabets[] = {
+alphabet_t alphabets_hindi[] = {
 	{DEV_A, "A"},
 	{DEV_A_, "A_"},
 	{DEV_I, "I"},
@@ -111,9 +112,10 @@ alphabet_t devanagari_alphabets[] = {
 	{DEV_HA, "HA"}
 };
 
-script_t script_devanagari = {
-	DEVANAGARI_SCRIPT_LEN,
-	devanagari_alphabets
+script_t script_hindi = {
+	SCRIPT_HINDI_LENGTH,
+	SCRIPT_HINDI_FILESET,
+	alphabets_hindi
 }; 
 
-#endif /* _SCRIPT_DEVANAGARI_H_ */
+#endif /* _SCRIPT_HINDI_H_ */

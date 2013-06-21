@@ -27,7 +27,7 @@ volatile char ui_current_mode;
 volatile int ui_selected_mode;
 
 //Dealing with the user data
-bool ui_check_modes(void);
+void ui_check_modes(void);
 uint16_t ui_calculate_crc(unsigned char* message);
 bool ui_parse_message(bool mp3_is_playing);
 void ui_control_key_pressed(void);

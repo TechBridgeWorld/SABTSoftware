@@ -8,6 +8,22 @@
 
 #include "Globals.h"
 
+// The volume is controlled by 2 bytes - the MSB controls the left
+// audio channel and the LSB controls the right audio channel
+// Needs to be masked, bitshifted and assigned for proper volume control
+// Note that 0x00 is the highest volume, 0xFE is the lowest volume for a
+// channel
+
+#define VOL_INIT    0x30
+#define VOL_MIN     0x50    // Set based on testing
+#define VOL_INCR    0x08
+#define CHANGE_VOLUME(X) ((X) | (X) << 8)
+#define CURRENT_VOLUME(X) (X & 0xFF)
+
+static uint8_t mono_volume;
+static uint16_t stereo_volume;
+static char debug[32];
+
 // TODO find more descriptive variable names
 volatile unsigned int temp1 = 0;
 volatile unsigned int temp2 = 0;
@@ -15,7 +31,6 @@ volatile unsigned int temp3 = 0;
 volatile unsigned char temp4;
 volatile unsigned char temp5;
 volatile unsigned char temp_address;
-
 
 /**
  * @brief initialize the audio codec
@@ -57,13 +72,15 @@ unsigned char vs1053_initialize(void)
   vs1053_write_command(0x05, 0xac45);         // Activate sample rate as 44.1kHz stereo
 
   retry = 0;
-  while(vs1053_read_command(0x0b) != 0x2828)  // REDO if not written properly
+
+  mono_volume = VOL_INIT;
+  stereo_volume = CHANGE_VOLUME(VOL_INIT);
+  while(vs1053_read_command(0x0b) != stereo_volume)  // REDO if not written properly
   {
-    vs1053_write_command(0x0b, 0x2828);       // Set volume to a midrange value
-    if(retry++ > 10 ) return 3;               // try this for 10 times
+    vs1053_write_command(0x0b, stereo_volume);       // Set volume to a midrange value
+    if(retry++ > 10) return 3;               // try this for 10 times
   }
 
-  vs1053_volume = 0x2828;
   retry = 0;
   while(vs1053_read_command(0x00) != 0x0800)  // REDO if not written properly
   {
@@ -97,23 +114,24 @@ bool vs1053_increase_vol(void)
   int retry = 0;
 
   // Increase the global volume setting
-  vs1053_volume = vs1053_volume - VOL_INCR;
+  mono_volume = mono_volume - VOL_INCR;
   
   // Check for max volume we are allowing
-  //vs1053_volume is an unsigned, so if you go belove 0, wraps around to high positive
-  if(vs1053_volume <= VOL_INCR)
+  //mono_volume is an unsigned, so if you go belove 0, wraps around to high positive
+  if(mono_volume <= VOL_INCR)
+    mono_volume = VOL_INCR;
+  
+  stereo_volume = CHANGE_VOLUME(mono_volume);
+  // Actually increase the volume
+  while(vs1053_read_command(0x0B) != stereo_volume)   // REDO if not written properly
   {
-    vs1053_volume = VOL_INCR + 1;
+    vs1053_write_command(0x0B, stereo_volume);        // Set the requested volume
+    if(retry++ > 10) return false;
   }
-  else
-  {
-    // Actually increase the volume
-    while(vs1053_read_command(0x0B) != vs1053_volume)   // REDO if not written properly
-    {
-      vs1053_write_command(0x0B, vs1053_volume);        // Set the requested volume
-      if(retry++ > 10) return false;
-    }
-  }
+
+  sprintf(debug, "Volume: %x\n\r", stereo_volume);
+  PRINTF(debug);
+
   return true;
 }
 
@@ -129,26 +147,28 @@ bool vs1053_decrease_vol(void)
   int retry = 0;
 
   //Decrease the global volume setting
-  vs1053_volume = vs1053_volume + VOL_INCR;
+  mono_volume = mono_volume + VOL_INCR;
 
   // Check for min volume setting
-  //vs1053_volume is an unsigned, so if you go above FFFF, will wrap around to small number
+  //mono_volume is an unsigned, so if you go above FFFF, will wrap around to small number
   //Min_vol is assigned based off of testing.  IF you go down by more then 9, vol_INCR, when set at
   //1000. Sound will go up for 4 down presses before becoming completely quiet.  
   //make sure not to let this happen
-  if(vs1053_volume >= (MIN_VOL - VOL_INCR))
+  if(mono_volume >= VOL_MIN)
+    mono_volume = VOL_MIN;
+
+  stereo_volume = CHANGE_VOLUME(mono_volume);
+  
+  // Actually decrease the volume
+  while(vs1053_read_command(0x0B) != stereo_volume)   // REDO if not written properly
   {
-    vs1053_volume = MIN_VOL - VOL_INCR - 1;
+    vs1053_write_command(0x0B, stereo_volume);        // Set the requested volume
+    if(retry++ > 10) return false;
   }
-  else
-  {
-    // Actually decrease the volume
-    while(vs1053_read_command(0x0B) != vs1053_volume)   // REDO if not written properly
-    {
-      vs1053_write_command(0x0B, vs1053_volume);        // Set the requested volume
-      if(retry++ > 10) return false;
-    }
-  }
+
+  sprintf(debug, "Volume: %x\n\r", stereo_volume);
+  PRINTF(debug);
+
   return true;
 }
 

@@ -11,13 +11,18 @@
 #include "Globals.h"
 #include "Modes.h"
 
+#include <string.h>
+
+#define MAX_MODE_FILE_LENGTH 128
+#define MAX_MODE_NUMBER_DIGITS 2
+
 /**
  * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
  *         what they are
  * @return bool  - return true on succesful completion of transmission, false on 
  *         failure
  */
-bool ui_check_modes(void)
+void ui_check_modes(void)
 {
   /*
    * The modes.dat contains the numbers of modes that 
@@ -27,88 +32,87 @@ bool ui_check_modes(void)
    * For example if we need modes 2, 5 and 14 to be activated:
    * <2><5><14>$
    */
-  unsigned char file_content[100];
-  unsigned char mode_id[3];
-  // TODO should pc_print_content be of length 4?
-  unsigned char pc_print_content[10];
-  int i = 0, mode_number = 0;
-  bool parsing_mode_descriptor;
-  const char* modes_file = "MODES.DAT";
+  char file_content[MAX_MODE_FILE_LENGTH];
+  int i = 0;
+  //const char* modes_file = "MODES.DAT";
+  char mode_number[MAX_MODE_NUMBER_DIGITS + 1] = "";
+  short mode_number_index = 0;
+  int parsed_mode_number = 0;
+  char debug[64] = "";
 
+  //Global variable being initialised
   number_of_modes = 0;
 
   // Clear file content array  
-  for(i = 0; i < 100; i++)
+  for(i = 0; i < MAX_MODE_FILE_LENGTH; i++)
     file_content[i] = 0;
 
-  // Populate file content
+  /* Populate file contents;
   if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0)
   {
-    TX_NEWLINE_PC;
-    return false;
-  }
+    PRINTF("Mode file could not be read\n\r");
+    while (1) { }
+  }*/
+
+  strcpy(file_content, "1,2,3,4,5,6,7,;");
 
   // Print file contents to debug stream
+  PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
-  TX_NEWLINE_PC;
+  NEWLINE;
 
-  parsing_mode_descriptor = false;
+  for (i = 0;
+      (i < MAX_MODE_FILE_LENGTH) && (file_content[i] != ';') &&
+        (number_of_modes < MAX_NUMBER_OF_MODES);
+      i++) {
 
-  i = 0;
+    switch (file_content[i]) {
+      case ',':
+        //Add NULL terminator to mode number string to be parsed
+        mode_number[mode_number_index] = 0;
+        mode_number_index = 0;
 
-  // '$' signifies end of file, <i> signifies mode i active
-  while(file_content[i] != '$')
-  {
-    // at end of mode descriptor
-    if(file_content[i] == '>')
-    {
-      ui_modes[number_of_modes] = atoi((char*)&mode_id[0]);
-      number_of_modes++;
-      parsing_mode_descriptor = false;
+        parsed_mode_number = atoi(mode_number);
+        if (parsed_mode_number == 0) {
+          //If "mode number" could not be parsed or is 0, discard it
+          break;
+        }
+
+        //Update global mode array
+        ui_modes[number_of_modes] = parsed_mode_number;
+        number_of_modes++;
+        break;
+      
+      case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+      case '8': case '9': case '0':
+        mode_number[mode_number_index] = file_content[i];
+        mode_number_index++;
+        if (mode_number_index > MAX_MODE_NUMBER_DIGITS) {
+          //Mode numbers cannot be longer than a certain number of digits
+          break;
+        }
+        break;
+
+      default:
+        PRINTF("Invalid character in mode file: ");
+        SENDBYTE(file_content[i]);
+        NEWLINE;
+        break;
     }
-
-    // if not at a mode descriptor, clear everything
-    if(!parsing_mode_descriptor)
-    {
-      mode_id[0] = 0;
-      mode_id[1] = 0;
-      mode_id[2] = 0;
-      mode_number = 0;
-    }
-    else
-    {
-      if(mode_number == 3)
-      {
-        return false;
-      }
-      mode_id[mode_number++] = file_content[i];
-    }
-
-    // if at new mode descriptor
-    if(file_content[i] == '<')
-    {
-      parsing_mode_descriptor = true;
-    }
-    i++;    
   }
-
-  pc_print_content[0] = 0;
-  pc_print_content[1] = 0;
 
   // Print the number of modes found to a string
-  sprintf((char*)&pc_print_content[0], "%d", number_of_modes);
+  sprintf(debug, "%d modes deteceted\n\r", number_of_modes);
+  PRINTF(debug);
 
-  // Send the actual modes
-  PRINTF("And the modes are: ");
-  PRINTF(pc_print_content);
+  //Send the actual modes to debug stream
+  PRINTF("Modes enabled: ");
   for(i = 0; i < number_of_modes; i++)
   {
-    sprintf((char*)&pc_print_content[0], "%d, ", ui_modes[i]);
-    PRINTF(pc_print_content);
+    sprintf(debug, "%d, ", ui_modes[i]);
+    PRINTF(debug);
   }
-  TX_NEWLINE_PC;
-
-  return true; 
+  NEWLINE;
 }
 
 /**
