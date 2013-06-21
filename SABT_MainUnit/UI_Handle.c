@@ -10,11 +10,17 @@
 
 #include "Globals.h"
 #include "Modes.h"
+#include "audio.h"
 
 #include <string.h>
 
 #define MAX_MODE_FILE_LENGTH 128
 #define MAX_MODE_NUMBER_DIGITS 2
+
+static unsigned char incorrect_tries = 0;
+static bool ui_is_mode_selected = false;
+static char ui_current_mode_number = 0;
+static short ui_current_mode_index = 0;
 
 /**
  * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
@@ -113,6 +119,10 @@ void ui_check_modes(void)
     PRINTF(debug);
   }
   NEWLINE;
+
+  ui_is_mode_selected = false;
+  ui_current_mode_index = 0;
+  ui_current_mode_number = ui_modes[ui_current_mode_index];
 }
 
 /**
@@ -238,11 +248,11 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_ENT1: // Enter a mode
-      if(!ui_mode_selected) //Then this command is to select the mode
+      if(!ui_is_mode_selected) //Then this command is to select the mode
       {
-        if(ui_selected_mode >= 0)
+        if(ui_current_mode_index >= 0)
         {
-          ui_mode_selected = true;
+          ui_is_mode_selected = true;
           ui_reset_the_current_mode();
         }
         else
@@ -260,7 +270,7 @@ void ui_control_key_pressed(void)
       //This might be an exit from mode command or "NO" command in the mode
       PRINTF("Received CANCEL from keypad");
       NEWLINE;
-      if(ui_mode_selected) 
+      if(ui_is_mode_selected) 
       {
         PRINTF("A mode is selected");
         NEWLINE;
@@ -270,7 +280,9 @@ void ui_control_key_pressed(void)
         {
           PRINTF("Long press detected, going to main menu");
           NEWLINE;
-          ui_mode_selected = false;
+          ui_is_mode_selected = false;
+          ui_current_mode_index = 0;
+          ui_current_mode_number = ui_modes[ui_current_mode_index];
           request_to_play_mp3_file("MM.MP3");
         }
         else //Then this a "NO" answer, call the mode function for this
@@ -284,11 +296,11 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MFOR: // Move forward in list of modes
-      if(!ui_mode_selected)
+      if(!ui_is_mode_selected)
       {
-        //ui_selected_mode = (ui_selected_mode + 1) % number_of_modes;
-        ui_selected_mode = ui_selected_mode + 1 > number_of_modes - 1 ? 0 : ui_selected_mode + 1;
-        ui_current_mode = ui_modes[ui_selected_mode];
+        //ui_current_mode_index = (ui_current_mode_index + 1) % number_of_modes;
+        ui_current_mode_index = ui_current_mode_index + 1 > number_of_modes - 1 ? 0 : ui_current_mode_index + 1;
+        ui_current_mode_number = ui_modes[ui_current_mode_index];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
       } else {
@@ -297,10 +309,10 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MREV: // Move backwards in list of modes
-      if(!ui_mode_selected)
+      if(!ui_is_mode_selected)
       {
-        ui_selected_mode = ui_selected_mode - 1 < 0 ? number_of_modes - 1 : ui_selected_mode - 1;
-        ui_current_mode = ui_modes[ui_selected_mode];
+        ui_current_mode_index = ui_current_mode_index - 1 < 0 ? number_of_modes - 1 : ui_current_mode_index - 1;
+        ui_current_mode_number = ui_modes[ui_current_mode_index];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
       } else {
@@ -336,9 +348,9 @@ void ui_control_key_pressed(void)
 void ui_play_intro_current_mode(void)
 {
   char buf[11];
-  if(ui_current_mode <= number_of_modes)
+  if(ui_current_mode_number <= number_of_modes)
   {
-    sprintf(buf, "MD%i.MP3", ui_current_mode);
+    sprintf(buf, "MD%i.MP3", ui_current_mode_number);
     request_to_play_mp3_file(buf);
   }
   else
@@ -351,7 +363,7 @@ void ui_play_intro_current_mode(void)
  */
 void ui_call_mode_yes_answer(void)
 {
-  switch(ui_current_mode)
+  switch(ui_current_mode_number)
   {
     case 1:
       md1_call_mode_yes_answer();
@@ -385,7 +397,7 @@ void ui_call_mode_yes_answer(void)
  */
 void ui_call_mode_no_answer(void)
 {
-  switch(ui_current_mode)
+  switch(ui_current_mode_number)
   {
     case 1:
       md1_call_mode_no_answer();
@@ -419,31 +431,40 @@ void ui_call_mode_no_answer(void)
  */
 void ui_input_dot_to_current_mode(char this_dot)
 {
-  switch(ui_current_mode)
-  {
-    case 1:
-      md1_input_dot(this_dot);
-      break;
-    case 2:
-      md2_input_dot(this_dot);
-      break;
-    case 3:
-      md3_input_dot(this_dot);
-      break;
-    case 4:
-      md4_input_dot(this_dot);
-      break;
-    case 5:
-      md5_input_dot(this_dot);
-      break;
-    case 6:
-      md6_input_dot(this_dot);
-      break;
-    case 7:
-      md7_input_dot(this_dot);
-      break;
-    default:
-      break;
+  if (ui_is_mode_selected) {
+      switch(ui_current_mode_number)
+      {
+        case 1:
+          md1_input_dot(this_dot);
+          break;
+        case 2:
+          md2_input_dot(this_dot);
+          break;
+        case 3:
+          md3_input_dot(this_dot);
+          break;
+        case 4:
+          md4_input_dot(this_dot);
+          break;
+        case 5:
+          md5_input_dot(this_dot);
+          break;
+        case 6:
+          md6_input_dot(this_dot);
+          break;
+        case 7:
+          md7_input_dot(this_dot);
+          break;
+        default:
+          break;
+      }
+  } else {
+    play_mp3("SYS_","INVP");
+    incorrect_tries++;
+    if (incorrect_tries >= 3) {
+      play_mp3("SYS_","MINS");
+      incorrect_tries = 0;
+    }
   }
 }
 
@@ -453,42 +474,51 @@ void ui_input_dot_to_current_mode(char this_dot)
  */
 void ui_input_cell_to_current_mode(char this_cell)
 {
-  switch(ui_current_mode)
-  {
-    case 1:
-      md1_input_cell(this_cell);
-      break;
-    case 2:
-      md2_input_cell(this_cell);
-      break;
-    case 3:
-      md3_input_cell(this_cell);
-      break;
-    case 4:
-      md4_input_cell(this_cell);
-      break;
-    case 5:
-      md5_input_cell(this_cell);
-      break;
-    case 6:
-      md6_input_cell(this_cell);
-      break;
-    case 7:
-      md7_input_cell(this_cell);
-      break;
-    default:
-      break;
+  if (ui_is_mode_selected) {
+    switch(ui_current_mode_number)
+    {
+      case 1:
+        md1_input_cell(this_cell);
+        break;
+      case 2:
+        md2_input_cell(this_cell);
+        break;
+      case 3:
+        md3_input_cell(this_cell);
+        break;
+      case 4:
+        md4_input_cell(this_cell);
+        break;
+      case 5:
+        md5_input_cell(this_cell);
+        break;
+      case 6:
+        md6_input_cell(this_cell);
+        break;
+      case 7:
+        md7_input_cell(this_cell);
+        break;
+      default:
+        break;
+    }
+  } else {
+    play_mp3("SYS_","INVP");
+    incorrect_tries++;
+    if (incorrect_tries >= 3) {
+      play_mp3("SYS_","MINS");
+      incorrect_tries = 0;
+    }
   }
 }
 
 /**
- * @brief   Decides which of the three UI modes to go into based on ui_current_mode
+ * @brief   Decides which of the three UI modes to go into based on ui_current_mode_number
  * @return  Void
  */
 void ui_run_main_of_current_mode(void)
 {
-  if(ui_mode_selected){
-    switch(ui_current_mode)
+  if(ui_is_mode_selected){
+    switch(ui_current_mode_number)
     {
       case 1:
         md1_main();
@@ -523,8 +553,8 @@ void ui_run_main_of_current_mode(void)
  */
 void ui_reset_the_current_mode(void)
 {
-  if(ui_mode_selected){
-    switch(ui_current_mode)
+  if(ui_is_mode_selected){
+    switch(ui_current_mode_number)
     {
       case 1:
         md1_reset();
@@ -560,7 +590,7 @@ void ui_reset_the_current_mode(void)
  * @return void
  */
 void ui_call_mode_left(void) {
-  switch (ui_current_mode) {
+  switch (ui_current_mode_number) {
     case 7:
       md7_call_mode_left();
       break;
@@ -575,7 +605,7 @@ void ui_call_mode_left(void) {
  * @return void
  */
 void ui_call_mode_right(void) {
-  switch (ui_current_mode) {
+  switch (ui_current_mode_number) {
     case 7:
       md7_call_mode_right();
       break;
