@@ -32,6 +32,8 @@
 unsigned short number_of_modes;
 unsigned short ui_modes[MAX_NUMBER_OF_MODES];
 
+char dbgstr[64];
+
 //indicates whether or not we are currently playing a sound file
 bool playing_sound;
 

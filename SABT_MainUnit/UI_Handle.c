@@ -183,7 +183,7 @@ bool ui_parse_message(bool mp3_is_playing)
       if(message_type == 'D')               // Control key pressed
       {
         ui_control_key_pressed();
-        usart_ui_message_ready = true;      // Once control handled, exit
+        usart_ui_message_ready = false;      // Once control handled, exit
         return true;
       }
     }
@@ -347,14 +347,9 @@ void ui_control_key_pressed(void)
  */
 void ui_play_intro_current_mode(void)
 {
-  char buf[11];
-  if(ui_current_mode_number <= number_of_modes)
-  {
-    sprintf(buf, "MD%i.MP3", ui_current_mode_number);
-    request_to_play_mp3_file(buf);
-  }
-  else
-    request_to_play_mp3_file("ERR1.MP3");
+  char filename[5];
+  sprintf(filename, "MD%d", ui_current_mode_number);
+  play_mp3("",filename);
 }
 
 /**

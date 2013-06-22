@@ -25,18 +25,21 @@ unsigned char sd_init(void)
   unsigned char i, response, sd_version;
   unsigned int retry = 0;
 
-  for(i = 0; i < 10; i++)
+  for(i = 0; i < 10; i++) {
     spi_transmit(0xff);   //80 clock pulses spent before sending the first command
+  }
   SD_CS_ASSERT;
+  
   do
   {
     response = sd_send_command(GO_IDLE_STATE, 0); //send 'reset & go idle' command
     retry++;
-    if(retry>0x20)
+    if(retry > 0x20)
       return 1;   //time out, card not detected
   } while(response != 0x01);
 
   SD_CS_DEASSERT;
+
   spi_transmit (0xff);
   spi_transmit (0xff);
 
@@ -65,7 +68,7 @@ unsigned char sd_init(void)
     // CMD55, must be sent before sending any ACMD command
     response = sd_send_command(APP_CMD,0); 
     response = sd_send_command(SD_SEND_OP_COND,0x40000000); // ACMD41
-
+    PRINTF(dbgstr);
     retry++;
     if(retry > 0xfe)
     {
@@ -82,6 +85,7 @@ unsigned char sd_init(void)
   {
     do
     {
+      PRINTF("DEBUG: READ_OCR");
       response = sd_send_command(READ_OCR,0);
       retry++;
       if(retry > 0xfe)
