@@ -586,6 +586,9 @@ void ui_reset_the_current_mode(void)
  */
 void ui_call_mode_left(void) {
   switch (ui_current_mode_number) {
+    case 6:
+      md6_call_mode_left();
+      break;
     case 7:
       md7_call_mode_left();
       break;
@@ -601,6 +604,9 @@ void ui_call_mode_left(void) {
  */
 void ui_call_mode_right(void) {
   switch (ui_current_mode_number) {
+    case 6:
+      md6_call_mode_left();
+      break;
     case 7:
       md7_call_mode_right();
       break;

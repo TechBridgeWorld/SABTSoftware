@@ -5,28 +5,40 @@
  */
 
 #include "Globals.h"
-#include "Modes.h"
 #include "audio.h"
+#include "common.h"
 
 /* Change this script header for new script */
-#include "script_roman.h"
+#include "script_english.h"
 
 // State definitions
-#define MD6_STATE_INITIAL     0b00000000  // Initial state
-#define MD6_STATE_ACCEPT_DOTS 0b00000001  // Waits for dot input from user
-#define MD6_STATE_CHECK_DOTS  0b00000010  // Verifies input, gives feedback,
-                                          //  returns to input wait loop
+#define STATE_INITIAL   0b00000000  // Initial state
+#define STATE_INPUT     0b00000001  // Waits for dot input from user
+#define STATE_CHECK     0b00000010  // Verifies input, gives feedback,
+                                    // returns to input wait loop
 
-/* Change this script pointer for new script */
-static script_t* this_script = &script_roman;
+#define MAX_INCORRECT_TRIES 3
 
-static char next_state = MD6_STATE_INITIAL;
+/* Change these script pointers for new script */
+static script_t* this_script = &script_english;
+static char* lang_fileset = script_english.fileset;
+static char mode_fileset[5] = "MD6_";
+
+static char next_state = STATE_INITIAL;
 static char button_bits = 0b00000000;
 static char last_dot = 0;
 static char last_cell = 0;
 static alphabet_t *this_alpha = NULL;
+static char incorrect_tries = 0;
 
-
+void reset() {
+  button_bits = 0x00;
+  last_dot = 0;
+  last_cell = 0;
+  this_alpha = NULL;
+  incorrect_tries = 0;
+  PRINTF("State reset\n\r");
+}
 
 /**
  * @brief Implements core state machine for free play mode
@@ -35,33 +47,51 @@ static alphabet_t *this_alpha = NULL;
 void md6_main(void) {
   switch (next_state) {
     
-    case MD6_STATE_INITIAL:
-      PRINTF("MD6 Free Play\n\r");
-      request_to_play_mp3_file("MD6_INT.mp3");
-      next_state = MD6_STATE_ACCEPT_DOTS;
+    case STATE_INITIAL:
+      PRINTF("*** MD6 Free Play ***\n\r");
+      reset();
+      play_mp3(mode_fileset, "INT");
+      next_state = STATE_INPUT;
       break;
 
-    case MD6_STATE_ACCEPT_DOTS:
+    case STATE_INPUT:
       if (last_dot != 0) {
         // If last button pressed is ENTER, check the dots input so far
         //  otherwise continue to accept more dots
-        if (last_dot == ENTER) {
-          next_state = MD6_STATE_CHECK_DOTS;
-        } else if ((last_dot >= '1') && (last_dot <= '6')) {
-          button_bits |= 1 << (CHARTOINT(last_dot) - 1);
-          play_dot(NULL, last_dot);
+        switch (last_dot) {
+          case ENTER:
+            next_state = STATE_CHECK;
+            break;
+
+          case CANCEL:
+            play_mp3(lang_fileset, "CANC");
+            button_bits = 0x00;
+            break;
+
+          case '1': case '2': case '3': case '4': case '5': case '6':
+            button_bits = add_dot(button_bits, last_dot);
+            play_dot(lang_fileset, last_dot);
+            break;
+
+          default:
+            incorrect_tries++;
+            play_mp3(lang_fileset, "INVP");
+            if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+              incorrect_tries = 0;
+              next_state = STATE_INITIAL;
+            }
         }
         last_dot = 0;
       }
       break;
 
-    case MD6_STATE_CHECK_DOTS:
+    case STATE_CHECK:
       // If user presses ENTER, then check dot sequence for valid letter
       //  and provide feedback
       this_alpha = get_alphabet_by_bits(button_bits, this_script);
-      play_alphabet(NULL, this_alpha);
-      next_state = MD6_STATE_ACCEPT_DOTS;
-	  button_bits = 0;
+      play_alphabet(lang_fileset, this_alpha);
+      next_state = STATE_INPUT;
+      button_bits = 0x00;
       break;
   }
 }
@@ -71,8 +101,7 @@ void md6_main(void) {
  * @return void
  */
 void md6_reset(void) {
-  next_state = MD6_STATE_INITIAL;
-  last_dot = 0;
+  next_state = STATE_INITIAL;
 }
 
 /**
@@ -80,9 +109,9 @@ void md6_reset(void) {
  * @return void
  */
 void md6_call_mode_yes_answer(void) {
-  // If no input received, replay prompty, otherwise process as ENTER
-  if (button_bits == 0)
-    next_state = MD6_STATE_INITIAL;
+  // If no input received, replay prompt, otherwise process as ENTER
+  if (button_bits == 0) 
+    next_state = STATE_INITIAL;
   else
     last_dot = ENTER;
 }
@@ -92,7 +121,7 @@ void md6_call_mode_yes_answer(void) {
  * @return void
  */
 void md6_call_mode_no_answer(void) {
-  // Does nothing
+  last_dot = CANCEL;
 }
 
 /**
@@ -111,4 +140,12 @@ void md6_input_cell(char this_cell) {
   if (last_dot != 0) {
     last_cell = this_cell;
   }
+}
+
+void md6_call_mode_left(void) {
+  last_dot = LEFT;
+}
+
+void md6_call_mode_right(void) {
+  last_dot = RIGHT;
 }

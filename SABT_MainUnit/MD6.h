@@ -13,5 +13,7 @@ void md6_call_mode_yes_answer(void);
 void md6_call_mode_no_answer(void);
 void md6_input_dot(char this_dot);
 void md6_input_cell(char this_cell);
+void md6_call_mode_left(void);
+void md6_call_mode_right(void);
 
 #endif /* _MD6_H_ */

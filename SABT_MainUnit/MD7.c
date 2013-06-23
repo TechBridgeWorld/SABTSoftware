@@ -98,6 +98,7 @@ void reset_state() {
 	bound = 0;
 	strcpy(com_mp3,"");
 	correct = 0;
+	cancel = 0;
 	PRINTF("State variables reset\n\r");
 }
 
@@ -244,7 +245,8 @@ void md7_main(void) {
 						button_bits = 0x00;
 						cancel = 1;
 					} else {
-						next_state = STATE_INIT;
+						cancel = 0;
+						next_state = STATE_START;
 					}
 					break;
 
@@ -337,6 +339,10 @@ void md7_main(void) {
 					last_dot = 0;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
 					play_mp3(lang_fileset, "INVP");
 					last_dot = 0;
@@ -357,6 +363,7 @@ void md7_main(void) {
 				case '1':
 					next_state = STATE_NEXT;
 					play_mp3(mode_fileset, "NEXT");
+					incorrect_tries = 0;
 					correct = 0;
 					last_dot = RIGHT;
 					break;
@@ -380,6 +387,10 @@ void md7_main(void) {
 				case RIGHT:
 					correct = 0;
 					next_state = STATE_NEXT;
+					break;
+
+				case CANCEL:
+					next_state = STATE_START;
 					break;
 
 				default:
@@ -421,9 +432,6 @@ void md7_main(void) {
 						flag_array[current_index] = 1;
 						correct_count++;
 					}
-					sprintf(debug, "Correct count: %d", correct_count);
-					PRINTF(debug);
-					NEWLINE;
 
 					//If # of correct entries == length of script/play array,
 					//	then submode complete
@@ -435,20 +443,11 @@ void md7_main(void) {
 						for (int i = PLUS_ONE_MOD(current_index, bound);
 									i != current_index;
 									i = PLUS_ONE_MOD(i, bound)) {
-							sprintf(debug, "i = %d", i);
-							PRINTF(debug);
-							NEWLINE;
-							sprintf(debug, "array[i] = %d", flag_array[i]);
-							PRINTF(debug);
-							NEWLINE;
 							if (flag_array[i] == 0) {
 								current_index = i;
 								break;
 							}
 						}
-						sprintf(debug, "Current index: %d", current_index);
-						PRINTF(debug);
-						NEWLINE;
 
 						switch (submode) {
 							case SUBMODE_LEARN:
@@ -516,12 +515,6 @@ void md7_main(void) {
 					for (int i = MINUS_ONE_MOD(current_index, bound);
 								i != current_index;
 								i = MINUS_ONE_MOD(i, bound)) {
-						sprintf(debug, "i = %d", i);
-						PRINTF(debug);
-						NEWLINE;
-						sprintf(debug, "array[i] = %d", flag_array[i]);
-						PRINTF(debug);
-						NEWLINE;
 						if (flag_array[i] == 0) {
 							current_index = i;
 							break;
