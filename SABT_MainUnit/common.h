@@ -21,5 +21,6 @@
 
 int timer_rand();
 char add_dot(char bits, char dot);
+void quit_mode(void);
 
 #endif /* _COMMON_H_ */

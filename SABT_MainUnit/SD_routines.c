@@ -85,7 +85,6 @@ unsigned char sd_init(void)
   {
     do
     {
-      PRINTF("DEBUG: READ_OCR");
       response = sd_send_command(READ_OCR,0);
       retry++;
       if(retry > 0xfe)

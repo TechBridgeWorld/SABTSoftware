@@ -38,9 +38,8 @@
 #define	PLAY_MODE_SIZE 				5
 #define MAX_INCORRECT_TRIES		3
 
-#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
-
 //Update this macro to refer to script length from script header file
+#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
 
 //Script and language configuration
 /* *NOTE* - After adding a new header file and language files on the SD card,
@@ -235,13 +234,14 @@ void md7_main(void) {
 					play_mp3(mode_fileset, "NEXT");
 					correct = 0;
 					next_state = STATE_NEXT;
+					return;
 					break;
 
 				case CANCEL:
 					// Press CANCEL once to delete last character, press CANCEL again
 					// to 
 					if (cancel == 0) {
-						play_mp3(mode_fileset, "CANC");
+						play_mp3(lang_fileset, "CANC");
 						button_bits = 0x00;
 						cancel = 1;
 					} else {
@@ -284,14 +284,14 @@ void md7_main(void) {
 					next_state = STATE_PROMPT;
 				} else {
 					incorrect_tries++;
-					play_mp3(mode_fileset, "INVP");
+					play_mp3(lang_fileset, "INVP");
 					next_state = STATE_INPUT;
 				}
 			} else {
 				//Otherwise check alphabet
 				input_alphabet = get_alphabet_by_bits(button_bits, this_script);
 				if (is_same_alphabet(current_alphabet, input_alphabet)) {
-					play_mp3(mode_fileset, "CORR");
+					play_mp3(lang_fileset, "CORR");
 					if (correct_count + 1 < bound)
 						play_mp3(mode_fileset, "NEXT");
 					incorrect_tries = 0;
@@ -336,7 +336,7 @@ void md7_main(void) {
 
 				case '2':
 					/* TODO - Quit mode */
-					last_dot = 0;
+					quit_mode();
 					break;
 
 				case CANCEL:
@@ -483,13 +483,23 @@ void md7_main(void) {
 					next_state = STATE_PREV;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
+					play_mp3(lang_fileset, "INVP");
+					last_dot = 0;
 					break;
 			}
 			break;
 
 		case STATE_PREV:
 			switch (last_dot) {
+
+				case 0:
+					break;
+
 				case LEFT:
 					PRINTF("Previous alphabet");
 					NEWLINE;
@@ -551,7 +561,13 @@ void md7_main(void) {
 					next_state = STATE_PROMPT;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
+					play_mp3(lang_fileset, "INVP");
+					last_dot = 0;
 					break;
 			}
 			break;

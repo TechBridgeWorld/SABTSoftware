@@ -5,6 +5,7 @@
  */
 
 #include "Globals.h"
+#include "audio.h"
 
 /**
  * @brief Generates a random integer based on the system timer
@@ -22,4 +23,16 @@ int timer_rand() {
  */
 char add_dot(char bits, char dot) {
 	return (bits | 1 << (CHARTOINT(dot) - 1));
+}
+
+/**
+ * @brief Quits the current mode and returns to the main menu
+ * @param void
+ * @return void
+ */
+void quit_mode(void) {
+	ui_is_mode_selected = false;
+  ui_current_mode_index = 0;
+  ui_current_mode_number = ui_modes[ui_current_mode_index];
+  play_mp3("","MM");
 }

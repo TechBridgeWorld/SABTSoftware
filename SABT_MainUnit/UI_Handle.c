@@ -11,6 +11,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "audio.h"
+#include "common.h"
 
 #include <string.h>
 
@@ -18,9 +19,6 @@
 #define MAX_MODE_NUMBER_DIGITS 2
 
 static unsigned char incorrect_tries = 0;
-static bool ui_is_mode_selected = false;
-static char ui_current_mode_number = 0;
-static short ui_current_mode_index = 0;
 
 /**
  * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
@@ -268,27 +266,19 @@ void ui_control_key_pressed(void)
     
     case UI_CMD_ENT2: // Exit a mode
       //This might be an exit from mode command or "NO" command in the mode
-      PRINTF("Received CANCEL from keypad");
-      NEWLINE;
       if(ui_is_mode_selected) 
       {
-        PRINTF("A mode is selected");
         NEWLINE;
         // If the next byte is 'E', this is exit command 
         // (when the user pressed E2 for more than 5 secs)
         if(usart_ui_received_packet[6] == 69) 
         {
-          PRINTF("Long press detected, going to main menu");
-          NEWLINE;
-          ui_is_mode_selected = false;
-          ui_current_mode_index = 0;
-          ui_current_mode_number = ui_modes[ui_current_mode_index];
-          request_to_play_mp3_file("MM.MP3");
+          PRINTF("Long CANCEL detected, going to main menu\n\r");
+          quit_mode();
         }
         else //Then this a "NO" answer, call the mode function for this
         {
-          PRINTF("Short press detected, calling mode NO function");
-          NEWLINE;
+          PRINTF("Short CANCEL detected, calling mode NO function\n\r");
           ui_call_mode_no_answer();
         }
       }

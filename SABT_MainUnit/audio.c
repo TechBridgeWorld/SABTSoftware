@@ -88,7 +88,7 @@ void play_silence(int milliseconds) {
  */
 void play_next_mp3() {
 	//Only called when the playlist is not empty
-	PRINTF("Requesting: ");
+	PRINTF("Playing: ");
 	PRINTF(playlist[playlist_index]);
 	NEWLINE;
 	request_to_play_mp3_file(playlist[playlist_index]);
