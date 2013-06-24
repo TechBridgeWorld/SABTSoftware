@@ -290,8 +290,8 @@ void md8_main(void) {
 					last_dot = RIGHT;
 					next_state = STATE_NEXT;
 				} else {
-					incorrect_tries++;
 					play_mp3(lang_fileset, "INVP");
+					incorrect_tries++;
 					next_state = STATE_INCORRECT;
 				}
 			}
@@ -368,7 +368,10 @@ void md8_main(void) {
 
 				case '3':
 					play_alphabet(lang_fileset, current_alphabet);
-					next_state = STATE_PROMPT;
+					play_mp3(mode_fileset, "LPRO");
+					play_bit_pattern(lang_fileset, current_alphabet->bit_pattern);
+					button_bits = 0x00;
+					next_state = STATE_INPUT;
 					last_dot = 0;
 					break;
 

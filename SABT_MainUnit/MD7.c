@@ -368,7 +368,10 @@ void md7_main(void) {
 
 				case '3':
 					play_alphabet(lang_fileset, current_alphabet);
-					next_state = STATE_PROMPT;
+					play_mp3(mode_fileset, "LPRO");
+					play_bit_pattern(lang_fileset, current_alphabet->bit_pattern);
+					button_bits = 0x00;
+					next_state = STATE_INPUT;
 					last_dot = 0;
 					break;
 

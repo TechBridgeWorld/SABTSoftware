@@ -266,6 +266,13 @@ void ui_control_key_pressed(void)
     
     case UI_CMD_ENT2: // Exit a mode
       //This might be an exit from mode command or "NO" command in the mode
+
+      //Cancel MP3 prompt
+      if (playing_sound) {
+        vs1053_skip_play = true;
+        return;
+      }
+
       if(ui_is_mode_selected) 
       {
         NEWLINE;
