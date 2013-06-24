@@ -1,7 +1,7 @@
 /**
  * @file audio.c
  * @brief Code for common MP3 functions
- * @author Vivek Nair
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #include <stdio.h>
@@ -12,10 +12,11 @@
 #include "alphabet.h"
 #include "Globals.h"
 
+// Maximum number of files that can be queued at a given time
 #define MAX_PLAYLIST_SIZE 32
 
-// Playlist supports quening some files at a time with filenames of up to 13
-//	characters
+// Playlist supports queuing some files at a time with filenames of up to 13
+// characters
 bool playlist_empty = true;
 static char playlist[MAX_FILENAME_SIZE][MAX_PLAYLIST_SIZE];
 static short playlist_size = 0;
@@ -23,20 +24,20 @@ static short playlist_index = 0;
 
 /**
  * @brief Tries to queue the requested MP3 file to the playlist
- * @param char* - Pointer to filename
- * @return bool - True if file was added, false if queue is full
+ * @param char* fileset - (optional) Pointer to fileset (4 characters)
+ * @param char* mp3 - Pointer to MP3 filename (4 characters)
+ * @return bool - True if file was added, false if queue is full or error
  */
 bool play_mp3(char* fileset, char* mp3) {
 
 	if (mp3 == NULL) {
-		PRINTF("Error: Cannot play NULL MP3");
-		NEWLINE;
+		PRINTF("Error: Cannot play NULL MP3\n\r");
+		return false;
 	}
 
 	//Return false if playlist is full
 	if (playlist_size == MAX_PLAYLIST_SIZE) {
-		PRINTF("Playlist full");
-		NEWLINE;
+		PRINTF("Playlist full\n\r");
 		return false;
 	}
 	
@@ -58,7 +59,8 @@ bool play_mp3(char* fileset, char* mp3) {
 
 /**
  * @brief Plays a specified amount of slience
- * @param int - Length of slience in milliseconds
+ * @param int milliseconds - Length of slience in milliseconds
+ *   currently can be 250, 500, 750 or 1000
  * @return void
  */
 void play_silence(int milliseconds) {
@@ -87,10 +89,17 @@ void play_silence(int milliseconds) {
  * @return void
  */
 void play_next_mp3() {
+	
 	//Only called when the playlist is not empty
+	if (playlist_empty == true) {
+		PRINTF("Error: Playlist empty\n\r");
+		return;
+	}
+
 	PRINTF("Playing: ");
 	PRINTF(playlist[playlist_index]);
 	NEWLINE;
+	
 	request_to_play_mp3_file(playlist[playlist_index]);
 	playlist_index++;
 
@@ -104,7 +113,8 @@ void play_next_mp3() {
 
 /**
  * @brief Queues dot sound file
- * @param char - Represents dot to play
+ * @param char* fileset - Language fileset for dot numbers
+ * @param char dot - Dot to play
  * @return void
  */
 void play_dot(char* fileset, char dot) {
@@ -115,7 +125,8 @@ void play_dot(char* fileset, char dot) {
 
 /**
  * @brief Play sound file corresponding to an alphabet, checks for NULL arg
- * @param alphabet_t* alpha
+ * @param char* fileset - Pointer to language fileset
+ * @param alphabet_t* alpha - Pointer to alphabet to play
  * @return void
  */
 void play_alphabet(char* fileset, alphabet_t *alpha) {
@@ -129,7 +140,8 @@ void play_alphabet(char* fileset, alphabet_t *alpha) {
 
 /**
  * @brief Plays the dot sequence for a given bit pattern
- * @param char* - localisation path, char - bit pattern
+ * @param char* fileset - Language fileset
+ * @param char bit_pattern - Bit pattern to play
  * @return void
  */
 void play_bit_pattern(char* fileset, unsigned char bit_pattern) {
@@ -143,7 +155,8 @@ void play_bit_pattern(char* fileset, unsigned char bit_pattern) {
 
 /**
  * @brief Play dot sequence corresponding to an alphabet, checks for NULL arg
- * @param alphabet_t *alpha
+ * @param char* fileset - Language fileset
+ * @param alphabet_t *alpha - Alphabet to play dot sequence for
  * @return void
  */
 void play_dot_sequence(char* fileset, alphabet_t *alpha) {
@@ -158,7 +171,8 @@ void play_dot_sequence(char* fileset, alphabet_t *alpha) {
 
 /**
  * @brief Informs user about erroroneous input
- * @param char* path to localisation, char - bit pattern
+ * @param char* fileset - Language fileset
+ * @param char bit_pattern - Erroneous bit pattern
  * @return void
  */
 void play_input_error(char* fileset, char bit_pattern) {

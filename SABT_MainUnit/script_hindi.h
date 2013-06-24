@@ -1,7 +1,7 @@
 /**
  *  @file script_hindi.h
  *  @brief Bit patterns representing alphabets of the Hindi script
- *  @author Vivek Nair (viveknai)
+ *  @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _SCRIPT_HINDI_H_

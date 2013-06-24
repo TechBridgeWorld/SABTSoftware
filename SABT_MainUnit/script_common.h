@@ -1,7 +1,7 @@
 /**
  * @file script_common.h
  * @brief Definitions for common script wrapper functions
- * @author Vivek Nair (viveknai)
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _SCRIPT_COMMON_H_

@@ -1,7 +1,7 @@
 /**
  * @file MD7.c
  * @brief Mode logic for Mode 7 - Hindi Braille alphabet practice
- * @author Vivek Nair (viveknai)
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 #include <stdlib.h>
 
@@ -38,7 +38,7 @@
 #define	PLAY_MODE_SIZE 				5
 #define MAX_INCORRECT_TRIES		3
 
-//Update this macro to refer to script length from script header file
+// *NOTE* Update this macro to refer to script length from script header file
 #define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
 
 //Script and language configuration
@@ -71,12 +71,7 @@ static char debug[64];
 static char correct = 0;
 static char cancel = 0;
 
-/**
- * @brief Resets mode state variables to default values
- * @param void
- * @return void
- */
-void reset_state() {
+void reset() {
 	submode = SUBMODE_NONE;
 	button_bits = 0b00000000;
 	last_dot = 0b00000000;
@@ -101,19 +96,15 @@ void reset_state() {
 	PRINTF("State variables reset\n\r");
 }
 
-/**
- * @brief Implements mode state machine
- * @param void
- * @return void
- */
 void md7_main(void) {
 
 	switch(next_state) {
 
+		// Initialises mode
 		case STATE_START:
 			PRINTF("*** MD7 - Hindi Braille practice ***\n\r");
 			PRINTF("STATE_START\n\r");
-			reset_state();
+			reset();
 			next_state = STATE_MENU;
 			break;
 
@@ -350,6 +341,7 @@ void md7_main(void) {
 			}
 			break;
 
+		// Skip letter menu
 		case STATE_SKIP:
 			switch (last_dot) {
 				case 0:
@@ -400,6 +392,7 @@ void md7_main(void) {
 			}
 			break;
 
+		// Advances through list of letters
 		case STATE_NEXT:
 			switch(last_dot) {
 
@@ -494,6 +487,7 @@ void md7_main(void) {
 			}
 			break;
 
+		// Goes back in list of letters
 		case STATE_PREV:
 			switch (last_dot) {
 

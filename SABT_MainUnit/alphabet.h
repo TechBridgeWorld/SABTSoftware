@@ -1,7 +1,7 @@
 /**
  * @file alphabet.h
  * @brief Structures for single alphabets and scripts
- * @author Vivek Nair (viveknai)
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _ALPHABET_H_
@@ -16,7 +16,7 @@ typedef struct alphabet {
 //Structure representing a script
 typedef struct script {
 	short length;						// Number of alphabets
-	char fileset[5];				// Fileset on SD card
+	char fileset[5];				// Fileset on SD card; 4 characters long
 	alphabet_t* alphabets;  // Pointer to array of alphabets
 } script_t;
 

@@ -1,7 +1,7 @@
 /**
  * @file MD6.c
  * @brief  Mode 6 code - Free Play
- * @author Vivek Nair (viveknai)
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #include "Globals.h"
@@ -19,11 +19,12 @@
 
 #define MAX_INCORRECT_TRIES 3
 
-/* Change these script pointers for new script */
+// Change these script pointers for new script
 static script_t* this_script = &script_english;
 static char* lang_fileset = script_english.fileset;
 static char mode_fileset[5] = "MD6_";
 
+// State variables
 static char next_state = STATE_INITIAL;
 static char button_bits = 0b00000000;
 static char last_dot = 0;
@@ -40,13 +41,10 @@ void reset() {
   PRINTF("State reset\n\r");
 }
 
-/**
- * @brief Implements core state machine for free play mode
- * @return void
- */
 void md6_main(void) {
   switch (next_state) {
     
+    // Initialises mode
     case STATE_INITIAL:
       PRINTF("*** MD6 Free Play ***\n\r");
       reset();
@@ -54,10 +52,10 @@ void md6_main(void) {
       next_state = STATE_INPUT;
       break;
 
+    // If last button pressed is ENTER, check the dots input so far
+    // otherwise continue to accept more dots
     case STATE_INPUT:
-      if (last_dot != 0) {
-        // If last button pressed is ENTER, check the dots input so far
-        //  otherwise continue to accept more dots
+      if (last_dot != 0) { 
         switch (last_dot) {
           case ENTER:
             next_state = STATE_CHECK;
@@ -85,9 +83,9 @@ void md6_main(void) {
       }
       break;
 
+    // If user presses ENTER, then check dot sequence for valid letter
+    // and provide feedback
     case STATE_CHECK:
-      // If user presses ENTER, then check dot sequence for valid letter
-      //  and provide feedback
       this_alpha = get_alphabet_by_bits(button_bits, this_script);
       play_alphabet(lang_fileset, this_alpha);
       next_state = STATE_INPUT;
@@ -96,46 +94,22 @@ void md6_main(void) {
   }
 }
 
-/**
- * @brief Resets free play mode
- * @return void
- */
 void md6_reset(void) {
   next_state = STATE_INITIAL;
 }
 
-/**
- * @brief Implements ENTER button functionality for free play mode
- * @return void
- */
 void md6_call_mode_yes_answer(void) {
-  // If no input received, replay prompt, otherwise process as ENTER
-  if (button_bits == 0) 
-    next_state = STATE_INITIAL;
-  else
-    last_dot = ENTER;
+  last_dot = ENTER;
 }
 
-/**
- * @brief Implements CANCEL button functionality for free play mode
- * @return void
- */
 void md6_call_mode_no_answer(void) {
   last_dot = CANCEL;
 }
 
-/**
- * @brief Implements dot input functionality for free play mode
- * @return void
- */
 void md6_input_dot(char this_dot) {
   last_dot = this_dot;
 }
 
-/**
- * @brief Implements cell input functionality for free play mode
- * @return void
- */
 void md6_input_cell(char this_cell) {
   if (last_dot != 0) {
     last_cell = this_cell;

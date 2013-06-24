@@ -1,7 +1,7 @@
 /**
  * @file MD6.h
- * @brief Definitions for mode 6 - Free Play
- * @author Vivek Nair (viveknai)
+ * @brief Declarations for mode 6 - Free Play
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _MD6_H_

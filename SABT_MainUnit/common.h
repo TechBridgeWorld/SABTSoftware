@@ -1,7 +1,7 @@
 /**
  * @file common.h
  * @brief Declarations for some common functions and constants
- * @author Vivek Nair
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _COMMON_H_

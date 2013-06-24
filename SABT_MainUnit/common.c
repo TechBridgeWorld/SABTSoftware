@@ -1,25 +1,26 @@
 /**
  * @file common.c
  * @brief Definitions for some common library functions
- * @author Vivek Nair
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #include "Globals.h"
 #include "audio.h"
 
 /**
- * @brief Generates a random integer based on the system timer
- * @param None
- * @return int - Random value
+ * @brief Generates a pseudo-random integer based on the system timer
+ * @param void
+ * @return int - Pseudo-random value
  */
-int timer_rand() {
+int timer_rand(void) {
 	return TCNT1 * 53;
 }
 
 /**
  * @brief Adds a dot to a bit pattern representing a cell
- * @param char bits - old bit pattern; char dot - dot to add
- * @return void
+ * @param char bits - Old bit pattern
+ * @param char dot - Dot to add
+ * @return char - New bit pattern
  */
 char add_dot(char bits, char dot) {
 	return (bits | 1 << (CHARTOINT(dot) - 1));

@@ -1,7 +1,7 @@
 /**
  *  @file script_english.h
  *  @brief Structures for the English language
- *  @author Vivek Nair (viveknai)
+ *  @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _SCRIPT_ENGLISH_H_
