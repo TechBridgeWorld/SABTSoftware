@@ -22,6 +22,7 @@
 #define STATE_DONE_WITH_CURRENT_ANIMAL 9   // Finished current animal correctly
 #define STATE_SELECT_MODE			   10 
 #define STATE_PLAY_SOUND			   11
+#define STATE_PROMPT				   12
 
 #define PRIME                53
 
@@ -50,5 +51,8 @@ void md3_call_mode_no_answer(void);
 
 void md3_input_dot(char thisDot);
 void md3_input_cell(char this_cell);
+void md3_call_mode_left(void);
+void md3_call_mode_right(void);
+
 
 #endif /* _MD3_H_ */

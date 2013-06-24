@@ -10,7 +10,7 @@
 #include "Modes.h"
 #include "audio.h"
 
-int md3_current_state;
+int md3_current_state, md3_prev_state = 0;
 static int game_mode = 0;
 char md3_last_dot, last_cell, expected_dot;
 
@@ -256,15 +256,39 @@ void md3_main(void)
 		  }
 	  md3_current_state = STATE_REQUEST_INPUT1;
 	  break;
+	case STATE_PROMPT:
+	  break;
   }
 }
+/**
+ * @brief Handle left scroll button presses in mode 3
+ * @return Void
+ */
 
+void md3_call_mode_left(void)
+{
+ 	//replays the animal name or sound in accordance with submode
+	md3_current_state = STATE_REQUEST_INPUT2;
+}
+/**
+ * @brief Handle right scroll button presses in mode 3
+ * @return Void
+ */
+
+void md3_call_mode_right(void)
+{
+// skips the animal 
+ md3_prev_state =  md3_current_state;
+ play_mp3("MD3_","SKIP");
+ md3_current_state = STATE_PROMPT;
+}
 /**
  * @brief Handle enter button presses in mode 3
  * @return Void
  */
 void md3_call_mode_yes_answer(void)
 {
+  if (md3_current_state == STATE_PROMPT) md3_current_state = STATE_REQUEST_INPUT1;	
 }
 
 /**
@@ -272,12 +296,19 @@ void md3_call_mode_yes_answer(void)
  * @return Void
  */
 void md3_call_mode_no_answer(void)
-{
+{  
+   if (md3_current_state == STATE_PROMPT)
+   {
+	  md3_current_state = md3_prev_state;    
+   }  
+   else 
+   {  
       play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       animals_used = 0;
       got_input = false;
+   }
 }
 
 /**
