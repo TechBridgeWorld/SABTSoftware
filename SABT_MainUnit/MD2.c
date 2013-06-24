@@ -8,6 +8,7 @@
 
 #include "Globals.h"
 #include "Modes.h"
+#include "common.h"
 
 static char button_bits;
 int current_state;

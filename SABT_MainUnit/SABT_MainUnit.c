@@ -152,14 +152,15 @@ ISR(USART0_RX_vect)
  */
 void initialize_system(void)
 {
-  // please wait for the dictionary file to load
-
   ui_mp3_file_pending = false;
   timer_interrupt = false;      // Clear the timer interrupt flag
+  playing_sound = false;
+  message_count = 0;
+  valid_message = true;
+
   PORTA = 0x00;
   DDRA = 0xFF;
   PORTA = 0x00;
-
   // Set the data direction register values
   DDRD |= _BV(5) | _BV(6) | _BV(7);
 
@@ -168,49 +169,37 @@ void initialize_system(void)
   OCR1A = 390;            // 1s interval
   TIMSK1 |= (1<<OCIE1A);  // Enable interrupt
 
-  init_usart_keypad();
   init_usart_pc();
+  PRINTF("SABT initialising...\n\r");
+  PRINTF("Setting flags...OK\n\r");
+  PRINTF("PC USART...OK\n\r");
+
+  PRINTF("Keypad USART...");
+  init_usart_keypad();
+  PRINTF("OK\n\r");
+
+  PRINTF("SPI...");
   spi_initialize();
+  PRINTF("OK\n\r");
 
+  PRINTF("Interrupt flag...");
   sei();  // sets the interrupt flag (enables interrupts)
-
-  usart_transmit_string_to_pc_from_flash (PSTR("SABT testing..."));
-  TX_NEWLINE_PC;
+  PRINTF("OK\n\r");
 
   init_sd_card(true);
+  PRINTF("SD card...OK\n\r");
 
-  //say that we are not playing a sound file
-  playing_sound = false;
-
-  message_count = 0;
-  valid_message = true;  
-  
-  /* TODO BANDAID FIX TO BYPASS FUNCTION */
-  /*if(!ui_check_modes())
-  {
-    usart_transmit_string_to_pc_from_flash (PSTR("Mode file not found"));
-    TX_NEWLINE_PC; 
-  }
-  else
-  {
-    usart_transmit_string_to_pc_from_flash (PSTR("Mode file found"));
-    TX_NEWLINE_PC;
-  }*/
-
-  number_of_modes = 7;
-  ui_current_mode = number_of_modes;  //No mode selected
-  ui_selected_mode = number_of_modes;
-
-  for (int i = 0; i < number_of_modes; i++) {
-    ui_modes[i] = i+1;
-  }
-
-  init_read_dict((unsigned char *)"wordsEn.txt");
   play_mp3_file((unsigned char*)"SYS_INIT.mp3");
 
+  ui_check_modes();
+  PRINTF("Parsing modes...OK\n\r");
+
+  PRINTF("Reading dictionary file...");
+  init_read_dict((unsigned char *)"wordsEn.txt");
   while(!done_rd_dict){
     read_dict_file();
   }
+  PRINTF("OK\n\r");
 
   play_mp3("SYS_","WELC");
   play_mp3("SYS_","MINT");

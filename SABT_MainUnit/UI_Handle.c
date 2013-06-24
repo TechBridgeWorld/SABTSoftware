@@ -10,6 +10,15 @@
 
 #include "Globals.h"
 #include "Modes.h"
+#include "audio.h"
+#include "common.h"
+
+#include <string.h>
+
+#define MAX_MODE_FILE_LENGTH 128
+#define MAX_MODE_NUMBER_DIGITS 2
+
+static unsigned char incorrect_tries = 0;
 
 /**
  * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
@@ -17,7 +26,7 @@
  * @return bool  - return true on succesful completion of transmission, false on 
  *         failure
  */
-bool ui_check_modes(void)
+void ui_check_modes(void)
 {
   /*
    * The modes.dat contains the numbers of modes that 
@@ -27,88 +36,91 @@ bool ui_check_modes(void)
    * For example if we need modes 2, 5 and 14 to be activated:
    * <2><5><14>$
    */
-  unsigned char file_content[100];
-  unsigned char mode_id[3];
-  // TODO should pc_print_content be of length 4?
-  unsigned char pc_print_content[10];
-  int i = 0, mode_number = 0;
-  bool parsing_mode_descriptor;
-  const char* modes_file = "MODES.DAT";
+  char file_content[MAX_MODE_FILE_LENGTH];
+  int i = 0;
+  //const char* modes_file = "MODES.DAT";
+  char mode_number[MAX_MODE_NUMBER_DIGITS + 1] = "";
+  short mode_number_index = 0;
+  int parsed_mode_number = 0;
+  char debug[64] = "";
 
+  //Global variable being initialised
   number_of_modes = 0;
 
   // Clear file content array  
-  for(i = 0; i < 100; i++)
+  for(i = 0; i < MAX_MODE_FILE_LENGTH; i++)
     file_content[i] = 0;
 
-  // Populate file content
+  /* Populate file contents;
   if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0)
   {
-    TX_NEWLINE_PC;
-    return false;
-  }
+    PRINTF("Mode file could not be read\n\r");
+    while (1) { }
+  }*/
+
+  strcpy(file_content, "1,2,3,4,5,6,7,;");
 
   // Print file contents to debug stream
+  PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
-  TX_NEWLINE_PC;
+  NEWLINE;
 
-  parsing_mode_descriptor = false;
+  for (i = 0;
+      (i < MAX_MODE_FILE_LENGTH) && (file_content[i] != ';') &&
+        (number_of_modes < MAX_NUMBER_OF_MODES);
+      i++) {
 
-  i = 0;
+    switch (file_content[i]) {
+      case ',':
+        //Add NULL terminator to mode number string to be parsed
+        mode_number[mode_number_index] = 0;
+        mode_number_index = 0;
 
-  // '$' signifies end of file, <i> signifies mode i active
-  while(file_content[i] != '$')
-  {
-    // at end of mode descriptor
-    if(file_content[i] == '>')
-    {
-      ui_modes[number_of_modes] = atoi((char*)&mode_id[0]);
-      number_of_modes++;
-      parsing_mode_descriptor = false;
+        parsed_mode_number = atoi(mode_number);
+        if (parsed_mode_number == 0) {
+          //If "mode number" could not be parsed or is 0, discard it
+          break;
+        }
+
+        //Update global mode array
+        ui_modes[number_of_modes] = parsed_mode_number;
+        number_of_modes++;
+        break;
+      
+      case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+      case '8': case '9': case '0':
+        mode_number[mode_number_index] = file_content[i];
+        mode_number_index++;
+        if (mode_number_index > MAX_MODE_NUMBER_DIGITS) {
+          //Mode numbers cannot be longer than a certain number of digits
+          break;
+        }
+        break;
+
+      default:
+        PRINTF("Invalid character in mode file: ");
+        SENDBYTE(file_content[i]);
+        NEWLINE;
+        break;
     }
-
-    // if not at a mode descriptor, clear everything
-    if(!parsing_mode_descriptor)
-    {
-      mode_id[0] = 0;
-      mode_id[1] = 0;
-      mode_id[2] = 0;
-      mode_number = 0;
-    }
-    else
-    {
-      if(mode_number == 3)
-      {
-        return false;
-      }
-      mode_id[mode_number++] = file_content[i];
-    }
-
-    // if at new mode descriptor
-    if(file_content[i] == '<')
-    {
-      parsing_mode_descriptor = true;
-    }
-    i++;    
   }
-
-  pc_print_content[0] = 0;
-  pc_print_content[1] = 0;
 
   // Print the number of modes found to a string
-  sprintf((char*)&pc_print_content[0], "%d", number_of_modes);
+  sprintf(debug, "%d modes deteceted\n\r", number_of_modes);
+  PRINTF(debug);
 
-  // Send the actual modes
-  PRINTF("And the modes are: ");
-  PRINTF(pc_print_content);
+  //Send the actual modes to debug stream
+  PRINTF("Modes enabled: ");
   for(i = 0; i < number_of_modes; i++)
   {
-    sprintf((char*)&pc_print_content[0], "%d, ", ui_modes[i]);
-    PRINTF(pc_print_content);
+    sprintf(debug, "%d, ", ui_modes[i]);
+    PRINTF(debug);
   }
-  TX_NEWLINE_PC;
+  NEWLINE;
 
-  return true; 
+  ui_is_mode_selected = false;
+  ui_current_mode_index = 0;
+  ui_current_mode_number = ui_modes[ui_current_mode_index];
 }
 
 /**
@@ -169,7 +181,7 @@ bool ui_parse_message(bool mp3_is_playing)
       if(message_type == 'D')               // Control key pressed
       {
         ui_control_key_pressed();
-        usart_ui_message_ready = true;      // Once control handled, exit
+        usart_ui_message_ready = false;      // Once control handled, exit
         return true;
       }
     }
@@ -234,11 +246,11 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_ENT1: // Enter a mode
-      if(!ui_mode_selected) //Then this command is to select the mode
+      if(!ui_is_mode_selected) //Then this command is to select the mode
       {
-        if(ui_selected_mode >= 0)
+        if(ui_current_mode_index >= 0)
         {
-          ui_mode_selected = true;
+          ui_is_mode_selected = true;
           ui_reset_the_current_mode();
         }
         else
@@ -254,25 +266,19 @@ void ui_control_key_pressed(void)
     
     case UI_CMD_ENT2: // Exit a mode
       //This might be an exit from mode command or "NO" command in the mode
-      PRINTF("Received CANCEL from keypad");
-      NEWLINE;
-      if(ui_mode_selected) 
+      if(ui_is_mode_selected) 
       {
-        PRINTF("A mode is selected");
         NEWLINE;
         // If the next byte is 'E', this is exit command 
         // (when the user pressed E2 for more than 5 secs)
         if(usart_ui_received_packet[6] == 69) 
         {
-          PRINTF("Long press detected, going to main menu");
-          NEWLINE;
-          ui_mode_selected = false;
-          request_to_play_mp3_file("MM.MP3");
+          PRINTF("Long CANCEL detected, going to main menu\n\r");
+          quit_mode();
         }
         else //Then this a "NO" answer, call the mode function for this
         {
-          PRINTF("Short press detected, calling mode NO function");
-          NEWLINE;
+          PRINTF("Short CANCEL detected, calling mode NO function\n\r");
           ui_call_mode_no_answer();
         }
       }
@@ -280,11 +286,11 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MFOR: // Move forward in list of modes
-      if(!ui_mode_selected)
+      if(!ui_is_mode_selected)
       {
-        //ui_selected_mode = (ui_selected_mode + 1) % number_of_modes;
-        ui_selected_mode = ui_selected_mode + 1 > number_of_modes - 1 ? 0 : ui_selected_mode + 1;
-        ui_current_mode = ui_modes[ui_selected_mode];
+        //ui_current_mode_index = (ui_current_mode_index + 1) % number_of_modes;
+        ui_current_mode_index = ui_current_mode_index + 1 > number_of_modes - 1 ? 0 : ui_current_mode_index + 1;
+        ui_current_mode_number = ui_modes[ui_current_mode_index];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
       } else {
@@ -293,10 +299,10 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MREV: // Move backwards in list of modes
-      if(!ui_mode_selected)
+      if(!ui_is_mode_selected)
       {
-        ui_selected_mode = ui_selected_mode - 1 < 0 ? number_of_modes - 1 : ui_selected_mode - 1;
-        ui_current_mode = ui_modes[ui_selected_mode];
+        ui_current_mode_index = ui_current_mode_index - 1 < 0 ? number_of_modes - 1 : ui_current_mode_index - 1;
+        ui_current_mode_number = ui_modes[ui_current_mode_index];
         vs1053_skip_play = true;
         ui_play_intro_current_mode();
       } else {
@@ -331,14 +337,9 @@ void ui_control_key_pressed(void)
  */
 void ui_play_intro_current_mode(void)
 {
-  char buf[11];
-  if(ui_current_mode <= number_of_modes)
-  {
-    sprintf(buf, "MD%i.MP3", ui_current_mode);
-    request_to_play_mp3_file(buf);
-  }
-  else
-    request_to_play_mp3_file("ERR1.MP3");
+  char filename[5];
+  sprintf(filename, "MD%d", ui_current_mode_number);
+  play_mp3("",filename);
 }
 
 /**
@@ -347,7 +348,7 @@ void ui_play_intro_current_mode(void)
  */
 void ui_call_mode_yes_answer(void)
 {
-  switch(ui_current_mode)
+  switch(ui_current_mode_number)
   {
     case 1:
       md1_call_mode_yes_answer();
@@ -381,7 +382,7 @@ void ui_call_mode_yes_answer(void)
  */
 void ui_call_mode_no_answer(void)
 {
-  switch(ui_current_mode)
+  switch(ui_current_mode_number)
   {
     case 1:
       md1_call_mode_no_answer();
@@ -415,31 +416,40 @@ void ui_call_mode_no_answer(void)
  */
 void ui_input_dot_to_current_mode(char this_dot)
 {
-  switch(ui_current_mode)
-  {
-    case 1:
-      md1_input_dot(this_dot);
-      break;
-    case 2:
-      md2_input_dot(this_dot);
-      break;
-    case 3:
-      md3_input_dot(this_dot);
-      break;
-    case 4:
-      md4_input_dot(this_dot);
-      break;
-    case 5:
-      md5_input_dot(this_dot);
-      break;
-    case 6:
-      md6_input_dot(this_dot);
-      break;
-    case 7:
-      md7_input_dot(this_dot);
-      break;
-    default:
-      break;
+  if (ui_is_mode_selected) {
+      switch(ui_current_mode_number)
+      {
+        case 1:
+          md1_input_dot(this_dot);
+          break;
+        case 2:
+          md2_input_dot(this_dot);
+          break;
+        case 3:
+          md3_input_dot(this_dot);
+          break;
+        case 4:
+          md4_input_dot(this_dot);
+          break;
+        case 5:
+          md5_input_dot(this_dot);
+          break;
+        case 6:
+          md6_input_dot(this_dot);
+          break;
+        case 7:
+          md7_input_dot(this_dot);
+          break;
+        default:
+          break;
+      }
+  } else {
+    play_mp3("SYS_","INVP");
+    incorrect_tries++;
+    if (incorrect_tries >= 3) {
+      play_mp3("SYS_","MINS");
+      incorrect_tries = 0;
+    }
   }
 }
 
@@ -449,42 +459,51 @@ void ui_input_dot_to_current_mode(char this_dot)
  */
 void ui_input_cell_to_current_mode(char this_cell)
 {
-  switch(ui_current_mode)
-  {
-    case 1:
-      md1_input_cell(this_cell);
-      break;
-    case 2:
-      md2_input_cell(this_cell);
-      break;
-    case 3:
-      md3_input_cell(this_cell);
-      break;
-    case 4:
-      md4_input_cell(this_cell);
-      break;
-    case 5:
-      md5_input_cell(this_cell);
-      break;
-    case 6:
-      md6_input_cell(this_cell);
-      break;
-    case 7:
-      md7_input_cell(this_cell);
-      break;
-    default:
-      break;
+  if (ui_is_mode_selected) {
+    switch(ui_current_mode_number)
+    {
+      case 1:
+        md1_input_cell(this_cell);
+        break;
+      case 2:
+        md2_input_cell(this_cell);
+        break;
+      case 3:
+        md3_input_cell(this_cell);
+        break;
+      case 4:
+        md4_input_cell(this_cell);
+        break;
+      case 5:
+        md5_input_cell(this_cell);
+        break;
+      case 6:
+        md6_input_cell(this_cell);
+        break;
+      case 7:
+        md7_input_cell(this_cell);
+        break;
+      default:
+        break;
+    }
+  } else {
+    play_mp3("SYS_","INVP");
+    incorrect_tries++;
+    if (incorrect_tries >= 3) {
+      play_mp3("SYS_","MINS");
+      incorrect_tries = 0;
+    }
   }
 }
 
 /**
- * @brief   Decides which of the three UI modes to go into based on ui_current_mode
+ * @brief   Decides which of the three UI modes to go into based on ui_current_mode_number
  * @return  Void
  */
 void ui_run_main_of_current_mode(void)
 {
-  if(ui_mode_selected){
-    switch(ui_current_mode)
+  if(ui_is_mode_selected){
+    switch(ui_current_mode_number)
     {
       case 1:
         md1_main();
@@ -519,8 +538,8 @@ void ui_run_main_of_current_mode(void)
  */
 void ui_reset_the_current_mode(void)
 {
-  if(ui_mode_selected){
-    switch(ui_current_mode)
+  if(ui_is_mode_selected){
+    switch(ui_current_mode_number)
     {
       case 1:
         md1_reset();
@@ -556,7 +575,10 @@ void ui_reset_the_current_mode(void)
  * @return void
  */
 void ui_call_mode_left(void) {
-  switch (ui_current_mode) {
+  switch (ui_current_mode_number) {
+    case 6:
+      md6_call_mode_left();
+      break;
     case 7:
       md7_call_mode_left();
       break;
@@ -571,7 +593,10 @@ void ui_call_mode_left(void) {
  * @return void
  */
 void ui_call_mode_right(void) {
-  switch (ui_current_mode) {
+  switch (ui_current_mode_number) {
+    case 6:
+      md6_call_mode_left();
+      break;
     case 7:
       md7_call_mode_right();
       break;

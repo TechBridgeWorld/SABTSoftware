@@ -27,9 +27,12 @@
 #include "PC_Handle.h"
 
 #define F_CPU 8000000UL
+#define MAX_NUMBER_OF_MODES	10
+ 
+unsigned short number_of_modes;
+unsigned short ui_modes[MAX_NUMBER_OF_MODES];
 
-volatile unsigned char number_of_modes;
-volatile unsigned char ui_modes[10];
+char dbgstr[64];
 
 //indicates whether or not we are currently playing a sound file
 bool playing_sound;

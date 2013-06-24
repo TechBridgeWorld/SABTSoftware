@@ -964,15 +964,17 @@ unsigned char convert_file_name (unsigned char *file_name)
     return 0;
 
   // 1 = BAD_EXTENSION
-  if(j>8) {
-    usart_transmit_string_to_pc_from_flash(PSTR("Invalid file_name.")); 
+  if(j > 8) {
+    PRINTF("Invalid file name: ");
+    PRINTF(file_name);
+    NEWLINE; 
     return 1;
   }
 
   for(k = 0; k < j; k++) //setting file name
     file_name_fat[k] = file_name[k];
 
-  for(k = j; k <= 7; k++) //filling file name trail with blanks
+  for(; k <= 7; k++) //filling file name trail with blanks
     file_name_fat[k] = ' ';
 
   j++;
@@ -983,9 +985,9 @@ unsigned char convert_file_name (unsigned char *file_name)
     {
       file_name_fat[k] = file_name[j++];
     }
-    else //filling extension trail with blanks
+    else //end filename
     {
-      file_name_fat[k] = file_name[j];
+      file_name_fat[k] = 0;
       break;
     }
   }
@@ -1001,7 +1003,6 @@ unsigned char convert_file_name (unsigned char *file_name)
 
   for(j = 0; j < FILE_NAME_LEN; j++)
     file_name[j] = file_name_fat[j];
-
 
   return 0;
 }

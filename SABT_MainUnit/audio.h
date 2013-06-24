@@ -1,7 +1,7 @@
 /**
  * @file audio.h
- * @brief Definitions for common MP3 control functions
- * @author - Vivek Nair (viveknai)
+ * @brief Declarations for common MP3 control functions
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _AUDIO_H_

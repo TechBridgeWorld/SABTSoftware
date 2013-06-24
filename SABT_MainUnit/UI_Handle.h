@@ -22,12 +22,12 @@
 #define UI_CMD_VOLD 6
 
 volatile bool ui_mp3_file_pending;
-volatile bool ui_mode_selected;
-volatile char ui_current_mode;
-volatile int ui_selected_mode;
+bool ui_is_mode_selected;
+char ui_current_mode_number;
+short ui_current_mode_index;
 
 //Dealing with the user data
-bool ui_check_modes(void);
+void ui_check_modes(void);
 uint16_t ui_calculate_crc(unsigned char* message);
 bool ui_parse_message(bool mp3_is_playing);
 void ui_control_key_pressed(void);

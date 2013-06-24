@@ -1,7 +1,7 @@
 /**
  * @file script_common.c
- * @brief Declarations for common script wrapper functions
- * @author Vivek Nair (viveknai)
+ * @brief Code for common script wrapper functions
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #include "alphabet.h"
@@ -11,8 +11,9 @@
 
 /**
  * @brief Finds an alphabet from a specified script based on a bit pattern
- * @param char bit_pattern, script_t* this_script
- * @return alphabet_t* corresponding to alphabet it found, NULL if not found
+ * @param char bit_pattern - Bit pattern to look for
+ * @param script_t* this_script - Script to look in
+ * @return alphabet_t* - Corresponding to alphabet it found, NULL if not found
  */
 alphabet_t* get_alphabet_by_bits(char bit_pattern, script_t* this_script) {
 	alphabet_t* this_alphabet = NULL;
@@ -29,8 +30,9 @@ alphabet_t* get_alphabet_by_bits(char bit_pattern, script_t* this_script) {
 
 /**
  * @brief Finds an alphabet from a specified script based on sound
- * @param char* sound, script_t* this_script
- * @return alphabet_t* corresponding to alphabet it found, NULL if not found
+ * @param char* sound - Phonetic sound string
+ * @param script_t* this_script - Script to look in
+ * @return alphabet_t* - corresponding to alphabet it found, NULL if not found
  */
 alphabet_t* get_alphabet_by_sound(char* sound, script_t* this_script) {
 	alphabet_t* this_alphabet = NULL;
@@ -47,8 +49,9 @@ alphabet_t* get_alphabet_by_sound(char* sound, script_t* this_script) {
 
 /**
  * @brief Checks if 2 alphabets are the same
- * @param alphabet_t* a1, a2
- * @return bool
+ * @param alphabet_t* a1 - First alphabet
+ * @param alphabet_t* a2 - Second alphabet
+ * @return bool - true if same, false otherwise
  */
 bool is_same_alphabet(alphabet_t* a1, alphabet_t* a2) {
 	if (a1 != NULL && a2 != NULL) {

@@ -1,7 +1,7 @@
 /**
  * @file MD7.c
  * @brief Mode logic for Mode 7 - Hindi Braille alphabet practice
- * @author Vivek Nair (viveknai)
+ * @author Vivek Nair (viveknair@cmu.edu)
  */
 #include <stdlib.h>
 
@@ -12,7 +12,7 @@
 
 /* *NOTE* - For new language modules, replace this header file with the header
 						for the new script */
-#include "script_devanagari.h"
+#include "script_hindi.h"
 
 //Mode states
 #define STATE_MENU			0x00
@@ -38,14 +38,14 @@
 #define	PLAY_MODE_SIZE 				5
 #define MAX_INCORRECT_TRIES		3
 
-//Update this macro to refer to script length from script header file
-#define SCRIPT_LENGTH					DEVANAGARI_SCRIPT_LEN
+// *NOTE* Update this macro to refer to script length from script header file
+#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
 
 //Script and language configuration
 /* *NOTE* - After adding a new header file and language files on the SD card,
  						edit the following 3 variables */
-static script_t* this_script = &script_devanagari;
-static char lang_fileset[5] = "HIN_";
+static script_t* this_script = &script_hindi;
+static char* lang_fileset = script_hindi.fileset;
 static char mode_fileset[5] = "MD7_";
 
 /* Defines initial state for mode state machine */
@@ -69,13 +69,9 @@ static short bound;
 static char com_mp3[5];
 static char debug[64];
 static char correct = 0;
+static char cancel = 0;
 
-/**
- * @brief Resets mode state variables to default values
- * @param void
- * @return void
- */
-void reset_state() {
+void reset() {
 	submode = SUBMODE_NONE;
 	button_bits = 0b00000000;
 	last_dot = 0b00000000;
@@ -96,22 +92,19 @@ void reset_state() {
 	bound = 0;
 	strcpy(com_mp3,"");
 	correct = 0;
+	cancel = 0;
 	PRINTF("State variables reset\n\r");
 }
 
-/**
- * @brief Implements mode state machine
- * @param void
- * @return void
- */
 void md7_main(void) {
 
 	switch(next_state) {
 
+		// Initialises mode
 		case STATE_START:
 			PRINTF("*** MD7 - Hindi Braille practice ***\n\r");
 			PRINTF("STATE_START\n\r");
-			reset_state();
+			reset();
 			next_state = STATE_MENU;
 			break;
 
@@ -232,6 +225,20 @@ void md7_main(void) {
 					play_mp3(mode_fileset, "NEXT");
 					correct = 0;
 					next_state = STATE_NEXT;
+					return;
+					break;
+
+				case CANCEL:
+					// Press CANCEL once to delete last character, press CANCEL again
+					// to 
+					if (cancel == 0) {
+						play_mp3(lang_fileset, "CANC");
+						button_bits = 0x00;
+						cancel = 1;
+					} else {
+						cancel = 0;
+						next_state = STATE_START;
+					}
 					break;
 
 				default:
@@ -275,7 +282,7 @@ void md7_main(void) {
 				//Otherwise check alphabet
 				input_alphabet = get_alphabet_by_bits(button_bits, this_script);
 				if (is_same_alphabet(current_alphabet, input_alphabet)) {
-					play_mp3(mode_fileset, "CORR");
+					play_mp3(lang_fileset, "CORR");
 					if (correct_count + 1 < bound)
 						play_mp3(mode_fileset, "NEXT");
 					incorrect_tries = 0;
@@ -314,13 +321,17 @@ void md7_main(void) {
 					break;
 
 				case '1':
-					next_state = STATE_START;
+					next_state = STATE_INIT;
 					last_dot = 0;
 					break;
 
 				case '2':
 					/* TODO - Quit mode */
-					last_dot = 0;
+					quit_mode();
+					break;
+
+				case CANCEL:
+					next_state = STATE_START;
 					break;
 
 				default:
@@ -330,6 +341,7 @@ void md7_main(void) {
 			}
 			break;
 
+		// Skip letter menu
 		case STATE_SKIP:
 			switch (last_dot) {
 				case 0:
@@ -343,6 +355,7 @@ void md7_main(void) {
 				case '1':
 					next_state = STATE_NEXT;
 					play_mp3(mode_fileset, "NEXT");
+					incorrect_tries = 0;
 					correct = 0;
 					last_dot = RIGHT;
 					break;
@@ -368,6 +381,10 @@ void md7_main(void) {
 					next_state = STATE_NEXT;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
 					play_mp3(lang_fileset, "INVP");
 					last_dot = 0;
@@ -375,6 +392,7 @@ void md7_main(void) {
 			}
 			break;
 
+		// Advances through list of letters
 		case STATE_NEXT:
 			switch(last_dot) {
 
@@ -407,9 +425,6 @@ void md7_main(void) {
 						flag_array[current_index] = 1;
 						correct_count++;
 					}
-					sprintf(debug, "Correct count: %d", correct_count);
-					PRINTF(debug);
-					NEWLINE;
 
 					//If # of correct entries == length of script/play array,
 					//	then submode complete
@@ -421,20 +436,11 @@ void md7_main(void) {
 						for (int i = PLUS_ONE_MOD(current_index, bound);
 									i != current_index;
 									i = PLUS_ONE_MOD(i, bound)) {
-							sprintf(debug, "i = %d", i);
-							PRINTF(debug);
-							NEWLINE;
-							sprintf(debug, "array[i] = %d", flag_array[i]);
-							PRINTF(debug);
-							NEWLINE;
 							if (flag_array[i] == 0) {
 								current_index = i;
 								break;
 							}
 						}
-						sprintf(debug, "Current index: %d", current_index);
-						PRINTF(debug);
-						NEWLINE;
 
 						switch (submode) {
 							case SUBMODE_LEARN:
@@ -470,13 +476,24 @@ void md7_main(void) {
 					next_state = STATE_PREV;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
+					play_mp3(lang_fileset, "INVP");
+					last_dot = 0;
 					break;
 			}
 			break;
 
+		// Goes back in list of letters
 		case STATE_PREV:
 			switch (last_dot) {
+
+				case 0:
+					break;
+
 				case LEFT:
 					PRINTF("Previous alphabet");
 					NEWLINE;
@@ -502,12 +519,6 @@ void md7_main(void) {
 					for (int i = MINUS_ONE_MOD(current_index, bound);
 								i != current_index;
 								i = MINUS_ONE_MOD(i, bound)) {
-						sprintf(debug, "i = %d", i);
-						PRINTF(debug);
-						NEWLINE;
-						sprintf(debug, "array[i] = %d", flag_array[i]);
-						PRINTF(debug);
-						NEWLINE;
 						if (flag_array[i] == 0) {
 							current_index = i;
 							break;
@@ -544,7 +555,13 @@ void md7_main(void) {
 					next_state = STATE_PROMPT;
 					break;
 
+				case CANCEL:
+					next_state = STATE_START;
+					break;
+
 				default:
+					play_mp3(lang_fileset, "INVP");
+					last_dot = 0;
 					break;
 			}
 			break;
@@ -563,21 +580,7 @@ void md7_call_mode_yes_answer(void) {
 }
 
 void md7_call_mode_no_answer(void) {
-	PRINTF("Received CANCEL signal");
-	NEWLINE;
-	if (next_state == STATE_INPUT) {
-		PRINTF("Switching to mode submenu");
-		NEWLINE;
-		next_state = STATE_MENU;
-	} else if (next_state == STATE_MENU) {
-		PRINTF("To implement: QUIT");
-		NEWLINE;
-		/* TODO - Quit mode */
-	} else {
-		PRINTF("Setting last_dot");
-		NEWLINE;
-		last_dot = CANCEL;
-	}
+	last_dot = CANCEL;
 }
 
 void md7_input_dot(char this_dot) {
