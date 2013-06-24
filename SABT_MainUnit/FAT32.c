@@ -523,7 +523,7 @@ unsigned char play_mp3_file(unsigned char *file_name)
 
 unsigned char play_beep(){
 
-  unsigned int iAudioByteCnt, retry = 0;
+  unsigned int iAudioByteCnt;
 
   unsigned char StringOfData[] = {0xff ,0xe3 ,0x18 ,0xc4 ,0x00 ,0x0b ,0x70 ,0x92 ,0xdd ,0x19 ,0x46 ,0x00 ,0x02 ,0xe0 ,0x89 ,0x24,
 	0x80 ,0x0b ,0xbb ,0xbb ,0xbb ,0xbf ,0x11 ,0x11 ,0x11 ,0x11 ,0xff ,0xef ,0x7f ,0xff ,0x9c ,0xf0,
@@ -540,28 +540,20 @@ unsigned char play_beep(){
 	0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55,
 	0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55 ,0x55}; //generated beep sequence in hex format
 
-  
   playing_sound = true;
 
-  while(vs1053_read_command(0x0B) != 0x09)   // REDO if not written properly
-  {
-      vs1053_write_command(0x0B, 0x09);        // Set the requested volume
-      if(retry++ > 10) break;
-  }
-  
   while(1) {
  
-    for (iAudioByteCnt = 0 ; iAudioByteCnt < 216; iAudioByteCnt ++ ){
+    for (iAudioByteCnt = 0 ; iAudioByteCnt < 216 ; iAudioByteCnt ++ ){
         vs1053_write_data(StringOfData[iAudioByteCnt]);    
 		usart_transmit_string_to_pc_from_flash (PSTR("Transmitting Beep"));
-		TX_NEWLINE_PC;
     }
 
-	
     iAudioByteCnt = 0;	  //reset byte count to zero after each beep
-    init_sd_card(true);   //try to initialize audio card after every beep
-    playing_sound = false;
-    break;
+    if (!sd_init()){//try to initialize audio card after every beep
+    	playing_sound = false;
+    	return 0;
+    }
   }  
   return 0;
 }
@@ -1552,36 +1544,31 @@ void init_sd_card(bool verbose)
 {
   unsigned char init = 0;
   unsigned char error, FAT32_active;
-  unsigned int i;
   card_type = 0;
-
-  for (i = 0; i < 10; i++)
-  {
-    error = sd_init();
-    if(!error) break;
-  }
+  error = sd_init(); // try to initialize sd card
 
   if(verbose)
   {
+    init = vs1053_initialize();
+
+    if(init == 0){
+        usart_transmit_string_to_pc_from_flash(PSTR("VS1053 MP3 chip sucessfully initialized"));
+      	TX_NEWLINE_PC;  
+    }
+    else{
+      	usart_transmit_string_to_pc_from_flash (PSTR("Error initializing VS1053 - CODE "));
+      	usart_transmit_byte_to_pc(init + 64);
+      	TX_NEWLINE_PC;
+    }
+
     if(error)
     {
-      if(error == 1) 
+      if(error == 1) {
         usart_transmit_string_to_pc_from_flash(PSTR("SD card not detected.."));
-	    TX_NEWLINE_PC;  
-        init = vs1053_initialize();
-
-      if(init == 0)
-      {
-      usart_transmit_string_to_pc_from_flash(PSTR("VS1053 MP3 chip sucessfully initialized"));
-      TX_NEWLINE_PC;  
-	  play_beep();
+	    TX_NEWLINE_PC;
+		play_beep();  
       }
-      else
-      {
-      usart_transmit_string_to_pc_from_flash (PSTR("Error initializing VS1053 - CODE "));
-      usart_transmit_byte_to_pc(init + 64);
-      TX_NEWLINE_PC;
-      }
+	    
       if(error == 2) 
         usart_transmit_string_to_pc_from_flash(PSTR("Card Initialization failed.."));
       while(1);  //wait here forever if error in SD init   
@@ -1626,20 +1613,7 @@ void init_sd_card(bool verbose)
           PSTR("FAT32 file system detected..."));
     }
     TX_NEWLINE_PC;  
-    init = vs1053_initialize();
-
-    if(init == 0)
-    {
-      usart_transmit_string_to_pc_from_flash(
-          PSTR("VS1053 MP3 chip sucessfully initialized"));
-      TX_NEWLINE_PC;  
-    }
-    else
-    {
-      usart_transmit_string_to_pc_from_flash (PSTR("Error initializing VS1053 - CODE "));
-      usart_transmit_byte_to_pc(init + 64);
-      TX_NEWLINE_PC;
-    }
+   
   }
   else
   {
