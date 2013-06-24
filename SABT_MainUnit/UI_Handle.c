@@ -58,7 +58,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,;");
+  strcpy(file_content, "1,2,3,4,5,6,7,8,;");
 
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
@@ -371,6 +371,9 @@ void ui_call_mode_yes_answer(void)
     case 7:
       md7_call_mode_yes_answer();
       break;
+    case 8:
+      md8_call_mode_yes_answer();
+      break;
     default:
       break;
   }
@@ -404,6 +407,9 @@ void ui_call_mode_no_answer(void)
       break;
     case 7:
       md7_call_mode_no_answer();
+      break;
+    case 8:
+      md8_call_mode_no_answer();
       break;
     default:
       break;
@@ -439,6 +445,9 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
         case 7:
           md7_input_dot(this_dot);
+          break;
+        case 8:
+          md8_input_dot(this_dot);
           break;
         default:
           break;
@@ -483,6 +492,9 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 7:
         md7_input_cell(this_cell);
         break;
+      case 8:
+        md8_input_cell(this_cell);
+        break;
       default:
         break;
     }
@@ -526,6 +538,9 @@ void ui_run_main_of_current_mode(void)
       case 7:
         md7_main();
         break;
+      case 8:
+        md8_main();
+        break;
       default:
         break;
     }
@@ -562,6 +577,9 @@ void ui_reset_the_current_mode(void)
       case 7:
         md7_reset();
         break;
+      case 8:
+        md8_reset();
+        break;  
       default:
         break;
     }
@@ -582,6 +600,9 @@ void ui_call_mode_left(void) {
     case 7:
       md7_call_mode_left();
       break;
+    case 8:
+      md8_call_mode_left();
+      break;
     default:
       break;
   }
@@ -600,6 +621,9 @@ void ui_call_mode_right(void) {
     case 7:
       md7_call_mode_right();
       break;
+    case 8:
+      md8_call_mode_right();
+      break;  
     default:
       break;
   }

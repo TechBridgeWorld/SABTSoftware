@@ -1,6 +1,6 @@
 /**
- * @file MD7.c
- * @brief Mode logic for Mode 7 - Hindi Braille alphabet practice
+ * @file MD8.c
+ * @brief Mode logic for mode 8 - English number practice
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 #include <stdlib.h>
@@ -12,7 +12,7 @@
 
 /* *NOTE* - For new language modules, replace this header file with the header
 						for the new script */
-#include "script_hindi.h"
+#include "script_num_eng.h"
 
 //Mode states
 #define STATE_MENU			0x00
@@ -39,14 +39,14 @@
 #define MAX_INCORRECT_TRIES		3
 
 // *NOTE* Update this macro to refer to script length from script header file
-#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
+#define SCRIPT_LENGTH SCRIPT_NUM_ENG_LENGTH
 
 //Script and language configuration
 /* *NOTE* - After adding a new header file and language files on the SD card,
  						edit the following 3 variables */
-static script_t* this_script = &script_hindi;
-static char* lang_fileset = script_hindi.fileset;
-static char mode_fileset[5] = "MD7_";
+static script_t* this_script = &script_num_eng;
+static char* lang_fileset = script_num_eng.fileset;
+static char mode_fileset[5] = "MD8_";
 
 /* Defines initial state for mode state machine */
 static char next_state = STATE_START;
@@ -71,7 +71,7 @@ static char debug[64];
 static char correct = 0;
 static char cancel = 0;
 
-void md7_reset_vars() {
+void md8_reset_vars() {
 	submode = SUBMODE_NONE;
 	button_bits = 0b00000000;
 	last_dot = 0b00000000;
@@ -96,15 +96,15 @@ void md7_reset_vars() {
 	PRINTF("State variables reset\n\r");
 }
 
-void md7_main(void) {
+void md8_main(void) {
 
 	switch(next_state) {
 
 		// Initialises mode
 		case STATE_START:
-			PRINTF("*** MD7 - Hindi Braille practice ***\n\r");
+			PRINTF("*** MD8 - Number practice ***\n\r");
 			PRINTF("STATE_START\n\r");
-			md7_reset_vars();
+			md8_reset_vars();
 			next_state = STATE_MENU;
 			break;
 
@@ -571,30 +571,30 @@ void md7_main(void) {
 	}
 }
 
-void md7_reset(void) {
+void md8_reset(void) {
 	next_state = STATE_START;
 }
 
-void md7_call_mode_yes_answer(void) {
+void md8_call_mode_yes_answer(void) {
 	last_dot = ENTER;
 }
 
-void md7_call_mode_no_answer(void) {
+void md8_call_mode_no_answer(void) {
 	last_dot = CANCEL;
 }
 
-void md7_input_dot(char this_dot) {
+void md8_input_dot(char this_dot) {
 	last_dot = this_dot;
 }
 
-void md7_input_cell(char this_cell) {
+void md8_input_cell(char this_cell) {
 	/* TODO  */
 }
 
-void md7_call_mode_left() {
+void md8_call_mode_left() {
 	last_dot = LEFT;
 }
 
-void md7_call_mode_right() {
+void md8_call_mode_right() {
 	last_dot = RIGHT;
 }

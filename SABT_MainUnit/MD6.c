@@ -32,7 +32,7 @@ static char last_cell = 0;
 static alphabet_t *this_alpha = NULL;
 static char incorrect_tries = 0;
 
-void reset() {
+void md6_reset_vars() {
   button_bits = 0x00;
   last_dot = 0;
   last_cell = 0;
@@ -47,7 +47,7 @@ void md6_main(void) {
     // Initialises mode
     case STATE_INITIAL:
       PRINTF("*** MD6 Free Play ***\n\r");
-      reset();
+      md6_reset_vars();
       play_mp3(mode_fileset, "INT");
       next_state = STATE_INPUT;
       break;
