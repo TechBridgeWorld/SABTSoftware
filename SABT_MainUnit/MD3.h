@@ -23,8 +23,11 @@
 #define STATE_SELECT_MODE			   10 
 #define STATE_PLAY_SOUND			   11
 #define STATE_PROMPT				   12
+#define STATE_LETTER_HINT			   13
+#define STATE_WORD_HINT				   14
+#define STATE_BUTTON_HINT			   15
 
-#define PRIME                53
+#define PRIME                	53
 
 //static char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.
