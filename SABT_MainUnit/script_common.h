@@ -7,14 +7,15 @@
 #ifndef _SCRIPT_COMMON_H_
 #define _SCRIPT_COMMON_H_ 
 
-#include "alphabet.h"
+#include "glyph.h"
 #include <stdbool.h>
+#include <stddef.h>
 
-/* Reserved script bit patterns */
+#define SCRIPT_COMMON_LENGTH 10
 
+extern script_t* lang_script;
+extern script_t script_common;
 
-alphabet_t* get_alphabet_by_bits(char bit_pattern, script_t* this_script);
-alphabet_t* get_alphabet_by_sound(char* sound, script_t* this_script);
-bool is_same_alphabet(alphabet_t* a1, alphabet_t* a2);
+glyph_t* get_glyph_by_pattern(char pattern);
 
 #endif /* _SCRIPT_COMMON_H_ */

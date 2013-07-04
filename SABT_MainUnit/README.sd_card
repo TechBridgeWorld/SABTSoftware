@@ -1,0 +1,12 @@
+To prepare a new SD card, format it in FAT32 using your disk utility of choce and then copy over all the files from the 'sd_card_files' directory. If it gives you pain, try fiddling with the allocation unit and cluster size parameters while formatting till something works.
+
+On a Mac, the following should work (should work for *IX?):
+
+1. Make sure the SD card is not inserted
+2. 'ls /dev/rdisk?' to list current drives
+3. Insert SD card
+4. 'ls /dev/rdisk?' The new drive is the SD card, let it's number be #
+5. 'ls /dev/rdisk#s?' - To list partiions on the disk, let $ be the parition you want (usually the first, and ideally, the only on the SD card)
+6. Make sure the partition is not mounted (Disk Utility's Unmount is your friend here)
+6. newfs_msdos -v SABT -F 32 /dev/rdisk#s$
+7. Your SD card should be ready to copy files onto

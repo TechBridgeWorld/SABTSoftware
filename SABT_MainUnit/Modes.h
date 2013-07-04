@@ -19,5 +19,6 @@
 #include "MD6.h" // Free play
 #include "MD7.h" // Hindi Braille
 #include "MD8.h" // Number practice
+#include "MD9.h" // Maths practice
 
 #endif /* _MODES_H_ */

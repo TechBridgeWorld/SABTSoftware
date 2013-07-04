@@ -1,20 +1,20 @@
 /**
  *  @file script_hindi.h
- *  @brief Bit patterns representing alphabets of the Hindi script
+ *  @brief Bit patterns representing glyphs of the Hindi script
  *  @author Vivek Nair (viveknair@cmu.edu)
  */
 
 #ifndef _SCRIPT_HINDI_H_
 #define _SCRIPT_HINDI_H_
 
-#include "alphabet.h"
+#include "glyph.h"
 #include "script_common.h"
 
 #define SCRIPT_HINDI_FILESET "HIN_"
 #define SCRIPT_HINDI_LENGTH 46
 
 // Devanagari script bit patterns
-// NOTE: Only a subset of all Hindi# alphabets is represented here
+// NOTE: Only a subset of all Hindi# glyphs is represented here
 #define DEV_A 				0b00000001
 #define DEV_A_				0b00011100
 #define DEV_I					0b00001010
@@ -63,59 +63,59 @@
 #define DEV_HA				0b00010011
 
 // Devanagari script array
-alphabet_t alphabets_hindi[] = {
-	{DEV_A, "A"},
-	{DEV_A_, "A_"},
-	{DEV_I, "I"},
-	{DEV_I_, "I_"},
-	{DEV_U, "U"},
-	{DEV_U_, "U_"},
-	{DEV_E, "E"},
-	{DEV_AI, "AI"},
-	{DEV_O, "O"},
-	{DEV_AU, "AU"},
-	{DEV_A_N, "A_N"},
-	{DEV_AH_, "AH_"},
-	{DEV__AM_, "_AM_"},
-	{DEV_KA, "KA"},
-	{DEV_KHA, "KHA"},
-	{DEV_GA, "GA"},
-	{DEV_GHA, "GHA"},
-	{DEV__NA, "_NA"},
-	{DEV_CA, "CA"},
-	{DEV_CHA, "CHA"},
-	{DEV_JA, "JA"},
-	{DEV_JHA, "JHA"},
-	{DEV___NA, "__NA"},
-	{DEV_T_A, "T_A"},
-	{DEV_T_HA, "T_HA"},
-	{DEV_D_A, "D_A"},
-	{DEV_D_HA, "D_HA"},
-	{DEV_N_A, "N_A"},
-	{DEV_TA, "TA"},
-	{DEV_THA, "THA"},
-	{DEV_DA, "DA"},
-	{DEV_DHA, "DHA"},
-	{DEV_NA, "NA"},
-	{DEV_PA, "PA"},
-	{DEV_PHA, "PHA"},
-	{DEV_BA, "BA"},
-	{DEV_BHA, "BHA"},
-	{DEV_MA, "MA"},
-	{DEV_YA, "YA"},
-	{DEV_RA, "RA"},
-	{DEV_LA, "LA"},
-	{DEV_VA, "VA"},
-	{DEV__SA, "_SA"},
-	{DEV_S_A, "S_A"},
-	{DEV_SA, "SA"},
-	{DEV_HA, "HA"}
+glyph_t glyphs_hindi[] = {
+	{DEV_A, "A", NULL},
+	{DEV_A_, "A_", NULL},
+	{DEV_I, "I", NULL},
+	{DEV_I_, "I_", NULL},
+	{DEV_U, "U", NULL},
+	{DEV_U_, "U_", NULL},
+	{DEV_E, "E", NULL},
+	{DEV_AI, "AI", NULL},
+	{DEV_O, "O", NULL},
+	{DEV_AU, "AU", NULL},
+	{DEV_A_N, "A_N", NULL},
+	{DEV_AH_, "AH_", NULL},
+	{DEV__AM_, "_AM_", NULL},
+	{DEV_KA, "KA", NULL},
+	{DEV_KHA, "KHA", NULL},
+	{DEV_GA, "GA", NULL},
+	{DEV_GHA, "GHA", NULL},
+	{DEV__NA, "_NA", NULL},
+	{DEV_CA, "CA", NULL},
+	{DEV_CHA, "CHA", NULL},
+	{DEV_JA, "JA", NULL},
+	{DEV_JHA, "JHA", NULL},
+	{DEV___NA, "__NA", NULL},
+	{DEV_T_A, "T_A", NULL},
+	{DEV_T_HA, "T_HA", NULL},
+	{DEV_D_A, "D_A", NULL},
+	{DEV_D_HA, "D_HA", NULL},
+	{DEV_N_A, "N_A", NULL},
+	{DEV_TA, "TA", NULL},
+	{DEV_THA, "THA", NULL},
+	{DEV_DA, "DA", NULL},
+	{DEV_DHA, "DHA", NULL},
+	{DEV_NA, "NA", NULL},
+	{DEV_PA, "PA", NULL},
+	{DEV_PHA, "PHA", NULL},
+	{DEV_BA, "BA", NULL},
+	{DEV_BHA, "BHA", NULL},
+	{DEV_MA, "MA", NULL},
+	{DEV_YA, "YA", NULL},
+	{DEV_RA, "RA", NULL},
+	{DEV_LA, "LA", NULL},
+	{DEV_VA, "VA", NULL},
+	{DEV__SA, "_SA", NULL},
+	{DEV_S_A, "S_A", NULL},
+	{DEV_SA, "SA", NULL},
+	{DEV_HA, "HA", NULL}
 };
 
 script_t script_hindi = {
 	SCRIPT_HINDI_LENGTH,
 	SCRIPT_HINDI_FILESET,
-	alphabets_hindi
+	glyphs_hindi
 }; 
 
 #endif /* _SCRIPT_HINDI_H_ */

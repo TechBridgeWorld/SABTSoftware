@@ -119,10 +119,10 @@ char get_bits_from_letters(char let)
  */
 char get_letter_from_bits(char bits)
 {
-  int alphabet_len = 26;
+  int glyph_len = 26;
   int i;
 
-  for(i = 0; i < alphabet_len; i++)
+  for(i = 0; i < glyph_len; i++)
   {
     if(letter_bits_arr[i] == bits)
       return letter_arr[i];

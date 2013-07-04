@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_ENGLISH_H_
 #define _SCRIPT_ENGLISH_H_
 
-#include "alphabet.h"
+#include "glyph.h"
 #include "script_common.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"
@@ -40,39 +40,39 @@
 #define Y_BITS 0b00111101
 #define Z_BITS 0b00110101
 
-static alphabet_t english_alphabets[] = {
-	{A_BITS, "A"},
-	{B_BITS, "B"},
-	{C_BITS, "C"},
-	{D_BITS, "D"},
-	{E_BITS, "E"},
-	{F_BITS, "F"},
-	{G_BITS, "G"},
-	{H_BITS, "H"},
-	{I_BITS, "I"},
-	{J_BITS, "J"},
-	{K_BITS, "K"},
-	{L_BITS, "L"},
-	{M_BITS, "M"},
-	{N_BITS, "N"},
-	{O_BITS, "O"},
-	{P_BITS, "P"},
-	{Q_BITS, "Q"},
-	{R_BITS, "R"},
-	{S_BITS, "S"},
-	{T_BITS, "T"},
-	{U_BITS, "U"},
-	{V_BITS, "V"},
-	{W_BITS, "W"},
-	{X_BITS, "X"},
-	{Y_BITS, "Y"},
-	{Z_BITS, "Z"}
+glyph_t english_glyphs[] = {
+	{A_BITS, "A", NULL},
+	{B_BITS, "B", NULL},
+	{C_BITS, "C", NULL},
+	{D_BITS, "D", NULL},
+	{E_BITS, "E", NULL},
+	{F_BITS, "F", NULL},
+	{G_BITS, "G", NULL},
+	{H_BITS, "H", NULL},
+	{I_BITS, "I", NULL},
+	{J_BITS, "J", NULL},
+	{K_BITS, "K", NULL},
+	{L_BITS, "L", NULL},
+	{M_BITS, "M", NULL},
+	{N_BITS, "N", NULL},
+	{O_BITS, "O", NULL},
+	{P_BITS, "P", NULL},
+	{Q_BITS, "Q", NULL},
+	{R_BITS, "R", NULL},
+	{S_BITS, "S", NULL},
+	{T_BITS, "T", NULL},
+	{U_BITS, "U", NULL},
+	{V_BITS, "V", NULL},
+	{W_BITS, "W", NULL},
+	{X_BITS, "X", NULL},
+	{Y_BITS, "Y", NULL},
+	{Z_BITS, "Z", NULL}
 };
  
-static script_t script_english = {
+script_t script_english = {
 	SCRIPT_ENGLISH_LENGTH,
 	SCRIPT_ENGLISH_FILESET,
-	english_alphabets
+	english_glyphs
 };
 
 #endif /* _SCRIPT_ENGLISH_H_ */

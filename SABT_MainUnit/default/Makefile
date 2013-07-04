@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = SABT_MainUnit.o USART_Keypad.o USART_PC.o VS1053.o SPI.o SD_routines.o FAT32.o UI_Handle.o MD1.o MD2.o MD3.o PC_Handle.o MD4.o MD5.o MD6.o audio.o script_common.o MD7.o common.o MD8.o 
+OBJECTS = SABT_MainUnit.o USART_Keypad.o USART_PC.o VS1053.o SPI.o SD_routines.o FAT32.o UI_Handle.o MD1.o MD2.o MD3.o PC_Handle.o MD4.o MD5.o MD6.o audio.o script_common.o MD7.o common.o MD8.o MD9.o io.o glyph.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -102,6 +102,15 @@ common.o: ../common.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 MD8.o: ../MD8.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+MD9.o: ../MD9.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+io.o: ../io.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+glyph.o: ../glyph.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

@@ -1,6 +1,6 @@
 /**
  * @file MD7.c
- * @brief Mode logic for Mode 7 - Hindi Braille alphabet practice
+ * @brief Mode logic for Mode 7 - Hindi Braille glyph practice
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 #include <stdlib.h>
@@ -15,24 +15,24 @@
 #include "script_hindi.h"
 
 //Mode states
-#define STATE_MENU			0x00
-#define STATE_INIT 			0x01
-#define STATE_PROMPT		0x02
-#define STATE_INPUT			0x03
-#define STATE_CHECK 		0x04
-#define STATE_NEXT 			0x05
-#define STATE_INCORRECT 0x06
-#define STATE_TRYAGAIN 	0x07
-#define STATE_SKIP			0x08
-#define STATE_START			0x09
-#define STATE_PREV			0x0B
+#define MD7_STATE_MENU			0x00
+#define MD7_STATE_INIT 			0x01
+#define MD7_STATE_PROMPT		0x02
+#define MD7_STATE_INPUT			0x03
+#define MD7_STATE_CHECK 		0x04
+#define MD7_STATE_NEXT 			0x05
+#define MD7_STATE_INCORRECT 0x06
+#define MD7_STATE_TRYAGAIN 	0x07
+#define MD7_STATE_SKIP			0x08
+#define MD7_STATE_START			0x09
+#define MD7_STATE_PREV			0x0B
 
 /*	Submodes
  *	The mode has 2 submodes - a sequential LEARN submode that teaches the
- *	alphabet and a PLAY submode that picks random letters to test on */
-#define SUBMODE_NONE		0x00
-#define SUBMODE_LEARN		0x01
-#define SUBMODE_PLAY		0x02
+ *	glyph and a PLAY submode that picks random letters to test on */
+#define MD7_SUBMODE_NONE		0x00
+#define MD7_SUBMODE_LEARN		0x01
+#define MD7_SUBMODE_PLAY		0x02
 
 //State magic numbers
 #define	PLAY_MODE_SIZE 				5
@@ -45,13 +45,11 @@
 /* *NOTE* - After adding a new header file and language files on the SD card,
  						edit the following 3 variables */
 static script_t* this_script = &script_hindi;
-static char* lang_fileset = script_hindi.fileset;
-static char mode_fileset[5] = "MD7_";
+static char* this_lang_fileset = script_hindi.fileset;
+static char this_mode_fileset[5] = "MD7_";
 
 /* Defines initial state for mode state machine */
-static char next_state = STATE_START;
-
-//State variables
+static char next_state = MD7_STATE_START;
 static char submode;
 static char button_bits;
 static char last_dot;
@@ -59,8 +57,8 @@ static short learn_flags[SCRIPT_LENGTH];
 static short play_indices[PLAY_MODE_SIZE];
 static short play_flags[PLAY_MODE_SIZE];
 static short current_index;
-static alphabet_t* current_alphabet;
-static alphabet_t* input_alphabet;
+static glyph_t* current_glyph;
+static glyph_t* input_glyph;
 static short correct_count;
 static short incorrect_count;
 static short incorrect_tries;
@@ -72,7 +70,8 @@ static char correct = 0;
 static char cancel = 0;
 
 void md7_reset_vars() {
-	submode = SUBMODE_NONE;
+	set_mode_globals(this_script, this_lang_fileset, this_mode_fileset);
+	submode = MD7_SUBMODE_NONE;
 	button_bits = 0b00000000;
 	last_dot = 0b00000000;
 	for (int i = 0; i < SCRIPT_LENGTH; i++) {
@@ -83,8 +82,8 @@ void md7_reset_vars() {
 		play_flags[i] = 0;
 	}
 	current_index = 0;
-	current_alphabet = NULL;
-	input_alphabet = NULL;
+	current_glyph = NULL;
+	input_glyph = NULL;
 	correct_count = 0;
 	incorrect_count = 0;
 	incorrect_tries = 0;
@@ -101,15 +100,15 @@ void md7_main(void) {
 	switch(next_state) {
 
 		// Initialises mode
-		case STATE_START:
+		case MD7_STATE_START:
 			PRINTF("*** MD7 - Hindi Braille practice ***\n\r");
-			PRINTF("STATE_START\n\r");
+			PRINTF("MD7_STATE_START\n\r");
 			md7_reset_vars();
-			next_state = STATE_MENU;
+			next_state = MD7_STATE_MENU;
 			break;
 
 		//Resets mode and lets user choose between LEARN and PLAY submodes
-		case STATE_MENU:
+		case MD7_STATE_MENU:
 			//User presses dot 1 for LEARN, dot 2 for PLAY
 			switch (last_dot) {
 				case 0:
@@ -122,17 +121,17 @@ void md7_main(void) {
 					break;
 
 				case '1':
-					submode = SUBMODE_LEARN;
+					submode = MD7_SUBMODE_LEARN;
 					PRINTF("** LEARN submode **\n\r");
-					next_state = STATE_INIT;
+					next_state = MD7_STATE_INIT;
 					last_dot = 0;
 					incorrect_tries = 0;
 					break;
 
 				case '2':
-					submode = SUBMODE_PLAY;
+					submode = MD7_SUBMODE_PLAY;
 					PRINTF("** PLAY submode **\n\r");
-					next_state = STATE_INIT;
+					next_state = MD7_STATE_INIT;
 					last_dot = 0;
 					incorrect_tries = 0;
 					break;
@@ -150,62 +149,62 @@ void md7_main(void) {
 			break;
 
 		//Initialises submode
-		case STATE_INIT:
-			PRINTF("STATE_INIT\n\r");
+		case MD7_STATE_INIT:
+			PRINTF("MD7_STATE_INIT\n\r");
 
 			switch (submode) {
 				//Prepares for sequential learn mode
-				case SUBMODE_LEARN:
+				case MD7_SUBMODE_LEARN:
 					play_mp3(mode_fileset, "LINT");
-					current_alphabet = &(this_script->alphabets[0]);
+					current_glyph = &(this_script->glyphs[0]);
 					break;
 
 				// Generates random indices from the script for play
-				case SUBMODE_PLAY:
+				case MD7_SUBMODE_PLAY:
 					play_mp3(mode_fileset, "PINT");
 					PRINTF("Initialising play letter array: ");
 					for (int i = 0; i < PLAY_MODE_SIZE; i++) {
 						play_indices[i] = timer_rand() % SCRIPT_LENGTH;
 						play_flags[i] = 0;
-						PRINTF((this_script->alphabets[play_indices[i]]).sound);
+						PRINTF((this_script->glyphs[play_indices[i]]).sound);
 						PRINTF(", ");
 					}
 					NEWLINE;
-					current_alphabet =
-						&(this_script->alphabets[play_indices[0]]);
+					current_glyph =
+						&(this_script->glyphs[play_indices[0]]);
 					break;
 
 				default:
 					break;
 			}
-			next_state = STATE_PROMPT;
+			next_state = MD7_STATE_PROMPT;
 			break; 
 
 		//Play prompt for letter
-		case STATE_PROMPT:
+		case MD7_STATE_PROMPT:
 			
-			PRINTF("STATE_PROMPT\n\r");
+			PRINTF("MD7_STATE_PROMPT\n\r");
 			switch (submode) {
-				case SUBMODE_LEARN:
-					play_alphabet(lang_fileset, current_alphabet);
+				case MD7_SUBMODE_LEARN:
+					play_glyph(current_glyph);
 					play_mp3(mode_fileset, "LPRO"); 
-					play_dot_sequence(lang_fileset, current_alphabet); 
+					play_dot_sequence(current_glyph); 
 					break;
 
 				//Does not play dot sequence in play mode
-				case SUBMODE_PLAY:
-					play_alphabet(lang_fileset, current_alphabet);
+				case MD7_SUBMODE_PLAY:
+					play_glyph(current_glyph);
 					break;
 
 				default:
 					break;
 			}
 			button_bits = 0;
-			next_state = STATE_INPUT;
+			next_state = MD7_STATE_INPUT;
 			break;
 		
 		//Wait for user to complete input of dots 
-		case STATE_INPUT:
+		case MD7_STATE_INPUT:
 			//Adds new dots to bit pattern and proceeds to check when ENTER is
 			//	pressed
 			switch (last_dot) {
@@ -213,18 +212,18 @@ void md7_main(void) {
 					break;
 
 				case ENTER:
-					next_state = STATE_CHECK;
+					next_state = MD7_STATE_CHECK;
 					break;
 
 				case LEFT:
 					play_mp3(mode_fileset, "NEXT");
-					next_state = STATE_PREV;
+					next_state = MD7_STATE_PREV;
 					break;
 
 				case RIGHT:
 					play_mp3(mode_fileset, "NEXT");
 					correct = 0;
-					next_state = STATE_NEXT;
+					next_state = MD7_STATE_NEXT;
 					return;
 					break;
 
@@ -237,7 +236,7 @@ void md7_main(void) {
 						cancel = 1;
 					} else {
 						cancel = 0;
-						next_state = STATE_START;
+						next_state = MD7_STATE_START;
 					}
 					break;
 
@@ -247,7 +246,7 @@ void md7_main(void) {
 						 SENDBYTE(last_dot);
 						 PRINTF("\n\r");
 						 button_bits = add_dot(button_bits, last_dot);
-						 play_dot(lang_fileset, last_dot);
+						 play_dot(last_dot);
 					}
 					break;
 			}
@@ -255,62 +254,62 @@ void md7_main(void) {
 			break;
 
 		//Checks cell input from user
-		case STATE_CHECK:
-			PRINTF("STATE_CHECK\n\r");
+		case MD7_STATE_CHECK:
+			PRINTF("MD7_STATE_CHECK\n\r");
 
 			//When user presses no dots and presses ENTER, prompt again
 			if (button_bits == 0x00) {
 				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
 					play_mp3(mode_fileset, "PLSP");
 					switch (submode) {
-						case SUBMODE_LEARN:
+						case MD7_SUBMODE_LEARN:
 							play_mp3(mode_fileset, "LINT");
 							break;
-						case SUBMODE_PLAY:
+						case MD7_SUBMODE_PLAY:
 							play_mp3(mode_fileset, "PINT");
 							break;
 						default:
 							break;
 					}
-					next_state = STATE_PROMPT;
+					next_state = MD7_STATE_PROMPT;
 				} else {
 					incorrect_tries++;
 					play_mp3(lang_fileset, "INVP");
-					next_state = STATE_INPUT;
+					next_state = MD7_STATE_INPUT;
 				}
 			} else {
-				//Otherwise check alphabet
-				input_alphabet = get_alphabet_by_bits(button_bits, this_script);
-				if (is_same_alphabet(current_alphabet, input_alphabet)) {
+				//Otherwise check glyph
+				input_glyph = get_glyph_by_pattern(button_bits);
+				if (glyph_equals(current_glyph, input_glyph)) {
 					play_mp3(lang_fileset, "CORR");
 					if (correct_count + 1 < bound)
 						play_mp3(mode_fileset, "NEXT");
 					incorrect_tries = 0;
 					correct = 1;
 					last_dot = RIGHT;
-					next_state = STATE_NEXT;
+					next_state = MD7_STATE_NEXT;
 				} else {
 					incorrect_tries++;
 					play_mp3(lang_fileset, "INVP");
-					next_state = STATE_INCORRECT;
+					next_state = MD7_STATE_INCORRECT;
 				}
 			}
 			break;
 
-		//If user input does not match current alphabet
-		case STATE_INCORRECT:
-			PRINTF("STATE_INCORRECT\n\r");
+		//If user input does not match current glyph
+		case MD7_STATE_INCORRECT:
+			PRINTF("MD7_STATE_INCORRECT\n\r");
 			//After a certain number of incorrect answers, ask user if they want
 			// to skip
 			if (incorrect_tries >= MAX_INCORRECT_TRIES) {
-				next_state = STATE_SKIP;
+				next_state = MD7_STATE_SKIP;
 			} else {
-				next_state = STATE_PROMPT;
+				next_state = MD7_STATE_PROMPT;
 			}
 			break;
 
 		//Asks user to try again
-		case STATE_TRYAGAIN:
+		case MD7_STATE_TRYAGAIN:
 			switch (last_dot) {
 				case 0:
 					play_mp3(mode_fileset, "TAGA");
@@ -321,7 +320,7 @@ void md7_main(void) {
 					break;
 
 				case '1':
-					next_state = STATE_INIT;
+					next_state = MD7_STATE_INIT;
 					last_dot = 0;
 					break;
 
@@ -331,7 +330,7 @@ void md7_main(void) {
 					break;
 
 				case CANCEL:
-					next_state = STATE_START;
+					next_state = MD7_STATE_START;
 					break;
 
 				default:
@@ -342,7 +341,7 @@ void md7_main(void) {
 			break;
 
 		// Skip letter menu
-		case STATE_SKIP:
+		case MD7_STATE_SKIP:
 			switch (last_dot) {
 				case 0:
 					play_mp3(mode_fileset, "SKIP");
@@ -353,7 +352,7 @@ void md7_main(void) {
 					break;
 				
 				case '1':
-					next_state = STATE_NEXT;
+					next_state = MD7_STATE_NEXT;
 					play_mp3(mode_fileset, "NEXT");
 					incorrect_tries = 0;
 					correct = 0;
@@ -362,30 +361,30 @@ void md7_main(void) {
 
 				case '2':
 					incorrect_tries = 0;
-					next_state = STATE_PROMPT;
+					next_state = MD7_STATE_PROMPT;
 					last_dot = 0;
 					break;
 
 				case '3':
-					play_alphabet(lang_fileset, current_alphabet);
+					play_glyph(current_glyph);
 					play_mp3(mode_fileset, "LPRO");
-					play_bit_pattern(lang_fileset, current_alphabet->bit_pattern);
+					play_cell_pattern(current_glyph->cell_pattern);
 					button_bits = 0x00;
-					next_state = STATE_INPUT;
+					next_state = MD7_STATE_INPUT;
 					last_dot = 0;
 					break;
 
 				case LEFT:
-					next_state = STATE_PREV;
+					next_state = MD7_STATE_PREV;
 					break;
 
 				case RIGHT:
 					correct = 0;
-					next_state = STATE_NEXT;
+					next_state = MD7_STATE_NEXT;
 					break;
 
 				case CANCEL:
-					next_state = STATE_START;
+					next_state = MD7_STATE_START;
 					break;
 
 				default:
@@ -396,24 +395,24 @@ void md7_main(void) {
 			break;
 
 		// Advances through list of letters
-		case STATE_NEXT:
+		case MD7_STATE_NEXT:
 			switch(last_dot) {
 
 				case 0:
 					break;
 
 				case RIGHT:
-					PRINTF("Next alphabet");
+					PRINTF("Next glyph");
 					NEWLINE;
 
 					switch (submode) {
-						case SUBMODE_LEARN:
+						case MD7_SUBMODE_LEARN:
 							flag_array = learn_flags;
 							bound = SCRIPT_LENGTH;
 							strcpy(com_mp3, "LCOM");
 							break;
 
-						case SUBMODE_PLAY:
+						case MD7_SUBMODE_PLAY:
 							flag_array = play_flags;
 							bound = PLAY_MODE_SIZE;
 							strcpy(com_mp3, "PCOM");
@@ -433,7 +432,7 @@ void md7_main(void) {
 					//	then submode complete
 					if (correct_count == bound) {
 						play_mp3(mode_fileset, com_mp3);
-						next_state = STATE_TRYAGAIN;
+						next_state = MD7_STATE_TRYAGAIN;
 					} else {
 						//Loop till an index not yet completed is found
 						for (int i = PLUS_ONE_MOD(current_index, bound);
@@ -446,13 +445,13 @@ void md7_main(void) {
 						}
 
 						switch (submode) {
-							case SUBMODE_LEARN:
-								current_alphabet = &((this_script->alphabets)[current_index]);
+							case MD7_SUBMODE_LEARN:
+								current_glyph = &((this_script->glyphs)[current_index]);
 								break;
 
-							case SUBMODE_PLAY:
-								current_alphabet =
-									&(this_script->alphabets[play_indices[current_index]]);
+							case MD7_SUBMODE_PLAY:
+								current_glyph =
+									&(this_script->glyphs[play_indices[current_index]]);
 								break;
 
 							default:
@@ -461,9 +460,9 @@ void md7_main(void) {
 
 						//If just scrolling through letters, play sound
 						if (correct == 0) {
-							play_alphabet(lang_fileset, current_alphabet);
+							play_glyph(current_glyph);
 						} else {
-							next_state = STATE_PROMPT;
+							next_state = MD7_STATE_PROMPT;
 							correct = 0;
 						}
 					}
@@ -472,15 +471,15 @@ void md7_main(void) {
 
 				case ENTER:
 					last_dot = 0;
-					next_state = STATE_PROMPT;
+					next_state = MD7_STATE_PROMPT;
 					break;
 
 				case LEFT:
-					next_state = STATE_PREV;
+					next_state = MD7_STATE_PREV;
 					break;
 
 				case CANCEL:
-					next_state = STATE_START;
+					next_state = MD7_STATE_START;
 					break;
 
 				default:
@@ -491,24 +490,24 @@ void md7_main(void) {
 			break;
 
 		// Goes back in list of letters
-		case STATE_PREV:
+		case MD7_STATE_PREV:
 			switch (last_dot) {
 
 				case 0:
 					break;
 
 				case LEFT:
-					PRINTF("Previous alphabet");
+					PRINTF("Previous glyph");
 					NEWLINE;
 					
 					switch (submode) {
-						case SUBMODE_LEARN:
+						case MD7_SUBMODE_LEARN:
 							flag_array = learn_flags;
 							bound = SCRIPT_LENGTH;
 							strcpy(com_mp3, "LCOM");
 							break;
 
-						case SUBMODE_PLAY:
+						case MD7_SUBMODE_PLAY:
 							flag_array = play_flags;
 							bound = PLAY_MODE_SIZE;
 							strcpy(com_mp3, "PCOM");
@@ -532,34 +531,34 @@ void md7_main(void) {
 					NEWLINE;
 
 					switch (submode) {
-						case SUBMODE_LEARN:
-							current_alphabet = &((this_script->alphabets)[current_index]);
+						case MD7_SUBMODE_LEARN:
+							current_glyph = &((this_script->glyphs)[current_index]);
 							break;
 
-						case SUBMODE_PLAY:
-							current_alphabet =
-								&(this_script->alphabets[play_indices[current_index]]);
+						case MD7_SUBMODE_PLAY:
+							current_glyph =
+								&(this_script->glyphs[play_indices[current_index]]);
 							break;
 
 						default:
 							break;
 					}
-					play_alphabet(lang_fileset, current_alphabet);
+					play_glyph(current_glyph);
 					last_dot = 0;
 					break;
 
 				case RIGHT:
 					correct = 0;
-					next_state = STATE_NEXT;
+					next_state = MD7_STATE_NEXT;
 					break;
 
 				case ENTER:
 					last_dot = 0;
-					next_state = STATE_PROMPT;
+					next_state = MD7_STATE_PROMPT;
 					break;
 
 				case CANCEL:
-					next_state = STATE_START;
+					next_state = MD7_STATE_START;
 					break;
 
 				default:
@@ -575,7 +574,7 @@ void md7_main(void) {
 }
 
 void md7_reset(void) {
-	next_state = STATE_START;
+	next_state = MD7_STATE_START;
 }
 
 void md7_call_mode_yes_answer(void) {

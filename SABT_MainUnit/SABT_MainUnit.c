@@ -194,12 +194,25 @@ void initialize_system(void)
   ui_check_modes();
   PRINTF("Parsing modes...OK\n\r");
 
-  PRINTF("Reading dictionary file...");
+  /* PRINTF("Reading dictionary file...");
   init_read_dict((unsigned char *)"wordsEn.txt");
   while(!done_rd_dict){
     read_dict_file();
   }
   PRINTF("OK\n\r");
+  */
+
+  PRINTF("Datatype info\n\r")
+  sprintf(dbgstr, "char: %d bytes\n\r", sizeof(char));
+  PRINTF(dbgstr);
+  sprintf(dbgstr, "int: %d bytes\n\r", sizeof(int));
+  PRINTF(dbgstr);
+  sprintf(dbgstr, "short: %d bytes\n\r", sizeof(short));
+  PRINTF(dbgstr);
+  sprintf(dbgstr, "long: %d bytes\n\r", sizeof(long));
+  PRINTF(dbgstr);
+  sprintf(dbgstr, "void*: %d bytes\n\r", sizeof(void*));
+  PRINTF(dbgstr);
 
   play_mp3("SYS_","WELC");
   play_mp3("SYS_","MINT");

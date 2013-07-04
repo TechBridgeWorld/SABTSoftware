@@ -1,6 +1,6 @@
 /**
  * @file MD7.h
- * @brief Header file for Mode 7 - Hindi Braille alphabet practice
+ * @brief Header file for Mode 7 - Hindi Braille glyph practice
  * @authoer Vivek Nair (viveknai)
  */
 

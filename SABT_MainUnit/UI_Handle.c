@@ -12,6 +12,7 @@
 #include "Modes.h"
 #include "audio.h"
 #include "common.h"
+#include "io.h"
 
 #include <string.h>
 
@@ -58,7 +59,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,8,;");
+  strcpy(file_content, "1,2,3,4,5,6,7,8,9,;");
 
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
@@ -190,6 +191,7 @@ bool ui_parse_message(bool mp3_is_playing)
     switch(message_type)
     {
       case 'A':                             // Single braille dot
+        io_dot = usart_ui_received_packet[5];
         ui_input_dot_to_current_mode(usart_ui_received_packet[5]);
         break;
       case 'B':  
@@ -246,30 +248,34 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_ENT1: // Enter a mode
-      if(!ui_is_mode_selected) //Then this command is to select the mode
+      io_dot = ENTER;
+      if(!ui_is_mode_selected)
+      // Then this command is to select the mode
       {
         if(ui_current_mode_index >= 0)
         {
           ui_is_mode_selected = true;
+          io_dot = NO_DOTS;
           ui_reset_the_current_mode();
         }
-        else
-        {
-          //request_to_play_mp3_file("ERR1.MP3");
-        }
       }
-      else //Then this the "YES" command in the mode, so call the function in the mode
+      else
+      // Then this the "YES" command in the mode, so call the function
+      // in the mode
       {
         ui_call_mode_yes_answer();
       }
       break;
     
     case UI_CMD_ENT2: // Exit a mode
+      io_dot = CANCEL;
       //This might be an exit from mode command or "NO" command in the mode
 
       //Cancel MP3 prompt
       if (playing_sound) {
         vs1053_skip_play = true;
+
+        io_dot = NO_DOTS;
         return;
       }
 
@@ -293,6 +299,7 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MFOR: // Move forward in list of modes
+      io_dot = RIGHT;
       if(!ui_is_mode_selected)
       {
         //ui_current_mode_index = (ui_current_mode_index + 1) % number_of_modes;
@@ -306,6 +313,7 @@ void ui_control_key_pressed(void)
       break;
     
     case UI_CMD_MREV: // Move backwards in list of modes
+      io_dot = LEFT;
       if(!ui_is_mode_selected)
       {
         ui_current_mode_index = ui_current_mode_index - 1 < 0 ? number_of_modes - 1 : ui_current_mode_index - 1;
@@ -381,6 +389,9 @@ void ui_call_mode_yes_answer(void)
     case 8:
       md8_call_mode_yes_answer();
       break;
+    case 9:
+      md9_call_mode_yes_answer();
+      break;
     default:
       break;
   }
@@ -417,6 +428,9 @@ void ui_call_mode_no_answer(void)
       break;
     case 8:
       md8_call_mode_no_answer();
+      break;
+    case 9:
+      md9_call_mode_no_answer();
       break;
     default:
       break;
@@ -455,6 +469,9 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
         case 8:
           md8_input_dot(this_dot);
+          break;
+        case 9:
+          md9_input_dot(this_dot);
           break;
         default:
           break;
@@ -502,6 +519,9 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 8:
         md8_input_cell(this_cell);
         break;
+      case 9:
+        md9_input_cell(this_cell);
+        break;
       default:
         break;
     }
@@ -548,6 +568,9 @@ void ui_run_main_of_current_mode(void)
       case 8:
         md8_main();
         break;
+      case 9:
+        md9_main();
+        break;
       default:
         break;
     }
@@ -586,7 +609,10 @@ void ui_reset_the_current_mode(void)
         break;
       case 8:
         md8_reset();
-        break;  
+        break;
+      case 9:
+        md9_reset();
+        break;
       default:
         break;
     }
@@ -610,6 +636,9 @@ void ui_call_mode_left(void) {
     case 8:
       md8_call_mode_left();
       break;
+    case 9:
+      md9_call_mode_left();
+      break;
     default:
       break;
   }
@@ -630,7 +659,10 @@ void ui_call_mode_right(void) {
       break;
     case 8:
       md8_call_mode_right();
-      break;  
+      break;
+    case 9:
+      md9_call_mode_right();
+      break;    
     default:
       break;
   }
