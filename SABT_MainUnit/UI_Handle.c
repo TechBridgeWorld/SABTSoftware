@@ -389,9 +389,15 @@ void ui_call_mode_yes_answer(void)
     case 8:
       md8_call_mode_yes_answer();
       break;
+
     case 9:
       md9_call_mode_yes_answer();
       break;
+
+	  case 10:
+	    md10_call_mode_yes_answer();
+	    break;
+
     default:
       break;
   }
@@ -429,9 +435,15 @@ void ui_call_mode_no_answer(void)
     case 8:
       md8_call_mode_no_answer();
       break;
+
     case 9:
       md9_call_mode_no_answer();
       break;
+
+    case 10:
+	    md10_call_mode_no_answer();
+	    break;
+
     default:
       break;
   }
@@ -470,9 +482,15 @@ void ui_input_dot_to_current_mode(char this_dot)
         case 8:
           md8_input_dot(this_dot);
           break;
+
         case 9:
           md9_input_dot(this_dot);
           break;
+
+        case 10:
+		      md10_input_dot(this_dot);
+		      break;
+
         default:
           break;
       }
@@ -522,6 +540,9 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 9:
         md9_input_cell(this_cell);
         break;
+	  case 10:
+        md10_input_cell(this_cell);
+        break;
       default:
         break;
     }
@@ -568,9 +589,15 @@ void ui_run_main_of_current_mode(void)
       case 8:
         md8_main();
         break;
+
       case 9:
         md9_main();
         break;
+
+	  case 10:
+	  	  md10_main();
+		    break;
+
       default:
         break;
     }
@@ -610,9 +637,15 @@ void ui_reset_the_current_mode(void)
       case 8:
         md8_reset();
         break;
+
       case 9:
         md9_reset();
         break;
+
+	   case 10:
+	      md10_reset();  
+        break;
+
       default:
         break;
     }
@@ -638,9 +671,15 @@ void ui_call_mode_left(void) {
     case 8:
       md8_call_mode_left();
       break;
+
     case 9:
       md9_call_mode_left();
       break;
+
+	  case 10:
+	    md10_call_mode_left();
+	    break;
+
     default:
       break;
   }
@@ -664,9 +703,15 @@ void ui_call_mode_right(void) {
     case 8:
       md8_call_mode_right();
       break;
+
     case 9:
       md9_call_mode_right();
       break;    
+
+	  case 10:
+	    md10_call_mode_right();
+	    break;  
+
     default:
       break;
   }

@@ -367,6 +367,7 @@ void md3_call_mode_no_answer(void)
 	  game_mode = 0;
       md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       animals_used = 0;
+	  mistakes = 0;
       got_input = false;
    }
 }
