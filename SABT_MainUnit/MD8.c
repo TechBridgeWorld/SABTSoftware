@@ -370,7 +370,7 @@ void md8_main(void) {
 				case '3':
 					play_glyph(current_glyph);
 					play_mp3(mode_fileset, "LPRO");
-					play_cell_pattern(current_glyph->cell_pattern);
+					play_pattern(current_glyph->pattern);
 					button_bits = 0x00;
 					next_state = MD8_STATE_INPUT;
 					last_dot = 0;

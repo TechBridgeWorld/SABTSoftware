@@ -28,8 +28,8 @@
 #define MD9_LEVEL_3			0x0003
 
 // Used to set global fileset variables
-#define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD9_"
+#define MD9_LANG_FILESET "ENG_"
+#define MD9_MODE_FILESET "MD9_"
 
 // Prompt files
 // Submode menu prompt
@@ -46,6 +46,8 @@
 // Limits
 #define MAX_DIGITS 3
 
+static script_t script_common;
+
 // State variables
 static char md_next_state = MD9_STATE_NULL;
 static char md_submode = MD9_SUBMODE_NUL;
@@ -60,8 +62,7 @@ void md9_reset(void) {
 	PRINTF("*** MD9 - Arithmetic practice ***\n\r");
 
 	// Global variables
-	lang_fileset = LANG_FILESET;
-	mode_fileset = MODE_FILESET;
+	set_mode_globals(&script_common, MD9_LANG_FILESET, MD9_MODE_FILESET);
 
 	// State variables
 	md_next_state = MD9_STATE_MENU;
@@ -216,6 +217,14 @@ void md9_main(void) {
 		case MD9_STATE_PROMPT:
 			md9_play_question();
 			md_next_state = MD9_STATE_INPUT;
+			break;
+
+		case MD9_STATE_INPUT:
+			if (get_line() == true) {
+				PRINTF(io_line);
+				NEWLINE;
+				md_next_state = MD9_STATE_GENQUES;
+			}
 			break;
 
 		default:

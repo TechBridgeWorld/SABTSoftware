@@ -13,60 +13,60 @@
 #define SCRIPT_ENGLISH_FILESET "ENG_"
 #define SCRIPT_ENGLISH_LENGTH 26
 
-#define A_BITS 0b00000001
-#define B_BITS 0b00000011
-#define C_BITS 0b00001001
-#define D_BITS 0b00011001
-#define E_BITS 0b00010001
-#define F_BITS 0b00001011
-#define G_BITS 0b00011011
-#define H_BITS 0b00010011
-#define I_BITS 0b00001010
-#define J_BITS 0b00011010
-#define K_BITS 0b00000101
-#define L_BITS 0b00000111
-#define M_BITS 0b00001101
-#define N_BITS 0b00011101
-#define O_BITS 0b00010101
-#define P_BITS 0b00001111
-#define Q_BITS 0b00011111
-#define R_BITS 0b00010111
-#define S_BITS 0b00001110
-#define T_BITS 0b00011110
-#define U_BITS 0b00100101
-#define V_BITS 0b00100111
-#define W_BITS 0b00111010
-#define X_BITS 0b00101101
-#define Y_BITS 0b00111101
-#define Z_BITS 0b00110101
+#define ENG_A 0b000001
+#define ENG_B 0b000011
+#define ENG_C 0b001001
+#define ENG_D 0b011001
+#define ENG_E 0b010001
+#define ENG_F 0b001011
+#define ENG_G 0b011011
+#define ENG_H 0b010011
+#define ENG_I 0b001010
+#define ENG_J 0b011010
+#define ENG_K 0b000101
+#define ENG_L 0b000111
+#define ENG_M 0b001101
+#define ENG_N 0b011101
+#define ENG_O 0b010101
+#define ENG_P 0b001111
+#define ENG_Q 0b011111
+#define ENG_R 0b010111
+#define ENG_S 0b001110
+#define ENG_T 0b011110
+#define ENG_U 0b100101
+#define ENG_V 0b100111
+#define ENG_W 0b111010
+#define ENG_X 0b101101
+#define ENG_Y 0b111101
+#define ENG_Z 0b110101
 
-glyph_t english_glyphs[] = {
-	{A_BITS, "A", NULL},
-	{B_BITS, "B", NULL},
-	{C_BITS, "C", NULL},
-	{D_BITS, "D", NULL},
-	{E_BITS, "E", NULL},
-	{F_BITS, "F", NULL},
-	{G_BITS, "G", NULL},
-	{H_BITS, "H", NULL},
-	{I_BITS, "I", NULL},
-	{J_BITS, "J", NULL},
-	{K_BITS, "K", NULL},
-	{L_BITS, "L", NULL},
-	{M_BITS, "M", NULL},
-	{N_BITS, "N", NULL},
-	{O_BITS, "O", NULL},
-	{P_BITS, "P", NULL},
-	{Q_BITS, "Q", NULL},
-	{R_BITS, "R", NULL},
-	{S_BITS, "S", NULL},
-	{T_BITS, "T", NULL},
-	{U_BITS, "U", NULL},
-	{V_BITS, "V", NULL},
-	{W_BITS, "W", NULL},
-	{X_BITS, "X", NULL},
-	{Y_BITS, "Y", NULL},
-	{Z_BITS, "Z", NULL}
+glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
+	{ENG_A, true, "A", NULL},
+	{ENG_B, true, "B", NULL},
+	{ENG_C, true, "C", NULL},
+	{ENG_D, true, "D", NULL},
+	{ENG_E, true, "E", NULL},
+	{ENG_F, true, "F", NULL},
+	{ENG_G, true, "G", NULL},
+	{ENG_H, true, "H", NULL},
+	{ENG_I, true, "I", NULL},
+	{ENG_J, true, "J", NULL},
+	{ENG_K, true, "K", NULL},
+	{ENG_L, true, "L", NULL},
+	{ENG_M, true, "M", NULL},
+	{ENG_N, true, "N", NULL},
+	{ENG_O, true, "O", NULL},
+	{ENG_P, true, "P", NULL},
+	{ENG_Q, true, "Q", NULL},
+	{ENG_R, true, "R", NULL},
+	{ENG_S, true, "S", NULL},
+	{ENG_T, true, "T", NULL},
+	{ENG_U, true, "U", NULL},
+	{ENG_V, true, "V", NULL},
+	{ENG_W, true, "W", NULL},
+	{ENG_X, true, "X", NULL},
+	{ENG_Y, true, "Y", NULL},
+	{ENG_Z, true, "Z", NULL}
 };
  
 script_t script_english = {

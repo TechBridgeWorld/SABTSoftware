@@ -7,6 +7,8 @@
 #include "glyph.h"
 #include "script_common.h"
 #include "audio.h"
+#include "globals.h"
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -15,6 +17,7 @@
 #define SCRIPT_COMMON_DEFAULT_FILESET "ENG_"
 
 // Numbers script bit patterns
+#define BLANK				0b000000
 #define NUM1 				0b000001
 #define NUM2				0b000011
 #define NUM3				0b001001
@@ -25,19 +28,22 @@
 #define NUM8				0b010011
 #define NUM9				0b001010
 #define NUM0				0b011010
+#define NUMSIGN			0b111100
 
 // Numbers script array
 static glyph_t glyphs_common[SCRIPT_COMMON_LENGTH] = {
-	{NUM1, "#1", NULL},
-	{NUM2, "#2", NULL},
-	{NUM3, "#3", NULL},
-	{NUM4, "#4", NULL},
-	{NUM5, "#5", NULL},
-	{NUM6, "#6", NULL},
-	{NUM7, "#7", NULL},
-	{NUM8, "#8", NULL},
-	{NUM9, "#9", NULL},
-	{NUM0, "#0", NULL},
+	{BLANK, true, "BLNK", NULL},
+	{NUM1, true, "#1", NULL},
+	{NUM2, true, "#2", NULL},
+	{NUM3, true, "#3", NULL},
+	{NUM4, true, "#4", NULL},
+	{NUM5, true, "#5", NULL},
+	{NUM6, true, "#6", NULL},
+	{NUM7, true, "#7", NULL},
+	{NUM8, true, "#8", NULL},
+	{NUM9, true, "#9", NULL},
+	{NUM0, true, "#0", NULL},
+	{NUMSIGN, true, "#NUM", NULL}
 };
 
 script_t script_common = {
@@ -62,7 +68,7 @@ glyph_t* get_glyph_by_pattern(char pattern) {
 	int script_length = lang_script->length;
 	for (int i = 0; i < script_length; i++) {
 		this_glyph = &script_glyphs[i];
-		if (this_glyph->cell_pattern == pattern) {
+		if (this_glyph->pattern == pattern) {
 			return this_glyph;
 		}
 	}
@@ -72,11 +78,14 @@ glyph_t* get_glyph_by_pattern(char pattern) {
 	script_length = script_common.length;
 	for (int i = 0; i < script_common.length; i++) {
 		this_glyph = &script_glyphs[i];
-		if (this_glyph->cell_pattern == pattern) {
+		if (this_glyph->pattern == pattern) {
 			return this_glyph;
 		}
 	}
 
 	// If nothing matches, return NULL
+	sprintf(dbgstr, "[Script] Glyph match not found for pattern: %x\n\r",
+		pattern);
+	PRINTF(dbgstr);
 	return NULL;
 }

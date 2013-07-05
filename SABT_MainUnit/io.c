@@ -25,6 +25,7 @@ glyph_t* io_parsed[MAX_BUF_SIZE] = {NULL};
 // Basic IO state variables
 static char io_cell_state = NO_DOTS;
 static unsigned int io_line_cell_index = 0;
+static bool io_line_ready = false;
 
 // Advanced IO state variables
 // Dialog state variables
@@ -33,7 +34,7 @@ static bool io_dialog_dots_enabled[6] =
 	{false, false, false, false, false, false};
 static bool io_dialog_enter_cancel_enabled = false;
 static bool io_dialog_left_right_enabled = false;
-static int io_dialog_incorrect_tries = 0;
+static int io_dialog_incorrect_tries = -1;
 
 // **************************************************
 // ********** Helper function declarations **********
@@ -43,6 +44,7 @@ static int io_dialog_incorrect_tries = 0;
 void io_line_next_cell(void);
 void io_line_prev_cell(void);
 void io_line_clear_cell(void);
+void io_line_reset(void);
 
 // Intermediate IO helper functions
 bool io_convert_line(void);
@@ -56,6 +58,16 @@ void io_dialog_error(void);
 // ******************************
 // ********** Basic IO **********
 // ******************************
+
+/*
+* @brief Resets IO state variables
+* @param void
+* @return void
+*/
+void io_init(void) {
+	io_line_reset();
+	io_dialog_reset();
+}
 
 /*
 *	@brief Gets current dot and then sets it to NO_DOTS
@@ -96,7 +108,11 @@ char get_cell(void) {
 		// 2 MSB of char
 		case ENTER: case LEFT: case RIGHT: case CANCEL:
 			ret_val = io_cell_state;
-			play_glyph_by_pattern(ret_val);
+			sprintf(dbgstr, "Playing glyph for pattern: %x\n\r", ret_val); 
+			PRINTF(dbgstr);
+			if (ret_val) {
+				play_glyph_by_pattern(ret_val);
+			}
 			io_cell_state = NO_DOTS;
 			switch (last_dot) {
 				case ENTER:
@@ -138,8 +154,12 @@ char get_cell(void) {
 * otherwise
 */
 bool get_line(void) {
+	if (io_line_ready == false) {
+		io_line_reset();
+	}
+
 	char last_cell = get_cell();
-	char pattern = GET_CELL_PATTERN(last_cell);
+	char pattern = GET_PATTERN(last_cell);
 	char control = GET_CELL_CONTROL(last_cell);
 
 	// If last cell was empty, there's nothing to do so return false and wait
@@ -147,32 +167,41 @@ bool get_line(void) {
 		return false;
 	}
 
-	// Otherwise, cell was recorded, so save it to io_line
-	io_line[io_line_cell_index] = pattern;
+	// Otherwise, if cell was recorded, save it to io_line
+	if (pattern) {
+		io_line[io_line_cell_index] = pattern;
+	}
 	switch (control) {
 		// ENTER - Advance cell, add EOT and return true
 		case 0b11:
 			io_line_next_cell();
 			io_line[io_line_cell_index] = END_OF_TEXT;
-			io_line_cell_index = 0;
+			io_line_ready = false;
 			return true;
 			break;
 
 		// RIGHT - Select next cell
 		case 0b01:
 			io_line_next_cell();
+			if (!pattern) {
+				play_glyph_by_pattern(io_line[io_line_cell_index]);
+			}
 			return false;
 			break;
 
 		// LEFT - Select previous cell
 		case 0b10:
 			io_line_prev_cell();
+			if (!pattern) {
+				play_glyph_by_pattern(io_line[io_line_cell_index]);
+			}
 			return false;
 			break;
 
 		// CANCEL - Clear current cell
 		case 0b00:
 			io_line_clear_cell();
+			play_glyph_by_pattern(io_line[io_line_cell_index]);
 			return false;
 			break;
 
@@ -209,6 +238,8 @@ bool parse_word(void);
 bool parse_number(void);
 bool parse_string(void);
 */
+
+
 
 // ********************************
 // ********* Advanced IO **********
@@ -248,7 +279,7 @@ char create_dialog(char* prompt, char control_mask) {
 			if (io_dialog_dots_enabled[CHARTOINT(last_dot) - 1] == true) {
 				sprintf(dbgstr, "[IO] Returning dot %c\n\r", last_dot);
 				PRINTF(dbgstr);
-				io_dialog_initialised = false;
+				io_dialog_reset();
 				return last_dot;
 			} else {
 				io_dialog_error();
@@ -259,7 +290,7 @@ char create_dialog(char* prompt, char control_mask) {
 		// Returns control button if enabled, o/w registers error
 		case ENTER: case CANCEL:
 			if (io_dialog_enter_cancel_enabled == true) {
-				io_dialog_initialised = false;
+				io_dialog_reset();
 				return last_dot;
 			} else {
 				io_dialog_error();
@@ -270,7 +301,7 @@ char create_dialog(char* prompt, char control_mask) {
 		// Returns control button if enabled, o/w registers error
 		case LEFT: case RIGHT:
 			if (io_dialog_left_right_enabled == true) {
-				io_dialog_initialised = false;
+				io_dialog_reset();
 				return last_dot;
 			} else {
 				io_dialog_error();
@@ -304,7 +335,6 @@ void io_line_next_cell(void) {
 	} else {
 		play_mp3(lang_fileset, "LCEL");
 	}
-	play_glyph_by_pattern(io_line[io_line_cell_index]);
 }
 
 /*
@@ -319,7 +349,6 @@ void io_line_prev_cell(void) {
 	} else {
 		play_mp3(lang_fileset, "FCEL");
 	}
-	play_glyph_by_pattern(io_line[io_line_cell_index]);
 }
 
 /*
@@ -329,7 +358,19 @@ void io_line_prev_cell(void) {
 */
 void io_line_clear_cell(void) {
 	io_line[io_line_cell_index] = NO_DOTS;
-	play_glyph_by_pattern(io_line[io_line_cell_index]);
+}
+
+/*
+* @brief Resets io_line state variables
+* @param void
+* @return void
+*/
+void io_line_reset(void) {
+	for (int i = 0; i < MAX_BUF_SIZE; i++) {
+		io_line[i] = NO_DOTS;
+	}
+	io_line_cell_index = 0;
+	io_line_ready = true;
 }
 
 // ******************************************************
@@ -382,7 +423,6 @@ bool io_convert_line(void) {
 // **************************************************
 
 void io_dialog_init(char control_mask) {
-	io_dialog_reset();
 	sprintf(dbgstr, "[IO] Control mask: %x\n\r", control_mask);
 	PRINTF(dbgstr);
 	for (int i = 0; i < 6; i++) {

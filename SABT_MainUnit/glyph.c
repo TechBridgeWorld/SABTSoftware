@@ -17,7 +17,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 	if (g1 == NULL || g2 == NULL) {
 		return false;
 	} else {
-		return (g1->cell_pattern == g2->cell_pattern);
+		return (g1->pattern == g2->pattern);
 	}
 }
 

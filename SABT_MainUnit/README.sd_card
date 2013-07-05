@@ -7,6 +7,8 @@ On a Mac, the following should work (should work for *IX?):
 3. Insert SD card
 4. 'ls /dev/rdisk?' The new drive is the SD card, let it's number be #
 5. 'ls /dev/rdisk#s?' - To list partiions on the disk, let $ be the parition you want (usually the first, and ideally, the only on the SD card)
-6. Make sure the partition is not mounted (Disk Utility's Unmount is your friend here)
-6. newfs_msdos -v SABT -F 32 /dev/rdisk#s$
-7. Your SD card should be ready to copy files onto
+6. Identify the volume label for the SD card. Check under '/Volumes/'.
+7. 'diskutil unmount "VOLUMELABEL"' to unmount the SD card volume.
+6. 'sudo newfs_msdos -v "VOLUMELABEL" -F 32 /dev/rdisk#s$'
+7. Your SD card should be ready to copy files onto. Take it out and reinsert it.
+8. 'cp <path to sd_card_files>/* /Volumes/VOLUMELABEL/'

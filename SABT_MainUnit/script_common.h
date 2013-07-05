@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define SCRIPT_COMMON_LENGTH 10
+#define SCRIPT_COMMON_LENGTH 12
 
 extern script_t* lang_script;
 extern script_t script_common;
