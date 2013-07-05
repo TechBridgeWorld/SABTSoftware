@@ -10,6 +10,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "audio.h"
+#include "common.h"
 
 int md3_current_state, md3_prev_state = 0;
 static int game_mode = 0;
@@ -73,19 +74,6 @@ int choose_animal()
   }
 
   return num;
-}
-
-/**
- * @brief  Given a char, in last_cell, play the corresponding number
- *         sound file
- * @return Void
- */
-void play_requested_dot(char dot)
-{
-  // This will hold formatted file to access
-  char req_mp3[10];
-  sprintf((char*)req_mp3, "dot_%c", dot);
-  play_mp3(NULL,req_mp3);
 }
 
 void md3_reset(void)

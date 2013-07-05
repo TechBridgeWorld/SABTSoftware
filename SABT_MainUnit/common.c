@@ -90,6 +90,21 @@ int get_num_of_digits(int number) {
 	}
 	return digits;
 }
+
+/**
+ * @brief  Given a char, in last_cell, play the corresponding number
+ *         sound file
+ * @return Void
+ */
+
+void play_requested_dot(char play_dot)
+{
+  // This will hold formatted file to access
+  char req_mp3[10];
+  sprintf((char*)req_mp3, "dot_%c", play_dot);
+  play_mp3(NULL,req_mp3);
+}
+
 /*
 
 int get_digit_at(int num, int digit) {

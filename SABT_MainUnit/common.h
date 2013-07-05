@@ -19,5 +19,6 @@ char add_dot(char bits, char dot);
 void quit_mode(void);
 int ten_to_the(int);
 int get_num_of_digits(int);
+void play_requested_dot(char);
 
 #endif /* _COMMON_H_ */
