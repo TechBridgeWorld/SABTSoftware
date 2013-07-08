@@ -89,3 +89,61 @@ glyph_t* get_glyph_by_pattern(char pattern) {
 	PRINTF(dbgstr);
 	return NULL;
 }
+
+/*
+* @brief Checks if a given glyph is a number
+* @param glyph_t* Pointer to glyph to check
+* @return bool - true if a number, false otherwise
+*/
+bool is_number(glyph_t* curr_glyph) {
+	if (curr_glyph == NULL)
+		return false;
+	switch (curr_glyph->pattern) {
+		case NUM1: case NUM2: case NUM3: case NUM4: case NUM5: case NUM6:
+		case NUM7: case NUM8: case NUM9: case NUM0:
+			return true;
+			break;
+		default:
+			return false;
+			break;
+	}
+}
+
+/*
+* @brief Converts a digit glyph to an integer
+* @param glyph_t* - Pointer to glyph to convet
+* @return int - 0-9 for valid digit, -1 otherwise
+*/
+int get_digit(glyph_t* curr_glyph) {
+	if (curr_glyph == NULL)
+		return -1;
+	if (!is_number(curr_glyph)) {
+		return -1;
+	}
+
+	switch(curr_glyph->pattern) {
+		case NUM1: return 1; break;
+		case NUM2: return 2; break;
+		case NUM3: return 3; break;
+		case NUM4: return 4; break;
+		case NUM5: return 5; break;
+		case NUM6: return 6; break;
+		case NUM7: return 7; break;
+		case NUM8: return 8; break;
+		case NUM9: return 9; break;
+		case NUM0: return 0; break;
+		default: return -1; break;
+	}
+}
+
+/*
+* @brief Checks to see if a glyph is BLANK
+* @param glyph_t* - Pointer to check
+* @return bool - true if BLANk, false otherwise
+*/
+bool is_blank(glyph_t* curr_glyph) {
+	if (curr_glyph == NULL)
+		return false;
+	else
+		return (curr_glyph->pattern == BLANK);
+}

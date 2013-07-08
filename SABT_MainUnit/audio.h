@@ -24,5 +24,6 @@ void play_glyph_by_pattern(char pattern);
 void play_dot_sequence(glyph_t *this_glyph);
 void play_silence(int milliseconds);
 void play_number(int number);
+void play_line(glyph_t** line);
 
 #endif /* _AUDIO_H_ */

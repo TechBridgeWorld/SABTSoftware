@@ -286,3 +286,20 @@ void play_number(int number) {
 		digits--;
 	}
 }
+
+/*
+* @brief Plays a NULL-terminated array of glyphs
+* @param glyph_t* - Pointer to line
+* @return void
+*/
+void play_line(glyph_t** line) {
+	glyph_t* curr_glyph = NULL;
+	for (int i = 0; i < MAX_BUF_SIZE; i++) {
+		curr_glyph = line[i];
+		if (curr_glyph) {
+			play_glyph(curr_glyph);
+		} else {
+			return;
+		}
+	}
+}

@@ -21,6 +21,9 @@ BLNK - Blank
 
 *** Common System Prompts ***
 INVP - Invalid Pattern
+CORR - Correct answer
+WRNG - Incorrect answer
+TAGA - Try again
 CANC - Cancel
 
 *** Digits and Numbers ***

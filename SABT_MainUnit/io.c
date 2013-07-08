@@ -48,6 +48,7 @@ void io_line_reset(void);
 
 // Intermediate IO helper functions
 bool io_convert_line(void);
+bool io_parse_number(int* res);
 
 // Advanced IO helper functions
 void io_dialog_init(char control_mask);
@@ -65,6 +66,8 @@ void io_dialog_error(void);
 * @return void
 */
 void io_init(void) {
+	io_dot = NO_DOTS;
+	io_cell = NO_DOTS;
 	io_line_reset();
 	io_dialog_reset();
 }
@@ -220,6 +223,38 @@ bool get_line(void) {
 // *************************************
 
 /*
+* @brief Gets a line from the user, converts to glyphs, converts to number
+* @param bool* - Address to put valid flag for input
+* @param int* - Address to put resultant integer
+* @return bool - true once user input is complete and parsed, false if pending
+*/
+bool get_number(bool* valid, int* res) {
+
+	// Pending completion of user input
+	if (!get_line()) {
+		return false;
+	}
+
+	// If cell sequence has invalid patterns, return false
+	if (!io_convert_line()) {
+		play_mp3(lang_fileset, "INVP");
+		*valid = false;
+		return true;
+	}
+
+	// If cell sequence successfully parsed, return true
+	if (io_parse_number(res)) {
+		*valid = true;
+		return true;
+	} else {
+		play_mp3(lang_fileset, "INVP");
+		*valid = false;
+		return true;
+	}
+}
+
+
+/*
 bool parse_letter(void) {
 	
 }
@@ -235,7 +270,7 @@ bool parse_symbol(void) {
 
 bool parse_character(void);
 bool parse_word(void);
-bool parse_number(void);
+bool io_parse_number(void);
 bool parse_string(void);
 */
 
@@ -413,6 +448,31 @@ bool io_convert_line(void) {
 
 	// If control returns from loop then matching glyphs were found for all
 	// raw cells, add a NULL terminator and return true
+	io_parsed[i] = NULL;
+	return true;
+}
+
+/*
+*	@brief Parses io_line buffer for a number and stores it in io_parsed
+* @param void
+* @return void
+*/
+bool io_parse_number(int* res) {
+	glyph_t* curr_glyph = NULL;
+	int i = 0, curr_digit = 0;
+
+	*res = 0;
+
+	for (i = 1; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
+		curr_glyph = io_parsed[i];
+		curr_digit = get_digit(curr_glyph);
+		if (curr_digit < 0) {
+			return false;
+		} else {
+			*res *= 10;
+			*res += curr_digit; 
+		}
+	}
 	io_parsed[i] = NULL;
 	return true;
 }

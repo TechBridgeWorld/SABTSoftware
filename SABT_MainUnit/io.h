@@ -59,7 +59,7 @@ bool parse_digit(void);
 bool parse_symbol(void);
 bool parse_character(void);
 bool parse_word(void);
-bool parse_number(void);
+bool get_number(bool* valid, int* res);
 bool parse_string(void);
 
 // Advanced IO functions

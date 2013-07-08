@@ -467,6 +467,7 @@ unsigned char play_mp3_file(unsigned char *file_name)
         {
           vs1053_skip_play = false;
           vs1053_software_reset();
+          playing_sound = false;
           return 0;//playing stopped by user
         }
         if((PINB & (1<<MP3_DREQ)))

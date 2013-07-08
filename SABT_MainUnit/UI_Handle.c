@@ -255,7 +255,7 @@ void ui_control_key_pressed(void)
         if(ui_current_mode_index >= 0)
         {
           ui_is_mode_selected = true;
-          io_dot = NO_DOTS;
+          io_init();
           ui_reset_the_current_mode();
         }
       }
@@ -274,7 +274,7 @@ void ui_control_key_pressed(void)
       //Cancel MP3 prompt
       if (playing_sound) {
         vs1053_skip_play = true;
-
+        
         io_dot = NO_DOTS;
         return;
       }
@@ -287,6 +287,7 @@ void ui_control_key_pressed(void)
         if(usart_ui_received_packet[6] == 69) 
         {
           PRINTF("Long CANCEL detected, going to main menu\n\r");
+          io_init();
           quit_mode();
         }
         else //Then this a "NO" answer, call the mode function for this
