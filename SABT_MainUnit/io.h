@@ -54,12 +54,13 @@ char get_cell(void);
 bool get_line(void);
 
 // Intermediate IO functions
+bool get_number(bool* valid, int* res);
+bool get_character(bool* valid, int* res);
 bool parse_letter(void);
 bool parse_digit(void);
 bool parse_symbol(void);
 bool parse_character(void);
 bool parse_word(void);
-bool get_number(bool* valid, int* res);
 bool parse_string(void);
 
 // Advanced IO functions
