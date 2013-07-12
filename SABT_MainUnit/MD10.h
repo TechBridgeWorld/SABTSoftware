@@ -8,11 +8,11 @@
 #define _MD10_H_
 
 // State definitions
-#define STATE_INITIAL                  0          // Just started, plays welcome message
-#define STATE_REQUEST_INPUT1           1          // Request for input from user - part 1
-#define STATE_REQUEST_INPUT2           2          // Request for input from user - part 2
-#define STATE_WAIT_INPUT               3          // Waiting for user input
-#define STATE_PROC_INPUT               4          // Processed user input
+#define MD10_STATE_INITIAL                  0          // Just started, plays welcome message
+#define MD10_STATE_SELECT_MODE				1		   // Selecting the submode
+#define MD10_STATE_REQUEST_INPUT            2          // Request for input from user - part 1
+#define MD10_STATE_WAIT_INPUT               3          // Waiting for user input
+#define MD10_STATE_PROC_INPUT               4          // Processed user input
 #define STATE_CHECK_IF_CORRECT         5          // Valid input was entered
 #define STATE_READ_ENTERED_LETTERS     6          // User input is invalid (not a real letter)
 #define STATE_WRONG_INPUT              7          // User input is valid but wrong
@@ -23,6 +23,7 @@
 #define STATE_PROMPT				   12
 
 #define PRIME                53
+#define NUM_SUB_MODES		 3
 
 char entered_letter;                       // Current letter being entered
 // Keeps track of how long the user entered word is
@@ -31,7 +32,6 @@ int length_entered_word;
 int current_word_index;
 //bool to determine state transition
 bool got_input;
-//stores the sub-mode the game is played in 
 
 //mode selected or not
 

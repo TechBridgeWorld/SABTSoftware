@@ -9,10 +9,10 @@
 // NEWLINE does what you think it's supposed to
 
 #define PRINTF(msg) \
-  usart_transmit_string_to_pc((unsigned char*)msg);
+  usart_transmit_string_to_pc((unsigned char*)msg)
 
 #define SENDBYTE(msg) \
-  usart_transmit_byte_to_pc((unsigned char)msg);
+  usart_transmit_byte_to_pc((unsigned char)msg)
 
 #define NEWLINE	PRINTF("\n\r");
 
