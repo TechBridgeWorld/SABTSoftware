@@ -340,7 +340,8 @@ void md3_call_mode_yes_answer(void)
 }
 
 /**
- * @brief Handle exit buton presses in this mode
+ * @brief Handle exit buton pressed in this mode
+ * @param Void 
  * @return Void
  */
 void md3_call_mode_no_answer(void)
@@ -353,7 +354,7 @@ void md3_call_mode_no_answer(void)
    {  
       play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
-      md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
+      md3_current_state = STATE_SELECT_MODE; 
       animals_used = 0;
 	  mistakes = 0;
       got_input = false;
