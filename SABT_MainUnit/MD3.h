@@ -35,7 +35,8 @@ int animals_used_list[11];
 // Keeps track of number of animals used in current rotation
 int animals_used;                          
 char* animal;                              // Name of current animal
-char entered_letter;                       // Current letter being entered
+
+//char entered_letter;                       // Current letter being entered
 // Keeps track of how long the user entered word is
 int length_entered_word;                   
 // Used to read back the letters in the current word

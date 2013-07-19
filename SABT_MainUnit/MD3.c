@@ -11,6 +11,7 @@
 #include "Modes.h"
 #include "audio.h"
 #include "common.h"
+#include "letter_globals.h"
 
 int md3_current_state, md3_prev_state = 0;
 static int game_mode = 0;
@@ -81,25 +82,6 @@ void md3_reset(void)
   md3_current_state = 0;
   md3_last_dot = 0;
   mistakes = 0;
-}
-
-/** 
- * @brief Check if the input dot combination is a valid letter
- * @param button_bits - char, holds bits 0-5 that correspond to which buttons have
- *        have been pressed
- * @return bool - true if a valid letter, false if not
- */
-bool valid_letter(char button_bits)
-{
-  char letter_from_bits = get_letter_from_bits(button_bits);
-
-  if((letter_from_bits >= 'a') && (letter_from_bits <= 'z'))
-  {
-    entered_letter = letter_from_bits;
-    return true;
-  }
-
-  return false;
 }
 
 /**
