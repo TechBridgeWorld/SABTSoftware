@@ -97,7 +97,7 @@ void md11_main(void)
   switch(md11_current_state)
   {
     case STATE_INITIAL:
-      play_mp3("md11_","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3("MD11","_INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       noises_used = 0;
@@ -105,8 +105,8 @@ void md11_main(void)
       break;
 
     case STATE_REQUEST_INPUT1:
-	  if (game_mode == 1) play_mp3("md11_","PLSA");
-	  else if (game_mode == 2) play_mp3("md11_","PLSB");
+	  if (game_mode == 1) play_mp3("MD11","PLSA");
+	  else if (game_mode == 2) play_mp3("MD11","PLSB");
       length_entered_word = 0;
       current_word_index = 0;
       noise = noise_list[choose_noise()];
@@ -234,7 +234,7 @@ void md11_main(void)
       break;
 
     case STATE_SELECT_MODE:
-	  play_mp3("md11_","MSEL");
+	  play_mp3("MD11","MSEL");
 	  md11_current_state = STATE_WAIT_INPUT;
 	  break;
  
@@ -242,7 +242,7 @@ void md11_main(void)
 	  sprintf(noise_sound, "N%s", noise);
 	  play_mp3(NULL,noise_sound);
 	  if (game_mode == 2){
-		  play_mp3("md11_","SAYS");
+		  play_mp3("MD11","_LKE");
 		  play_mp3(NULL,noise);
 		  }
 	  md11_current_state = STATE_REQUEST_INPUT1;
@@ -332,7 +332,7 @@ void md11_call_mode_no_answer(void)
    }  
    else 
    {  
-      play_mp3("md11_","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3("MD11","_INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; 
       noises_used = 0;
