@@ -10,17 +10,13 @@
 // State definitions
 #define MD10_STATE_INITIAL                  0          // Just started, plays welcome message
 #define MD10_STATE_SELECT_MODE				1		   // Selecting the submode
-#define MD10_STATE_REQUEST_INPUT            2          // Request for input from user - part 1
-#define MD10_STATE_WAIT_INPUT               3          // Waiting for user input
-#define MD10_STATE_PROC_INPUT               4          // Processed user input
-#define STATE_CHECK_IF_CORRECT         5          // Valid input was entered
-#define STATE_READ_ENTERED_LETTERS     6          // User input is invalid (not a real letter)
-#define STATE_WRONG_INPUT              7          // User input is valid but wrong
-#define STATE_CORRECT_INPUT            8          // User input is correct
-#define STATE_DONE_WITH_CURRENT_ANIMAL 9   // Finished current animal correctly
-#define STATE_SELECT_MODE			   10 
-#define STATE_PLAY_SOUND			   11
-#define STATE_PROMPT				   12
+#define MD10_STATE_SUBMODE_INIT				2		   // Submode initialisation
+#define MD10_STATE_REQUEST_INPUT            3          // Request for input from user - part 1
+#define MD10_STATE_CELL1					4
+#define MD10_STATE_WAIT_INPUT1              5           // Waiting for user input
+#define MD10_STATE_CELL2					6
+#define MD10_STATE_WAIT_INPUT2              7    
+#define MD10_STATE_PROMPT				    8
 
 #define PRIME                53
 #define NUM_SUB_MODES		 3

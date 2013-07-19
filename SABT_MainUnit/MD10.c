@@ -8,6 +8,7 @@
 #include "Modes.h"
 #include "audio.h"
 #include "common.h"
+#include "script_eng_contraction.h"
 
 int md10_current_state, md10_prev_state = 0;
 char md10_last_dot, last_cell, expected_dot;
@@ -16,7 +17,8 @@ static int game_mode = 0;
 static int word_num_inset = 0;
 static int set = 0;
 //static int mistakes = 0;
-
+struct dir_Structure *location;
+static char buf[8];
 
 void md10_main(void) {
 
@@ -33,18 +35,33 @@ void md10_main(void) {
     case MD10_STATE_SELECT_MODE:
 	  break;
  
+ 	case MD10_STATE_SUBMODE_INIT:
+	  switch(game_mode){
+		case 0:
+			play_mp3("MD10","WEL1");
+			break;
+		case 1:
+			play_mp3("MD10","WEL2");
+			break;
+		case 2:
+			play_mp3("MD10","WEL3");
+			break;
+		}
+		md10_current_state = MD10_STATE_REQUEST_INPUT;
+		break;
+
     case MD10_STATE_REQUEST_INPUT:
 	  switch(game_mode){
-	  	case 0:
-		    play_mp3("MD10","");
+	  	case 0:		    
 			play_mp3("MD10","_WRT"); // to write <word><set>_<num> please press
-
-			char buf[8];
-			sprintf(buf,"word%d_%d",set,word_num_inset);			
+			sprintf(buf,"CON%d_W%d",set,word_num_inset);
+			PRINTF(buf);
+			location = find_files(GET_FILE,(unsigned char*)buf);
+			if (!location) return;			
 			play_mp3(NULL,buf);
 			play_mp3(NULL,"PRESS");
-		
-			md10_current_state = MD10_STATE_PRESS;
+		//	location? PRINTF("YES") : PRINTF("NO");		
+			md10_current_state = MD10_STATE_CELL1;
 			break;
 		case 1:
 			play_mp3("MD10","_PL2");
@@ -53,58 +70,65 @@ void md10_main(void) {
 			play_mp3("MD10","_PL3");
 			break;
 	  }
-	  md10_current_state = MD10_STATE_WAIT_INPUT;
+//	  md10_current_state = MD10_STATE_WAIT_INPUT;
 	  break;
-
-    case MD10_STATE_WAIT_INPUT:	 
-      if(got_input)
+	case MD10_STATE_CELL1:
+	  if(buf[3] != '0'){
+		play_dot_sequence(&contraction_pattern[CHARTOINT(buf[3])]);
+		play_mp3("MD10","PRES");
+		md10_current_state = MD10_STATE_WAIT_INPUT1;
+		}
+	  break;
+		
+    case MD10_STATE_WAIT_INPUT1:
+	  PRINTF("waiting for second cell1 input");
+	  char cell1 = get_cell(); 
+      if(cell1)
       {
-        got_input = false;		
-        md10_current_state = STATE_PROC_INPUT;
+	    
+        if(1){// check if the bits are same as the pattern contraction_pattern[CHARTOINT(pat)].pattern){
+			play_mp3(NULL,"GOOD");
+			play_mp3("MD10","_NXT");
+			md10_current_state = MD10_STATE_CELL2;
+		}
+		else{
+			play_mp3(NULL,"no");
+		}
       }
+	  else return;
       break;
 
-    case MD10_STATE_PROC_INPUT:
-	    case 0:
-        // set entered_letter in valid_letter(), but return 1 or 0
-		md10_current_state = MD10_STATE_REQUEST_INPUT;
-     break;
+	
+	case MD10_STATE_CELL2:
+	  PRINTF("Please input cell 2 content");
+	  int sym;
+	  if (strlen(buf) == 7){
+	  	sym = 10*CHARTOINT(buf[5])+CHARTOINT(buf[6]);
+	  }
+	  else {
+	  	sym = CHARTOINT(buf[5]);
+	  }
 
-    case STATE_READ_ENTERED_LETTERS:
-      break;
-
-    case STATE_CHECK_IF_CORRECT:
-      break;
-
-    case STATE_WRONG_INPUT:
-      break;
-
-    case STATE_CORRECT_INPUT:
-      break;
-
-    case STATE_PLAY_SOUND:
-	  md10_current_state = MD10_STATE_REQUEST_INPUT;
+   	  play_dot_sequence(&contraction_glyphs[sym]);
+	  play_mp3("MD10","PRES");
+	  md10_current_state = MD10_STATE_WAIT_INPUT2;
 	  break;
 
-	case STATE_PROMPT:
-	  break;
-
-	case MD10_STATE_PRESS:
-		curr_button += 1;
-
-        char bits = get_bits_from_letters();
-        char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
-        //get the bits for each depending on button count - and play sound if bit is set
-
-        if(curr_bit){
-	        play_requested_dot(curr_button);
-      	}
-
-      	if(CHARTOINT(curr_button) == NUM_BUT)
-      	{
-        	md3_current_state = STATE_WAIT_INPUT;
-        	curr_button = '0'; 
-      	}
+	case MD10_STATE_WAIT_INPUT2:
+	  PRINTF("waiting for second cell2 input");
+	  char cell2 = get_cell(); 
+      if(cell2)
+      {
+        if(cell2){// check if the bits are same as the pattern contraction_pattern[CHARTOINT(pat)].pattern){
+			play_mp3(NULL,"GOOD");
+			md10_current_state = MD10_STATE_REQUEST_INPUT;
+		}
+		else{
+			play_mp3(NULL,"no");
+		}
+      }
+	  else return;
+      break;
 	}
 }
 
@@ -147,7 +171,7 @@ void md10_call_mode_left() {
 	}
     else 
 	{
-		//skip 	
+		play_mp3("MD10","NXT");	 	
 	}		
 
 }
@@ -158,9 +182,5 @@ void md10_call_mode_right() {
 		game_mode -= 1;
 		if (game_mode < 0) game_mode = NUM_SUB_MODES-1;
 		play_mp3("MD10",sub_mode[game_mode]);
-	}
-    else 
-	{
-		play_mp3("MD10","NXT");	
 	}
 }
