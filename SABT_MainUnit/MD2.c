@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "common.h"
+#include "letter_globals.h"
 
 static char button_bits;
 int current_state;
@@ -16,21 +17,6 @@ char last_cell;
 char md2_last_dot;
 static char last_dot;                   // char representing last big dot pressed
 
-// Contains bit representations of each of the letters
-char letter_bits_arr[26] =
-{
-  A_BITS, B_BITS, C_BITS, D_BITS, E_BITS, F_BITS, G_BITS, 
-  H_BITS, I_BITS, J_BITS, K_BITS, L_BITS, M_BITS, N_BITS, 
-  O_BITS, P_BITS, Q_BITS, R_BITS, S_BITS, T_BITS, U_BITS, 
-  V_BITS, W_BITS, X_BITS, Y_BITS, Z_BITS
-};
-
-char letter_arr[26] = 
-{
-  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
-  'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 
-  'w', 'x', 'y', 'z'
-};
 
 char used_letter[5] = {0, 0, 0, 0, 0};
 
@@ -110,27 +96,6 @@ char get_bits_from_letters(char let)
   return -1;
 }
 
-
-/**
- * @brief Changes letter bits into an actual char letter
- * @param bits - char, bits that correspond to the buttons pressed
- * @return char - letter that corresponds to buttons pressed 
- *                on error - not found bits, return -1
- */
-char get_letter_from_bits(char bits)
-{
-  int glyph_len = 26;
-  int i;
-
-  for(i = 0; i < glyph_len; i++)
-  {
-    if(letter_bits_arr[i] == bits)
-      return letter_arr[i];
-  }
-
-  // Return error on failure (letter not present in array)
-  return -1;
-}
 
 /**
  * @brief  Given a bitmask, in last_cell, play the corresponding letter

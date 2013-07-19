@@ -1,9 +1,8 @@
-/**
- *  @file letter_globals.h
- *  @brief Pound defines used for determining letters and buttons
- *  @author Kory Stiger (kstiger)
- */
+#ifndef _LETTER_H_
+#define _LETTER_H_
+#include <stdbool.h>
 
+//bit correspondance for letters.  Right most bit is 1
 #define A_BITS 0b00000001
 #define B_BITS 0b00000011
 #define C_BITS 0b00001001
@@ -30,3 +29,13 @@
 #define X_BITS 0b00101101
 #define Y_BITS 0b00111101
 #define Z_BITS 0b00110101
+
+char letter_bits_arr[26];
+char letter_arr[26];
+
+char entered_letter; // Current letter being entered
+
+bool valid_letter(char);
+char get_letter_from_bits(char);
+
+#endif

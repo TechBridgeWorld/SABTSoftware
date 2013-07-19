@@ -60,8 +60,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,8,9,10,12,;");
-
+  strcpy(file_content, "1,2,3,4,5,6,7,8,9,10,11,12,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -391,9 +390,13 @@ void ui_call_mode_yes_answer(void)
       md9_call_mode_yes_answer();
       break;
 
-	  case 10:
-	    md10_call_mode_yes_answer();
-	    break;
+	case 10:
+	  md10_call_mode_yes_answer();
+	  break;
+
+	case 11:
+	  md11_call_mode_yes_answer();
+	  break;
 
     default:
       break;
@@ -429,15 +432,15 @@ void ui_call_mode_no_answer(void)
     case 8:
       md8_call_mode_no_answer();
       break;
-
     case 9:
       md9_call_mode_no_answer();
       break;
-
     case 10:
-	    md10_call_mode_no_answer();
-	    break;
-
+	  md10_call_mode_no_answer();
+	  break;
+	case 11:
+	  md11_call_mode_no_answer();
+	  break;
     default:
       break;
   }
@@ -479,8 +482,11 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
 
         case 10:
-		      md10_input_dot(this_dot);
-		      break;
+		  md10_input_dot(this_dot);
+		  break;
+	    case 11:
+		  md11_input_dot(this_dot);
+		  break;
 
         default:
           break;
@@ -531,6 +537,9 @@ void ui_input_cell_to_current_mode(char this_cell)
 	  case 10:
         md10_input_cell(this_cell);
         break;
+	  case 11:
+        md11_input_cell(this_cell);
+        break;
       default:
         break;
     }
@@ -577,15 +586,15 @@ void ui_run_main_of_current_mode(void)
       case 8:
         md8_main();
         break;
-
       case 9:
         md9_main();
         break;
-
       case 10:
 	  	  md10_main();
+		  break;
+	  case 11:
+	  	  md11_main();
 		    break;
-
       case 12:
         md12_main();
         break;
@@ -629,13 +638,14 @@ void ui_reset_the_current_mode(void)
       case 8:
         md8_reset();
         break;
-
       case 9:
         md9_reset();
         break;
-
-	   case 10:
-	      md10_reset();  
+	  case 10:
+	    md10_reset();  
+        break;
+	  case 11:
+	    md11_reset();  
         break;
 
       case 12:
@@ -663,14 +673,15 @@ void ui_call_mode_left(void) {
     case 8:
       md8_call_mode_left();
       break;
-
     case 9:
       md9_call_mode_left();
       break;
-
-	  case 10:
-	    md10_call_mode_left();
-	    break;
+	case 10:
+	  md10_call_mode_left();
+	  break;
+	case 11:
+	  md11_call_mode_left();
+	  break;
 
     default:
       break;
@@ -692,14 +703,15 @@ void ui_call_mode_right(void) {
     case 8:
       md8_call_mode_right();
       break;
-
     case 9:
       md9_call_mode_right();
       break;    
-
-	  case 10:
-	    md10_call_mode_right();
-	    break;  
+	case 10:
+	  md10_call_mode_right();
+	  break;  
+	case 11:
+	  md11_call_mode_right();
+	  break;  
 
     default:
       break;
