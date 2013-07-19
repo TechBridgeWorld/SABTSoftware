@@ -60,7 +60,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,8,9,10,11,12,;");
+  strcpy(file_content, "1,2,3,4,5,6,7,8,9,11,12,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -293,11 +293,6 @@ void ui_control_key_pressed(void)
         {
           PRINTF("[UI] Short CANCEL detected, calling mode NO function\n\r");
           ui_call_mode_no_answer();
-        }
-      } else {
-        if(usart_ui_received_packet[6] == 69) 
-        {
-          play_mp3("SYS_","EE");
         }
       }
       //This has no effect when no mode is selected
