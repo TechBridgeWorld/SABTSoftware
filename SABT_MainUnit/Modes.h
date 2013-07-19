@@ -21,5 +21,6 @@
 #include "MD8.h" // Number practice
 #include "MD9.h" // Maths practice
 #include "MD10.h"// Braille Contractions
+#include "MD11.h"// Everyday Noises Game
 
 #endif /* _MODES_H_ */
