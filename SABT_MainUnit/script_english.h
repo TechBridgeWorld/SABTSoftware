@@ -11,7 +11,9 @@
 #include "script_common.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"
-#define SCRIPT_ENGLISH_LENGTH 26
+#define SCRIPT_ENGLISH_LENGTH 26 // 26 Alphabets
+
+// English Alphabets - bit pattern
 
 #define ENG_A 0b000001
 #define ENG_B 0b000011
