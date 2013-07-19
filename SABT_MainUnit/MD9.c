@@ -256,7 +256,7 @@ void md9_main(void) {
 			} else {
 				// Wrong answer
 				md_incorrect_tries++;
-				play_mp3(LANG_FILESET, MP3_WRONG);
+				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				md_next_state = STATE_REPROMPT;
 			}

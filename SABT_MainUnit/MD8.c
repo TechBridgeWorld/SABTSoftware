@@ -140,7 +140,7 @@ void md8_main(void) {
 
 				default:
 					incorrect_tries++;
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					if (incorrect_tries >= MAX_INCORRECT_TRIES) {
 						last_dot = 0;
 					} else {
@@ -276,12 +276,12 @@ void md8_main(void) {
 					next_state = MD8_STATE_PROMPT;
 				} else {
 					incorrect_tries++;
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					next_state = MD8_STATE_INPUT;
 				}
 			} else {
 				//Otherwise check glyph
-				input_glyph = get_glyph_by_pattern(button_bits);
+				input_glyph = search_script(NULL, button_bits);
 				if (glyph_equals(current_glyph, input_glyph)) {
 					play_mp3(lang_fileset, "CORR");
 					if (correct_count + 1 < bound)
@@ -291,7 +291,7 @@ void md8_main(void) {
 					last_dot = RIGHT;
 					next_state = MD8_STATE_NEXT;
 				} else {
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					incorrect_tries++;
 					next_state = MD8_STATE_INCORRECT;
 				}
@@ -336,7 +336,7 @@ void md8_main(void) {
 					break;
 
 				default:
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					last_dot = 0;
 					break;
 			}
@@ -390,7 +390,7 @@ void md8_main(void) {
 					break;
 
 				default:
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					last_dot = 0;
 					break;
 			}
@@ -485,7 +485,7 @@ void md8_main(void) {
 					break;
 
 				default:
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					last_dot = 0;
 					break;
 			}
@@ -564,7 +564,7 @@ void md8_main(void) {
 					break;
 
 				default:
-					play_mp3(lang_fileset, "INVP");
+					play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 					last_dot = 0;
 					break;
 			}

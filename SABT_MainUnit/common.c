@@ -23,6 +23,7 @@ void set_mode_globals(script_t* new_script, char* new_lang_fileset,
 	lang_script = new_script;
 	lang_fileset = new_lang_fileset;
 	mode_fileset = new_mode_fileset;
+	reset_script_indices(new_script);
 }
 
 /**

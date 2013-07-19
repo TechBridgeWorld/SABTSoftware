@@ -8,6 +8,8 @@
 #include "script_common.h"
 #include "audio.h"
 #include "globals.h"
+#include "common.h"
+#include "io.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -28,67 +30,207 @@
 #define NUM8				0b010011
 #define NUM9				0b001010
 #define NUM0				0b011010
-#define NUMSIGN			0b111100
+#define NUMSIGN				0b111100
 
 // Numbers script array
 static glyph_t glyphs_common[SCRIPT_COMMON_LENGTH] = {
-	{BLANK, true, "BLNK", NULL},
-	{NUM1, true, "#1", NULL},
-	{NUM2, true, "#2", NULL},
-	{NUM3, true, "#3", NULL},
-	{NUM4, true, "#4", NULL},
-	{NUM5, true, "#5", NULL},
-	{NUM6, true, "#6", NULL},
-	{NUM7, true, "#7", NULL},
-	{NUM8, true, "#8", NULL},
-	{NUM9, true, "#9", NULL},
-	{NUM0, true, "#0", NULL},
-	{NUMSIGN, true, "#NUM", NULL}
+	{BLANK, MP3_BLANK, NULL, NULL},
+	{NUM1, "#1", NULL, NULL},
+	{NUM2, "#2", NULL, NULL},
+	{NUM3, "#3", NULL, NULL},
+	{NUM4, "#4", NULL, NULL},
+	{NUM5, "#5", NULL, NULL},
+	{NUM6, "#6", NULL, NULL},
+	{NUM7, "#7", NULL, NULL},
+	{NUM8, "#8", NULL, NULL},
+	{NUM9, "#9", NULL, NULL},
+	{NUM0, "#0", NULL, NULL},
+	{NUMSIGN, "#NUM", NULL, NULL}
 };
 
 script_t script_common = {
 	SCRIPT_COMMON_LENGTH,
+	0,
 	SCRIPT_COMMON_DEFAULT_FILESET,
 	glyphs_common
 };
 
 script_t* lang_script = NULL;
 
+/*
+* @brief Resets a script's indices
+* @param script_t* - Pointer to script to reset
+* @return void
+*/
+void reset_script_indices(script_t* script) {
+	script->index = -1;
+	for (int i = 0; i < script->length; i++) {
+		if (script->glyphs[i].subscript != NULL) {
+			reset_script_indices(script->glyphs[i].subscript);
+		}
+	}
+}
+
+/*
+* @brief Pattern matches from a string of patterns to a glyph by traversing
+*	the script provided
+* @param script_t* script - Pointer to script to search in
+* @param char* pattern - Pointer to pattern array to search for
+* @param int* index - Index to update as parsing continues
+* @return glyph_t* - Pointer to glyph, NULL if not found
+*/
+glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
+	char curr_pattern = patterns[*index];
+	script_t* subscript = NULL;
+	glyph_t* curr_glyph;
+
+	sprintf(dbgstr, "[IO] Current pattern: 0x%x\n\r", curr_pattern);
+	PRINTF(dbgstr);
+	
+	// Return if EOT
+	if (curr_pattern == END_OF_TEXT) {
+		PRINTF("[IO] Current pattern is EOT; returning NULL\n\r");
+		return NULL;
+	}
+
+	// If no match found in script, return NULL
+	curr_glyph = search_script(script, curr_pattern);
+	if (curr_glyph == NULL) {
+		curr_glyph = search_script(&script_common, curr_pattern);
+		if (curr_glyph == NULL) {
+			PRINTF("[IO] Matching glyph not found; returning NULL\n\r");
+			return NULL;
+		}
+	}
+	subscript = curr_glyph->subscript;
+	
+	// If glyph does not have subscript, check subscript
+	if (curr_glyph->subscript != NULL) {
+		PRINTF("[IO] Recursively checking subscript for next pattern\n\r");
+		*index = *index + 1;
+		return get_glyph(subscript, patterns, index);
+	
+	// Otherwise return subscript
+	} else {
+		PRINTF("[IO] No subscript; returning glyph\n\r");
+		return curr_glyph;
+	}
+}
+
 /**
  * @brief Finds an glyph from based on a cell pattern, checks language script
  * and then the common script if no match found in language
+ * @param	script_t* script - Script to look in
  * @param char pattern - Cell pattern to look for
  * @return glyph_t* - Corresponding to glyph it found, NULL if not found
  */
-glyph_t* get_glyph_by_pattern(char pattern) {
-	glyph_t* this_glyph = NULL;
+glyph_t* search_script(script_t* curr_script, char pattern) {
+	glyph_t* curr_glyph = NULL;
+	int index_bound = 0;
+	index_bound = curr_script->length;
 
-	// First search lang script
-	glyph_t* script_glyphs = lang_script->glyphs;
-	int script_length = lang_script->length;
-	for (int i = 0; i < script_length; i++) {
-		this_glyph = &script_glyphs[i];
-		if (this_glyph->pattern == pattern) {
-			return this_glyph;
-		}
-	}
-
-	// Search common script
-	script_glyphs = script_common.glyphs;
-	script_length = script_common.length;
-	for (int i = 0; i < script_common.length; i++) {
-		this_glyph = &script_glyphs[i];
-		if (this_glyph->pattern == pattern) {
-			return this_glyph;
+	// Search through array of glyphs
+	for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
+		curr_glyph = &(curr_script->glyphs[glyph_index]);
+		if (curr_glyph && curr_glyph->pattern == pattern) {
+			return curr_glyph;
 		}
 	}
 
 	// If nothing matches, return NULL
-	sprintf(dbgstr, "[Script] Glyph match not found for pattern: %x\n\r",
-		pattern);
+	sprintf(dbgstr, "[Script] Glyph match not found: 0x%x\n\r", pattern);
 	PRINTF(dbgstr);
 	return NULL;
 }
+
+/*
+* @brief Returns a random last-order glyph from the current script
+* @param script_t* - Script to get random glyph from
+* @return glyph_t* - Pointer to random glyph
+*/
+glyph_t* get_random_glyph(script_t* script) {
+	glyph_t* curr_glyph = &(script->glyphs[timer_rand() % script->length]);
+	if (curr_glyph->subscript == NULL) {
+		return curr_glyph;
+	} else {
+		return get_random_glyph(curr_glyph->subscript);
+	}
+}
+
+/*
+* @brief Returns the next glyph from the current script
+* @param void
+* @glyph_t* - Pointer to next glyph
+*/
+glyph_t* get_next_glyph(script_t* script) {
+
+	glyph_t* curr_glyph;
+	glyph_t* next_glyph;
+
+	script->index++;
+
+	// Return NULL if reached end of script
+	if (script->index >= script->length) {
+		script->index = script->length;
+		return NULL;
+	}
+
+	curr_glyph = &(script->glyphs[script->index]);
+
+	// If current glyph is valid, update index and return
+	if (curr_glyph->subscript == NULL) {
+		return curr_glyph;
+	// Otherwise recursively call on subscript
+	} else {
+		next_glyph = get_next_glyph(curr_glyph->subscript);
+		// If glyph found in subscript, return
+		if (next_glyph != NULL) {
+			script->index--;
+			return next_glyph;
+		// Otherwise update superscript and call again
+		} else {
+			return get_next_glyph(script);
+		}
+	}
+}
+
+/*
+* @brief Returns the previous glyph from the current script
+* @param void
+* @glyph_t* - Pointer to previous glyph
+*/
+glyph_t* get_prev_glyph(script_t* script) {
+
+	glyph_t* curr_glyph;
+	glyph_t* prev_glyph;
+
+	script->index--;
+
+	// Return NULL if reached end of script
+	if (script->index <= -1) {
+		script->index = -1;
+		return NULL;
+	}
+
+	curr_glyph = &(script->glyphs[script->index]);
+
+	// If current glyph is valid, update index and return
+	if (curr_glyph->subscript == NULL) {
+		return curr_glyph;
+	// Otherwise recursively call on subscript
+	} else {
+		prev_glyph = get_prev_glyph(curr_glyph->subscript);
+		// If glyph found in subscript, return
+		if (prev_glyph != NULL) {
+			script->index++;
+			return prev_glyph;
+		// Otherwise update superscript and call again
+		} else {
+			return get_prev_glyph(script);
+		}
+	}
+}
+
 
 /*
 * @brief Checks if a given glyph is a number

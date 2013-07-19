@@ -9,14 +9,12 @@ DOT5 - 5
 DOT6 - 6
 DOTE - Enter
 DOTC - Cancel
-DOTL - Left
-DOTR - Right
-DOTU - Volume Up
-DOTD - Volume Down
 
 *** IO Sounds ***
 FCEL - First Cell
 LCEL - Last Cell
+NCEL - Next Cell
+NLET - Next Letter
 BLNK - Blank
 
 *** Common System Prompts ***
@@ -24,9 +22,8 @@ INVP - Invalid Pattern
 CORR - Correct answer
 WRNG - Incorrect answer
 TAGA - Try again
-CANC - Cancel
 
-*** Digits and Numbers ***
+*** Digits and Numbers (optional) ***
 #NEG - Negative
 #0 - 0
 #1 - 1

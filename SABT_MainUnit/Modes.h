@@ -21,5 +21,6 @@
 #include "MD8.h" // Number practice
 #include "MD9.h" // Maths practice
 #include "MD10.h"// Braille Contractions
+#include "md12.h"// Kannada braille practice
 
 #endif /* _MODES_H_ */

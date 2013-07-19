@@ -14,20 +14,18 @@ typedef struct script script_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
-	char pattern;					/* 0bxxxxxx 6-bit pattern Braille representation */
-	bool is_valid;				/* If "path" to this glyph is a valid Braille char
-														Is false for first glyph in a multi-cell
-														character that is not a valid character in
-														itself; true for other glyphs */
-	char sound[5];				/* BBBB in AAA_BBBB.mp3 soundfile */
+	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
+	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
+	glyph_t* parent;		/* Pointer to previous glyph, if next in sequence */
 	script_t* subscript;	/* Pointer to array of possible next glyphs in
-														cell sequence if not the last in a multi-cell
-														character, NULL otherwise */
+								cell sequence if not the last in a multi-cell
+								character, NULL otherwise */
 };
 
 // Structure representing a script
 struct script {
-	int length;					/* Length of first cell glyph array */
+	int length;				/* Length of first cell glyph array */
+	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
 };

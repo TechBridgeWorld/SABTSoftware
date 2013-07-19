@@ -76,7 +76,7 @@ void md6_main(void) {
 
           default:
             incorrect_tries++;
-            play_mp3(lang_fileset, "INVP");
+            play_mp3(lang_fileset, MP3_INVALID_PATTERN);
             if (incorrect_tries >= MAX_INCORRECT_TRIES) {
               incorrect_tries = 0;
               next_state = MD6_STATE_INITIAL;
@@ -89,7 +89,7 @@ void md6_main(void) {
     // If user presses ENTER, then check dot sequence for valid letter
     // and provide feedback
     case MD6_STATE_CHECK:
-      this_glyph = get_glyph_by_pattern(button_bits);
+      this_glyph = search_script(NULL, button_bits);
       play_glyph(this_glyph);
       next_state = MD6_STATE_INPUT;
       button_bits = 0x00;
