@@ -54,7 +54,7 @@ void quit_mode(void) {
 	ui_is_mode_selected = false;
   ui_current_mode_index = 0;
   ui_current_mode_number = ui_modes[ui_current_mode_index];
-  play_mp3("","MM");
+  play_mp3("SYS_","MM");
 }
 
 /*
