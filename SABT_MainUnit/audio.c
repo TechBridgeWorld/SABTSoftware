@@ -47,6 +47,7 @@ char* mode_fileset = NULL;
  * @param char* mp3 - Pointer to MP3 filename (4 characters)
  * @return bool - True if file was added, false if queue is full or error
  */
+
 bool play_mp3(char* fileset, char* mp3) {
 
 	if (mp3 == NULL) {
@@ -60,8 +61,15 @@ bool play_mp3(char* fileset, char* mp3) {
 		return false;
 	}
 	
-	//Otherwise add file to playlist
+	
 	playlist_size++;
+
+	//Truncate to 8 chars if the string is longer than that
+	if (strlen(mp3)>8){
+		mp3[8] = '\0';
+	}
+
+	//Otherwise add file to playlist
 	if (fileset != NULL)
 		sprintf(playlist[playlist_size - 1], "%s%s.mp3", fileset, mp3);
  	else
@@ -76,6 +84,7 @@ bool play_mp3(char* fileset, char* mp3) {
 	playlist_empty = false;
 	return true;
 }
+
 
 
 /**
