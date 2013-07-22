@@ -21,6 +21,8 @@ char io_dot = NO_DOTS;
 char io_cell = NO_DOTS;
 char io_line[MAX_BUF_SIZE] = "";
 glyph_t* io_parsed[MAX_BUF_SIZE] = {NULL};
+bool io_user_cancel = false;
+bool io_user_abort = false;
 
 // Basic IO state variables
 static char io_cell_state = NO_DOTS;
@@ -68,6 +70,8 @@ void io_dialog_error(void);
 void io_init(void) {
 	io_dot = NO_DOTS;
 	io_cell = NO_DOTS;
+	io_user_cancel = false;
+	io_user_abort = false;
 	io_line_reset();
 	io_dialog_reset();
 }
@@ -111,23 +115,31 @@ char get_cell(void) {
 		// 2 MSB of char
 		case ENTER: case LEFT: case RIGHT: case CANCEL:
 			ret_val = io_cell_state;
-			sprintf(dbgstr, "Playing glyph for pattern: %x\n\r", ret_val); 
-			PRINTF(dbgstr);
-			if (ret_val) {
-				play_glyph_by_pattern(ret_val);
-			}
 			io_cell_state = NO_DOTS;
 			switch (last_dot) {
 				case ENTER:
+					io_user_cancel = false;
+					io_user_abort = false;
 					return ret_val | WITH_ENTER;
 					break;
 				case LEFT:
+					io_user_cancel = false;
+					io_user_abort = false;
 					return ret_val | WITH_LEFT;
 					break;
 				case RIGHT:
+					io_user_cancel = false;
+					io_user_abort = false;
 					return ret_val | WITH_RIGHT;
 					break;
 				case CANCEL:
+					if (io_user_cancel == true) {
+						io_user_abort = true;
+						io_user_cancel = false;
+					} else {
+						io_user_cancel = true;
+						io_user_abort = false;
+					}
 					return ret_val | WITH_CANCEL;
 					break;
 				// Should not execute this code
@@ -161,6 +173,10 @@ bool get_line(void) {
 		io_line_reset();
 	}
 
+	if (io_user_abort) {
+		return false;
+	}
+
 	char last_cell = get_cell();
 	char pattern = GET_PATTERN(last_cell);
 	char control = GET_CELL_CONTROL(last_cell);
@@ -183,20 +199,24 @@ bool get_line(void) {
 			return true;
 			break;
 
-		// RIGHT - Select next cell
+		/* RIGHT is used to switch to previous cell because Brialle is entered
+			this way */
+		// RIGHT - Select prev cell
 		case 0b01:
-			io_line_next_cell();
+			io_line_prev_cell();
 			if (!pattern) {
-				play_glyph_by_pattern(io_line[io_line_cell_index]);
+				play_pattern(io_line[io_line_cell_index]);
 			}
 			return false;
 			break;
 
-		// LEFT - Select previous cell
+		/* RIGHT is used to switch to next cell because Brialle is entered
+			this way */
+		// LEFT - Select next cell
 		case 0b10:
-			io_line_prev_cell();
+			io_line_next_cell();
 			if (!pattern) {
-				play_glyph_by_pattern(io_line[io_line_cell_index]);
+				play_pattern(io_line[io_line_cell_index]);
 			}
 			return false;
 			break;
@@ -204,7 +224,6 @@ bool get_line(void) {
 		// CANCEL - Clear current cell
 		case 0b00:
 			io_line_clear_cell();
-			play_glyph_by_pattern(io_line[io_line_cell_index]);
 			return false;
 			break;
 
@@ -237,7 +256,7 @@ bool get_number(bool* valid, int* res) {
 
 	// If cell sequence has invalid patterns, return false
 	if (!io_convert_line()) {
-		play_mp3(lang_fileset, "INVP");
+		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 		*valid = false;
 		return true;
 	}
@@ -247,8 +266,39 @@ bool get_number(bool* valid, int* res) {
 		*valid = true;
 		return true;
 	} else {
-		play_mp3(lang_fileset, "INVP");
+		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 		*valid = false;
+		return true;
+	}
+}
+
+/*
+* @brief Gets a line from the user, converts to glyphs, returns first glyph
+* @param glyph_t* res - Pointer to placeholder for pointer
+* @return bool - true if ready for further processing
+*/
+bool get_character(glyph_t** res) {
+	
+	// Let user finish input
+	if (!get_line()) {
+		return false;
+	}
+
+	PRINTF("[IO] Line accepted\n\r");
+
+	/*
+	If conversion is unsuccessful, return NULL, otherwise return first
+	character
+	*/
+	if (!io_convert_line()) {
+		PRINTF("[IO] Line conversion unsuccessful\n\r");
+		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+		*res = NULL;
+		return true;
+	} else {
+		*res = io_parsed[0];
+		sprintf(dbgstr, "[IO] Returning character: %s\n\r", (*res)->sound);
+		PRINTF(dbgstr);
 		return true;
 	}
 }
@@ -336,6 +386,7 @@ char create_dialog(char* prompt, char control_mask) {
 		// Returns control button if enabled, o/w registers error
 		case LEFT: case RIGHT:
 			if (io_dialog_left_right_enabled == true) {
+				io_dot = last_dot;
 				io_dialog_reset();
 				return last_dot;
 			} else {
@@ -368,7 +419,7 @@ void io_line_next_cell(void) {
 	if (io_line_cell_index + 2 < MAX_BUF_SIZE) {
 		io_line_cell_index++;
 	} else {
-		play_mp3(lang_fileset, "LCEL");
+		play_mp3(lang_fileset, MP3_LAST_CELL);
 	}
 }
 
@@ -382,7 +433,7 @@ void io_line_prev_cell(void) {
 	if (io_line_cell_index > 0) {
 		io_line_cell_index--;
 	} else {
-		play_mp3(lang_fileset, "FCEL");
+		play_mp3(lang_fileset, MP3_FIRST_CELL);
 	}
 }
 
@@ -419,41 +470,38 @@ void io_line_reset(void) {
 * @return bool - true if all raw cells were valid, false otherwise
 */
 bool io_convert_line(void) {
-	int i;
-	char curr_pattern = NO_DOTS;
-	glyph_t* curr_glyph;
+	int line_index = 0;
+	int parse_index = 0;
+	glyph_t* curr_glyph = NULL;
 	
 	// Iterate through io_line, find matching glyph for each cell pattern as long
 	// as it isn't END_OF_TEXT, and add to io_parsed
-	for
-		(
-			i = 0,
-			curr_pattern = io_line[0],
-			curr_glyph = get_glyph_by_pattern(curr_pattern);
-
-			curr_pattern != END_OF_TEXT;
-
-			i++,
-			curr_pattern = io_line[i],
-			curr_glyph = get_glyph_by_pattern(curr_pattern)
-		) {
-
-				if (curr_glyph == NULL) {
-					// Invalid pattern before EOT
-					return false;
-				} else {
-					io_parsed[i] = curr_glyph;
-			}
+	for (line_index = 0, parse_index = 0;
+		line_index - 2 < MAX_BUF_SIZE;
+		line_index++, parse_index++) {
+		
+		if (io_line[line_index] == END_OF_TEXT) {
+			break;
 		}
+		
+		curr_glyph = get_glyph(lang_script, io_line, &line_index);
+		if (curr_glyph == NULL) {
+			return false;
+		} else {
+			sprintf(dbgstr, "[IO] Parsed glyph: %s\n\r", curr_glyph->sound);
+			PRINTF(dbgstr);
+			io_parsed[parse_index] = curr_glyph;
+		}
+	}
 
 	// If control returns from loop then matching glyphs were found for all
 	// raw cells, add a NULL terminator and return true
-	io_parsed[i] = NULL;
+	io_parsed[line_index] = NULL;
 	return true;
 }
 
 /*
-*	@brief Parses io_line buffer for a number and stores it in io_parsed
+* @brief Parses io_line buffer for a number and stores it in io_parsed
 * @param void
 * @return void
 */
@@ -483,22 +531,21 @@ bool io_parse_number(int* res) {
 // **************************************************
 
 void io_dialog_init(char control_mask) {
-	sprintf(dbgstr, "[IO] Control mask: %x\n\r", control_mask);
+	char last_dot = get_dot();
 	PRINTF(dbgstr);
 	for (int i = 0; i < 6; i++) {
 		if ((control_mask & (1 << i)) != 0) {
 			io_dialog_dots_enabled[i] = true;
-			sprintf(dbgstr, "[IO] Dot %d enabled\n\r", i + 1);
-			PRINTF(dbgstr);
 		}
 	}
 	if ((control_mask & LEFT_RIGHT) == LEFT_RIGHT) {
 		io_dialog_left_right_enabled = true;
-		PRINTF("[IO] LEFT & RIGHT enabled\n\r");
 	}
 	if ((control_mask & ENTER_CANCEL) == ENTER_CANCEL) {
 		io_dialog_enter_cancel_enabled = true;
-		PRINTF("[IO] ENTER & CANCEL enabled\n\r");
+	}
+	if (last_dot == LEFT || last_dot == RIGHT) {
+		io_dialog_incorrect_tries = 0;
 	}
 	io_dialog_initialised = true;
 }
@@ -515,7 +562,7 @@ void io_dialog_reset(void) {
 
 void io_dialog_error(void) {
 	io_dialog_incorrect_tries++;
-	play_mp3(lang_fileset, "INVP");
+	play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 	if (io_dialog_incorrect_tries >= MAX_INCORRECT_TRIES) {
 		io_dialog_incorrect_tries = -1;
 	}

@@ -15,7 +15,7 @@
 // Note that 0x00 is the highest volume, 0xFE is the lowest volume for a
 // channel
 
-#define VOL_INIT    0x30
+#define VOL_INIT    0x18
 #define VOL_MIN     0x50    // Set based on testing
 #define VOL_INCR    0x08
 #define CHANGE_VOLUME(X) ((X) | (X) << 8)
@@ -130,9 +130,11 @@ bool vs1053_increase_vol(void)
     if(retry++ > 10) return false;
   }
 
-  sprintf(debug, "Volume: %x\n\r", stereo_volume);
+  sprintf(debug, "[Audio] Volume: %x\n\r", stereo_volume);
   PRINTF(debug);
-  play_mp3("SYS_","VOL");
+  if (!playing_sound) {
+    play_mp3("SYS_","VOL");
+  }
 
   return true;
 }
@@ -168,9 +170,11 @@ bool vs1053_decrease_vol(void)
     if(retry++ > 10) return false;
   }
 
-  sprintf(debug, "Volume: %x\n\r", stereo_volume);
+  sprintf(debug, "[Audio] Volume: %x\n\r", stereo_volume);
   PRINTF(debug);
-  play_mp3("SYS_","VOL");
+  if (!playing_sound) {
+    play_mp3("SYS_","VOL");
+  }
 
   return true;
 }

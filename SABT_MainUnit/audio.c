@@ -67,9 +67,11 @@ bool play_mp3(char* fileset, char* mp3) {
  	else
  		sprintf(playlist[playlist_size - 1], "%s.mp3", mp3);
 
+ 	/*
  	PRINTF("[Audio] Queuing: ");
  	PRINTF(playlist[playlist_size - 1]);
  	NEWLINE;
+ 	*/
 
 	playlist_empty = false;
 	return true;
@@ -101,6 +103,17 @@ void play_silence(int milliseconds) {
 	}
 }
 
+/*
+* @brief Clears MP3 playlist
+* @param void
+* @return void
+*/
+void clear_playlist(void) {
+	playlist_empty = true;
+	playlist_size = 0;
+	playlist_index = 0;
+}
+
 /**
  * @brief Plays next queued MP3 file. Only called when queue is not empty.
  *		is called repeatedly till queue is empty
@@ -124,9 +137,7 @@ void play_next_mp3(void) {
 
 	//If playlist is now empty, reset variables 
 	if (playlist_index == playlist_size) {
-		playlist_empty = true;
-		playlist_size = 0;
-		playlist_index = 0;
+		clear_playlist();
 	}
 }
 
@@ -139,18 +150,14 @@ void play_next_mp3(void) {
 void play_dot(char dot) {
 	char mp3[5];
 	switch (dot) {
-		case '1': case '2': case '3': case '4': case '5': case '6':
-			break;
-		case ENTER:
-		case CANCEL:
-		case LEFT:
-		case RIGHT:
-		case NO_DOTS:
-			return;
-			break;
+		case '1': case '2': case '3': case '4': case '5': case '6': break;
+		case ENTER: dot = 'E'; break;
+		case CANCEL: dot = 'C'; break;
+		case LEFT: case RIGHT: case NO_DOTS: return;
 		default:
 			sprintf(dbgstr, "[Audio] Invalid dot: %c\n\r", dot);
 			PRINTF(dbgstr);
+			break;
 	}
 	sprintf(mp3, "DOT%c", dot);
 	play_mp3(lang_fileset, mp3);
@@ -164,23 +171,9 @@ void play_dot(char dot) {
 void play_glyph(glyph_t *this_glyph) {
 	char mp3[5];
 	if (this_glyph != NULL) {
-		sprintf(mp3, "%s", this_glyph->sound);
+		sprintf(mp3, this_glyph->sound);
+		play_mp3(lang_fileset, mp3);
 	}
-	else {
-		sprintf(mp3, "INVP");
-	}
-	play_mp3(lang_fileset, mp3);
-}
-
-/**
- * @brief Play sound file corresponding to an glyph, checks for NULL arg
- * @param glyph_t* this_glyph - Pointer to glyph to play
- * @return void
- */
-void play_glyph_by_pattern(char pattern) {
-	pattern = GET_PATTERN(pattern);
-	glyph_t* this_glyph = get_glyph_by_pattern(pattern);
-	play_glyph(this_glyph);
 }
 
 /**
@@ -189,6 +182,10 @@ void play_glyph_by_pattern(char pattern) {
  * @return void
  */
 void play_pattern(unsigned char pattern) {
+	if (pattern == 0) {
+		play_mp3(lang_fileset, MP3_BLANK);
+		return;
+	}
 	char dot[2];
 	for (int i = 0; pattern != 0; i++, pattern = pattern >> 1) {
 		if (pattern & 0x01) {
@@ -205,10 +202,17 @@ void play_pattern(unsigned char pattern) {
 void play_dot_sequence(glyph_t *this_glyph) {
 	char pattern;
 	if (this_glyph != NULL) {
+		if (this_glyph->parent != NULL) {
+			sprintf(dbgstr, "[Audio] Playing parent pattern: %s\n\r",
+				this_glyph->parent->sound);
+			play_dot_sequence(this_glyph->parent);
+			play_silence(250);
+			play_mp3(lang_fileset, MP3_NEXT_CELL);
+		}
 		pattern = this_glyph->pattern;
 		play_pattern(pattern);
 	} else {
-		play_mp3(lang_fileset, "INVP");
+		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 	}
 }
 

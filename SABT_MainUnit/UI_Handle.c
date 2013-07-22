@@ -13,6 +13,7 @@
 #include "audio.h"
 #include "common.h"
 #include "io.h"
+#include "script_common.h"
 
 #include <string.h>
 
@@ -59,8 +60,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,8,9,10,11,12;");
-
+  strcpy(file_content, "1,2,3,4,5,6,7,8,9,11,12,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -274,25 +274,24 @@ void ui_control_key_pressed(void)
       //Cancel MP3 prompt
       if (playing_sound) {
         vs1053_skip_play = true;
-        
+        clear_playlist();
         io_dot = NO_DOTS;
         return;
       }
 
       if(ui_is_mode_selected) 
       {
-        NEWLINE;
         // If the next byte is 'E', this is exit command 
         // (when the user pressed E2 for more than 5 secs)
         if(usart_ui_received_packet[6] == 69) 
         {
-          PRINTF("Long CANCEL detected, going to main menu\n\r");
+          PRINTF("[UI] Long CANCEL detected, going to main menu\n\r");
           io_init();
           quit_mode();
         }
         else //Then this a "NO" answer, call the mode function for this
         {
-          PRINTF("Short CANCEL detected, calling mode NO function\n\r");
+          PRINTF("[UI] Short CANCEL detected, calling mode NO function\n\r");
           ui_call_mode_no_answer();
         }
       }
@@ -328,19 +327,13 @@ void ui_control_key_pressed(void)
 
     case UI_CMD_VOLU: // Volume Up
       //only increase sound if you are not playing a sound
-      if(!playing_sound){
-        usart_transmit_string_to_pc_from_flash(PSTR("Vol UP pressed"));
-        TX_NEWLINE_PC;
-        vs1053_increase_vol();
-      }
+      PRINTF("[UI] Volume up\n\r");
+      vs1053_increase_vol();
       break;
     case UI_CMD_VOLD: // Volume down
       //only increase sound if you are not playing a sound
-      if(!playing_sound){
-        usart_transmit_string_to_pc_from_flash(PSTR("Vol DOWN pressed"));
-        TX_NEWLINE_PC;
-        vs1053_decrease_vol();
-      }
+      PRINTF("[UI] Volume down\n\r");
+      vs1053_decrease_vol();
       break;
     default:
       break;
@@ -383,12 +376,6 @@ void ui_call_mode_yes_answer(void)
       break;
     case 6:
       md6_call_mode_yes_answer();
-      break;
-    case 7:
-      md7_call_mode_yes_answer();
-      break;
-    case 8:
-      md8_call_mode_yes_answer();
       break;
 
     case 9:
@@ -434,12 +421,6 @@ void ui_call_mode_no_answer(void)
     case 6:
       md6_call_mode_no_answer();
       break;
-    case 7:
-      md7_call_mode_no_answer();
-      break;
-    case 8:
-      md8_call_mode_no_answer();
-      break;
     case 9:
       md9_call_mode_no_answer();
       break;
@@ -481,12 +462,6 @@ void ui_input_dot_to_current_mode(char this_dot)
         case 6:
           md6_input_dot(this_dot);
           break;
-        case 7:
-          md7_input_dot(this_dot);
-          break;
-        case 8:
-          md8_input_dot(this_dot);
-          break;
 
         case 9:
           md9_input_dot(this_dot);
@@ -503,7 +478,7 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
       }
   } else {
-    play_mp3("SYS_","INVP");
+    play_mp3("ENG_",MP3_INVALID_PATTERN);
     incorrect_tries++;
     if (incorrect_tries >= 3) {
       play_mp3("SYS_","MINS");
@@ -539,12 +514,6 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 6:
         md6_input_cell(this_cell);
         break;
-      case 7:
-        md7_input_cell(this_cell);
-        break;
-      case 8:
-        md8_input_cell(this_cell);
-        break;
       case 9:
         md9_input_cell(this_cell);
         break;
@@ -558,7 +527,7 @@ void ui_input_cell_to_current_mode(char this_cell)
         break;
     }
   } else {
-    play_mp3("SYS_","INVP");
+    play_mp3("SYS_",MP3_INVALID_PATTERN);
     incorrect_tries++;
     if (incorrect_tries >= 3) {
       play_mp3("SYS_","MINS");
@@ -603,12 +572,16 @@ void ui_run_main_of_current_mode(void)
       case 9:
         md9_main();
         break;
-	  case 10:
+      case 10:
 	  	  md10_main();
 		  break;
 	  case 11:
 	  	  md11_main();
 		    break;
+      case 12:
+        md12_main();
+        break;
+
       default:
         break;
     }
@@ -658,6 +631,9 @@ void ui_reset_the_current_mode(void)
 	    md11_reset();  
         break;
 
+      case 12:
+        md12_reset();
+
       default:
         break;
     }
@@ -676,12 +652,6 @@ void ui_call_mode_left(void) {
 	  md3_call_mode_left();
     case 6:
       md6_call_mode_left();
-      break;
-    case 7:
-      md7_call_mode_left();
-      break;
-    case 8:
-      md8_call_mode_left();
       break;
     case 9:
       md9_call_mode_left();
@@ -709,12 +679,6 @@ void ui_call_mode_right(void) {
 	  md3_call_mode_right();
     case 6:
       md6_call_mode_left();
-      break;
-    case 7:
-      md7_call_mode_right();
-      break;
-    case 8:
-      md8_call_mode_right();
       break;
     case 9:
       md9_call_mode_right();

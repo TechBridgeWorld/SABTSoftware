@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "audio.h"
 #include "script_common.h"
+#include "script_digits.h"
 
 #define STATE_NULL 0x00
 #define STATE_MENU 0x01
@@ -72,7 +73,7 @@ void md9_reset(void) {
 	PRINTF("*** MD9 - Arithmetic practice ***\n\r");
 
 	// Global variables
-	set_mode_globals(&script_common, LANG_FILESET, MODE_FILESET);
+	set_mode_globals(&script_digits, LANG_FILESET, MODE_FILESET);
 
 	// State variables
 	md_next_state = STATE_MENU;
@@ -256,7 +257,7 @@ void md9_main(void) {
 			} else {
 				// Wrong answer
 				md_incorrect_tries++;
-				play_mp3(LANG_FILESET, MP3_WRONG);
+				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				md_next_state = STATE_REPROMPT;
 			}

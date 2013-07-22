@@ -191,7 +191,8 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name)
         if(dir->name[0] == EMPTY) //indicates end of the file list of the directory
         {
           if((flag == GET_FILE) || (flag == DELETE))
-            usart_transmit_string_to_pc_from_flash(PSTR("File does not exist!"));
+            usart_transmit_string_to_pc_from_flash(
+              PSTR("[FAT32] File does not exist\n\r"));
           return 0;   
         }
         if((dir->name[0] != DELETED) && (dir->attrib != ATTR_LONG_NAME))

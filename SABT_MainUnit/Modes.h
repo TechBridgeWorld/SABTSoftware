@@ -22,5 +22,5 @@
 #include "MD9.h" // Maths practice
 #include "MD10.h"// Braille Contractions
 #include "MD11.h"// Everyday Noises Game
-
+#include "md12.h"// Kannada braille practice
 #endif /* _MODES_H_ */

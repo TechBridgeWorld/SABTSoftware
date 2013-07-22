@@ -46,6 +46,7 @@ extern char io_dot;
 extern char io_cell;
 extern char io_line[MAX_BUF_SIZE];
 extern glyph_t* io_parsed[MAX_BUF_SIZE];
+extern bool io_user_abort;
 
 // Basic IO functions
 void io_init(void);
@@ -55,11 +56,10 @@ bool get_line(void);
 
 // Intermediate IO functions
 bool get_number(bool* valid, int* res);
-bool get_character(bool* valid, int* res);
+bool get_character(glyph_t** res);
 bool parse_letter(void);
 bool parse_digit(void);
 bool parse_symbol(void);
-bool parse_character(void);
 bool parse_word(void);
 bool parse_string(void);
 
