@@ -26,6 +26,7 @@
 #define MP3_FIRST_CELL "FCEL"
 #define MP3_LAST_CELL "LCEL"
 #define MP3_NEXT_CELL "NCEL"
+#define MP3_PREV_CELL "PCEL"
 #define MP3_NEXT_LETTER "NLET"
 #define MP3_BLANK "BLNK"
 #define MP3_NEXT_PATTERN "NPAT"

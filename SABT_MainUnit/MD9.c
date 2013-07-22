@@ -40,6 +40,7 @@
 #define MP3_MENU	"MENU" //Menu
 // Level select prompt
 #define MP3_LVLSEL "LVSL" //Level select
+#define MP3_INSTRUCTIONS "INST"
 // Pre-question prompt
 #define MP3_PREQUES "WHIS" //What is
 // In-question operators
@@ -199,18 +200,21 @@ void md9_main(void) {
 				case '1':
 					PRINTF("[MD9] Level: 1\n\r");
 					md_level = LEVEL_1;
+					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '2':
 					PRINTF("[MD9] Level: 2\n\r");
 					md_level = LEVEL_2;
+					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '3':
 					PRINTF("[MD9] Level: 3\n\r");
 					md_level = LEVEL_3;
+					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
@@ -234,6 +238,12 @@ void md9_main(void) {
 			break;
 
 		case STATE_INPUT:
+			if (io_user_abort == true) {
+				PRINTF("[MD12] User aborted input\n\r");
+				md_next_state = STATE_REPROMPT;
+				io_init();
+				break;
+			}
 			if (get_number(&md_input_valid, &md_usr_res)) {
 				if (md_input_valid) {
 					sprintf(dbgstr, "[MD9] User answer: %d\n\r", md_usr_res);
@@ -259,12 +269,15 @@ void md9_main(void) {
 				md_incorrect_tries++;
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-				md_next_state = STATE_REPROMPT;
+				if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
+					md_next_state = STATE_REPROMPT;
+				} else {
+					md_next_state = STATE_INPUT;
+				}
 			}
 			break;
 
 		case STATE_REPROMPT:
-			if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
 				md_last_dot = create_dialog(MP3_SKIP, DOT_1 | DOT_2 | DOT_3);
 				switch (md_last_dot) {
 					
@@ -295,9 +308,6 @@ void md9_main(void) {
 					default:
 						break;
 				}
-			} else {
-				md_next_state = STATE_INPUT;
-			}
 			break;
 
 		default:

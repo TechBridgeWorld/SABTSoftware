@@ -189,18 +189,16 @@ void initialize_system(void)
   init_sd_card(true);
   PRINTF("SD card...OK\n\r");
 
-  play_mp3_file((unsigned char*)"SYS_INIT.mp3");
+  play_mp3_file((unsigned char*)"SYS_WELC.mp3");
 
   ui_check_modes();
   PRINTF("Parsing modes...OK\n\r");
 
-  /* PRINTF("Reading dictionary file...");
+  PRINTF("Reading dictionary file...");
   init_read_dict((unsigned char *)"wordsEn.txt");
   while(!done_rd_dict){
     read_dict_file();
   }
-  PRINTF("OK\n\r");
-  */
 
   PRINTF("Datatype info\n\r");
   sprintf(dbgstr, "char: %d bytes\n\r", sizeof(char));
@@ -214,7 +212,5 @@ void initialize_system(void)
   sprintf(dbgstr, "void*: %d bytes\n\r", sizeof(void*));
   PRINTF(dbgstr);
 
-  play_mp3("SYS_","WELC");
-  play_mp3("SYS_","MINT");
-  play_mp3("SYS_","MINS");
+  play_mp3("SYS_","MENU");
 }

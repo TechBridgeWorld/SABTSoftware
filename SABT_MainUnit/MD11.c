@@ -307,7 +307,7 @@ void md11_call_mode_right(void)
 {
 // skips the noise 
  if (md11_current_state != STATE_PROMPT) md11_prev_state =  md11_current_state;
- play_mp3("md11_","SKIP");
+ play_mp3("MD11","SKIP");
  md11_current_state = STATE_PROMPT;
 }
 /**

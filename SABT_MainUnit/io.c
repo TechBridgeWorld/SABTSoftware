@@ -418,6 +418,7 @@ void io_line_next_cell(void) {
 	// Next cell only if not at end of buffer (saves space for EOT)
 	if (io_line_cell_index + 2 < MAX_BUF_SIZE) {
 		io_line_cell_index++;
+		play_mp3(lang_fileset, MP3_NEXT_CELL);
 	} else {
 		play_mp3(lang_fileset, MP3_LAST_CELL);
 	}
@@ -432,6 +433,7 @@ void io_line_prev_cell(void) {
 	// Previous cell only if not already on first cell
 	if (io_line_cell_index > 0) {
 		io_line_cell_index--;
+		play_mp3(lang_fileset, MP3_PREV_CELL);
 	} else {
 		play_mp3(lang_fileset, MP3_FIRST_CELL);
 	}

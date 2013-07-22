@@ -14,7 +14,9 @@ DOTC - Cancel
 FCEL - First Cell
 LCEL - Last Cell
 NCEL - Next Cell
+PCEL - Previous Cell
 NLET - Next Letter
+NPAT - Next Paattern
 BLNK - Blank
 
 *** Common System Prompts ***
