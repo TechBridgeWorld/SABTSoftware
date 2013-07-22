@@ -279,7 +279,7 @@ void md9_main(void) {
 
 		case STATE_REPROMPT:
 				md_last_dot = create_dialog(MP3_SKIP,
-					ENTER_CANCEL, DOT_1 | DOT_2 | DOT_3);
+					ENTER_CANCEL | DOT_1 | DOT_2 | DOT_3);
 				switch (md_last_dot) {
 					
 					case NO_DOTS:
