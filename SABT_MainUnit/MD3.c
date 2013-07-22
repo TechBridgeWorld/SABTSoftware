@@ -12,6 +12,8 @@
 #include "audio.h"
 #include "common.h"
 #include "letter_globals.h"
+#include "script_common.h"
+#include "script_english.h" 
 
 int md3_current_state, md3_prev_state = 0;
 static int game_mode = 0;
@@ -79,6 +81,7 @@ int choose_animal()
 
 void md3_reset(void)
 {
+  set_mode_globals(&script_english, "ENG_", "MD3_");
   md3_current_state = 0;
   md3_last_dot = 0;
   mistakes = 0;
@@ -142,7 +145,7 @@ void md3_main(void)
       } else if (valid_letter(last_cell))
       {
         char buf[16];
-        sprintf(buf, "%c", entered_letter);
+        sprintf(buf, "ENG_%c", entered_letter);
         md3_current_state = STATE_CHECK_IF_CORRECT;
 		if (!game_mode)
 	    {
@@ -159,7 +162,7 @@ void md3_main(void)
       {
 	    mistakes = mistakes+1;
 		PRINTF("mistake_inv");
-		 play_mp3(NULL,"INVPAT");
+		 play_mp3("ENG_","INVP");
 		if (mistakes == 3){
 			md3_current_state = STATE_WORD_HINT;
 		}
@@ -174,7 +177,7 @@ void md3_main(void)
       if(length_entered_word > 0)
       {
         char buf[16];
-        sprintf(buf, "%c", animal[current_word_index]);
+        sprintf(buf, "ENG_%c", animal[current_word_index]);
         play_mp3(NULL,buf);
         current_word_index++;
       }
@@ -203,7 +206,7 @@ void md3_main(void)
 
     case STATE_WRONG_INPUT:
 	  
-      play_mp3(NULL,"no");
+      play_mp3("ENG_","NO");
 	  mistakes = mistakes + 1;
 	  PRINTF("mistakes");
 
@@ -218,17 +221,17 @@ void md3_main(void)
 
     case STATE_CORRECT_INPUT:
 	  mistakes = 3;
-      play_mp3(NULL,"good");	  
+      play_mp3("ENG_","GOOD");	  
       md3_current_state = STATE_WAIT_INPUT;
       break;
 
     case STATE_DONE_WITH_CURRENT_ANIMAL:
 	  mistakes = 0;
-	  play_mp3(NULL,"good");
-	  play_mp3(NULL,"nc_wrk");
+	  play_mp3("ENG_","GOOD");
+	  play_mp3("ENG_","NCWK");
 	  if (game_mode == 1) {
       	for (int count = 0; count < strlen(animal); count++) {
-			sprintf(spell_letter,"%c",animal[count]);
+			sprintf(spell_letter,"ENG_%c",animal[count]);
 			play_mp3(NULL,spell_letter);
 		}  	  	
 	  }
@@ -253,23 +256,23 @@ void md3_main(void)
 	  break;
 
     case STATE_WORD_HINT:
-	  play_mp3("PLS_","WRT");
+	  play_mp3("MD3_","PLWR");
 	  sprintf(animal_sound, "N%s", animal);
 	  play_mp3(NULL,animal_sound);
 	  for (int count = 0; count < strlen(animal); count++) {
-			sprintf(spell_letter,"%c",animal[count]);
+			sprintf(spell_letter,"ENG_%c",animal[count]);
 			play_mp3(NULL,spell_letter);
 	  }
 	  md3_current_state = STATE_WAIT_INPUT;  	  
 	  break;
 
 	case STATE_LETTER_HINT:
-	  play_mp3("PLS_","WRT");
+	  play_mp3("MD3_","PLWR");
 	  char let[3];
       sprintf(let, "%c", animal[length_entered_word]);
 	  PRINTF(let);
       play_mp3(NULL,let);
-	  play_mp3(NULL,"press");	  
+	  play_mp3("MD3_","PRSS");	  
 	  md3_current_state = STATE_BUTTON_HINT;
 	  break;
 
@@ -340,7 +343,7 @@ void md3_call_mode_no_answer(void)
 void md3_input_dot(char this_dot)
 {
   md3_last_dot = this_dot;
-  play_requested_dot(md3_last_dot);
+  play_dot(md3_last_dot);
 }
 
 /**

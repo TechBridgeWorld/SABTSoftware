@@ -24,6 +24,9 @@ INVP - Invalid Pattern
 CORR - Correct answer
 WRNG - Incorrect answer
 TAGA - Try again
+GOOD - Good
+NO - No
+NCWK - Nice Work
 
 *** Digits and Numbers (optional) ***
 #NEG - Negative
