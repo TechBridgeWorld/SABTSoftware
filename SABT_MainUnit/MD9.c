@@ -278,7 +278,8 @@ void md9_main(void) {
 			break;
 
 		case STATE_REPROMPT:
-				md_last_dot = create_dialog(MP3_SKIP, DOT_1 | DOT_2 | DOT_3);
+				md_last_dot = create_dialog(MP3_SKIP,
+					ENTER_CANCEL, DOT_1 | DOT_2 | DOT_3);
 				switch (md_last_dot) {
 					
 					case NO_DOTS:
@@ -303,6 +304,13 @@ void md9_main(void) {
 					case '3':
 						md_next_state = STATE_INPUT;
 						md_incorrect_tries = 0;
+						break;
+
+					case CANCEL:
+						md9_reset();
+						break;
+
+					case ENTER:
 						break;
 
 					default:
