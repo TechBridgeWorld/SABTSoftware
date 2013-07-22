@@ -42,7 +42,7 @@
 #define ENG_Y 0b111101
 #define ENG_Z 0b110101
 
-glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
+static glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
 	{ENG_A, "A", NULL, NULL},
 	{ENG_B, "B", NULL, NULL},
 	{ENG_C, "C", NULL, NULL},
@@ -71,7 +71,7 @@ glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
 	{ENG_Z, "Z", NULL, NULL}
 };
  
-script_t script_english = {
+static script_t script_english = {
 	SCRIPT_ENGLISH_LENGTH,
 	0,
 	SCRIPT_ENGLISH_FILESET,

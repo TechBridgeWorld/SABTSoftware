@@ -6,8 +6,18 @@
  * @author Kory Stiger (kstiger)
  */
 
+// MP3 prompts
+#define MODE_FILESET "MD1_"
+#define LANG_FILESET "ENG_"
+#define MP3_INTRODUCTION "INT"
+#define MP3_FIND_DOT "FNDT"
+
 #include "Globals.h"
 #include "MD1.h"
+#include "audio.h"
+#include "script_common.h"
+#include "script_english.h"
+#include "common.h"
 
 static char last_dot;                   // char representing last big dot pressed
 char used_number[6] = {0, 0, 0, 0, 0, 0};
@@ -56,29 +66,13 @@ char random_number_as_char()
 }
 
 /**
- * @brief echo the number of the dot pressed
- * @param last_dot - unsigned char. Which dot to play
- * @return Void
- */
-void md1_play_requested_dot(unsigned char last_dot)
-{
-  char buf[10];
-
-  // Check for validity of number
-  if (last_dot >= '1' && last_dot <= '6')
-  {
-    sprintf(buf, "dot_%c.MP3", last_dot);
-    request_to_play_mp3_file(buf);
-  }
-}
-
-/**
  * @brief Reset mode 1 to starting state
  *        Should be useful for error handling
  * @return Void
  */
 void md1_reset(void)
 {
+  set_mode_globals(&script_english, "ENG_", "MD1_");
   current_state = STATE_INITIAL;
 }
 
@@ -96,17 +90,17 @@ void md1_main(void)
       PRINTF("[MD1] Entering MD1\n\r");
       used_num_cnt = 0;
       // Play the introductory message for Mode 1
-      request_to_play_mp3_file("MD1INT.MP3");
+      play_mp3(MODE_FILESET,MP3_INTRODUCTION);
       current_state = STATE_REQUEST_INPUT1;
       break;
     case STATE_REQUEST_INPUT1:
-      request_to_play_mp3_file("find_dot.MP3");
+      play_mp3(MODE_FILESET,MP3_FIND_DOT);
       expected_dot = random_number_as_char();
       current_state = STATE_REQUEST_INPUT2;
       break;
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
-      md1_play_requested_dot(expected_dot);
+      play_dot(expected_dot);
       current_state = STATE_WAIT_INPUT;
       break;
     case STATE_WAIT_INPUT:
@@ -116,13 +110,13 @@ void md1_main(void)
     case STATE_PROC_INPUT:
       if(last_dot != expected_dot)
       {
-        request_to_play_mp3_file("no.MP3");
+        play_mp3(LANG_FILESET,MP3_INCORRECT);
         last_dot = 0;
         current_state = STATE_WAIT_INPUT;
       }
       else
       {
-        request_to_play_mp3_file("good.MP3");
+        play_mp3(LANG_FILESET,MP3_CORRECT);
         last_dot = 0;
         current_state = STATE_REQUEST_INPUT1;
       }
@@ -138,7 +132,7 @@ void md1_main(void)
  */
 void md1_call_mode_yes_answer(void)
 {
-  request_to_play_mp3_file("find_dot.MP3");
+  play_mp3(MODE_FILESET,MP3_FIND_DOT);
   current_state = STATE_REQUEST_INPUT2;
 }
 
@@ -152,8 +146,6 @@ void md1_call_mode_no_answer(void) {}
  */
 void md1_input_dot(char this_dot)
 {
-  SENDBYTE(this_dot);
-  PRINTF("\n\r");
   last_dot = this_dot;
   current_state = STATE_PROC_INPUT;
 }

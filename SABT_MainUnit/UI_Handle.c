@@ -120,8 +120,8 @@ void ui_check_modes(void)
   NEWLINE;
 
   ui_is_mode_selected = false;
-  ui_current_mode_index = 0;
-  ui_current_mode_number = ui_modes[ui_current_mode_index];
+  ui_current_mode_index = -1;
+  ui_current_mode_number = -1;
 }
 
 /**
@@ -274,7 +274,6 @@ void ui_control_key_pressed(void)
       //Cancel MP3 prompt
       if (playing_sound) {
         vs1053_skip_play = true;
-        clear_playlist();
         io_dot = NO_DOTS;
         return;
       }
@@ -362,9 +361,6 @@ void ui_call_mode_yes_answer(void)
     case 1:
       md1_call_mode_yes_answer();
       break;
-    case 2:
-      md2_call_mode_yes_answer();
-      break;
     case 3:
       md3_call_mode_yes_answer();
       break;
@@ -406,9 +402,6 @@ void ui_call_mode_no_answer(void)
     case 1:
       md1_call_mode_no_answer();
       break;
-    case 2:
-      md2_call_mode_no_answer();
-      break;
     case 3:
       md3_call_mode_no_answer();
       break;
@@ -446,9 +439,6 @@ void ui_input_dot_to_current_mode(char this_dot)
       {
         case 1:
           md1_input_dot(this_dot);
-          break;
-        case 2:
-          md2_input_dot(this_dot);
           break;
         case 3:
           md3_input_dot(this_dot);
@@ -498,9 +488,6 @@ void ui_input_cell_to_current_mode(char this_cell)
     {
       case 1:
         md1_input_cell(this_cell);
-        break;
-      case 2:
-        md2_input_cell(this_cell);
         break;
       case 3:
         md3_input_cell(this_cell);

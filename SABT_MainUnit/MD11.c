@@ -272,19 +272,9 @@ void md11_main(void)
 	  break;
 
 	case STATE_BUTTON_HINT:
-      curr_button += 1;
-      char bits = get_bits_from_letters(noise[length_entered_word]);
-      char curr_bit = (bits >> (CHARTOINT(curr_button) - 1)) & 1;
-      //get the bits for each depending on button count - and play sound if bit is set
-      if(curr_bit && curr_button >= '1' && curr_button <= '6'){
-        play_requested_dot(curr_button);
-      }
-
-      if(CHARTOINT(curr_button) == NUM_BUT)
-      {
-        md11_current_state = STATE_WAIT_INPUT;
-        curr_button = '0'; 
-      }
+      play_pattern(noise[length_entered_word]);
+      md11_current_state = STATE_WAIT_INPUT;
+      break;
       break;
   }
 }
