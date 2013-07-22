@@ -377,9 +377,6 @@ void ui_call_mode_yes_answer(void)
     case 6:
       md6_call_mode_yes_answer();
       break;
-    case 8:
-      md8_call_mode_yes_answer();
-      break;
 
     case 9:
       md9_call_mode_yes_answer();
@@ -424,9 +421,6 @@ void ui_call_mode_no_answer(void)
     case 6:
       md6_call_mode_no_answer();
       break;
-    case 8:
-      md8_call_mode_no_answer();
-      break;
     case 9:
       md9_call_mode_no_answer();
       break;
@@ -467,9 +461,6 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
         case 6:
           md6_input_dot(this_dot);
-          break;
-        case 8:
-          md8_input_dot(this_dot);
           break;
 
         case 9:
@@ -522,9 +513,6 @@ void ui_input_cell_to_current_mode(char this_cell)
         break;
       case 6:
         md6_input_cell(this_cell);
-        break;
-      case 8:
-        md8_input_cell(this_cell);
         break;
       case 9:
         md9_input_cell(this_cell);
@@ -665,9 +653,6 @@ void ui_call_mode_left(void) {
     case 6:
       md6_call_mode_left();
       break;
-    case 8:
-      md8_call_mode_left();
-      break;
     case 9:
       md9_call_mode_left();
       break;
@@ -694,9 +679,6 @@ void ui_call_mode_right(void) {
 	  md3_call_mode_right();
     case 6:
       md6_call_mode_left();
-      break;
-    case 8:
-      md8_call_mode_right();
       break;
     case 9:
       md9_call_mode_right();

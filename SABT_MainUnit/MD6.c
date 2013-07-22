@@ -89,7 +89,7 @@ void md6_main(void) {
     // If user presses ENTER, then check dot sequence for valid letter
     // and provide feedback
     case MD6_STATE_CHECK:
-      this_glyph = search_script(NULL, button_bits);
+      this_glyph = search_script(&script_english, button_bits);
       play_glyph(this_glyph);
       next_state = MD6_STATE_INPUT;
       button_bits = 0x00;

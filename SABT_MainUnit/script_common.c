@@ -6,6 +6,7 @@
 
 #include "glyph.h"
 #include "script_common.h"
+#include "script_digits.h"
 #include "audio.h"
 #include "globals.h"
 #include "common.h"
@@ -15,47 +16,15 @@
 #include <stdbool.h>
 #include <string.h>
 
-// *NOTE* - Common script MP3s must be part of every language
-#define SCRIPT_COMMON_DEFAULT_FILESET "ENG_"
-
-// Numbers script bit patterns
-#define BLANK				0b000000
-#define NUM1 				0b000001
-#define NUM2				0b000011
-#define NUM3				0b001001
-#define NUM4				0b011001
-#define NUM5				0b010001
-#define NUM6				0b001011
-#define NUM7				0b011011
-#define NUM8				0b010011
-#define NUM9				0b001010
-#define NUM0				0b011010
-#define NUMSIGN				0b111100
-
-// Numbers script array
-static glyph_t glyphs_common[SCRIPT_COMMON_LENGTH] = {
-	{BLANK, MP3_BLANK, NULL, NULL},
-	{NUM1, "#1", NULL, NULL},
-	{NUM2, "#2", NULL, NULL},
-	{NUM3, "#3", NULL, NULL},
-	{NUM4, "#4", NULL, NULL},
-	{NUM5, "#5", NULL, NULL},
-	{NUM6, "#6", NULL, NULL},
-	{NUM7, "#7", NULL, NULL},
-	{NUM8, "#8", NULL, NULL},
-	{NUM9, "#9", NULL, NULL},
-	{NUM0, "#0", NULL, NULL},
-	{NUMSIGN, "#NUM", NULL, NULL}
-};
-
-script_t script_common = {
-	SCRIPT_COMMON_LENGTH,
-	0,
-	SCRIPT_COMMON_DEFAULT_FILESET,
-	glyphs_common
-};
 
 script_t* lang_script = NULL;
+
+glyph_t blank_cell = {
+	0x00,
+	MP3_BLANK,
+	NULL,
+	NULL
+};
 
 /*
 * @brief Resets a script's indices
@@ -93,10 +62,15 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 		return NULL;
 	}
 
+	if (curr_pattern == 0x00) {
+		PRINTF("[IO] Blank cell\n\r");
+		return &blank_cell;
+	}
+
 	// If no match found in script, return NULL
 	curr_glyph = search_script(script, curr_pattern);
 	if (curr_glyph == NULL) {
-		curr_glyph = search_script(&script_common, curr_pattern);
+		curr_glyph = search_script(&script_digits, curr_pattern);
 		if (curr_glyph == NULL) {
 			PRINTF("[IO] Matching glyph not found; returning NULL\n\r");
 			return NULL;
@@ -287,5 +261,5 @@ bool is_blank(glyph_t* curr_glyph) {
 	if (curr_glyph == NULL)
 		return false;
 	else
-		return (curr_glyph->pattern == BLANK);
+		return (curr_glyph->pattern == 0x00);
 }

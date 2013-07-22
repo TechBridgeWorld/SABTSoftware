@@ -11,13 +11,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define SCRIPT_COMMON_LENGTH 12
 #define SYS_FILESET "SYS_"
 
 // Common SYS sounds
 #define MP3_TADA "TADA"
 
-// Common lang-specific MP3 prompts
+// Common lang-inspecific MP3 prompts
 
 #define MP3_INVALID_PATTERN "INVP"
 #define MP3_CORRECT "CORR"
@@ -29,6 +28,7 @@
 #define MP3_NEXT_CELL "NCEL"
 #define MP3_NEXT_LETTER "NLET"
 #define MP3_BLANK "BLNK"
+#define MP3_NEXT_PATTERN "NPAT"
 
 extern script_t* lang_script;
 extern script_t script_common;
