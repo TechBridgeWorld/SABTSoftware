@@ -9,6 +9,8 @@
 #include "audio.h"
 #include "common.h"
 #include "letter_globals.h"
+#include "script_common.h"
+#include "script_english.h"
 
 int md11_current_state, md11_prev_state = 0;
 static int game_mode = 0;
@@ -16,10 +18,10 @@ char md11_last_dot, last_cell, expected_dot;
 static int mistakes = 0;
 
 
-char *noise_list[11] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
+char *noise_list[10] = {"plane", "rain", "bell", "horn", "auto",
     "truck", "train", "siren", "phone", "clock"};
 
-int noise_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
+int noise_used_list[10] = {0,0,0,0,0,0,0,0,0,0};
 
 
 /**
@@ -36,7 +38,7 @@ int choose_noise()
   int i;
 
   num *= PRIME;
-  num = (abs(num) % 11);
+  num = (abs(num) % 10);
 
   char buf[10];
   sprintf(buf, "num=%i\r\n", num);
@@ -46,12 +48,12 @@ int choose_noise()
   {
     num = TCNT1;
     num *= PRIME;
-    num = (abs(num) % 11);
+    num = (abs(num) % 10);
   }
 
   noises_used_list[num] = 1;
 
-  for(i = 0; i < 11; i ++)
+  for(i = 0; i < 10; i ++)
   {
     sprintf(buf, "arr=%i, ",noises_used_list[i] );
     PRINTF(buf);
@@ -64,10 +66,10 @@ int choose_noise()
 
   // increment noises_used until we've used all 11 noises then reset everything
   noises_used++;
-  if (noises_used == 11)
+  if (noises_used == 10)
   {
     noises_used = 0;
-    for (i = 0; i < 11; i++)
+    for (i = 0; i < 10; i++)
       noises_used_list[i] = 0;
   }
 
@@ -76,6 +78,7 @@ int choose_noise()
 
 void md11_reset(void)
 {
+  set_mode_globals(&script_english, "ENG_", "MD11");
   md11_current_state = 0;
   md11_last_dot = 0;
   mistakes = 0;
@@ -97,7 +100,7 @@ void md11_main(void)
   switch(md11_current_state)
   {
     case STATE_INITIAL:
-      play_mp3("MD11","_INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3("MD11","INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       noises_used = 0;
@@ -140,7 +143,7 @@ void md11_main(void)
       } else if (valid_letter(last_cell))
       {
         char buf[16];
-        sprintf(buf, "%c", entered_letter);
+        sprintf(buf, "ENG_%c", entered_letter);
         md11_current_state = STATE_CHECK_IF_CORRECT;
 		if (!game_mode)
 	    {
@@ -157,7 +160,7 @@ void md11_main(void)
       {
 	    mistakes = mistakes+1;
 		PRINTF("mistake_inv");
-		 play_mp3(NULL,"INVPAT");
+		 play_mp3("ENG_","INVP");
 		if (mistakes == 3){
 			md11_current_state = STATE_WORD_HINT;
 		}
@@ -172,7 +175,7 @@ void md11_main(void)
       if(length_entered_word > 0)
       {
         char buf[16];
-        sprintf(buf, "%c", noise[current_word_index]);
+        sprintf(buf, "ENG_%c", noise[current_word_index]);
         play_mp3(NULL,buf);
         current_word_index++;
       }
@@ -201,7 +204,7 @@ void md11_main(void)
 
     case STATE_WRONG_INPUT:
 	  
-      play_mp3(NULL,"no");
+      play_mp3("ENG_","NO");
 	  mistakes = mistakes + 1;
 	  PRINTF("mistakes");
 
@@ -216,17 +219,17 @@ void md11_main(void)
 
     case STATE_CORRECT_INPUT:
 	  mistakes = 3;
-      play_mp3(NULL,"good");	  
+      play_mp3("ENG_","GOOD");	  
       md11_current_state = STATE_WAIT_INPUT;
       break;
 
     case STATE_DONE_WITH_CURRENT_NOISE:
 	  mistakes = 0;
-	  play_mp3(NULL,"good");
-	  play_mp3(NULL,"nc_wrk");
+	  play_mp3("ENG_","GOOD");
+	  play_mp3("ENG_","NCWK");
 	  if (game_mode == 1) {
       	for (int count = 0; count < strlen(noise); count++) {
-			sprintf(spell_letter,"%c",noise[count]);
+			sprintf(spell_letter,"ENG_%c",noise[count]);
 			play_mp3(NULL,spell_letter);
 		}  	  	
 	  }
@@ -242,7 +245,7 @@ void md11_main(void)
 	  sprintf(noise_sound, "N%s", noise);
 	  play_mp3(NULL,noise_sound);
 	  if (game_mode == 2){
-		  play_mp3("MD11","_LKE");
+		  play_mp3("MD11","LIKE");
 		  play_mp3(NULL,noise);
 		  }
 	  md11_current_state = STATE_REQUEST_INPUT1;
@@ -251,23 +254,23 @@ void md11_main(void)
 	  break;
 
     case STATE_WORD_HINT:
-	  play_mp3("PLS_","WRT");
+	  play_mp3("MD11","PLWR");
 	  sprintf(noise_sound, "N%s", noise);
 	  play_mp3(NULL,noise_sound);
 	  for (int count = 0; count < strlen(noise); count++) {
-			sprintf(spell_letter,"%c",noise[count]);
+			sprintf(spell_letter,"ENG_%c",noise[count]);
 			play_mp3(NULL,spell_letter);
 	  }
 	  md11_current_state = STATE_WAIT_INPUT;  	  
 	  break;
 
 	case STATE_LETTER_HINT:
-	  play_mp3("PLS_","WRT");
-	  char let[3];
-      sprintf(let, "%c", noise[length_entered_word]);
+	  play_mp3("MD11","PLWR");
+	  char let[8];
+      sprintf(let, "ENG_%c", noise[length_entered_word]);
 	  PRINTF(let);
       play_mp3(NULL,let);
-	  play_mp3(NULL,"press");	  
+	  play_mp3("MD11","PRSS");	  
 	  md11_current_state = STATE_BUTTON_HINT;
 	  break;
 
@@ -322,7 +325,7 @@ void md11_call_mode_no_answer(void)
    }  
    else 
    {  
-      play_mp3("MD11","_INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3("MD11","INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; 
       noises_used = 0;
@@ -339,7 +342,7 @@ void md11_call_mode_no_answer(void)
 void md11_input_dot(char this_dot)
 {
   md11_last_dot = this_dot;
-  play_requested_dot(md11_last_dot);
+  play_dot(md11_last_dot);
 }
 
 /**

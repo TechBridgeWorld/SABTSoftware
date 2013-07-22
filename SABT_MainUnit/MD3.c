@@ -268,7 +268,7 @@ void md3_main(void)
 
 	case STATE_LETTER_HINT:
 	  play_mp3("MD3_","PLWR");
-	  char let[3];
+	  char let[8];
       sprintf(let, "%c", animal[length_entered_word]);
 	  PRINTF(let);
       play_mp3(NULL,let);
