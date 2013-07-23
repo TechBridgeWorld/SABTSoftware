@@ -18,10 +18,10 @@ char md11_last_dot, last_cell, expected_dot;
 static int mistakes = 0;
 
 
-char *noise_list[10] = {"plane", "rain", "bell", "horn", "auto",
+char *noise_list[11] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
     "truck", "train", "siren", "phone", "clock"};
 
-int noise_used_list[10] = {0,0,0,0,0,0,0,0,0,0};
+int noise_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
 
 /**
@@ -38,9 +38,9 @@ int choose_noise()
   int i;
 
   num *= PRIME;
-  num = (abs(num) % 10);
+  num = (abs(num) % 11);
 
-  char buf[10];
+  char buf[11];
   sprintf(buf, "num=%i\r\n", num);
   PRINTF(buf);
 
@@ -48,12 +48,12 @@ int choose_noise()
   {
     num = TCNT1;
     num *= PRIME;
-    num = (abs(num) % 10);
+    num = (abs(num) % 11);
   }
 
   noises_used_list[num] = 1;
 
-  for(i = 0; i < 10; i ++)
+  for(i = 0; i < 11; i ++)
   {
     sprintf(buf, "arr=%i, ",noises_used_list[i] );
     PRINTF(buf);
@@ -66,10 +66,10 @@ int choose_noise()
 
   // increment noises_used until we've used all 11 noises then reset everything
   noises_used++;
-  if (noises_used == 10)
+  if (noises_used == 11)
   {
     noises_used = 0;
-    for (i = 0; i < 10; i++)
+    for (i = 0; i < 11; i++)
       noises_used_list[i] = 0;
   }
 
