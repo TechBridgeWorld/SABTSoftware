@@ -64,3 +64,24 @@ char get_letter_from_bits(char bits)
   return -1;
 }
 
+/**
+ * @brief Changes letter into an its Braille bit representation
+ * @param bits - char, bits that correspond to letter character
+ * @return char - letter that corresponds to Braille pattern
+ *                on error - not found bits, return -1
+ */
+char get_bits_from_letter(char letter)
+{
+  int glyph_len = 26;
+  int i;
+
+  for(i = 0; i < glyph_len; i++)
+  {
+    if(letter_arr[i] == letter)
+      return letter_bits_arr[i];
+  }
+
+  // Return error on failure (letter not present in array)
+  return -1;
+}
+

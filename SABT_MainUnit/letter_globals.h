@@ -37,5 +37,6 @@ char entered_letter; // Current letter being entered
 
 bool valid_letter(char);
 char get_letter_from_bits(char);
+char get_bits_from_letter(char);
 
 #endif

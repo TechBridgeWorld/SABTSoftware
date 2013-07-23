@@ -277,7 +277,7 @@ void md3_main(void)
 	  break;
 
 	case STATE_BUTTON_HINT:
-      play_pattern(animal[length_entered_word]);
+	    play_pattern(get_bits_from_letter(animal[length_entered_word]));
       md3_current_state = STATE_WAIT_INPUT;
       break;
   }
