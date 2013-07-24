@@ -275,7 +275,7 @@ void md11_main(void)
 	  break;
 
 	case STATE_BUTTON_HINT:
-      play_pattern(get_bits_from_letter(animal[length_entered_word]));
+      play_pattern(get_bits_from_letter(noise[length_entered_word]));
       md11_current_state = STATE_WAIT_INPUT;
       break;
       break;

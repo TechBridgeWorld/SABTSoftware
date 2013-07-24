@@ -13,7 +13,7 @@
 #define MAX_INCORRECT_TRIES 3
 #define MAX_BUF_SIZE 				256
 #define GET_CELL_CONTROL(c) ((c >> 6) & 0b00000011)
-#define GET_PATTERN(c) (c & 0b00111111)
+#define GET_CELL_PATTERN(c) (c & 0b00111111)
 
 // Button and control flow mappings
 #define NO_DOTS 						0b00000000

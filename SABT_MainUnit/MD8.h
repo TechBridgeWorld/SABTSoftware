@@ -1,6 +1,6 @@
 /**
 * @file MD8.h
-* @brief Function declarations for mode 8 - Number practice
+* @brief Function declarations for mode 8 - Hindi practice
 * @author Vivek Nair (viveknair@cmu.edu)
 */
 

@@ -50,7 +50,6 @@ static char submode = SUBMODE_NULL;
 static int index = 0;
 static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
-static int incorrect_tries = 0;
 
 void md12_reset(void) {
 	set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
@@ -60,7 +59,6 @@ void md12_reset(void) {
 	index = 0;
 	curr_glyph = NULL;
 	user_glyph = NULL;
-	incorrect_tries = 0;
 	PRINTF("[MD12] Mode reset\n\r");
 }
 
@@ -129,13 +127,6 @@ void md12_main(void) {
 			break;
 
 		case STATE_PROMPT:
-			if (incorrect_tries == MAX_INCORRECT_TRIES) {
-				sprintf(dbgstr, "[MD12] Hit incorrect try threshold\n\r");
-				PRINTF(dbgstr);
-				incorrect_tries = 0;
-				next_state = STATE_REPROMPT;
-				break;
-			}
 			switch(submode) {
 
 				case SUBMODE_LEARN:
@@ -171,19 +162,13 @@ void md12_main(void) {
 		case STATE_CHECK:
 			if (glyph_equals(curr_glyph, user_glyph)) {
 				PRINTF("[MD12] User answered correctly\n\r");
-				incorrect_tries = 0;
 				play_mp3(LANG_FILESET, MP3_CORRECT);
 				play_mp3(SYS_FILESET, MP3_TADA);
 				next_state = STATE_GENQUES;
 			} else {
 				PRINTF("[MD12] User answered incorrectly\n\r");
-				incorrect_tries++;
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
-				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
-					next_state = STATE_REPROMPT;
-				} else {
-					next_state = STATE_INPUT;
-				}
+				next_state = STATE_PROMPT;
 			}
 			break;
 
@@ -195,7 +180,6 @@ void md12_main(void) {
 
 				case '1':
 					PRINTF("[MD12] Skipping character\n\r");
-					incorrect_tries = 0;
 					next_state = STATE_GENQUES;
 					break;
 
@@ -210,7 +194,6 @@ void md12_main(void) {
 
 				case '3':
 					PRINTF("[MD12] Reissuing prompt\n\r");
-					incorrect_tries = 0;
 					next_state = STATE_PROMPT;
 					break;
 
@@ -221,7 +204,6 @@ void md12_main(void) {
 
 				case ENTER:
 					PRINTF("[MD12] Reissuing prompt\n\r");
-					incorrect_tries = 0;
 					next_state = STATE_PROMPT;
 					break;
 

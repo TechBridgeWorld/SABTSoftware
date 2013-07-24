@@ -10,5 +10,5 @@ On a Mac, the following should work (should work for *IX?):
 6. Identify the volume label for the SD card. Check under '/Volumes/'.
 7. 'diskutil unmount "VOLUMELABEL"' to unmount the SD card volume.
 6. 'sudo newfs_msdos -v "VOLUMELABEL" -F 32 /dev/rdisk#s$'
-7. Your SD card should be ready to copy files onto. Take it out and reinsert it.
+7. Your SD card should be ready to copy files onto. Mount it again using 'diskutil mount "VOLUMELABEL"'
 8. 'cp <path to sd_card_files>/* /Volumes/VOLUMELABEL/'

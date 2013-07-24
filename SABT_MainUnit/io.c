@@ -120,6 +120,9 @@ char get_cell(void) {
 				case ENTER:
 					io_user_cancel = false;
 					io_user_abort = false;
+					sprintf(dbgstr, "[IO] Cell pattern: %x\n\r",
+						ret_val | WITH_ENTER);
+					PRINTF(dbgstr);
 					return ret_val | WITH_ENTER;
 					break;
 				case LEFT:
@@ -133,12 +136,14 @@ char get_cell(void) {
 					return ret_val | WITH_RIGHT;
 					break;
 				case CANCEL:
-					if (io_user_cancel == true) {
-						io_user_abort = true;
-						io_user_cancel = false;
-					} else {
-						io_user_cancel = true;
-						io_user_abort = false;
+					if (ret_val == 0x00) {
+						if (io_user_cancel == true) {
+							io_user_abort = true;
+							io_user_cancel = false;
+						} else {
+							io_user_cancel = true;
+							io_user_abort = false;
+						}
 					}
 					return ret_val | WITH_CANCEL;
 					break;
@@ -178,7 +183,7 @@ bool get_line(void) {
 	}
 
 	char last_cell = get_cell();
-	char pattern = GET_PATTERN(last_cell);
+	char pattern = GET_CELL_PATTERN(last_cell);
 	char control = GET_CELL_CONTROL(last_cell);
 
 	// If last cell was empty, there's nothing to do so return false and wait

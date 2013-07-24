@@ -54,7 +54,6 @@
 
 // Limits
 #define MAX_DIGITS 3
-#define MAX_INCORRECT_TRIES 3
 
 // State variables
 static char md_next_state = STATE_NULL;
@@ -67,7 +66,6 @@ static int md_res = -1;
 static int md_usr_res = -1;
 static bool md_input_ready = false;
 static bool md_input_valid = false;
-static int md_incorrect_tries = 0;
 
 
 void md9_reset(void) {
@@ -87,7 +85,6 @@ void md9_reset(void) {
 	md_usr_res = -1;
 	md_input_ready = false;
 	md_input_valid = false;
-	md_incorrect_tries = 0;
 }
 
 void md9_generate_question(void) {
@@ -260,20 +257,14 @@ void md9_main(void) {
 		case STATE_CHECKANS:
 			if (md_usr_res == md_res) {
 				// Correct answer
-				md_incorrect_tries = 0;
 				play_mp3(LANG_FILESET, MP3_CORRECT);
 				play_mp3(SYS_FILESET, MP3_TADA);
 				md_next_state = STATE_GENQUES;
 			} else {
 				// Wrong answer
-				md_incorrect_tries++;
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-				if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
-					md_next_state = STATE_REPROMPT;
-				} else {
-					md_next_state = STATE_INPUT;
-				}
+				md_next_state = STATE_PROMPT;
 			}
 			break;
 
@@ -291,19 +282,16 @@ void md9_main(void) {
 						play_number(md_res);
 						play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 						md_next_state = STATE_INPUT;
-						md_incorrect_tries = 0;
 						break;
 
 					// Skipping question
 					case '2':
 						md_next_state = STATE_GENQUES;
-						md_incorrect_tries = 0;
 						break;
 
 					// Try again
 					case '3':
 						md_next_state = STATE_INPUT;
-						md_incorrect_tries = 0;
 						break;
 
 					case CANCEL:
