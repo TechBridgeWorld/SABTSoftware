@@ -29,7 +29,4 @@ void vs1053_write_data(unsigned char data);           // Write MP3 data
 void vs1053_write_command(unsigned char addr, unsigned int cmd);  
 unsigned int vs1053_read_command(unsigned char address);  //  Read an internal register
 
-
-void request_to_play_mp3_file(const char* this_file);
-
 #endif /* __VS1053_H__ */

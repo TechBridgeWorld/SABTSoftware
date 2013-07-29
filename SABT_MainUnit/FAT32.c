@@ -11,6 +11,7 @@
  */
 
 #include "Globals.h"
+#include "ui_handle.h"
 
 /**
  * @brief Reads in data data from boot sector and
@@ -432,9 +433,10 @@ unsigned char play_mp3_file(unsigned char *file_name)
   unsigned int iAudioByteCnt;
   bool end_of_file=false;
 
-  playing_sound = true;
+  uint16_t calc_crc, msg_crc;
+  uint8_t msg_len;
 
-  ui_mp3_file_pending=false;
+  playing_sound = true;
 
   error = convert_file_name (file_name); //convert file_name into FAT format
   if(error) return 2;
@@ -469,7 +471,7 @@ unsigned char play_mp3_file(unsigned char *file_name)
           vs1053_skip_play = false;
           vs1053_software_reset();
           playing_sound = false;
-          return 0;//playing stopped by user
+          return 0; //playing stopped by user
         }
         if((PINB & (1<<MP3_DREQ)))
         {
@@ -480,21 +482,61 @@ unsigned char play_mp3_file(unsigned char *file_name)
           }  
         }
 
+        /*
         // KORY CHANGED
-        //After playing a 32 bytes of data, check the user inputs
+        // After playing a 32 bytes of data, check the user inputs
         if(usart_keypad_data_ready)
         {
+          PRINTF("[IO] Keypad interrupt received\n\r");
           usart_keypad_receive_action();
         }
         if(usart_pc_data_ready)
         {
+          PRINTF("[IO] PC interrupt received\n\r");
           usart_pc_receive_action();
         }    
         if(usart_ui_message_ready) //If a message ready from the user interface, process it
         {
-          ui_parse_message(true);
+          PRINTF("[IO] Processing keypad interrupt\n\r");
+          ui_parse_message(playing_sound);
+        }
+        */
+
+        if (usart_keypad_data_ready){
+          // Process interrupts
+          usart_keypad_receive_action();
+        }
+
+        if (usart_ui_message_ready) {
+
+          msg_len = usart_ui_received_packet[2];
+          calc_crc = ui_calculate_crc((unsigned char*)usart_ui_received_packet);
+          msg_crc = usart_ui_received_packet[msg_len - 2] << 8 | 
+                      usart_ui_received_packet[msg_len - 1];
+          if (msg_crc == calc_crc) {
+            switch (usart_ui_received_packet[5]) {
+              // Deal with volume here
+              case UI_CMD_VOLU:
+                vs1053_increase_vol();
+                usart_ui_message_ready = false;
+                break;
+              case UI_CMD_VOLD:
+                vs1053_decrease_vol();
+                usart_ui_message_ready = false;
+                break;
+              default:
+                // Handle in main loop
+                playing_sound = 0;
+                return 0;
+                break;
+            }
+          } else {
+            PRINTF("[IO] CRC failed on interrupt\n\r");
+            usart_ui_message_ready = false;
+          }
         }
       }
+
       if(end_of_file)
       { 
         playing_sound = false;

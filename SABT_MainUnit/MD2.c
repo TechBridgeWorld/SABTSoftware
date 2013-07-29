@@ -35,6 +35,8 @@
 #define MP3_REPROMPT "RMEN"
 #define MP3_INSTRUCTIONS "INST"
 
+#define MAX_INCORRECT_TRIES 3
+
 // Script and fileset parameters
 #include "script_english.h"
 #define SCRIPT_ADDRESS &script_english
@@ -52,6 +54,7 @@ static glyph_t* user_glyph = NULL;
 static char cell = 0;
 static char cell_pattern = 0;
 static char cell_control = 0;
+static int incorrect_tries = 0;
 
 void md2_reset(void) {
 	set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
@@ -64,6 +67,7 @@ void md2_reset(void) {
 	cell = 0;
 	cell_pattern = 0;
 	cell_control = 0;
+	incorrect_tries = 0;
 	PRINTF("[MD2] Mode reset\n\r");
 }
 
@@ -182,14 +186,24 @@ void md2_main(void) {
 
 		case STATE_CHECK:
 			if (glyph_equals(curr_glyph, user_glyph)) {
+				incorrect_tries = 0;
 				PRINTF("[MD2] User answered correctly\n\r");
 				play_mp3(LANG_FILESET, MP3_CORRECT);
 				play_mp3(SYS_FILESET, MP3_TADA);
 				next_state = STATE_GENQUES;
 			} else {
+				incorrect_tries++;
 				PRINTF("[MD2] User answered incorrectly\n\r");
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
+				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				next_state = STATE_PROMPT;
+				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+					play_glyph(curr_glyph);
+					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
+					play_dot_sequence(curr_glyph);
+					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+					next_state = STATE_INPUT;
+				}
 			}
 			break;
 

@@ -35,6 +35,8 @@
 #define MP3_REPROMPT "RMEN"
 #define MP3_INSTRUCTIONS "INST"
 
+#define MAX_INCORRECT_TRIES 3
+
 // Script and fileset parameters
 #include "script_hindi.h"
 #define SCRIPT_ADDRESS &script_hindi
@@ -49,6 +51,7 @@ static char submode = SUBMODE_NULL;
 static int index = 0;
 static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
+static int incorrect_tries = 0;
 
 void md7_reset(void) {
 	set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
@@ -59,6 +62,7 @@ void md7_reset(void) {
 	curr_glyph = NULL;
 	user_glyph = NULL;
 	PRINTF("[MD7] Mode reset\n\r");
+	incorrect_tries = 0;
 }
 
 void md7_main(void) {
@@ -160,14 +164,24 @@ void md7_main(void) {
 
 		case STATE_CHECK:
 			if (glyph_equals(curr_glyph, user_glyph)) {
+				incorrect_tries = 0;
 				PRINTF("[MD7] User answered correctly\n\r");
 				play_mp3(LANG_FILESET, MP3_CORRECT);
 				play_mp3(SYS_FILESET, MP3_TADA);
 				next_state = STATE_GENQUES;
 			} else {
+				incorrect_tries++;
 				PRINTF("[MD7] User answered incorrectly\n\r");
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
+				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				next_state = STATE_PROMPT;
+				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+					play_glyph(curr_glyph);
+					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
+					play_dot_sequence(curr_glyph);
+					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+					next_state = STATE_INPUT;
+				}
 			}
 			break;
 

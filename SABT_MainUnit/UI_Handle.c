@@ -168,6 +168,7 @@ bool ui_parse_message(bool mp3_is_playing)
   unsigned char adc_message[10];
   uint16_t chksum = ui_calculate_crc((unsigned char*)&usart_ui_received_packet);
 
+
   // Check the checksum
   if (chksum == (usart_ui_received_packet[message_len - 2] << 8 
         | usart_ui_received_packet[message_len - 1]))
@@ -227,6 +228,7 @@ bool ui_parse_message(bool mp3_is_playing)
   } 
   else // Checksum not valid
   {
+    PRINTF("[IO] CRC failed\n\r");
     usart_ui_message_ready = false;
     return false;
   }

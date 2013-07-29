@@ -7,6 +7,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "letter_globals.h"
+#include "audio.h"
 
 int md5_current_state;
 char md5_last_dot, last_cell, expected_dot;
@@ -59,8 +60,8 @@ void md5_play_requested_dot(void)
 {
   // This will hold formatted file to access
   char req_mp3[10];
-  sprintf((char*)req_mp3, "dot_%c.MP3", md5_last_dot);
-  request_to_play_mp3_file(req_mp3);
+  sprintf((char*)req_mp3, "dot_%c", md5_last_dot);
+  play_mp3("",req_mp3);
 }
 
 void md5_reset(void)
@@ -82,7 +83,7 @@ void md5_main(void)
   switch(md5_current_state)
   {
     case MD5_STATE_INITIAL:
-      request_to_play_mp3_file("MD5INT.mp3");
+      play_mp3("","MD5INT");
       md5_current_state = MD5_STATE_SETUP_VARS;
       break;
 
@@ -115,13 +116,13 @@ void md5_main(void)
         if (bin_srch_dict((unsigned char *)player1_word))
         {
           // valid word so move on to player 2's turn
-          request_to_play_mp3_file("fnd_wrd.mp3"); // @TODO "valid word, please hand device to player 2 and press enter when ready"
+          play_mp3("","fnd_wrd"); // @TODO "valid word, please hand device to player 2 and press enter when ready"
           input_word_index = 0;
           md5_current_state = MD5_STATE_WAIT4P2;
         } else 
         {
           // word not found in dictionary, clear variables and try again
-          request_to_play_mp3_file("not_fnd.mp3"); // @TODO "word not found in dictionary, please try again"
+          play_mp3("","not_fnd"); // @TODO "word not found in dictionary, please try again"
 
           int i;
           for (i = 0; i < MAX_LEN + 1; i++)
@@ -135,8 +136,8 @@ void md5_main(void)
       } else if (md5_valid_letter(last_cell))
       {  // set entered_letter in valid_letter(), but return true or false
         char buff[7];
-        sprintf(buff, "%c.mp3", entered_letter);
-        request_to_play_mp3_file(buff);
+        sprintf(buff, "%c", entered_letter);
+        play_mp3("",buff);
 
         // reset because too many letters were input
         if (input_word_index == MAX_LEN)
@@ -158,7 +159,7 @@ void md5_main(void)
         md5_current_state = MD5_STATE_WAIT_INPUT_1;
       } else
       {
-        request_to_play_mp3_file("MD5_INV.mp3");  // @TODO "invalid pattern, please enter another letter"
+        play_mp3("","MD5_INV");  // @TODO "invalid pattern, please enter another letter"
         md5_current_state = MD5_STATE_WAIT_INPUT_1;
       }
       break;
@@ -167,7 +168,7 @@ void md5_main(void)
       if(got_input)
       {
         got_input = false;
-        request_to_play_mp3_file("your_wrd.mp3"); // @ TODO "your word is"
+        play_mp3("","your_wrd"); // @ TODO "your word is"
         md5_current_state = MD5_STATE_SAY_STATUS;
       }
       break;
@@ -180,7 +181,7 @@ void md5_main(void)
         input_word_index = 0;
         if (num_mistakes > 0)
         {
-          request_to_play_mp3_file("and_mstk.mp3");
+          play_mp3("","and_mstk");
           md5_current_state = MD5_STATE_SAY_MISTAKES;
         } else
           md5_current_state = MD5_STATE_ASK_FOR_GUESS;
@@ -189,11 +190,11 @@ void md5_main(void)
         if (input_word[input_word_index] != '0')
         {
           char buf[10];
-          sprintf(buf, "%c.mp3", input_word[input_word_index]);
-          request_to_play_mp3_file(buf);
+          sprintf(buf, "%c", input_word[input_word_index]);
+          play_mp3("",buf);
         } else
         {
-          request_to_play_mp3_file("blank.mp3");
+          play_mp3("","blank");
         }
 
         input_word_index++;
@@ -201,13 +202,13 @@ void md5_main(void)
       break;
 
     case MD5_STATE_SAY_MISTAKES:
-      sprintf(bufff, "%d_mstks.mp3", num_mistakes);
-      request_to_play_mp3_file(bufff);
+      sprintf(bufff, "%d_mstks", num_mistakes);
+      play_mp3("",bufff);
       md5_current_state = MD5_STATE_ASK_FOR_GUESS;
       break;
 
     case MD5_STATE_ASK_FOR_GUESS:
-      request_to_play_mp3_file("guess.mp3");
+      play_mp3("","guess");
       md5_current_state = MD5_STATE_WAIT_INPUT_2;
       break;
 
@@ -227,12 +228,12 @@ void md5_main(void)
       } else if (md5_valid_letter(last_cell))
       {  // set entered_letter in valid_letter(), but return true or false
         char buff[7];
-        sprintf(buff, "%c.mp3", entered_letter);
-        request_to_play_mp3_file(buff);
+        sprintf(buff, "%c", entered_letter);
+        play_mp3("",buff);
         md5_current_state = MD5_STATE_CHECK_MATCH;
       } else
       {
-        request_to_play_mp3_file("INVPAT.mp3");
+        play_mp3("","INVPAT");
         num_mistakes++;
         md5_current_state = MD5_STATE_EVALUATE_GAME;
       }
@@ -244,10 +245,10 @@ void md5_main(void)
       // into input_word.
       if (md5_place_letter())
       {
-        request_to_play_mp3_file("yes.mp3");
+        play_mp3("","yes");
       } else
       {
-        request_to_play_mp3_file("no.mp3");
+        play_mp3("","no");
         num_mistakes++;
       }
       md5_current_state = MD5_STATE_EVALUATE_GAME;
@@ -257,15 +258,15 @@ void md5_main(void)
       if (!strncmp(input_word, player1_word, strlen(player1_word)))
       {
         game_status = 1;
-        request_to_play_mp3_file("you_win.mp3");  // "you have guessed the word!"
+        play_mp3("","you_win");  // "you have guessed the word!"
       } else if (num_mistakes == 7)
       {
         game_status = 1;
-        request_to_play_mp3_file("you_lose.mp3"); // "you have made 7 mistakes the word you missed was"
+        play_mp3("","you_lose"); // "you have made 7 mistakes the word you missed was"
       }
       if (game_status == 0)
       {
-        request_to_play_mp3_file("so_far.mp3");
+        play_mp3("","so_far");
         md5_current_state = MD5_STATE_SAY_STATUS;
       } else if (game_status == 1)
       {
@@ -277,13 +278,13 @@ void md5_main(void)
       if (input_word_index == strlen(player1_word))
       {
         input_word_index = 0;
-        request_to_play_mp3_file("new_game.mp3");
+        play_mp3("","new_game");
         md5_current_state = MD5_STATE_SETUP_VARS;
       } else
       {
         char nom[10];
-        sprintf(nom, "%c.mp3", player1_word[input_word_index]);
-        request_to_play_mp3_file(nom);
+        sprintf(nom, "%c", player1_word[input_word_index]);
+        play_mp3("",nom);
         input_word_index++;
       }
       break;

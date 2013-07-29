@@ -1,0 +1,68 @@
+
+SYS_
+WELC - Welcome to the Stand Alone Braille Tutor. Please wait.
+MENU - You are in the main menu. Use the left and right buttons to choose a mode. Then press Enter to select the mode.
+MM - Main menu
+
+MD1_
+MD1 - Learn dots
+MD1_INT - You have selected dot practice
+MD1_FNDT - Find dot
+
+MD2_
+MD2 - Learn letters
+MD2_FXPD - Press dots
+MD2_INST - To submit your answer, press Enter. To move to the next or previous cells, use Left and Right. To clear a cell, press Cancel. For help, press Cancel two times.
+MD2_MENU - To learn letters, press dot 1. To practice letters, press dot 2.
+MD2_RMEN - To skip this letter, press dot 1. To hear the pattern, press dot 2. To try again, press dot 3. To change the letter, use the Left and Right buttons and then press Enter.
+
+MD3_
+MD3 - Animal Game
+MD3_INT - Welcome to the animal game. Please select a mode.
+MD3_MSEL - Enter A to play the game. Enter B to learn animal sounds.
+MD3_PLSA - Please write the name of the animal that makes the sound…
+MD3_PLSB - Please write the spelling of this animal…
+MD3_SAYS - …says…
+MD3_SKIP - To skip this animal, press Enter. To continue playing, press Cancel.
+MD3_PLWR - Please write...
+MD3_PRSS - …press...
+
+MD6_
+MD6 - Free Play
+MD6_INT - You are in the free play mode. Press the pattern for any letter and then press Enter. To clear a cell, press Cancel.
+
+MD7_
+MD7 - Hindi Braille Practice
+(Copy over the rest of the prompts from MD2)
+
+MD8_
+MD8 - Number Braille Practice
+MD8_FXPD - Copy from MD2
+MD8_INST - Copy from MD2
+MD8_MENU - To learn numbers, press dot 1. To practice numbers, press dot 2.
+MD8_RMEN - To skip this number, press dot 1. To hear the pattern, press dot 2. To try again, press dot 3. To change the number, use the Left and Right buttons and then press Enter.
+
+MD9_
+MD9 - Maths Practice
+MD9_INST - To submit your answer, press Enter. To move to the next or previous cell, use Left or Right. To clear a cell, press Cancel. For help, press Cancel two times.
+MD9_LVLS - Please select your level of difficulty. For easy, press dot 1. For medium, press dot 2. For hdifficult, press dot 3.
+MD9_MENU - For addition, press dot 1. For subtraction, press dot 2. For multiplication, press dot 3.
+MD9_SKIP - To hear the answer, press dot 1. To skip this question, press dot 2. To try again, press dot 3.
+MD9_TAIS - The answer is
+MD9_UANS - You answered
+MD9_WHIS - Please write the number that is equal to
+
+MD11_
+MD11 - Everyday noises game
+MD11INT - Welcome to the everyday noises game. Please select a mode.
+MD11MSEL - Enter A to play the game. Enter B to learn everyday noises.
+MD11PLSA - Please write the name of the object that makes the sound…
+MD11PLSB - Please write the spelling of this object…
+MD11LIKE - …sounds like…
+MD11SKIP - To skip this object, press Enter. To continue playing, press Cancel.
+MD11PLWR - Please write...
+MD11PRSS - …press...
+
+MD12
+MD12 - Kannada Braille Practice
+(Translate the rest of the prompts from MD2 into Kannada)

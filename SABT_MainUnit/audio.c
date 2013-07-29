@@ -14,6 +14,7 @@
 #include "common.h"
 #include "io.h"
 #include "script_common.h"
+#include "FAT32.h"
 
 // Maximum number of files that can be queued at a given time
 #define MAX_PLAYLIST_SIZE 32
@@ -34,6 +35,7 @@
 // Playlist supports queuing some files at a time with filenames of up to 13
 // characters
 bool playlist_empty = true;
+
 static char playlist[MAX_FILENAME_SIZE][MAX_PLAYLIST_SIZE];
 static short playlist_size = 0;
 static short playlist_index = 0;
@@ -141,7 +143,8 @@ void play_next_mp3(void) {
 	PRINTF(playlist[playlist_index]);
 	NEWLINE;
 	
-	request_to_play_mp3_file(playlist[playlist_index]);
+	play_mp3_file((unsigned char*)playlist[playlist_index]);
+
 	playlist_index++;
 
 	//If playlist is now empty, reset variables 

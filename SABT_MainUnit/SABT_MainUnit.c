@@ -84,19 +84,14 @@ int main(void)
 
     if(usart_ui_message_ready) //If a message ready from the user interface, process it
     {
-      ui_parse_message(false);
+      ui_parse_message(playing_sound);
     }
 
-    if(ui_mp3_file_pending)  //If the UI handler needs to play new file, play it (the main loop won't be called while playing another file, so don't worry)
-    {
-      play_mp3_file(g_file_name);
-    }
+    ui_run_main_of_current_mode();
 
     if (playlist_empty == false) {
       play_next_mp3();
     }
-
-    ui_run_main_of_current_mode();
   }
   return 1;
 }
@@ -152,7 +147,6 @@ ISR(USART0_RX_vect)
  */
 void initialize_system(void)
 {
-  ui_mp3_file_pending = false;
   timer_interrupt = false;      // Clear the timer interrupt flag
   playing_sound = false;
   message_count = 0;

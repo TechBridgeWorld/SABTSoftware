@@ -68,7 +68,7 @@ void usart_keypad_receive_action(void)
     if(usart_ui_receive_msgcnt == 2)
     {
       usart_ui_received_payload_len = usart_keypad_received_data;
-      usart_ui_received_packet[usart_ui_receive_msgcnt] = usart_keypad_received_data;
+      usart_ui_received_packet[2] = usart_keypad_received_data;
       usart_ui_length_received = true;
       usart_ui_receive_msgcnt++;
     }
@@ -81,6 +81,12 @@ void usart_keypad_receive_action(void)
   else
   {
     usart_ui_received_packet[usart_ui_receive_msgcnt++] = usart_keypad_received_data;
+
+    if (usart_ui_receive_msgcnt >= 19) {
+      usart_ui_message_ready = false;
+      usart_ui_header_received = false;
+      usart_ui_length_received = false;
+    }
 
     // Full message has been received
     if(usart_ui_receive_msgcnt == usart_ui_received_payload_len) 
