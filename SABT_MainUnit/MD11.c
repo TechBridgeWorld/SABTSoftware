@@ -12,25 +12,50 @@
 #include "script_common.h"
 #include "script_english.h"
 
+#define MAX_INDEX 11
+#define MODE_FILESET "MD11"
+
 int md11_current_state, md11_prev_state = 0;
 static int game_mode = 0;
 char md11_last_dot, last_cell, expected_dot;
 static int mistakes = 0;
 
-
-char *noise_list[11] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
+char *noise_list[MAX_INDEX] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
     "truck", "train", "siren", "phone", "clock"};
 
-int noise_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
+int noise_used_list[MAX_INDEX] = {0,0,0,0,0,0,0,0,0,0,0};
+
+char* noise_sounds[MAX_INDEX] = {"AER", "RAI", "BEL", "DOO", "HOR", "AUT",
+    "TRU", "TRA", "SIR", "PHO", "CLO"};
+
+/*
+* @brief Plays noises
+* @param char* noise - Noise name
+* @param bool name - true if name requested, false if sound requested
+* @return void
+*/
+void play_noise(char* noise, bool name) {
+  char filename[5];
+  for (int i = 0; i < MAX_INDEX; i++) {
+    if (strcmp(noise, noise_list[i]) == 0) {
+      // Match found
+      if (name)
+        sprintf(filename, "N%s", noise_sounds[i]);
+      else
+        sprintf(filename, "S%s", noise_sounds[i]);
+      play_mp3(MODE_FILESET, filename);
+    }
+  }
+}
 
 
 /**
  * @brief Based off of the internal timer (TCNT1) - we generate
- *        a psuedo-random number. Turn that into a number from 1 - 11
- *        which corresponds to 1 of 11 different noises. Check which
+ *        a psuedo-random number. Turn that into a number from 1 - MAX_INDEX
+ *        which corresponds to 1 of MAX_INDEX different noises. Check which
  *        noises have been played already to be sure to play all of
  *        the different noises before repeating the list.
- * @return int - number between 1 - 11 corresponding to the noise file to play
+ * @return int - number between 1 - MAX_INDEX corresponding to the noise file to play
  */
 int choose_noise()
 {
@@ -38,7 +63,7 @@ int choose_noise()
   int i;
 
   num *= PRIME;
-  num = (abs(num) % 11);
+  num = (abs(num) % MAX_INDEX);
 
   char buf[11];
   sprintf(buf, "num=%i\r\n", num);
@@ -48,12 +73,12 @@ int choose_noise()
   {
     num = TCNT1;
     num *= PRIME;
-    num = (abs(num) % 11);
+    num = (abs(num) % MAX_INDEX);
   }
 
   noises_used_list[num] = 1;
 
-  for(i = 0; i < 11; i ++)
+  for(i = 0; i < MAX_INDEX; i ++)
   {
     sprintf(buf, "arr=%i, ",noises_used_list[i] );
     PRINTF(buf);
@@ -64,12 +89,12 @@ int choose_noise()
   PRINTF(buf);
   TX_NEWLINE_PC;
 
-  // increment noises_used until we've used all 11 noises then reset everything
+  // increment noises_used until we've used all MAX_INDEX noises then reset everything
   noises_used++;
-  if (noises_used == 11)
+  if (noises_used == MAX_INDEX)
   {
     noises_used = 0;
-    for (i = 0; i < 11; i++)
+    for (i = 0; i < MAX_INDEX; i++)
       noises_used_list[i] = 0;
   }
 
@@ -78,7 +103,7 @@ int choose_noise()
 
 void md11_reset(void)
 {
-  set_mode_globals(&script_english, "ENG_", "MD11");
+  set_mode_globals(&script_english, "ENG_", MODE_FILESET);
   md11_current_state = 0;
   md11_last_dot = 0;
   mistakes = 0;
@@ -94,13 +119,11 @@ void md11_reset(void)
  */
 void md11_main(void)
 {
-  char noise_file[16];
-  char noise_sound[16];
   char spell_letter[8];
   switch(md11_current_state)
   {
     case STATE_INITIAL:
-      play_mp3("MD11","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3(MODE_FILESET,"INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       noises_used = 0;
@@ -108,8 +131,8 @@ void md11_main(void)
       break;
 
     case STATE_REQUEST_INPUT1:
-	  if (game_mode == 1) play_mp3("MD11","PLSA");
-	  else if (game_mode == 2) play_mp3("MD11","PLSB");
+	  if (game_mode == 1) play_mp3(MODE_FILESET,"PLSA");
+	  else if (game_mode == 2) play_mp3(MODE_FILESET,"PLSB");
       length_entered_word = 0;
       current_word_index = 0;
       noise = noise_list[choose_noise()];
@@ -118,10 +141,10 @@ void md11_main(void)
 
     case STATE_REQUEST_INPUT2:
 
-      if (game_mode == 1) play_mp3(NULL,noise);
-      else if (game_mode == 2) { sprintf(noise_file, "N%s", noise);
-	  play_mp3(NULL,noise_file);}
-
+      if (game_mode == 1)
+        play_noise(noise, false);
+      else if (game_mode == 2)
+        play_noise(noise, true);
       md11_current_state = STATE_WAIT_INPUT;
       break;
 
@@ -237,16 +260,15 @@ void md11_main(void)
       break;
 
     case STATE_SELECT_MODE:
-	  play_mp3("MD11","MSEL");
+	  play_mp3(MODE_FILESET,"MSEL");
 	  md11_current_state = STATE_WAIT_INPUT;
 	  break;
  
     case STATE_PLAY_SOUND:
-	  sprintf(noise_sound, "N%s", noise);
-	  play_mp3(NULL,noise_sound);
+	  play_noise(noise, true);
 	  if (game_mode == 2){
-		  play_mp3("MD11","LIKE");
-		  play_mp3(NULL,noise);
+		  play_mp3(MODE_FILESET,"LIKE");
+		  play_noise(noise, false);
 		  }
 	  md11_current_state = STATE_REQUEST_INPUT1;
 	  break;
@@ -254,9 +276,8 @@ void md11_main(void)
 	  break;
 
     case STATE_WORD_HINT:
-	  play_mp3("MD11","PLWR");
-	  sprintf(noise_sound, "N%s", noise);
-	  play_mp3(NULL,noise_sound);
+	  play_mp3(MODE_FILESET,"PLWR");
+	  play_noise(noise, true);
 	  for (int count = 0; count < strlen(noise); count++) {
 			sprintf(spell_letter,"ENG_%c",noise[count]);
 			play_mp3(NULL,spell_letter);
@@ -265,12 +286,12 @@ void md11_main(void)
 	  break;
 
 	case STATE_LETTER_HINT:
-	  play_mp3("MD11","PLWR");
+	  play_mp3(MODE_FILESET,"PLWR");
 	  char let[8];
       sprintf(let, "ENG_%c", noise[length_entered_word]);
 	  PRINTF(let);
       play_mp3(NULL,let);
-	  play_mp3("MD11","PRSS");	  
+	  play_mp3(MODE_FILESET,"PRSS");	  
 	  md11_current_state = STATE_BUTTON_HINT;
 	  break;
 
@@ -300,7 +321,7 @@ void md11_call_mode_right(void)
 {
 // skips the noise 
  if (md11_current_state != STATE_PROMPT) md11_prev_state =  md11_current_state;
- play_mp3("MD11","SKIP");
+ play_mp3(MODE_FILESET,"SKIP");
  md11_current_state = STATE_PROMPT;
 }
 /**
@@ -325,7 +346,7 @@ void md11_call_mode_no_answer(void)
    }  
    else 
    {  
-      play_mp3("MD11","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3(MODE_FILESET,"INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md11_current_state = STATE_SELECT_MODE; 
       noises_used = 0;

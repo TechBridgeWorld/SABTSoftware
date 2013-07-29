@@ -15,25 +15,51 @@
 #include "script_common.h"
 #include "script_english.h" 
 
+#define MAX_INDEX 11
+#define MODE_FILESET "MD3_"
+
 int md3_current_state, md3_prev_state = 0;
 static int game_mode = 0;
 char md3_last_dot, last_cell, expected_dot;
 int mistakes = 0;
 
 
-char *animal_list[11] = {"bee", "camel", "cat", "cow", "dog", "horse",
+char *animal_list[MAX_INDEX] = {"bee", "camel", "cat", "cow", "dog", "horse",
     "hyena", "pig", "rooster", "sheep", "zebra"};
 
-int animal_used_list[11] = {0,0,0,0,0,0,0,0,0,0,0};
+int animal_used_list[MAX_INDEX] = {0,0,0,0,0,0,0,0,0,0,0};
+
+char* animal_sounds[MAX_INDEX] = {"BEE","CAM","CAT","COW","DOG","HOR",
+    "HYE","PIG","ROO","SHE","ZEB"};
+
+/*
+* @brief Plays animal sounds
+* @param char* animal - Animal name
+* @param bool name - true if name requeste, false if sound requested
+* @return void
+*/
+void play_animal(char* animal, bool name) {
+  char filename[5];
+  for (int i = 0; i < MAX_INDEX; i++) {
+    if (strcmp(animal, animal_list[i]) == 0) {
+      // Match found
+      if (name)
+        sprintf(filename, "N%s", animal_sounds[i]);
+      else
+        sprintf(filename, "S%s", animal_sounds[i]);
+      play_mp3(MODE_FILESET, filename);
+    }
+  }
+}
 
 
 /**
  * @brief Based off of the internal timer (TCNT1) - we generate
- *        a psuedo-random number. Turn that into a number from 1 - 11
- *        which corresponds to 1 of 11 different animals. Check which
+ *        a psuedo-random number. Turn that into a number from 1 - MAX_INDEX
+ *        which corresponds to 1 of MAX_INDEX different animals. Check which
  *        animals have been played already to be sure to play all of
  *        the different animals before repeating the list.
- * @return int - number between 1 - 11 corresponding to the animal file to play
+ * @return int - number between 1 - MAX_INDEX corresponding to the animal file to play
  */
 int choose_animal()
 {
@@ -41,7 +67,7 @@ int choose_animal()
   int i;
 
   num *= PRIME;
-  num = (abs(num) % 11);
+  num = (abs(num) % MAX_INDEX);
 
   char buf[10];
   sprintf(buf, "num=%i\r\n", num);
@@ -51,12 +77,12 @@ int choose_animal()
   {
     num = TCNT1;
     num *= PRIME;
-    num = (abs(num) % 11);
+    num = (abs(num) % MAX_INDEX);
   }
 
   animals_used_list[num] = 1;
 
-  for(i = 0; i < 11; i ++)
+  for(i = 0; i < MAX_INDEX; i ++)
   {
     sprintf(buf, "arr=%i, ",animals_used_list[i] );
     PRINTF(buf);
@@ -67,12 +93,12 @@ int choose_animal()
   PRINTF(buf);
   TX_NEWLINE_PC;
 
-  // increment animals_used until we've used all 11 animals then reset everything
+  // increment animals_used until we've used all MAX_INDEX animals then reset everything
   animals_used++;
-  if (animals_used == 11)
+  if (animals_used == MAX_INDEX)
   {
     animals_used = 0;
-    for (i = 0; i < 11; i++)
+    for (i = 0; i < MAX_INDEX; i++)
       animals_used_list[i] = 0;
   }
 
@@ -81,7 +107,7 @@ int choose_animal()
 
 void md3_reset(void)
 {
-  set_mode_globals(&script_english, "ENG_", "MD3_");
+  set_mode_globals(&script_english, "ENG_", MODE_FILESET);
   md3_current_state = 0;
   md3_last_dot = 0;
   mistakes = 0;
@@ -96,13 +122,11 @@ void md3_reset(void)
  */
 void md3_main(void)
 {
-  char animal_file[16];
-  char animal_sound[16];
   char spell_letter[8];
   switch(md3_current_state)
   {
     case STATE_INITIAL:
-      play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3(MODE_FILESET,"INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md3_current_state = STATE_SELECT_MODE; //STATE_REQUEST_INPUT1;
       animals_used = 0;
@@ -110,8 +134,8 @@ void md3_main(void)
       break;
 
     case STATE_REQUEST_INPUT1:
-	  if (game_mode == 1) play_mp3("MD3_","PLSA");
-	  else if (game_mode == 2) play_mp3("MD3_","PLSB");
+	  if (game_mode == 1) play_mp3("MODE_FILESET","PLSA");
+	  else if (game_mode == 2) play_mp3("MODE_FILESET","PLSB");
       length_entered_word = 0;
       current_word_index = 0;
       animal = animal_list[choose_animal()];
@@ -120,10 +144,10 @@ void md3_main(void)
 
     case STATE_REQUEST_INPUT2:
 
-      if (game_mode == 1) play_mp3(NULL,animal);
-      else if (game_mode == 2) { sprintf(animal_file, "N%s", animal);
-	  play_mp3(NULL,animal_file);}
-
+      if (game_mode == 1)
+        play_animal(animal, false);
+      else if (game_mode == 2)
+        play_animal(animal, true);
       md3_current_state = STATE_WAIT_INPUT;
       break;
 
@@ -239,16 +263,15 @@ void md3_main(void)
       break;
 
     case STATE_SELECT_MODE:
-	  play_mp3("MD3_","MSEL");
+	  play_mp3(MODE_FILESET,"MSEL");
 	  md3_current_state = STATE_WAIT_INPUT;
 	  break;
  
     case STATE_PLAY_SOUND:
-	  sprintf(animal_sound, "N%s", animal);
-	  play_mp3(NULL,animal_sound);
+	  play_animal(animal, true);
 	  if (game_mode == 2){
-		  play_mp3("MD3_","SAYS");
-		  play_mp3(NULL,animal);
+		  play_mp3(MODE_FILESET,"SAYS");
+		  play_animal(animal, false);
 		  }
 	  md3_current_state = STATE_REQUEST_INPUT1;
 	  break;
@@ -256,9 +279,8 @@ void md3_main(void)
 	  break;
 
     case STATE_WORD_HINT:
-	  play_mp3("MD3_","PLWR");
-	  sprintf(animal_sound, "N%s", animal);
-	  play_mp3(NULL,animal_sound);
+	  play_mp3(MODE_FILESET,"PLWR");
+	  play_animal(animal, true);
 	  for (int count = 0; count < strlen(animal); count++) {
 			sprintf(spell_letter,"ENG_%c",animal[count]);
 			play_mp3(NULL,spell_letter);
@@ -267,12 +289,12 @@ void md3_main(void)
 	  break;
 
 	case STATE_LETTER_HINT:
-	  play_mp3("MD3_","PLWR");
+	  play_mp3(MODE_FILESET,"PLWR");
 	  char let[8];
       sprintf(let, "%c", animal[length_entered_word]);
 	  PRINTF(let);
       play_mp3(NULL,let);
-	  play_mp3("MD3_","PRSS");	  
+	  play_mp3(MODE_FILESET,"PRSS");	  
 	  md3_current_state = STATE_BUTTON_HINT;
 	  break;
 
@@ -301,7 +323,7 @@ void md3_call_mode_right(void)
 {
 // skips the animal 
  if (md3_current_state != STATE_PROMPT) md3_prev_state =  md3_current_state;
- play_mp3("MD3_","SKIP");
+ play_mp3(MODE_FILESET,"SKIP");
  md3_current_state = STATE_PROMPT;
 }
 /**
@@ -326,7 +348,7 @@ void md3_call_mode_no_answer(void)
    }  
    else 
    {  
-      play_mp3("MD3_","INT"); // Welcomes and asks to choose a mode A or B
+      play_mp3(MODE_FILESET,"INT"); // Welcomes and asks to choose a mode A or B
 	  game_mode = 0;
       md3_current_state = STATE_SELECT_MODE; 
       animals_used = 0;
