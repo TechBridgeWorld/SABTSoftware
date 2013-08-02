@@ -26,7 +26,7 @@ glyph_t blank_cell = {
 	NULL
 };
 
-/*
+/**
 * @brief Resets a script's indices
 * @param script_t* - Pointer to script to reset
 * @return void
@@ -40,7 +40,7 @@ void reset_script_indices(script_t* script) {
 	}
 }
 
-/*
+/**
 * @brief Pattern matches from a string of patterns to a glyph by traversing
 *	the script provided
 * @param script_t* script - Pointer to script to search in
@@ -117,7 +117,7 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 	return NULL;
 }
 
-/*
+/**
 * @brief Returns a random last-order glyph from the current script
 * @param script_t* - Script to get random glyph from
 * @return glyph_t* - Pointer to random glyph
@@ -131,7 +131,7 @@ glyph_t* get_random_glyph(script_t* script) {
 	}
 }
 
-/*
+/**
 * @brief Returns the next glyph from the current script
 * @param void
 * @glyph_t* - Pointer to next glyph
@@ -168,7 +168,7 @@ glyph_t* get_next_glyph(script_t* script) {
 	}
 }
 
-/*
+/**
 * @brief Returns the previous glyph from the current script
 * @param void
 * @glyph_t* - Pointer to previous glyph
@@ -206,7 +206,7 @@ glyph_t* get_prev_glyph(script_t* script) {
 }
 
 
-/*
+/**
 * @brief Checks if a given glyph is a number
 * @param glyph_t* Pointer to glyph to check
 * @return bool - true if a number, false otherwise
@@ -225,7 +225,7 @@ bool is_number(glyph_t* curr_glyph) {
 	}
 }
 
-/*
+/**
 * @brief Converts a digit glyph to an integer
 * @param glyph_t* - Pointer to glyph to convet
 * @return int - 0-9 for valid digit, -1 otherwise
@@ -252,7 +252,7 @@ int get_digit(glyph_t* curr_glyph) {
 	}
 }
 
-/*
+/**
 * @brief Checks to see if a glyph is BLANK
 * @param glyph_t* - Pointer to check
 * @return bool - true if BLANk, false otherwise

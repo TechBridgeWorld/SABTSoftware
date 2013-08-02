@@ -194,7 +194,7 @@ void initialize_system(void)
     read_dict_file();
   }
 
-  PRINTF("Datatype info\n\r");
+  PRINTF("Type info\n\r");
   sprintf(dbgstr, "char: %d bytes\n\r", sizeof(char));
   PRINTF(dbgstr);
   sprintf(dbgstr, "int: %d bytes\n\r", sizeof(int));

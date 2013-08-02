@@ -1,6 +1,7 @@
 /**
  *  @file letter_globals.c
  *  @brief Pound defines used for determining letters and buttons
+ *         DEPRECATED
  *  @author Kory Stiger (kstiger)
  *  @author Poornima Kanirasu (pkaniara)
  */

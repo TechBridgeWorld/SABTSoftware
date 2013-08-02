@@ -1,4 +1,4 @@
-/*
+/**
 * @file debug.h
 * @brief Constants and macros for PC based debugging
 * @author Vivek Nair (viveknair@cmu.edu)

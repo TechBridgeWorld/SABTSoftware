@@ -54,6 +54,7 @@
 
 // Limits
 #define MAX_DIGITS 3
+#define MAX_INCORRECT_TRIES 3
 
 // State variables
 static char md_next_state = STATE_NULL;
@@ -66,6 +67,7 @@ static int md_res = -1;
 static int md_usr_res = -1;
 static bool md_input_ready = false;
 static bool md_input_valid = false;
+static bool md_incorrect_tries = 0;
 
 
 void md9_reset(void) {
@@ -85,6 +87,7 @@ void md9_reset(void) {
 	md_usr_res = -1;
 	md_input_ready = false;
 	md_input_valid = false;
+	md_incorrect_tries = 0;
 }
 
 void md9_generate_question(void) {
@@ -146,6 +149,11 @@ void md9_play_question() {
 			break;
 	}
 	play_number(md_op_2);
+}
+
+void md9_play_answer(void) {
+	play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
+	play_number(md_res);
 }
 
 void md9_main(void) {
@@ -257,12 +265,17 @@ void md9_main(void) {
 		case STATE_CHECKANS:
 			if (md_usr_res == md_res) {
 				// Correct answer
+				md_incorrect_tries = 0;
 				play_mp3(LANG_FILESET, MP3_CORRECT);
 				play_mp3(SYS_FILESET, MP3_TADA);
 				md_next_state = STATE_GENQUES;
 			} else {
 				// Wrong answer
+				md_incorrect_tries++;
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
+				if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
+					md9_play_answer();
+				}
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				md_next_state = STATE_PROMPT;
 			}
@@ -270,35 +283,25 @@ void md9_main(void) {
 
 		case STATE_REPROMPT:
 				md_last_dot = create_dialog(MP3_SKIP,
-					ENTER_CANCEL | DOT_1 | DOT_2 | DOT_3);
+					ENTER_CANCEL | LEFT_RIGHT);
 				switch (md_last_dot) {
 					
 					case NO_DOTS:
 						break;
 
 					// Playing answer
-					case '1':
-						play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
-						play_number(md_res);
-						play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-						md_next_state = STATE_INPUT;
+					case RIGHT: case LEFT:
+						md9_play_answer();
 						break;
 
 					// Skipping question
-					case '2':
+					case ENTER:
 						md_next_state = STATE_GENQUES;
 						break;
 
 					// Try again
-					case '3':
-						md_next_state = STATE_INPUT;
-						break;
-
 					case CANCEL:
-						md9_reset();
-						break;
-
-					case ENTER:
+						md_next_state = STATE_PROMPT;
 						break;
 
 					default:

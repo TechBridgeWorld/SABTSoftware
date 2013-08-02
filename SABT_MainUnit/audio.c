@@ -1,6 +1,6 @@
 /**
  * @file audio.c
- * @brief Code for common MP3 functions
+ * @brief Audio library
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 
@@ -16,14 +16,14 @@
 #include "script_common.h"
 #include "FAT32.h"
 
-// Maximum number of files that can be queued at a given time
+/* Maximum number of MP3s that can be queued at a given time */
 #define MAX_PLAYLIST_SIZE 32
 
-// Some standard filesets
+/* System files fileset on SD card */
 #define SYSTEM_FILESET "SYS_"
 
-// Number name parsers, macro refers to number it's position away from decimal
-// point
+/** Number name parsers, macro refers to number it's position away from decimal
+	point */
 #define PLACE_ONES 0x01
 #define PLACE_TENS 0x02
 #define PLACE_HUNDREDS 0x03
@@ -31,23 +31,24 @@
 #define PLACE_TEN_THOUSANDS 0x05
 // ints on this platform are 2 bytes long - largest signed int is 32,768
 
-
-// Playlist supports queuing some files at a time with filenames of up to 13
-// characters
 bool playlist_empty = true;
 
+/** Playlist supports queuing some files at a time with filenames of up to 13
+	characters */
 static char playlist[MAX_FILENAME_SIZE][MAX_PLAYLIST_SIZE];
 static short playlist_size = 0;
 static short playlist_index = 0;
 
+/** Set via set_mode_globals() in each mode so that audio library
+	does not have to be constantly passed filesets */
 char* lang_fileset = NULL;
 char* mode_fileset = NULL;
 
 /**
- * @brief Tries to queue the requested MP3 file to the playlist
- * @param char* fileset - (optional) Pointer to fileset (4 characters)
- * @param char* mp3 - Pointer to MP3 filename (4 characters)
- * @return bool - True if file was added, false if queue is full or error
+ *	@brief Tries to queue the requested MP3 file to the playlist
+ * 	@param char* fileset - (optional) Pointer to fileset
+ * 	@param char* mp3 - Pointer to MP3 filename (4 characters)
+ * 	@return bool - True if file was added, false if queue is full or error
  */
 
 bool play_mp3(char* fileset, char* mp3) {
@@ -76,12 +77,6 @@ bool play_mp3(char* fileset, char* mp3) {
 		sprintf(playlist[playlist_size - 1], "%s%s.mp3", fileset, mp3);
  	else
  		sprintf(playlist[playlist_size - 1], "%s.mp3", mp3);
-
- 	/*
- 	PRINTF("[Audio] Queuing: ");
- 	PRINTF(playlist[playlist_size - 1]);
- 	NEWLINE;
- 	*/
 
 	playlist_empty = false;
 	return true;
@@ -114,7 +109,7 @@ void play_silence(int milliseconds) {
 	}
 }
 
-/*
+/**
 * @brief Clears MP3 playlist
 * @param void
 * @return void
@@ -215,6 +210,7 @@ void play_dot_sequence(glyph_t *this_glyph) {
 	char pattern;
 	if (this_glyph != NULL) {
 		if (this_glyph->parent != NULL) {
+			// Checks for parent glyphs if a last-order pattern
 			sprintf(dbgstr, "[Audio] Playing parent pattern: %s\n\r",
 				this_glyph->parent->sound);
 			play_dot_sequence(this_glyph->parent);
@@ -228,45 +224,37 @@ void play_dot_sequence(glyph_t *this_glyph) {
 	}
 }
 
-//TODO Fails on MININT
+/**	
+	@brief Plays number
+	@param int number - Number to be played. Must be under between -9,999 and
+	9,999
+	@return void
+*/
 void play_number(int number) {
 	
 	int curr_digit = -1;
 	int digits = -1;
 	char mp3[5] = "";
 
-	//sprintf(dbgstr, "[play_number] number = %d\n\r", number);
-	//PRINTF(dbgstr);
 
 	// If number is just 0, play #0 and return
 	if (number == 0) {
 		play_mp3(lang_fileset, "#0");
-		//PRINTF("[play_number] number = 0\n\r");
 		return;
 	}
 
 	if (number < 0) {
 		// Say "Negative" and take absolute value
-		//play_mp3(lang_fileset, "#NEG");
+		play_mp3(lang_fileset, "#NEG");
 		number = 0 - number;
-		//sprintf(dbgstr, "[play_number] abs(number = %d\n\r", number);
-		//PRINTF(dbgstr);
 	}
 
 	// Count number of digits
 	digits = get_num_of_digits(number);
 
-	//sprintf(dbgstr, "[play_number] digits = %d\n\r", digits);
-	//PRINTF(dbgstr);
-
 	while (number != 0) {
 		// Extract current digit and adjust number
 		curr_digit = number / ten_to_the(digits - 1);
-
-		//sprintf(dbgstr, "[play_number] curr_digit = %d\n\r", curr_digit);
-		//PRINTF(dbgstr);
-		//sprintf(dbgstr, "[play_number] digits = %d\n\r", digits);
-		//PRINTF(dbgstr);
 
 		if (curr_digit != 0) {
 			sprintf(mp3, "#%d", curr_digit);
@@ -303,7 +291,7 @@ void play_number(int number) {
 	}
 }
 
-/*
+/**
 * @brief Plays a NULL-terminated array of glyphs
 * @param glyph_t* - Pointer to line
 * @return void

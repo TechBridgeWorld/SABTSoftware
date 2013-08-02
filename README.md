@@ -10,7 +10,8 @@ To best understand this project, read the following documents, ideally in this o
 - This Readme
 - The programming guide (SABT\_programming\_guide.pdf)
 - The doxygen documentation found in the html folder (start with index.html)
-- In code comments
+- Overview README files placed in project folders
+- In-code comments
 
 ## Setting up the project
 
@@ -38,6 +39,7 @@ See the programming guide - SABT\_programming\_guide.pdf.
 ## Components
 There are four different boards that compose the SABT - the Main Control Unit and
 one of three User Interface boards. The Main Control Unit is used in conjunction with one of the other three boards to make an interface suitable for the user's skill level.
+
 ### Main Control Unit (MCU)
 This folder contains all of the code for the control unit which does all of the processing for the boards and contains the modes. Open SABT\_MainUnit.aps in AVR Studio 4.
 The MCU handles the following:
@@ -64,21 +66,10 @@ No work has been done yet in this folder, but it should contain the file SABT\_A
 - Consists of six rows of braille cells (16 cells per row)
 
 ## Current issues and pitfalls
-- We need a better way to read in the dictionary more quickly. It currently takes 10-15 seconds which is a distracting amount of silence.
-- Pressing a volume button while an mp3 file is playing breaks the system.
-- In digitalIO.c, in the Primary Board's code base, we use a function called delay().  The reason for this is that we are sending two things in a row in this function. If the delay() function is not used, both transfers will not work.  Look to fix the use of this.
-- AT the end of the dictionary file, you must have a line of ++++++++, so that the dictionary parser knows where to stop.
-- Volume sound files are not of uniform volume. Some are louder and some are softer then others. Look to standardize these sound files or even change them based off of User testing. 
-- Dictionary is currently read in all at once before any sound files are played. Each time through the loop a number of dictionary nodes are read in.  This number is stored in the value CLUSTERS_PER_RUN which is set to 60 currently.  The value is set in the header file FAT32.h.
-- Currently volume can only go down 9 steps before stopping. This is because there is a kink in the volume system. If you continue to press volume down after 9 presses (based on current step sizes) the volume goes up for three, then goes completely silent.  This is documented in the file VS1053.c.
-- The file that currently contains the write version of the braille dots, which will be used to compare if a braille cell is valid, is letter_globals.h
-- We are currently receiving a warning - fixing the warning causes the code to not function, so there must be another way to resolve the warning such that the code can still run. This warning is:
-```c
-../FAT32.c: In function 'read_and_retrieve_file_contents':
-../FAT32.c:360: warning: 'num_bytes_read' may be used uninitialized in this function```
+Refer to README.todo under SABT_MainUnit
 
-##Description of SABT MAIN Code
-Main function is located in SABT_MainUnit.c.  This is where the function starts, in the main() function. The rest of the files are spread throughout the SABT_MainUnit Project. You will have to find the files you need. Here are the steps the code follows once it enters main:
+## Description of SABT main() code
+The main() function is located in SABT_MainUnit.c. The rest of the files are spread throughout the SABT_MainUnit Project. You will have to find the files you need. Here are the steps the code follows once it enters main:
 
 1. It calls initialize system
   a. This call initializes all inputs form hardware, interrupts, SD card, sound player and global variables
@@ -92,16 +83,7 @@ Main function is located in SABT_MainUnit.c.  This is where the function starts,
   - Step into the mode and take a single step down the mode. This usually involves interpreting any messages that have been received. Using this input to move down the mode. You then queue a sound file to play to tell the user what they have done. 
 
 ## Opportunities for further development
-- The Intermediate and Advanced user interface boards need to be developed in their entirety.
-- Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
-- Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
-- From user testing, we found that some users entered dots very quickly. It would be very helpful to have either some mechanism to skip MP3s (if a user already knows the prompt) or some way to adjust the speed of the MP3 playback.
-- The Animal Game could be expanded to include more animal sounds, and to include a variety of animals such that all of the letters are tested at some point.
-- In the Animal Game, users wanted to be able to skip animals.
-- A couple of users experessed interested in a "Household Sounds" game - much like the animal game, but the sounds are sounds of everyday life.
-- Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
-- One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
-- Look to create a blank game, that responds to values in a file on the SD card. The idea is that we cannot infinitely add new games to the main board, due to lack of memory.  What we need instead is a blank FSM that can read controls from an SD card file to move through states, store values, and play sound files.  Would allow for app development community. 
+Refer to README.future_development under SABT_MainUnit 
 
 ## Doxygen Documentation  
 The most recent Doxygen documentation can be found at cmu-15-239.github.io/SABTSoftware/ 

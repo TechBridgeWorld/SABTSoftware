@@ -62,7 +62,7 @@ void io_dialog_error(void);
 // ********** Basic IO **********
 // ******************************
 
-/*
+/**
 * @brief Resets IO state variables
 * @param void
 * @return void
@@ -76,8 +76,8 @@ void io_init(void) {
 	io_dialog_reset();
 }
 
-/*
-*	@brief Gets current dot and then sets it to NO_DOTS
+/**
+* @brief Gets current dot and then sets it to NO_DOTS
 * @param void
 * @return char - Current dot
 */
@@ -88,7 +88,7 @@ char get_dot(void) {
 	return ret_val;
 }
 
-/*
+/**
 *	@brief Gets current cell
 * @param void
 * @return char - Cell pattern with 2 MSB as controls for ENTER, LEFT, RIGHT
@@ -167,7 +167,7 @@ char get_cell(void) {
 	}
 }
 
-/*
+/**
 * @brief Gets a line of raw cells from the user
 * @param void
 * @return bool - true if io_line is ready for further processing, false
@@ -248,7 +248,7 @@ bool get_line(void) {
 // ********** Intermediate IO **********
 // *************************************
 
-/*
+/**
 * @brief Gets a line from the user, converts to glyphs, converts to number
 * @param bool* - Address to put valid flag for input
 * @param int* - Address to put resultant integer
@@ -279,7 +279,7 @@ bool get_number(bool* valid, int* res) {
 	}
 }
 
-/*
+/**
 * @brief Gets a line from the user, converts to glyphs, returns first glyph
 * @param glyph_t* res - Pointer to placeholder for pointer
 * @return bool - true if ready for further processing
@@ -310,34 +310,11 @@ bool get_character(glyph_t** res) {
 	}
 }
 
-
-/*
-bool parse_letter(void) {
-	
-}
-
-
-bool parse_digit(void) {
-
-}
-
-bool parse_symbol(void) {
-
-}
-
-bool parse_character(void);
-bool parse_word(void);
-bool io_parse_number(void);
-bool parse_string(void);
-*/
-
-
-
 // ********************************
 // ********* Advanced IO **********
 // ********************************
 
-/*
+/**
 * @brief Creates a dialog with prompt and specified allowed user inputs
 * @param char* prompt - Pointer to filename for prompt to play - prefixed with
 * mode fileset
@@ -416,7 +393,7 @@ char create_dialog(char* prompt, char control_mask) {
 // ********** Basic IO helper funcitons **********
 // ***********************************************
 
-/*
+/**
 * @brief Advances to next cell in io_line
 * @param void
 * @return void
@@ -430,7 +407,7 @@ void io_line_next_cell(void) {
 	}
 }
 
-/*
+/**
 * @brief Advances to previous cell in io_line
 * @param void
 * @return void
@@ -444,7 +421,7 @@ void io_line_prev_cell(void) {
 	}
 }
 
-/*
+/**
 * @brief Clears current cell in io_line
 * @param void
 * @return void
@@ -453,7 +430,7 @@ void io_line_clear_cell(void) {
 	io_line[io_line_cell_index] = NO_DOTS;
 }
 
-/*
+/**
 * @brief Resets io_line state variables
 * @param void
 * @return void
@@ -471,7 +448,7 @@ void io_line_reset(void) {
 // ******************************************************
 
 
-/*
+/**
 * @brief Converts raw cell patterns from io_line to glyphs in io_parsed
 * @param void
 * @return bool - true if all raw cells were valid, false otherwise
@@ -507,7 +484,7 @@ bool io_convert_line(void) {
 	return true;
 }
 
-/*
+/**
 * @brief Parses io_line buffer for a number and stores it in io_parsed
 * @param void
 * @return void
@@ -537,6 +514,11 @@ bool io_parse_number(int* res) {
 // ********** Advanced IO helper functions **********
 // **************************************************
 
+/**
+	@brief Initialises dialog state variables
+	@param char control_mask - The controls to enable on the dialog
+	@return void
+*/
 void io_dialog_init(char control_mask) {
 	char last_dot = get_dot();
 	PRINTF(dbgstr);
@@ -557,6 +539,11 @@ void io_dialog_init(char control_mask) {
 	io_dialog_initialised = true;
 }
 
+/**
+	@brief Resets dialog state variables
+	@param void
+	@return void
+*/
 void io_dialog_reset(void) {
 	for (int i = 0; i < 6; i++) {
 		io_dialog_dots_enabled[i] = false;
@@ -567,6 +554,11 @@ void io_dialog_reset(void) {
 	io_dialog_initialised = false;
 }
 
+/**
+	@brief Resets dialog state variables
+	@param void
+	@return void
+*/
 void io_dialog_error(void) {
 	io_dialog_incorrect_tries++;
 	play_mp3(lang_fileset, MP3_INVALID_PATTERN);

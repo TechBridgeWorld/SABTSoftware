@@ -134,8 +134,8 @@ void md3_main(void)
       break;
 
     case STATE_REQUEST_INPUT1:
-	  if (game_mode == 1) play_mp3("MODE_FILESET","PLSA");
-	  else if (game_mode == 2) play_mp3("MODE_FILESET","PLSB");
+	  if (game_mode == 1) play_mp3(MODE_FILESET,"PLSA");
+	  else if (game_mode == 2) play_mp3(MODE_FILESET,"PLSB");
       length_entered_word = 0;
       current_word_index = 0;
       animal = animal_list[choose_animal()];

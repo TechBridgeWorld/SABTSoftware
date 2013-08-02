@@ -60,7 +60,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,3,4,5,6,7,8,9,11,12,;");
+  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -280,21 +280,19 @@ void ui_control_key_pressed(void)
         return;
       }
 
+      if(usart_ui_received_packet[6] == 69) 
+      {
+        PRINTF("[UI] Long CANCEL detected, going to main menu\n\r");
+        io_init();
+        quit_mode();
+        return;
+      }
+
       if(ui_is_mode_selected) 
       {
-        // If the next byte is 'E', this is exit command 
-        // (when the user pressed E2 for more than 5 secs)
-        if(usart_ui_received_packet[6] == 69) 
-        {
-          PRINTF("[UI] Long CANCEL detected, going to main menu\n\r");
-          io_init();
-          quit_mode();
-        }
-        else //Then this a "NO" answer, call the mode function for this
-        {
-          PRINTF("[UI] Short CANCEL detected, calling mode NO function\n\r");
-          ui_call_mode_no_answer();
-        }
+        //Then this a "NO" answer, call the mode function for this
+        PRINTF("[UI] Short CANCEL detected, calling mode NO function\n\r");
+        ui_call_mode_no_answer();
       }
       //This has no effect when no mode is selected
       break;

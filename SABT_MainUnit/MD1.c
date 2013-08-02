@@ -111,12 +111,15 @@ void md1_main(void)
       if(last_dot != expected_dot)
       {
         play_mp3(LANG_FILESET,MP3_INCORRECT);
+        play_mp3(MODE_FILESET, MP3_FIND_DOT);
+        play_dot(expected_dot);
         last_dot = 0;
         current_state = STATE_WAIT_INPUT;
       }
       else
       {
         play_mp3(LANG_FILESET,MP3_CORRECT);
+        play_mp3(SYS_FILESET, MP3_TADA);
         last_dot = 0;
         current_state = STATE_REQUEST_INPUT1;
       }

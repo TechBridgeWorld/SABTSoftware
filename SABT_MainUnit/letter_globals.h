@@ -2,6 +2,8 @@
 #define _LETTER_H_
 #include <stdbool.h>
 
+//DEPRECATED
+
 //bit correspondance for letters.  Right most bit is 1
 #define A_BITS 0b00000001
 #define B_BITS 0b00000011

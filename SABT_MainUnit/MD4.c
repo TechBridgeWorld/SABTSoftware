@@ -9,6 +9,25 @@
 #include "letter_globals.h"
 #include "audio.h"
 
+#define MODE_FILESET "MD4_"
+#define LANG_FILESET "ENG_"
+
+// Prompts
+#define MP3_INTRO "INT"
+#define MP3_AND_MISTAKES "AMSK"
+#define MP3_BLANK "BLNK"
+#define MP3_INVALID "INVP"
+#define MP3_MISTAKES "MSTK"
+#define MP3_GUESS "GAL"
+#define MP3_YES "YES"
+#define MP3_NO "NO"
+#define MP3_YOU_LOSE "YOLO"
+#define MP3_YOU_WIN "YOWI"
+#define MP3_SO_FAR "SOFA"
+#define MP3_NEW_WORD "NWOR"
+
+
+
 int md4_current_state;
 char md4_last_dot, last_cell, expected_dot;
 
@@ -99,8 +118,8 @@ void md4_play_requested_dot(void)
 {
   // This will hold formatted file to access
   char req_mp3[10];
-  sprintf((char*)req_mp3, "dot_%c", md4_last_dot);
-  play_mp3("",req_mp3);
+  sprintf((char*)req_mp3, "DOT%c", md4_last_dot);
+  play_mp3(LANG_FILESET,req_mp3);
 }
 
 void md4_reset(void)
@@ -119,7 +138,7 @@ void md4_main(void)
   switch(md4_current_state)
   {
     case MD4_STATE_INITIAL:
-      play_mp3("","MD4INT");
+      play_mp3(MODE_FILESET,MP3_INTRO);
       md4_current_state = MD4_STATE_CHOOSE_WORD;
       break;
 
@@ -143,7 +162,7 @@ void md4_main(void)
         input_word_index = 0;
         if (num_mistakes > 0)
         {
-          play_mp3("","and_mstk");
+          play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
           md4_current_state = MD4_STATE_SAY_MISTAKES;
         } else
           md4_current_state = MD4_STATE_ASK_FOR_GUESS;
@@ -153,10 +172,10 @@ void md4_main(void)
         {
           char buf[10];
           sprintf(buf, "%c", input_word[input_word_index]);
-          play_mp3("",buf);
+          play_mp3(LANG_FILESET,buf);
         } else
         {
-          play_mp3("","blank");
+          play_mp3(LANG_FILESET,MP3_BLANK);
         }
 
         input_word_index++;
@@ -164,13 +183,14 @@ void md4_main(void)
       break;
 
     case MD4_STATE_SAY_MISTAKES:
-      sprintf(bufff, "%d_mstks", num_mistakes);
-      play_mp3("",bufff);
+      sprintf(bufff, "#%d", num_mistakes);
+      play_mp3(LANG_FILESET, bufff);
+      play_mp3(MODE_FILESET,MP3_MISTAKES);
       md4_current_state = MD4_STATE_ASK_FOR_GUESS;
       break;
 
     case MD4_STATE_ASK_FOR_GUESS:
-      play_mp3("","guess");
+      play_mp3(MODE_FILESET,MP3_GUESS);
       md4_current_state = MD4_STATE_WAIT_INPUT;
       break;
 
@@ -191,11 +211,11 @@ void md4_main(void)
       { // set entered_letter in valid_letter(), but return true or false
         char buff[7];
         sprintf(buff, "%c", entered_letter);
-        play_mp3("",buff);
+        play_mp3(LANG_FILESET,buff);
         md4_current_state = MD4_STATE_CHECK_MATCH;
       } else
       {
-        play_mp3("","INVPAT");
+        play_mp3(LANG_FILESET,MP3_INVALID);
         num_mistakes++;
         md4_current_state = MD4_STATE_EVALUATE_GAME;
       }
@@ -207,10 +227,10 @@ void md4_main(void)
       // into input_word.
       if (place_letter())
       {
-        play_mp3("","yes");
+        play_mp3(LANG_FILESET,MP3_YES);
       } else
       {
-        play_mp3("","no");
+        play_mp3(LANG_FILESET, MP3_NO);
         num_mistakes++;
       }
 
@@ -221,16 +241,16 @@ void md4_main(void)
       if (!strncmp(input_word, current_word, strlen(current_word)))
       {
         game_status = 1;
-        play_mp3("","you_win");  // "you have guessed the word!"
+        play_mp3(MODE_FILESET,MP3_YOU_WIN);  // "you have guessed the word!"
       } else if (num_mistakes == 7)
       {
         game_status = 1;
-        play_mp3("","you_lose"); // "you have made 7 mistakes the word you missed was"
+        play_mp3(MODE_FILESET,MP3_YOU_LOSE); // "you have made 7 mistakes the word you missed was"
       }
 
       if (game_status == 0)
       {
-        play_mp3("","so_far");
+        play_mp3(MODE_FILESET, MP3_SO_FAR);
         md4_current_state = MD4_STATE_SAY_STATUS;
       } else if (game_status == 1)
       {
@@ -242,13 +262,13 @@ void md4_main(void)
       if (input_word_index == strlen(current_word))
       {
         input_word_index = 0;
-        play_mp3("","new_word");
+        play_mp3(MODE_FILESET,MP3_NEW_WORD);
         md4_current_state = MD4_STATE_CHOOSE_WORD;
       } else
       {
         char nom[10];
         sprintf(nom, "%c", current_word[input_word_index]);
-        play_mp3("",nom);
+        play_mp3(LANG_FILESET,nom);
         input_word_index++;
       }
       break;

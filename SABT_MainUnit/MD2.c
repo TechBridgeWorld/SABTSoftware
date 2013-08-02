@@ -55,6 +55,7 @@ static char cell = 0;
 static char cell_pattern = 0;
 static char cell_control = 0;
 static int incorrect_tries = 0;
+static bool scrolled = false;
 
 void md2_reset(void) {
 	set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
@@ -68,6 +69,7 @@ void md2_reset(void) {
 	cell_pattern = 0;
 	cell_control = 0;
 	incorrect_tries = 0;
+	scrolled = false;
 	PRINTF("[MD2] Mode reset\n\r");
 }
 
@@ -209,37 +211,23 @@ void md2_main(void) {
 
 		case STATE_REPROMPT:
 			switch(create_dialog(MP3_REPROMPT,
-				DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL | LEFT_RIGHT)) {
+				ENTER_CANCEL | LEFT_RIGHT)) {
 				case NO_DOTS:
 					break;
 
-				case '1':
-					PRINTF("[MD2] Skipping character\n\r");
-					next_state = STATE_GENQUES;
-					break;
-
-				case '2':
-					PRINTF("[MD2] Playing pattern\n\r");
-					play_glyph(curr_glyph);
-					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
-					play_dot_sequence(curr_glyph);
-					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-					next_state = STATE_INPUT;
-					break;
-
-				case '3':
+				case CANCEL:
 					PRINTF("[MD2] Reissuing prompt\n\r");
 					next_state = STATE_PROMPT;
-					break;
-
-				case CANCEL:
-					PRINTF("[MD2] Cancelling to submode menu\n\r");
-					md2_reset();
+					scrolled = false;
 					break;
 
 				case ENTER:
-					PRINTF("[MD2] Reissuing prompt\n\r");
-					next_state = STATE_PROMPT;
+					PRINTF("[MD2] Skipping character\n\r");
+					if (scrolled)
+						next_state = STATE_PROMPT;
+					else
+						next_state = STATE_GENQUES;
+					scrolled = false;
 					break;
 
 				case LEFT:
@@ -258,6 +246,7 @@ void md2_main(void) {
 							break;
 					}
 					play_glyph(curr_glyph);
+					scrolled = true;
 					break;
 
 				case RIGHT:
@@ -276,6 +265,7 @@ void md2_main(void) {
 							break;
 					}
 					play_glyph(curr_glyph);
+					scrolled = true;
 					break;
 
 				default:
