@@ -12,11 +12,11 @@
 #define MD10_STATE_SELECT_MODE				1		   // Selecting the submode
 #define MD10_STATE_SUBMODE_INIT				2		   // Submode initialisation
 #define MD10_STATE_REQUEST_INPUT            3          // Request for input from user - part 1
-#define MD10_STATE_CELL1					4
-#define MD10_STATE_WAIT_INPUT1              5           // Waiting for user input
-#define MD10_STATE_CELL2					6
-#define MD10_STATE_WAIT_INPUT2              7    
-#define MD10_STATE_PROMPT				    8
+#define MD10_STATE_CELL1					4		   // Waiting for user input - cell 1
+#define MD10_STATE_CELL2					5		   // Waiting for user input - cell 2   
+#define MD10_STATE_CHECK				    6		   // Checks if pattern is right
+#define MD10_STATE_REQUEST_WRITE			7		   // Requests the user to write in the pattern
+#define MD10_STATE_SPELL_PATTERN			8		   // Spells out the pattern for the user
 
 #define PRIME                53
 #define NUM_SUB_MODES		 3

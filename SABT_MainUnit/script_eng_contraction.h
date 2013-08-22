@@ -10,7 +10,7 @@
 #include "glyph.h"
 #include "script_common.h"
 
-#define SCRIPT_CONTRACTION_FILESET "CON" // Followed by 0,1, ..., 6 depending on the pattern used
+#define SCRIPT_CONTRACTION_FILESET "ENG_" // Followed by 0,1, ..., 6 depending on the pattern used
 #define SCRIPT_CONTRACTION_LENGTH 36 // 10 contraction symbols + 26 english alphabets
 #define SCRIPT_CONTRACTION_PATTERN_LENTGH 7 // 6 glyphs used to form contractions + 0 for single cell contractions
 
@@ -45,25 +45,25 @@
 
 // English Contraction symbols
 
-#define CON_S1 0b111101
+#define CON_S1 0b101111
 #define CON_S2 0b111111
-#define CON_S3 0b111011
-#define CON_S4 0b011101
-#define CON_S5 0b011111
+#define CON_S3 0b110111
+#define CON_S4 0b101110
+#define CON_S5 0b111110
 #define CON_S6 0b100001
-#define CON_S7 0b100101
-#define CON_S8 0b100111
-#define CON_S9 0b100011
+#define CON_S7 0b101001
+#define CON_S8 0b111001
+#define CON_S9 0b110001
 #define CON_S10 0b110011
 
 // English Contraction forming patterns
 
-#define CON_P1 0b000010
-#define CON_P2 0b000110
-#define CON_P3 0b000111
-#define CON_P4 0b000101
-#define CON_P5 0b000011
-#define CON_P6 0b000001
+#define CON_P1 0b010000
+#define CON_P2 0b011000
+#define CON_P3 0b111000
+#define CON_P4 0b101000
+#define CON_P5 0b110000
+#define CON_P6 0b100000
 
 
 glyph_t contraction_glyphs[SCRIPT_CONTRACTION_LENGTH] = {
