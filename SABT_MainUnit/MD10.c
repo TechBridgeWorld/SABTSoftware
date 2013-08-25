@@ -79,7 +79,7 @@ void md10_main(void) {
     case MD10_STATE_REQUEST_INPUT:
 	  switch(game_mode){
 	  	case 0:		    
-			play_mp3("MD10","_WRT"); // to write <word><set>_<num> please press
+		    // to write <word><set>_<num> please press
 			sprintf(buf,"CON%d_W%d",set,word_num_inset-1);
 			sprintf(fname,"%s.mp3",buf);
 			PRINTF(buf);			
@@ -99,7 +99,7 @@ void md10_main(void) {
 				return;
 			}			
 			play_mp3(NULL,buf);
-			play_mp3(NULL,"PRESS");
+			play_mp3(LANG_FILESET,"PRSS");
 					
 			md10_current_state = MD10_STATE_SPELL_PATTERN;
 			break;
@@ -117,7 +117,6 @@ void md10_main(void) {
 	    g1 = &contraction_pattern[CHARTOINT(buf[3])];   // Stores the preceding pattern for the cell
 		play_dot_sequence(g1);
 		play_mp3("MD10","_NXT");
-		PRINTF("1");
 		}
 	  else g1 = NULL;
 	  int sym;
@@ -125,7 +124,6 @@ void md10_main(void) {
 	  	sym = 10*CHARTOINT(buf[6])+CHARTOINT(buf[7]);
 		char test[10];
 		sprintf(test,"num%d",sym);
-		PRINTF("2");
 	  }
 	  else {
 	  	sym = CHARTOINT(buf[6]);						// Stores the alphabet/symbol glyph
@@ -159,7 +157,7 @@ void md10_main(void) {
 		  break;
 		case 0b01:
 		  PRINTF("RIGHT");		  
-		  play_mp3(NULL,"BLNK");
+		  play_mp3(LANG_FILESET,"BLNK");
 		  cell1_pattern = NO_DOTS;		  
 		  break;
 		case 0b00:
@@ -192,7 +190,7 @@ void md10_main(void) {
 			play_mp3("MD10","_CL2");
 		  	cell2_pattern = NO_DOTS;
 		  } else {
-			play_mp3(NULL,"BLNK");
+			play_mp3(LANG_FILESET,"BLNK");
 			cell1_pattern = NO_DOTS;
 			cell2_pattern = NO_DOTS;
 			md10_current_state = MD10_STATE_CELL1;
@@ -207,11 +205,11 @@ void md10_main(void) {
 	case MD10_STATE_CHECK:
 	  if(g1==NULL || cell1_pattern == g1->pattern){
 	      if(cell2_pattern == g2->pattern){
-			play_mp3(NULL,"GOOD");
+			play_mp3(LANG_FILESET,"GOOD");
 			md10_current_state = MD10_STATE_REQUEST_WRITE;
 		  }
 	      else{
-			play_mp3(NULL,"no");
+			play_mp3(LANG_FILESET,"NO");
 			play_mp3("MD10","_TRY");
 			cell1_pattern = NO_DOTS;
 			cell2_pattern = NO_DOTS;
