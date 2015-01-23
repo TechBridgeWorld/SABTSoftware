@@ -7,10 +7,10 @@
 *.map
 *.aws
 *.d
+*.atsuo
 SABT/
 .DS_Store
 documentation
 .vagrant
-SABT_MainUnit/default/dep/
-SABT_MainUnit/default/NUL
-UserInterface(Primary)/default/NUL
+SABT_MainUnit/default/*
+UserInterface(Primary)/default/*

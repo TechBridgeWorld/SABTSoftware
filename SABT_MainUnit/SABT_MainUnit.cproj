@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.2</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
+    <ProjectGuid>a6ec8c67-5185-4eee-b232-e4c5be55b3c3</ProjectGuid>
+    <Name>SABT_MainUnit</Name>
+    <avrdevice>atmega1284p</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <AvrProjectType>Importer</AvrProjectType>
+    <OutputType>Executable</OutputType>
+    <Language>C</Language>
+    <OutputFileName>SABT_MainUnit</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <avrtool />
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <UncachedRange />
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <BootSegment>2</BootSegment>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.17.0" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'default' ">
+    <OutputPath>bin\default\</OutputPath>
+    <ToolchainSettings>
+      <AvrGcc xmlns="">
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>true</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>true</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=8000000UL</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>true</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>true</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.warnings.AllWarnings>true</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcc.compiler.miscellaneous.OtherFlags>-gdwarf-2 -std=gnu99</avrgcc.compiler.miscellaneous.OtherFlags>
+        <avrgcc.assembler.general.AssemblerFlags>-Wall -gdwarf-2 -std=gnu99   -DF_CPU=8000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums</avrgcc.assembler.general.AssemblerFlags>
+      </AvrGcc>
+    </ToolchainSettings>
+    <BuildTarget>all</BuildTarget>
+    <CleanTarget>clean</CleanTarget>
+  </PropertyGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+  <ItemGroup>
+    <Compile Include="USART_Keypad.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="USART_PC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="VS1053.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sd_routines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FAT32.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UI_Handle.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Globals.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD2.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Modes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD3.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="PC_Handle.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="letter_globals.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD4.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD5.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD6.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="audio.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_common.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD7.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="common.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_hindi.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_english.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD9.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="glyph.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="io.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_kannada.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD10.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD12.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD11.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_digits.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_eng_contraction.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SABT_MainUnit.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="USART_Keypad.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="USART_PC.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="VS1053.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="SPI.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="SD_routines.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="FAT32.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="UI_Handle.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="MD1.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="MD2.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="MD3.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="PC_Handle.c">
+      <SubType>compile</SubType>
+      <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
+      </CustomCompilationSetting>
+    </Compile>
+    <Compile Include="MD4.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD5.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD6.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="audio.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_common.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD7.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="common.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD8.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD9.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="io.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="glyph.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD10.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD12.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD11.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="letter_globals.c">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

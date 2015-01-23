@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "SABT_MainUnit", "SABT_MainUnit\SABT_MainUnit.cproj", "{A6EC8C67-5185-4EEE-B232-E4C5BE55B3C3}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UserInterface", "UserInterface(Primary)\UserInterface.cproj", "{18A38CEB-C3B8-4759-87CE-45163838355C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		default|AVR = default|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6EC8C67-5185-4EEE-B232-E4C5BE55B3C3}.default|AVR.ActiveCfg = default|AVR
+		{A6EC8C67-5185-4EEE-B232-E4C5BE55B3C3}.default|AVR.Build.0 = default|AVR
+		{18A38CEB-C3B8-4759-87CE-45163838355C}.default|AVR.ActiveCfg = default|AVR
+		{18A38CEB-C3B8-4759-87CE-45163838355C}.default|AVR.Build.0 = default|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
