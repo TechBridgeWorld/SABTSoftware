@@ -1,149 +1,307 @@
-###############################################################################
-# Makefile for the project SABT_MainUnit
-###############################################################################
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
 
-## General Flags
-PROJECT = SABT_MainUnit
-MCU = atmega1284p
-TARGET = SABT_MainUnit.elf
-CC = avr-gcc
+SHELL := cmd.exe
+RM := rm -rf
 
-CPP = avr-g++
+USER_OBJS :=
 
-## Options common to compile, link and assembly rules
-COMMON = -mmcu=$(MCU)
+LIBS := 
+PROJ := 
 
-## Compile options common for all C compilation units.
-CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99   -DF_CPU=8000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
+O_SRCS := 
+C_SRCS := 
+S_SRCS := 
+S_UPPER_SRCS := 
+OBJ_SRCS := 
+ASM_SRCS := 
+PREPROCESSING_SRCS := 
+OBJS := 
+OBJS_AS_ARGS := 
+C_DEPS := 
+C_DEPS_AS_ARGS := 
+EXECUTABLES := 
+OUTPUT_FILE_PATH :=
+OUTPUT_FILE_PATH_AS_ARGS :=
+AVR_APP_PATH :=$$$AVR_APP_PATH$$$
+QUOTE := "
+ADDITIONAL_DEPENDENCIES:=
+OUTPUT_FILE_DEP:=
+LIB_DEP:=
 
-## Assembly specific flags
-ASMFLAGS = $(COMMON)
-ASMFLAGS += $(CFLAGS)
-ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
-
-## Linker flags
-LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=SABT_MainUnit.map
-
-
-## Intel Hex file production flags
-HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
-
-HEX_EEPROM_FLAGS = -j .eeprom
-HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
-HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
+# Every subdirectory with source files must be described here
+SUBDIRS := 
 
 
-## Objects that must be built in order to link
-OBJECTS = SABT_MainUnit.o USART_Keypad.o USART_PC.o VS1053.o SPI.o SD_routines.o FAT32.o UI_Handle.o MD1.o MD2.o MD3.o PC_Handle.o MD4.o MD5.o MD6.o audio.o script_common.o MD7.o common.o MD8.o MD9.o io.o glyph.o MD10.o MD12.o MD11.o letter_globals.o 
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS +=  \
+../SABT_MainUnit.c \
+../USART_Keypad.c \
+../USART_PC.c \
+../VS1053.c \
+../SPI.c \
+../SD_routines.c \
+../FAT32.c \
+../UI_Handle.c \
+../MD1.c \
+../MD2.c \
+../MD3.c \
+../PC_Handle.c \
+../MD4.c \
+../MD5.c \
+../MD6.c \
+../audio.c \
+../script_common.c \
+../MD7.c \
+../common.c \
+../MD8.c \
+../MD9.c \
+../io.c \
+../glyph.c \
+../MD10.c \
+../MD12.c \
+../MD11.c \
+../letter_globals.c
 
-## Objects explicitly added by the user
-LINKONLYOBJECTS = 
 
-## Build
-all: $(TARGET) SABT_MainUnit.hex SABT_MainUnit.eep SABT_MainUnit.lss## Compile
-SABT_MainUnit.o: ../SABT_MainUnit.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+PREPROCESSING_SRCS += 
 
-USART_Keypad.o: ../USART_Keypad.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-USART_PC.o: ../USART_PC.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+ASM_SRCS += 
 
-VS1053.o: ../VS1053.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-SPI.o: ../SPI.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+OBJS +=  \
+SABT_MainUnit.o \
+USART_Keypad.o \
+USART_PC.o \
+VS1053.o \
+SPI.o \
+SD_routines.o \
+FAT32.o \
+UI_Handle.o \
+MD1.o \
+MD2.o \
+MD3.o \
+PC_Handle.o \
+MD4.o \
+MD5.o \
+MD6.o \
+audio.o \
+script_common.o \
+MD7.o \
+common.o \
+MD8.o \
+MD9.o \
+io.o \
+glyph.o \
+MD10.o \
+MD12.o \
+MD11.o \
+letter_globals.o
 
-SD_routines.o: ../SD_routines.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+OBJS_AS_ARGS +=  \
+SABT_MainUnit.o \
+USART_Keypad.o \
+USART_PC.o \
+VS1053.o \
+SPI.o \
+SD_routines.o \
+FAT32.o \
+UI_Handle.o \
+MD1.o \
+MD2.o \
+MD3.o \
+PC_Handle.o \
+MD4.o \
+MD5.o \
+MD6.o \
+audio.o \
+script_common.o \
+MD7.o \
+common.o \
+MD8.o \
+MD9.o \
+io.o \
+glyph.o \
+MD10.o \
+MD12.o \
+MD11.o \
+letter_globals.o
 
-FAT32.o: ../FAT32.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+C_DEPS +=  \
+SABT_MainUnit.d \
+USART_Keypad.d \
+USART_PC.d \
+VS1053.d \
+SPI.d \
+SD_routines.d \
+FAT32.d \
+UI_Handle.d \
+MD1.d \
+MD2.d \
+MD3.d \
+PC_Handle.d \
+MD4.d \
+MD5.d \
+MD6.d \
+audio.d \
+script_common.d \
+MD7.d \
+common.d \
+MD8.d \
+MD9.d \
+io.d \
+glyph.d \
+MD10.d \
+MD12.d \
+MD11.d \
+letter_globals.d
 
-UI_Handle.o: ../UI_Handle.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+C_DEPS_AS_ARGS +=  \
+SABT_MainUnit.d \
+USART_Keypad.d \
+USART_PC.d \
+VS1053.d \
+SPI.d \
+SD_routines.d \
+FAT32.d \
+UI_Handle.d \
+MD1.d \
+MD2.d \
+MD3.d \
+PC_Handle.d \
+MD4.d \
+MD5.d \
+MD6.d \
+audio.d \
+script_common.d \
+MD7.d \
+common.d \
+MD8.d \
+MD9.d \
+io.d \
+glyph.d \
+MD10.d \
+MD12.d \
+MD11.d \
+letter_globals.d
 
-MD1.o: ../MD1.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+OUTPUT_FILE_PATH +=SABT_MainUnit.elf
 
-MD2.o: ../MD2.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+OUTPUT_FILE_PATH_AS_ARGS +=SABT_MainUnit.elf
 
-MD3.o: ../MD3.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+ADDITIONAL_DEPENDENCIES:=
 
-PC_Handle.o: ../PC_Handle.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+OUTPUT_FILE_DEP:= ./makedep.mk
 
-MD4.o: ../MD4.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+LIB_DEP+= 
 
-MD5.o: ../MD5.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+# AVR32/GNU C Compiler
 
-MD6.o: ../MD6.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-audio.o: ../audio.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-script_common.o: ../script_common.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD7.o: ../MD7.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-common.o: ../common.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD8.o: ../MD8.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD9.o: ../MD9.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-io.o: ../io.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-glyph.o: ../glyph.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD10.o: ../MD10.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD12.o: ../MD12.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-MD11.o: ../MD11.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-letter_globals.o: ../letter_globals.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-##Link
-$(TARGET): $(OBJECTS)
-	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
 
-%.hex: $(TARGET)
-	avr-objcopy -O ihex $(HEX_FLASH_FLAGS)  $< $@
 
-%.eep: $(TARGET)
-	-avr-objcopy $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0
 
-%.lss: $(TARGET)
-	avr-objdump -h -S $< > $@
 
-## Clean target
-.PHONY: clean
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+./%.o: .././%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.3.3
+	$(QUOTE)C:\WinAVR-20100110\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DF_CPU=8000000UL  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -mmcu=atmega1284p -c -gdwarf-2 -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+
+
+# AVR32/GNU Preprocessing Assembler
+
+
+
+# AVR32/GNU Assembler
+
+
+
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(C_DEPS)),)
+-include $(C_DEPS)
+endif
+endif
+
+# Add inputs and outputs from these tool invocations to the build variables 
+
+# All Target
+all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
+
+$(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP)
+	@echo Building target: $@
+	@echo Invoking: AVR/GNU Linker : 4.3.3
+	$(QUOTE)C:\WinAVR-20100110\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="SABT_MainUnit.map" -Wl,--start-group  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega1284p  
+	@echo Finished building target: $@
+	"C:\WinAVR-20100110\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "SABT_MainUnit.elf" "SABT_MainUnit.hex"
+	"C:\WinAVR-20100110\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "SABT_MainUnit.elf" "SABT_MainUnit.eep" || exit 0
+	"C:\WinAVR-20100110\bin\avr-objdump.exe" -h -S "SABT_MainUnit.elf" > "SABT_MainUnit.lss"
+	"C:\WinAVR-20100110\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures "SABT_MainUnit.elf" "SABT_MainUnit.srec"
+	"C:\WinAVR-20100110\bin\avr-size.exe" "SABT_MainUnit.elf"
+	
+	
+
+
+
+
+
+# Other Targets
 clean:
-	-rm -rf $(OBJECTS) SABT_MainUnit.elf dep/* SABT_MainUnit.hex SABT_MainUnit.eep SABT_MainUnit.lss SABT_MainUnit.map
-
-
-## Other dependencies
--include $(shell mkdir dep 2>NUL) $(wildcard dep/*)
-
+	-$(RM) $(OBJS_AS_ARGS) $(EXECUTABLES)  
+	-$(RM) $(C_DEPS_AS_ARGS)   
+	rm -rf "SABT_MainUnit.elf" "SABT_MainUnit.a" "SABT_MainUnit.hex" "SABT_MainUnit.lss" "SABT_MainUnit.eep" "SABT_MainUnit.map" "SABT_MainUnit.srec" "SABT_MainUnit.usersignatures"
+	
