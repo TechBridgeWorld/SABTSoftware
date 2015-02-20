@@ -119,6 +119,7 @@ void md8_main(void) {
 					if (curr_glyph == NULL) {
 						reset_script_indices(SCRIPT_ADDRESS);
 						next_state = STATE_GENQUES;
+						curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
 						break;
 					}
 					break;
