@@ -119,6 +119,7 @@ void md2_main(void) {
 					if (curr_glyph == NULL) {
 						reset_script_indices(SCRIPT_ADDRESS);
 						next_state = STATE_GENQUES;
+						curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
 						break;
 					}
 					break;
@@ -203,7 +204,6 @@ void md2_main(void) {
 					play_glyph(curr_glyph);
 					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
 					play_dot_sequence(curr_glyph);
-					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 					next_state = STATE_INPUT;
 				}
 			}
