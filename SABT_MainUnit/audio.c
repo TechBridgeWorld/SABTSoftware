@@ -207,18 +207,18 @@ void play_pattern(unsigned char pattern) {
  * @return void
  */
 void play_dot_sequence(glyph_t *this_glyph) {
-	char pattern;
+	char pattern; 
 	if (this_glyph != NULL) {
-		if (this_glyph->parent != NULL) {
-			// Checks for parent glyphs if a last-order pattern
-			sprintf(dbgstr, "[Audio] Playing parent pattern: %s\n\r",
-				this_glyph->parent->sound);
-			play_dot_sequence(this_glyph->parent);
-			play_silence(250);
-			play_mp3(lang_fileset, MP3_NEXT_CELL);
-		}
 		pattern = this_glyph->pattern;
 		play_pattern(pattern);
+		if (this_glyph->next != NULL) {
+			// Plays all the next glyphs in the linked list
+			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
+				this_glyph->next->sound);
+			play_mp3(lang_fileset, MP3_NEXT_CELL);
+			play_dot_sequence(this_glyph->next);
+			play_silence(250);
+		}
 	} else {
 		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 	}
