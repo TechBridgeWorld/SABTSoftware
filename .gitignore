@@ -7,6 +7,9 @@
 *.map
 *.aws
 *.d
+*.srec
+*.atsln
+*.atsuo
 SABT/
 .DS_Store
 documentation
