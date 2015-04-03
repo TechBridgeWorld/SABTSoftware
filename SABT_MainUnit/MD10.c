@@ -175,14 +175,14 @@ void md10_main(void) {
 	  cell2_pattern = GET_CELL_PATTERN(cell);
 	  cell_control = GET_CELL_CONTROL(cell);
 	  switch (cell_control) {
-	    case 0b11:
+	    case WITH_ENTER:
 		  PRINTF("ENTER");
 		  md10_current_state = MD10_STATE_CHECK;		  
 		  break;
-		case 0b10:
+		case WITH_LEFT:
 		  PRINTF("LEFT");
 		  break;
-		case 0b01:
+		case WITH_RIGHT:
 		  PRINTF("RIGHT");
 		  if (cell2_pattern && g1){		  
 		  	play_mp3("MD10","_CL1");
@@ -196,7 +196,7 @@ void md10_main(void) {
 			md10_current_state = MD10_STATE_CELL1;
 		  }		  
 		  break;
-		case 0b00:
+		case WITH_CANCEL:
 		  PRINTF("User pressed CANCEL");
 		  break;
 	  }

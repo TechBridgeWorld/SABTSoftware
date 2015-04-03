@@ -16,10 +16,8 @@ typedef struct script script_t;
 struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
-	glyph_t* parent;		/* Pointer to previous glyph, if next in sequence */
-	script_t* subscript;	/* Pointer to array of possible next glyphs in
-								cell sequence if not the last in a multi-cell
-								character, NULL otherwise */
+	glyph_t* prev;			/* Pointer to previous glyph in linked list */
+	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
 // Structure representing a script
