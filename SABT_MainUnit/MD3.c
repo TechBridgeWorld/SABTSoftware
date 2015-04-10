@@ -10,6 +10,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "audio.h"
+#include "glyph.h"
 #include "common.h"
 #include "letter_globals.h"
 #include "script_common.h"
@@ -20,23 +21,21 @@
 #define MODE_FILESET "MD3_"
 
 static char submode = SUBMODE_NULL;
-int md3_current_state, md3_prev_state = 0;
-static int game_mode = 0;
-char md3_last_dot,  expected_dot;
-int mistakes = 0;
+static char next_state = STATE_NULL;
+int incorrect_tries = 0;
 static char cell = 0;
 static char cell_pattern = 0;
 static char cell_control = 0;
 static bool scrolled = false;
 /* user_glyph - inputted glyph from user
  * curr_glyph - glyph corresponding to the next letter in the animal
- * word_glyph - stores the word as it is being inputted
- * animal_glyph - stores the entire word
+ * user_word - stores the word as it is being inputted
+ * curr_word - stores the entire word
  */ 
 static glyph_t* user_glyph = NULL;
 static glyph_t* curr_glyph = NULL;
-static glyph_t* word_glyph = NULL;
-static glyph_t* animal_glyph = NULL;
+static word_node_t* user_word = NULL;
+static word_node_t* curr_word = NULL;
 static script_t* this_script = &script_english;
 
 
@@ -124,9 +123,18 @@ int choose_animal()
 void md3_reset(void)
 {
   set_mode_globals(&script_english, "ENG_", MODE_FILESET);
-  md3_current_state = STATE_MENU;
-  md3_last_dot = 0;
-  mistakes = 0;
+  next_state = STATE_MENU;
+  submode = SUBMODE_NULL;
+  incorrect_tries = 0;
+  user_glyph = NULL;
+  curr_glyph = NULL;
+  user_word = free_word(user_word);
+  curr_word = free_word(curr_word);
+  cell = 0;
+  cell_pattern = 0;
+  cell_control = 0;
+  scrolled = false;
+  PRINTF("[MD3] Mode reset");
   play_mp3(MODE_FILESET, "INT");
   play_mp3(MODE_FILESET, "MSEL");
 }
@@ -138,12 +146,11 @@ void md3_reset(void)
  */
 void md3_main(void)
 {
-  char spell_letter[8];
-  switch(md3_current_state)
+  switch(next_state)
   {
     case STATE_MENU:
 	  if (io_user_abort == true) {
-		  PRINTF("[MD3] Quitting to main menu");
+		  PRINTF("[MD3] Quitting to main menu\n\r");
 		  quit_mode();
 		  io_init();
 	  }
@@ -161,14 +168,14 @@ void md3_main(void)
 			if (cell_pattern == ENG_A) {
 			    play_glyph(user_glyph);
 				submode = SUBMODE_PLAY;
-				md3_current_state = STATE_GENQUES;
+				next_state = STATE_GENQUES;
 			} else if (cell_pattern == ENG_B) {
 				play_glyph(user_glyph);
 				submode = SUBMODE_LEARN;
-				md3_current_state = STATE_GENQUES;
+				next_state = STATE_GENQUES;
 			} else {
 				play_mp3(lang_fileset, MP3_INVALID_PATTERN);
-				md3_current_state = STATE_MENU;
+				next_state = STATE_MENU;
 			}
 		  break;
 		  case WITH_LEFT:case WITH_RIGHT:case WITH_CANCEL:
@@ -176,14 +183,15 @@ void md3_main(void)
 	  }
 	break;
 	  
-	/*If user input is A, enter SUBMODE_PLAY; if input is B, enter SUBMODE_LEARN; 
-	else go back to menu*/
 	case STATE_GENQUES:
 	  length_entered_word = 0;
 	  current_word_index = 0;
 	  animal = animal_list[choose_animal()];
-	  word_glyph = NULL;
-	  md3_current_state = STATE_PROMPT;
+	  user_glyph = NULL;
+	  curr_glyph = NULL;
+      user_word = free_word(user_word);
+	  curr_word = free_word(curr_word);
+	  next_state = STATE_PROMPT;
 	  break;
 	  
     case STATE_PROMPT:
@@ -202,13 +210,13 @@ void md3_main(void)
 		default:
 		  break;  
 	  }
-	md3_current_state = STATE_INPUT;
+	next_state = STATE_INPUT;
 	break;
 	
 	case STATE_INPUT:
 	if (io_user_abort == true) {
-		PRINTF("[MD3] User aborted input");
-		md3_current_state = STATE_REPROMPT;
+		PRINTF("[MD3] User aborted input\n\r");
+		next_state = STATE_REPROMPT;
 		io_init();
 	}
 	cell = get_cell();
@@ -220,14 +228,14 @@ void md3_main(void)
 	switch (cell_control) {
 		case WITH_ENTER:
 		user_glyph = search_script(this_script, cell_pattern);
-		md3_current_state = STATE_CHECK;
-		PRINTF("[MD3] Checking answer");
+		next_state = STATE_CHECK;
+		PRINTF("[MD3] Checking answer\n\r");
 		break;
 		case WITH_LEFT:
-		md3_current_state = STATE_PROMPT;
+		next_state = STATE_PROMPT;
 		break;
 		case WITH_RIGHT:
-		md3_current_state = STATE_REPROMPT;
+		next_state = STATE_REPROMPT;
 		break;
 		case WITH_CANCEL:
 		break;
@@ -237,15 +245,15 @@ void md3_main(void)
 	case STATE_CHECK:
 		curr_glyph = search_script(this_script, get_bits_from_letter(animal[length_entered_word]));
 		if (glyph_equals(curr_glyph, user_glyph)) {
-			mistakes = 0;
+			play_glyph(curr_glyph);
+			incorrect_tries = 0;
 			length_entered_word++;
-			word_glyph = add_glyph(this_script, word_glyph, curr_glyph);
+			user_word = add_glyph_to_word(user_word, user_glyph);
 			if(length_entered_word != strlen(animal)) {
-			  play_glyph(curr_glyph);
 			  play_mp3(lang_fileset, "GOOD");
-			  md3_current_state = STATE_INPUT;
+			  next_state = STATE_INPUT;
 			} else { 
-			  play_mp3(lang_fileset, "GOOD");
+			  play_mp3(lang_fileset,  "GOOD");
 			  play_mp3(lang_fileset, "NCWK");
 			  switch (submode){
 				  case SUBMODE_LEARN:
@@ -255,28 +263,29 @@ void md3_main(void)
 				  break;
 				  
 				  case SUBMODE_PLAY:
-				  play_glyph(word_glyph);
+				  play_word(user_word);
 				  play_animal(animal, true);
 			  }
-			  md3_current_state = STATE_GENQUES;
+			  next_state = STATE_GENQUES;
 			}
 		} else {
-			mistakes++;
-			PRINTF("[MD3] User answered incorrectly");
+			play_glyph(user_glyph);
+			incorrect_tries++;
+			PRINTF("[MD3] User answered incorrectly\n\r");
 			play_mp3(lang_fileset, "NO");
 			play_mp3(lang_fileset, MP3_TRY_AGAIN);
-			play_glyph(word_glyph);
-			if (mistakes == MAX_INCORRECT_TRIES_1) {
+			play_word(user_word);
+			if (incorrect_tries == MAX_INCORRECT_TRIES_1) {
 				play_mp3(MODE_FILESET, "PLWR");
 				play_animal(animal, true);
-				animal_glyph = word_to_glyph(this_script, animal);
-				play_glyph(animal_glyph);
-			} else if (mistakes >= 6) {
+				curr_word = word_to_glyph_word(this_script, animal);
+				play_word(curr_word);
+			} else if (incorrect_tries >= 6) {
 				play_glyph(curr_glyph);
 				play_mp3(MODE_FILESET, "PRSS");
 				play_dot_sequence(curr_glyph);
 			}
-			md3_current_state = STATE_INPUT;
+			next_state = STATE_INPUT;
 		}
 		break;
 	
@@ -288,16 +297,16 @@ void md3_main(void)
 
 		case CANCEL:
 		PRINTF("[MD3] Reissuing prompt");
-		md3_current_state = STATE_PROMPT;
+		next_state = STATE_PROMPT;
 		scrolled = false;
 		break;
 
 		case ENTER:
 		PRINTF("[MD3] Skipping animal");
 		if (scrolled)
-		md3_current_state = STATE_PROMPT;
+		next_state = STATE_PROMPT;
 		else
-		md3_current_state = STATE_GENQUES;
+		next_state = STATE_GENQUES;
 		scrolled = false;
 		break;
 
@@ -306,8 +315,20 @@ void md3_main(void)
 			length_entered_word = 0;
 			current_word_index = 0;
 			animal = animal_list[choose_animal()];
-			word_glyph = NULL;
-			play_animal(animal, true);
+			user_word = NULL;
+			switch(submode)
+			{
+				case SUBMODE_PLAY:
+				play_animal(animal, false);
+				break;
+				
+				case SUBMODE_LEARN:
+				play_animal(animal, true);
+				break;
+				
+				default:
+				break;
+			}
 			scrolled = true;
 		break;
 

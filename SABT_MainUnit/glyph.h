@@ -11,6 +11,7 @@
 
 typedef struct glyph glyph_t;
 typedef struct script script_t;
+typedef struct word_node word_node_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
@@ -26,6 +27,11 @@ struct script {
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
+};
+
+struct word_node {
+	glyph_t* data;
+	struct word_node* next;	
 };
 
 // Common glyph functions

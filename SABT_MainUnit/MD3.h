@@ -9,23 +9,14 @@
 #ifndef _MD3_H_
 #define _MD3_H_
 
-// State definitions
-#define STATE_MENU                     0          // Just started, plays welcome message
-#define STATE_GENQUES                  1          // Request for input from user - part 1
-#define STATE_INPUT					   2          // Request for input from user - part 2
-#define STATE_REPROMPT                 3          // Waiting for user input
-#define STATE_PROC_INPUT               4          // Processed user input
-#define STATE_CHECK                    5          // Valid input was entered
-#define STATE_READ_ENTERED_LETTERS     6          // User input is invalid (not a real letter)
-#define STATE_WRONG_INPUT              7          // User input is valid but wrong
-#define STATE_CORRECT_INPUT            8          // User input is correct
-#define STATE_DONE_WITH_CURRENT_ANIMAL 9   // Finished current animal correctly
-#define STATE_SELECT_MODE			   10 
-#define STATE_PLAY_SOUND			   11
-#define STATE_PROMPT				   12
-#define STATE_LETTER_HINT			   13
-#define STATE_WORD_HINT				   14
-#define STATE_BUTTON_HINT			   15
+// State machine constants
+#define STATE_NULL 0x00
+#define STATE_MENU 0x01
+#define STATE_GENQUES 0x02
+#define STATE_PROMPT 0x03
+#define STATE_INPUT 0x04
+#define STATE_CHECK 0x05
+#define STATE_REPROMPT 0x06
 
 #define PRIME                	53
 
