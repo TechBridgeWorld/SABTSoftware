@@ -361,19 +361,12 @@ void ui_call_mode_yes_answer(void)
     case 1:
       md1_call_mode_yes_answer();
       break;
-    case 3:
-      md3_call_mode_yes_answer();
-      break;
     case 4:
       md4_call_mode_yes_answer();
       break;
     case 5:
       md5_call_mode_yes_answer();
       break;
-    case 6:
-      md6_call_mode_yes_answer();
-      break;
-
     case 9:
       md9_call_mode_yes_answer();
       break;
@@ -402,17 +395,11 @@ void ui_call_mode_no_answer(void)
     case 1:
       md1_call_mode_no_answer();
       break;
-    case 3:
-      md3_call_mode_no_answer();
-      break;
     case 4:
       md4_call_mode_no_answer();
       break;
     case 5:
       md5_call_mode_no_answer();
-      break;
-    case 6:
-      md6_call_mode_no_answer();
       break;
     case 9:
       md9_call_mode_no_answer();
@@ -440,19 +427,12 @@ void ui_input_dot_to_current_mode(char this_dot)
         case 1:
           md1_input_dot(this_dot);
           break;
-        case 3:
-          md3_input_dot(this_dot);
-          break;
         case 4:
           md4_input_dot(this_dot);
           break;
         case 5:
           md5_input_dot(this_dot);
           break;
-        case 6:
-          md6_input_dot(this_dot);
-          break;
-
         case 9:
           md9_input_dot(this_dot);
           break;
@@ -489,26 +469,17 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 1:
         md1_input_cell(this_cell);
         break;
-      case 3:
-        md3_input_cell(this_cell);
-        break;
       case 4:
         md4_input_cell(this_cell);
         break;
       case 5:
         md5_input_cell(this_cell);
         break;
-      case 6:
-        md6_input_cell(this_cell);
-        break;
       case 9:
         md9_input_cell(this_cell);
         break;
 	  case 10:
         md10_input_cell(this_cell);
-        break;
-	  case 11:
-        md11_input_cell(this_cell);
         break;
       default:
         break;
@@ -635,11 +606,6 @@ void ui_reset_the_current_mode(void)
  */
 void ui_call_mode_left(void) {
   switch (ui_current_mode_number) {
-    case 3:
-	  md3_call_mode_left();
-    case 6:
-      md6_call_mode_left();
-      break;
     case 9:
       md9_call_mode_left();
       break;
@@ -662,11 +628,6 @@ void ui_call_mode_left(void) {
  */
 void ui_call_mode_right(void) {
   switch (ui_current_mode_number) {
-    case 3:
-	  md3_call_mode_right();
-    case 6:
-      md6_call_mode_left();
-      break;
     case 9:
       md9_call_mode_right();
       break;    

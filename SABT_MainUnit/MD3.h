@@ -10,12 +10,12 @@
 #define _MD3_H_
 
 // State definitions
-#define STATE_INITIAL                  0          // Just started, plays welcome message
-#define STATE_REQUEST_INPUT1           1          // Request for input from user - part 1
-#define STATE_REQUEST_INPUT2           2          // Request for input from user - part 2
-#define STATE_WAIT_INPUT               3          // Waiting for user input
+#define STATE_MENU                     0          // Just started, plays welcome message
+#define STATE_GENQUES                  1          // Request for input from user - part 1
+#define STATE_INPUT					   2          // Request for input from user - part 2
+#define STATE_REPROMPT                 3          // Waiting for user input
 #define STATE_PROC_INPUT               4          // Processed user input
-#define STATE_CHECK_IF_CORRECT         5          // Valid input was entered
+#define STATE_CHECK                    5          // Valid input was entered
 #define STATE_READ_ENTERED_LETTERS     6          // User input is invalid (not a real letter)
 #define STATE_WRONG_INPUT              7          // User input is valid but wrong
 #define STATE_CORRECT_INPUT            8          // User input is correct
@@ -28,6 +28,14 @@
 #define STATE_BUTTON_HINT			   15
 
 #define PRIME                	53
+
+// Submode constants
+#define SUBMODE_NULL 0x00
+#define SUBMODE_PLAY 0x01
+#define SUBMODE_LEARN 0x02
+
+#define MAX_INCORRECT_TRIES_1 3
+#define MAX_INCORRECT_TRIES_2 6
 
 //static char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.

@@ -112,6 +112,29 @@ glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph) {
 }
 
 /**
+* @brief Adds added_glyph to the end of the linked list 
+* starting with curr_glyph
+* @param glyph_t* curr_glyph pointer to glyph being added to
+* @param glyph_t* added_glyph pointer to glyph being added
+* @param script_t* script - Script to look in
+* @return glyph_t* - curr_glyph with added_glyph added
+*/
+glyph_t* add_glyph(script_t* curr_script, glyph_t* curr_glyph, glyph_t* added_glyph) {
+	if (added_glyph == NULL) return;
+	if (curr_glyph == NULL) { 
+		return added_glyph;
+	} else {
+		glyph_t* next_glyph = curr_glyph;
+		while (next_glyph->next != NULL){
+			next_glyph = get_next(curr_script, next_glyph);
+		}
+		next_glyph->next = added_glyph;
+		return curr_glyph;
+	}
+}
+
+
+/**
  * @brief Returns the glyph in the script the corresponds to 
  * the first node in the linked list that includes curr_glyph
  * @param glyph_t* curr_glyph - Pointer to glyph to find next of
@@ -126,6 +149,23 @@ glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
 		return get_root(curr_script,curr_glyph);
 	}
 }
+
+/**
+ * @brief Returns a glyph linked list that corresponds to the given word
+ * @param char* word -> word to turn into a glyph linked list
+ * @param script_t* script - Script to look in
+ * @return glyph_t* - pointer to first glyph in the linked list representing word
+ */
+glyph_t* word_to_glyph(script_t* curr_script, char* word) {
+	glyph_t* word_glyph = NULL;
+	glyph_t* curr_glyph = NULL;
+	for (int i = 0; i < strlen(word); i++) {
+		curr_glyph = search_script(curr_script,get_bits_from_letter(word[i]));
+		word_glyph = add_glyph(curr_script,word_glyph,curr_glyph);
+	}
+	return word_glyph;
+}
+
 
 /**
 * @brief Returns a random last-order glyph from the current script

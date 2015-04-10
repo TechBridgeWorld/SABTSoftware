@@ -177,9 +177,10 @@ void play_dot(char dot) {
  */
 void play_glyph(glyph_t *this_glyph) {
 	char mp3[5];
-	if (this_glyph != NULL) {
+	while (this_glyph != NULL) {
 		sprintf(mp3, this_glyph->sound);
 		play_mp3(lang_fileset, mp3);
+		this_glyph = this_glyph->next;
 	}
 }
 

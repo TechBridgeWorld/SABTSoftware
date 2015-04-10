@@ -204,7 +204,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 		break;
 
 		case STATE_REPROMPT:
-		switch(create_dialog(MP3_REPROMPT,
+		switch(create_dialog("SKIP",
 		ENTER_CANCEL | LEFT_RIGHT)) {
 			case NO_DOTS:
 			break;

@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+learn_letter_mode.c
+
 SABT_MainUnit.c
 
 USART_Keypad.c
