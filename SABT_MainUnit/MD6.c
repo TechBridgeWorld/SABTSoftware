@@ -71,7 +71,11 @@ void md6_main(void) {
     // If user presses ENTER, then check dot sequence for valid letter
     // and provide feedback
     case MD6_STATE_CHECK:
-      play_glyph(this_glyph);
+	  if (this_glyph == NULL) {
+		play_mp3(this_lang_fileset, MP3_INVALID_PATTERN);
+	  } else {
+		play_glyph(this_glyph);
+	  }
       next_state = MD6_STATE_INPUT;
       break;
   }
