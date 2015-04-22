@@ -10,6 +10,7 @@
 // Standard libraries
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 // Custom libraries
 #include "audio.h"

@@ -67,6 +67,12 @@
   </PropertyGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
   <ItemGroup>
+    <Compile Include="learn_letter_mode.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="learn_letter_mode.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="USART_Keypad.h">
       <SubType>compile</SubType>
     </Compile>

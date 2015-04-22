@@ -43,5 +43,7 @@ glyph_t* get_random_glyph(script_t* script);
 bool is_number(glyph_t* curr_glyph);
 int get_digit(glyph_t* curr_glyph);
 bool is_blank(glyph_t* curr_glyph);
+glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph);
+glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph);
 
 #endif /* _SCRIPT_COMMON_H_ */
