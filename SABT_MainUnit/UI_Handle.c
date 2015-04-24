@@ -375,9 +375,6 @@ void ui_call_mode_yes_answer(void)
 	  md10_call_mode_yes_answer();
 	  break;
 
-	case 11:
-	  md11_call_mode_yes_answer();
-	  break;
 
     default:
       break;
@@ -406,9 +403,6 @@ void ui_call_mode_no_answer(void)
       break;
     case 10:
 	  md10_call_mode_no_answer();
-	  break;
-	case 11:
-	  md11_call_mode_no_answer();
 	  break;
     default:
       break;
@@ -439,9 +433,6 @@ void ui_input_dot_to_current_mode(char this_dot)
 
         case 10:
 		  md10_input_dot(this_dot);
-		  break;
-	    case 11:
-		  md11_input_dot(this_dot);
 		  break;
 
         default:
@@ -612,9 +603,6 @@ void ui_call_mode_left(void) {
 	case 10:
 	  md10_call_mode_left();
 	  break;
-	case 11:
-	  md11_call_mode_left();
-	  break;
 
     default:
       break;
@@ -633,9 +621,6 @@ void ui_call_mode_right(void) {
       break;    
 	case 10:
 	  md10_call_mode_right();
-	  break;  
-	case 11:
-	  md11_call_mode_right();
 	  break;  
 
     default:
