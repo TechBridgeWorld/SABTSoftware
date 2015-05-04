@@ -73,6 +73,12 @@
     <Compile Include="learn_letter_mode.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sound_game_mode.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sound_game_mode.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="USART_Keypad.h">
       <SubType>compile</SubType>
     </Compile>

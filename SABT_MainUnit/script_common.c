@@ -112,6 +112,40 @@ glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph) {
 }
 
 /**
+* @brief Adds added_glyph to the end of a word_node
+* @param word_node_t* curr_word pointer to word being added to
+* @param glyph_t* added_glyph pointer to glyph being added
+* @return word_node_t* - curr_word with added_glyph added
+*/
+word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph) {
+	word_node_t* new_word_node = malloc(sizeof(word_node_t));
+	new_word_node->data = added_glyph; 
+	new_word_node->next = NULL;
+	if (added_glyph == NULL) return;
+	if (curr_word == NULL) { 
+		return new_word_node;
+	} else {
+		word_node_t* next_word_node = curr_word;
+		while (next_word_node->next != NULL){
+			next_word_node = next_word_node->next;
+		}
+		next_word_node->next = new_word_node;
+		return curr_word;
+	}
+}
+
+word_node_t* free_word(word_node_t* this_word) {
+	word_node_t* curr_node;
+	while (this_word!= NULL) {
+		curr_node = this_word;
+		this_word = this_word->next;
+		free(curr_node);
+	}
+	return NULL;
+}
+
+
+/**
  * @brief Returns the glyph in the script the corresponds to 
  * the first node in the linked list that includes curr_glyph
  * @param glyph_t* curr_glyph - Pointer to glyph to find next of
@@ -126,6 +160,23 @@ glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
 		return get_root(curr_script,curr_glyph);
 	}
 }
+
+/**
+ * @brief Returns a word linked list that corresponds to the given word
+ * @param char* word -> word to turn into a glyph linked list
+ * @param script_t* script - Script to look in
+ * @return word_node_t* - pointer to first word_node in the linked list representing word
+ */
+glyph_t* word_to_glyph_word(script_t* curr_script, char* word) {
+	word_node_t* curr_word = NULL;
+	glyph_t* curr_glyph = NULL;
+	for (int i = 0; i < strlen(word); i++) {
+		curr_glyph = search_script(curr_script,get_bits_from_letter(word[i]));
+		curr_word = add_glyph_to_word(curr_word,curr_glyph);
+	}
+	return curr_word;
+}
+
 
 /**
 * @brief Returns a random last-order glyph from the current script

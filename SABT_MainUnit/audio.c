@@ -184,6 +184,19 @@ void play_glyph(glyph_t *this_glyph) {
 }
 
 /**
+ * @brief Play sound file corresponding to an word, checks for NULL arg
+ * @param word_node_t* this_word - Pointer to word to play
+ * @return void
+ */
+void play_word(word_node_t *this_word) {
+	while(this_word != NULL) {
+		play_glyph(this_word->data);
+		this_word = this_word->next;
+	}
+}
+
+
+/**
  * @brief Plays the dot sequence for a given bit pattern
  * @param char pattern - Bit pattern to play
  * @return void
