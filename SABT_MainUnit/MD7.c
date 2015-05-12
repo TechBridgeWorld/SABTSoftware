@@ -7,6 +7,7 @@
 // Standard libraries
 #include <stdbool.h>
 #include <stdio.h>
+#include "learn_letter_mode.h"
 
 // Script and fileset parameters
 #include "script_hindi.h"

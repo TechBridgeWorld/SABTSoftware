@@ -48,10 +48,8 @@ static word_node_t* curr_word = NULL;
 static script_t* this_script = &script_english;
 
 
-static char **sound_source_list;
-
-
-static char **sound_list;
+char **sound_source_list;
+char **sound_list;
 
 /*
 * @brief Plays sound_source sounds
@@ -126,11 +124,11 @@ int choose_sound_source()
   return num;
 }
 
-void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET, const char *SOUND_SOURCE_LIST[], const char *SOUND_LIST[12])
+void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET, const char** SOUND_SOURCE_LIST, const char** SOUND_LIST)
 {
   set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
-  sound_list = SOUND_LIST;
-  sound_source_list = SOUND_SOURCE_LIST;
+  sound_list = (char**) SOUND_LIST;
+  sound_source_list = (char**) SOUND_SOURCE_LIST;
   next_state = STATE_MENU;
   submode = SUBMODE_NULL;
   incorrect_tries = 0;

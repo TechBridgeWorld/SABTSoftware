@@ -11,7 +11,7 @@
 #include "script_common.h"
 
 #define SCRIPT_HINDI_FILESET "HIN_"
-#define SCRIPT_HINDI_LENGTH 48
+#define SCRIPT_HINDI_LENGTH 49
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Hindi glyphs is represented here

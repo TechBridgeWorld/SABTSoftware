@@ -12,18 +12,18 @@
 #include "letter_globals.h"
 #include "script_common.h"
 #include "script_english.h"
+#include "sound_game_mode.h"
 
-#define MAX_INDEX 11
 #define SCRIPT_ADDRESS &script_english
 #define SCRIPT_LENGTH SCRIPT_ENGLISH_LENGTH
 #define LANG_FILESET "ENG_"
 #define MODE_FILESET "MD11"
 
 
-const char *noise_list[MAX_INDEX] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
+const char *noise_list[MAX_INDEX + 1] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
     "truck", "train", "siren", "phone", "clock", NULL};
 
-const char* noise_sounds[MAX_INDEX] = {"AER", "RAI", "BEL", "DOO", "HOR", "AUT",
+const char* noise_sounds[MAX_INDEX + 1] = {"AER", "RAI", "BEL", "DOO", "HOR", "AUT",
     "TRU", "TRA", "SIR", "PHO", "CLO", NULL};
 
 void md11_reset(void) {

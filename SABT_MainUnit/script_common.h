@@ -45,5 +45,8 @@ int get_digit(glyph_t* curr_glyph);
 bool is_blank(glyph_t* curr_glyph);
 glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph);
 glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph);
+word_node_t* word_to_glyph_word(script_t* curr_script, char* word);
+word_node_t* free_word(word_node_t* this_word);
+word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph);
 
 #endif /* _SCRIPT_COMMON_H_ */

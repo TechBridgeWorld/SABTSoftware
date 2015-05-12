@@ -11,7 +11,7 @@
 #include "script_common.h"
 
 #define SCRIPT_KANNADA_FILESET "KAN_"
-#define SCRIPT_KANNADA_LENGTH 50
+#define SCRIPT_KANNADA_LENGTH 51
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Kannada glyphs is represented here

@@ -7,6 +7,7 @@
 #include "glyph.h"
 #include "script_common.h"
 #include "script_digits.h"
+#include "letter_globals.h"
 #include "audio.h"
 #include "globals.h"
 #include "common.h"
@@ -121,7 +122,7 @@ word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph) {
 	word_node_t* new_word_node = malloc(sizeof(word_node_t));
 	new_word_node->data = added_glyph; 
 	new_word_node->next = NULL;
-	if (added_glyph == NULL) return;
+	if (added_glyph == NULL) return NULL;
 	if (curr_word == NULL) { 
 		return new_word_node;
 	} else {
@@ -167,7 +168,7 @@ glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
  * @param script_t* script - Script to look in
  * @return word_node_t* - pointer to first word_node in the linked list representing word
  */
-glyph_t* word_to_glyph_word(script_t* curr_script, char* word) {
+word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 	word_node_t* curr_word = NULL;
 	glyph_t* curr_glyph = NULL;
 	for (int i = 0; i < strlen(word); i++) {

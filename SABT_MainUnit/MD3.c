@@ -16,18 +16,18 @@
 #include "script_common.h"
 #include "script_english.h" 
 #include "MD3.h"
+#include "sound_game_mode.h"
 
-#define MAX_INDEX 11
 #define SCRIPT_ADDRESS &script_english
 #define SCRIPT_LENGTH SCRIPT_ENGLISH_LENGTH
 #define LANG_FILESET "ENG_"
 #define MODE_FILESET "MD3_"
 
 
-const char *animal_list[MAX_INDEX] = {"bee", "camel", "cat", "cow", "dog", "horse",
+const char *animal_list[MAX_INDEX + 1] = {"bee", "camel", "cat", "cow", "dog", "horse",
     "hyena", "pig", "rooster", "sheep", "zebra", NULL};
 	
-const char* animal_sounds[MAX_INDEX] = {"BEE","CAM","CAT","COW","DOG","HOR",
+const char* animal_sounds[MAX_INDEX + 1] = {"BEE","CAM","CAT","COW","DOG","HOR",
     "HYE","PIG","ROO","SHE","ZEB", NULL};
 
 void md3_reset(void) {

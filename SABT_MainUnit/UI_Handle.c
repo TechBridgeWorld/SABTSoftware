@@ -163,7 +163,6 @@ bool ui_parse_message(bool mp3_is_playing)
 {
   //First things first, check the CRC
   unsigned char message_len = usart_ui_received_packet[2];
-  unsigned char message_number;
   unsigned char message_type;
   unsigned char adc_message[10];
   uint16_t chksum = ui_calculate_crc((unsigned char*)&usart_ui_received_packet);
@@ -174,7 +173,6 @@ bool ui_parse_message(bool mp3_is_playing)
         | usart_ui_received_packet[message_len - 1]))
   {
     // If correct, store the message elements
-    message_number = usart_ui_received_packet[3];
     message_type = usart_ui_received_packet[4];
 
     // Process the message
