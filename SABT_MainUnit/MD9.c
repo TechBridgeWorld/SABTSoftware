@@ -39,7 +39,7 @@
 // Submode menu prompt
 #define MP3_MENU	"MENU" //Menu
 // Level select prompt
-#define MP3_LVLSEL "LVSL" //Level select
+#define MP3_LVLSEL "LVLS" //Level select
 #define MP3_INSTRUCTIONS "INST"
 // Pre-question prompt
 #define MP3_PREQUES "WHIS" //What is
