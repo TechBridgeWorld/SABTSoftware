@@ -7,6 +7,7 @@
 #include "glyph.h"
 #include "script_common.h"
 #include "script_digits.h"
+#include "letter_globals.h"
 #include "audio.h"
 #include "globals.h"
 #include "common.h"
@@ -33,11 +34,6 @@ glyph_t blank_cell = {
 */
 void reset_script_indices(script_t* script) {
 	script->index = -1;
-	for (int i = 0; i < script->length; i++) {
-		if (script->glyphs[i].subscript != NULL) {
-			reset_script_indices(script->glyphs[i].subscript);
-		}
-	}
 }
 
 /**
@@ -50,7 +46,6 @@ void reset_script_indices(script_t* script) {
 */
 glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 	char curr_pattern = patterns[*index];
-	script_t* subscript = NULL;
 	glyph_t* curr_glyph;
 
 	sprintf(dbgstr, "[IO] Current pattern: 0x%x\n\r", curr_pattern);
@@ -76,19 +71,8 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 			return NULL;
 		}
 	}
-	subscript = curr_glyph->subscript;
-	
-	// If glyph does not have subscript, check subscript
-	if (curr_glyph->subscript != NULL) {
-		PRINTF("[IO] Recursively checking subscript for next pattern\n\r");
-		*index = *index + 1;
-		return get_glyph(subscript, patterns, index);
-	
-	// Otherwise return subscript
-	} else {
 		PRINTF("[IO] No subscript; returning glyph\n\r");
 		return curr_glyph;
-	}
 }
 
 /**
@@ -118,16 +102,94 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 }
 
 /**
+ * @brief Returns the glyph in the script the corresponds to 
+ * curr_glyph -> next
+ * @param glyph_t* curr_glyph pointer to glyph to find next of
+ * @param script_t* script - Script to look in
+ * @return glyph_t* - Corresponding to next in the linked list
+ */
+glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph) {
+	return search_script(curr_script, curr_glyph->next->pattern);
+}
+
+/**
+* @brief Adds added_glyph to the end of a word_node
+* @param word_node_t* curr_word pointer to word being added to
+* @param glyph_t* added_glyph pointer to glyph being added
+* @return word_node_t* - curr_word with added_glyph added
+*/
+word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph) {
+	word_node_t* new_word_node = malloc(sizeof(word_node_t));
+	new_word_node->data = added_glyph; 
+	new_word_node->next = NULL;
+	if (added_glyph == NULL) return NULL;
+	if (curr_word == NULL) { 
+		return new_word_node;
+	} else {
+		word_node_t* next_word_node = curr_word;
+		while (next_word_node->next != NULL){
+			next_word_node = next_word_node->next;
+		}
+		next_word_node->next = new_word_node;
+		return curr_word;
+	}
+}
+
+word_node_t* free_word(word_node_t* this_word) {
+	word_node_t* curr_node;
+	while (this_word!= NULL) {
+		curr_node = this_word;
+		this_word = this_word->next;
+		free(curr_node);
+	}
+	return NULL;
+}
+
+
+/**
+ * @brief Returns the glyph in the script the corresponds to 
+ * the first node in the linked list that includes curr_glyph
+ * @param glyph_t* curr_glyph - Pointer to glyph to find next of
+ * @param script_t* script - Script to look in
+ * @return glyph_t* - pointer to first glyph in the linked list
+ */
+glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
+	if (curr_glyph->prev == NULL) {
+		return curr_glyph;
+	} else {
+		curr_glyph = search_script(curr_script,curr_glyph->prev->pattern);
+		return get_root(curr_script,curr_glyph);
+	}
+}
+
+/**
+ * @brief Returns a word linked list that corresponds to the given word
+ * @param char* word -> word to turn into a glyph linked list
+ * @param script_t* script - Script to look in
+ * @return word_node_t* - pointer to first word_node in the linked list representing word
+ */
+word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
+	word_node_t* curr_word = NULL;
+	glyph_t* curr_glyph = NULL;
+	for (int i = 0; i < strlen(word); i++) {
+		curr_glyph = search_script(curr_script,get_bits_from_letter(word[i]));
+		curr_word = add_glyph_to_word(curr_word,curr_glyph);
+	}
+	return curr_word;
+}
+
+
+/**
 * @brief Returns a random last-order glyph from the current script
 * @param script_t* - Script to get random glyph from
 * @return glyph_t* - Pointer to random glyph
 */
 glyph_t* get_random_glyph(script_t* script) {
 	glyph_t* curr_glyph = &(script->glyphs[timer_rand() % script->length]);
-	if (curr_glyph->subscript == NULL) {
+	if (curr_glyph->prev == NULL) {
 		return curr_glyph;
 	} else {
-		return get_random_glyph(curr_glyph->subscript);
+		return get_random_glyph(script);
 	}
 }
 
@@ -139,7 +201,6 @@ glyph_t* get_random_glyph(script_t* script) {
 glyph_t* get_next_glyph(script_t* script) {
 
 	glyph_t* curr_glyph;
-	glyph_t* next_glyph;
 
 	script->index++;
 
@@ -150,21 +211,11 @@ glyph_t* get_next_glyph(script_t* script) {
 	}
 
 	curr_glyph = &(script->glyphs[script->index]);
-
-	// If current glyph is valid, update index and return
-	if (curr_glyph->subscript == NULL) {
+	//
+	if (curr_glyph -> prev == NULL) {
 		return curr_glyph;
-	// Otherwise recursively call on subscript
 	} else {
-		next_glyph = get_next_glyph(curr_glyph->subscript);
-		// If glyph found in subscript, return
-		if (next_glyph != NULL) {
-			script->index--;
-			return next_glyph;
-		// Otherwise update superscript and call again
-		} else {
-			return get_next_glyph(script);
-		}
+		return get_next_glyph(script);
 	}
 }
 
@@ -176,7 +227,6 @@ glyph_t* get_next_glyph(script_t* script) {
 glyph_t* get_prev_glyph(script_t* script) {
 
 	glyph_t* curr_glyph;
-	glyph_t* prev_glyph;
 
 	script->index--;
 
@@ -187,22 +237,12 @@ glyph_t* get_prev_glyph(script_t* script) {
 	}
 
 	curr_glyph = &(script->glyphs[script->index]);
-
-	// If current glyph is valid, update index and return
-	if (curr_glyph->subscript == NULL) {
+	if (curr_glyph -> prev == NULL) {
 		return curr_glyph;
-	// Otherwise recursively call on subscript
 	} else {
-		prev_glyph = get_prev_glyph(curr_glyph->subscript);
-		// If glyph found in subscript, return
-		if (prev_glyph != NULL) {
-			script->index++;
-			return prev_glyph;
-		// Otherwise update superscript and call again
-		} else {
-			return get_prev_glyph(script);
-		}
+		return get_prev_glyph(script);
 	}
+
 }
 
 

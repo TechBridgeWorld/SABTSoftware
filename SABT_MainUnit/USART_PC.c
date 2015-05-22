@@ -102,7 +102,7 @@ void usart_transmit_byte_to_pc(unsigned char data)
  * @param str_data   String     Contains message to be sent to PC
  * @return Void
  */
-void usart_transmit_string_to_pc_from_flash(char* str_data)
+void usart_transmit_string_to_pc_from_flash(const char* str_data)
 {
   while (pgm_read_byte(&(*str_data)))
     usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));

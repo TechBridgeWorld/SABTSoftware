@@ -12,7 +12,7 @@
 // General constants
 #define MAX_INCORRECT_TRIES 3
 #define MAX_BUF_SIZE 				256
-#define GET_CELL_CONTROL(c) ((c >> 6) & 0b00000011)
+#define GET_CELL_CONTROL(c) (c & 0b11000000)
 #define GET_CELL_PATTERN(c) (c & 0b00111111)
 
 // Button and control flow mappings
@@ -27,7 +27,7 @@
 #define WITH_ENTER					0b11000000
 #define WITH_LEFT						0b10000000
 #define WITH_RIGHT					0b01000000
-#define WITH_CANCEL 				0b00111111	// Becuase we don't care about the cell
+#define WITH_CANCEL 				0b00000000	// Becuase we don't care about the cell
  																				// pattern in this case - also, I ran
  																				// out of bits for control buttons...
 

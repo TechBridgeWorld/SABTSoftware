@@ -35,6 +35,6 @@ void init_usart_pc(void);
 unsigned char usart_pc_receive_action(void);
 void usart_transmit_byte_to_pc(unsigned char);
 void usart_transmit_string_to_pc(unsigned char*);
-void usart_transmit_string_to_pc_from_flash(char*);
+void usart_transmit_string_to_pc_from_flash(const char*);
 
 #endif /* _USART_PC_H_ */

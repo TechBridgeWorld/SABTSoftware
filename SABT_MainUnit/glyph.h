@@ -11,15 +11,14 @@
 
 typedef struct glyph glyph_t;
 typedef struct script script_t;
+typedef struct word_node word_node_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
-	glyph_t* parent;		/* Pointer to previous glyph, if next in sequence */
-	script_t* subscript;	/* Pointer to array of possible next glyphs in
-								cell sequence if not the last in a multi-cell
-								character, NULL otherwise */
+	glyph_t* prev;			/* Pointer to previous glyph in linked list */
+	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
 // Structure representing a script
@@ -28,6 +27,11 @@ struct script {
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
+};
+
+struct word_node {
+	glyph_t* data;
+	struct word_node* next;	
 };
 
 // Common glyph functions

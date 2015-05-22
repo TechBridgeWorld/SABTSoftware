@@ -11,7 +11,7 @@
 #include "script_common.h"
 
 #define SCRIPT_KANNADA_FILESET "KAN_"
-#define SCRIPT_KANNADA_LENGTH 50
+#define SCRIPT_KANNADA_LENGTH 51
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Kannada glyphs is represented here
@@ -78,14 +78,6 @@
 
 glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH];
 
-//Multi-cell - RU
-
-script_t subscript_kan_ru_1;
-glyph_t glyphs_kan_ru_1[1];
-
-script_t subscript_kan_ru_1 = {1, 0, "KAN_", glyphs_kan_ru_1};
-glyph_t glyphs_kan_ru_1[1] = {{KAN_RU_2, "RU", &(glyphs_kannada[6]), NULL}};
-
 // Kannada script array
 glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_A, "A", NULL, NULL},
@@ -94,7 +86,8 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_II, "II", NULL, NULL},
 	{KAN_U, "U", NULL, NULL},
 	{KAN_UU, "UU", NULL, NULL},
-	{KAN_RU_1, MP3_INVALID_PATTERN, NULL, &subscript_kan_ru_1},
+	{KAN_RU_1, "RU", NULL, &glyphs_kannada[7]},
+	{KAN_RU_2, "RU_2", &glyphs_kannada[6] ,NULL},
 
 	{KAN_E, "E", NULL, NULL},
 	{KAN_EE, "EE", NULL, NULL},

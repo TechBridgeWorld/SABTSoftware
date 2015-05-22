@@ -20,7 +20,7 @@
 #define STATE_DONE_WITH_CURRENT_NOISE  9   // Finished current noise correctly
 #define STATE_SELECT_MODE			   10 
 #define STATE_PLAY_SOUND			   11
-#define STATE_PROMPT				   12
+//#define STATE_PROMPT				   12
 #define STATE_LETTER_HINT			   13
 #define STATE_WORD_HINT				   14
 #define STATE_BUTTON_HINT			   15

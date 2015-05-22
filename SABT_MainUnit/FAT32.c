@@ -135,7 +135,6 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
     unsigned long fs_entry)
 {
   struct FSInfo_Structure *FS = (struct FSInfo_Structure *) &buffer;
-  unsigned char error;
 
   sd_read_single_block(unused_sectors + 1);
 
@@ -154,7 +153,6 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
       FS->free_cluster_count = fs_entry;
     else // when tot_or_next = NEXT_FREE
       FS->next_free_cluster = fs_entry;
-    error = sd_write_single_block(unused_sectors + 1);  //update FSinfo
   }
   return 0xffffffff;
 }
@@ -648,8 +646,7 @@ unsigned char init_read_dict(unsigned char *file_name){
  */
 unsigned char read_dict_file()
 {
-  struct dir_Structure *dir;
-  unsigned long cluster, file_size, first_sector;
+  unsigned long cluster, first_sector;
   unsigned char j;
   unsigned long i, k;
   bool end_of_file = false;
@@ -661,8 +658,6 @@ unsigned char read_dict_file()
   //@TODO   MUST FREE SOMEWHERE
   // READ in 281 clusters
 
-  dir = dict_dir;
-  file_size = dir->file_size;
   cluster = curr_dict_cluster;
   for(k = 0; k < CLUSTERS_PER_RUN; k++)
   {
@@ -735,16 +730,11 @@ bool bin_srch_dict(unsigned char *word)
   int lo = 0;
   int cmp_wrd = 0;
   int mid;
-  int cluster;
   struct dir_Structure *dir;
 
   dir = dict_dir;
   if(dir == 0)
     return (0);
-
-
-
-  cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
 
   file_size = dir->file_size;
 
@@ -1134,16 +1124,14 @@ unsigned char convert_dict_file_name (unsigned char *file_name)
  */
 int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned char *file_content)
 {
-  unsigned char j, error, append_file = 0;
+  unsigned char j;
   unsigned int i;
   struct dir_Structure *dir;
-  unsigned long cluster, first_sector, cluster_count;
+  unsigned long cluster, first_sector;
 
   if(read_file (VERIFY, file_name) == 1) 
   {
-    append_file = 1;
     cluster = append_start_cluster;
-    cluster_count=0;
     first_sector = get_first_sector (cluster);
     start_block = get_first_sector (cluster);
     i=0;
@@ -1155,7 +1143,6 @@ int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned c
       if(i >= 512)
       {        
         i=0;
-        error = sd_write_single_block (start_block);
         j++;
         if(j == sector_per_cluster) {j = 0; break;}
         start_block++; 
@@ -1166,7 +1153,6 @@ int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned c
       buffer[i++] = '$';
       for(;i < 512; i++)  //fill the rest of the buffer with 0x00
         buffer[i] = 0x00;
-      error = sd_write_single_block (start_block);
       _delay_ms(100);
     }
     sd_read_single_block(first_sector);    
@@ -1191,7 +1177,7 @@ int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned c
 void write_file (unsigned char *file_name)
 {
   struct dir_Structure *dir;
-  unsigned char j, data, error, file_created_flag = 0;
+  unsigned char j, data, file_created_flag = 0;
   unsigned char start = 0, append_file = 0, sector_end_flag = 0, sector = 0;
   unsigned int i, first_cluster_high, first_cluster_low;
   unsigned long cluster, next_cluster, prev_cluster;
@@ -1292,7 +1278,6 @@ void write_file (unsigned char *file_name)
       if(i >= 512)   
       {
         i = 0;
-        error = sd_write_single_block (start_block);
         j++;
         if(j == sector_per_cluster) {j = 0; break;}
         start_block++;
@@ -1307,7 +1292,6 @@ void write_file (unsigned char *file_name)
       i--;
       for(; i < 512; i++)  //fill the rest of the buffer with 0x00
         buffer[i]= 0x00;
-      error = sd_write_single_block (start_block);
 
       break;
     }
@@ -1588,7 +1572,7 @@ void free_memory_update (unsigned char flag, unsigned long size)
 void init_sd_card(bool verbose)
 {
   unsigned char init = 0;
-  unsigned char error, FAT32_active;
+  unsigned char error;
   card_type = 0;
   error = sd_init(); // try to initialize sd card
 
@@ -1642,14 +1626,12 @@ void init_sd_card(bool verbose)
 
     _delay_ms(1);   //some delay
 
-    FAT32_active = 1;
     error = get_boot_sector_data (); //read boot sector and keep necessary data in global variables
     if(error)   
     {
       TX_NEWLINE_PC;
       usart_transmit_string_to_pc_from_flash(
           PSTR("FAT32 not found!"));  //FAT32 incompatible drive
-      FAT32_active = 0;
     }
     else
     {
@@ -1668,15 +1650,8 @@ void init_sd_card(bool verbose)
     }
     _delay_ms(1);   //some delay
 
-    FAT32_active = 1;
-
     //read boot sector and keep necessary data in global variables
-    error = get_boot_sector_data(); 
-
-    if(error)   
-    {
-      FAT32_active = 0;
-    }
+    error = get_boot_sector_data();
 
     init = vs1053_initialize();
   }
