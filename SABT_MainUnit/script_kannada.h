@@ -17,17 +17,17 @@
 // NOTE: Only a subset of all Kannada glyphs is represented here
 #define KAN_A 				0b000001
 #define KAN_AA				0b011100
-#define KAN_I				0b001010
+#define KAN_I				  0b001010
 #define KAN_II				0b010100
-#define KAN_U				0b100101
+#define KAN_U			  	0b100101
 #define KAN_UU				0b110011
 #define KAN_RU_1 			0b010000	
 #define KAN_RU_2			0b010111
 
-#define KAN_E				0b100010
+#define KAN_E				  0b100010
 #define KAN_EE				0b010001
 #define KAN_AI				0b001100
-#define KAN_O				0b101101
+#define KAN_O			  	0b101101
 #define KAN_OO				0b010101
 #define KAN_AU				0b101010
 #define KAN_AM				0b110000
@@ -64,7 +64,7 @@
 #define KAN_MA				0b001101
 
 #define KAN_YA				0b111101
-#define KAN_RA				0b001111
+#define KAN_RA				0b010111 //changed from 0b001111 as that is PA (6/1/15)
 #define KAN_LA				0b000111
 #define KAN_VA				0b100111
 

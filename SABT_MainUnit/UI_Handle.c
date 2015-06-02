@@ -60,7 +60,7 @@ void ui_check_modes(void)
     while (1) { }
   }*/
 
-  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,10,;");
+  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);

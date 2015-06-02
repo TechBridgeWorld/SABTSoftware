@@ -17,11 +17,11 @@
 // NOTE: Only a subset of all Hindi glyphs is represented here
 #define HIN_A 				0b000001
 #define HIN_AA				0b011100
-#define HIN_I				0b001010
+#define HIN_I				  0b001010
 #define HIN_II				0b010100
-#define HIN_U				0b100101
+#define HIN_U				  0b100101
 #define HIN_UU				0b110011
-#define HIN_RU_1  			0b010000	
+#define HIN_RU_1  		0b010000	
 #define HIN_RU_2			0b010111
 
 #define HIN_EE				0b010001
@@ -62,7 +62,7 @@
 #define HIN_MA				0b001101
 
 #define HIN_YA				0b111101
-#define HIN_RA				0b001111
+#define HIN_RA				0b010111 //changed from 0b001111 as that is PA (6/1/15)
 #define HIN_LA				0b000111
 #define HIN_VA				0b100111
 
