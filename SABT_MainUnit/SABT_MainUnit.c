@@ -188,12 +188,6 @@ void initialize_system(void)
   ui_check_modes();
   PRINTF("Parsing modes...OK\n\r");
 
-  PRINTF("Reading dictionary file...");
-  init_read_dict((unsigned char *)"wordsEn.txt");
-  while(!done_rd_dict){
-    read_dict_file();
-  }
-
   PRINTF("Type info\n\r");
   sprintf(dbgstr, "char: %d bytes\n\r", sizeof(char));
   PRINTF(dbgstr);

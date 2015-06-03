@@ -71,7 +71,6 @@
 #define HIN_SA 				0b001110
 #define HIN_HA				0b010011
 
-#define HIN_DLA				0b111000
 #define HIN_KSHA			0b011111
 
 glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH];
@@ -136,7 +135,6 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 	{HIN_SA, "SA", NULL, NULL},
 	{HIN_HA, "HA", NULL, NULL},
 
-	{HIN_DLA, "DLA", NULL, NULL},
 	{HIN_KSHA, "KSHA", NULL, NULL}
 };
 

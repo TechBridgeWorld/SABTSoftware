@@ -13,6 +13,7 @@
 #define MODE_FILESET "MD5_"
 
 #define MP3_INTRO "INT"
+#define MP3_WAIT "WAIT"
 #define MP3_FOUND_WORD "FWRD"
 #define MP3_NOT_FOUND "NFND"
 #define MP3_INVALID "INV"
@@ -101,6 +102,33 @@ void md5_main(void)
   switch(md5_current_state)
   {
     case MD5_STATE_INITIAL:
+      // if we need to load in the dictionary,
+      // say "please wait" and then load it
+      if (!done_rd_dict) 
+      {
+        PRINTF("Reading dictionary file...");
+        play_mp3(MODE_FILESET, MP3_WAIT);
+        md5_current_state = MD5_STATE_READ_DICT;
+      }
+      // otherwise, go straight to intro
+      else
+      {
+        PRINTF("Using preloaded dictionary...");
+        md5_current_state = MD5_STATE_PLAY_INTRO;
+      }
+      break;
+
+    // read dictionary for word lookup
+    case MD5_STATE_READ_DICT:
+      init_read_dict((unsigned char *)"wordsEn.txt");
+      while(!done_rd_dict){
+        read_dict_file();
+      }        
+      md5_current_state = MD5_STATE_PLAY_INTRO;
+      break;
+
+    // play "welcome to two player hangman..." intro
+    case MD5_STATE_PLAY_INTRO:
       play_mp3(MODE_FILESET,MP3_INTRO);
       md5_current_state = MD5_STATE_SETUP_VARS;
       break;

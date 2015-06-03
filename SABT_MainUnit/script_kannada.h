@@ -74,7 +74,6 @@
 #define KAN_HA				0b010011
 
 #define KAN_DLA				0b111000
-#define KAN_KSHA			0b011111
 
 glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH];
 
@@ -139,7 +138,6 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_HA, "HA", NULL, NULL},
 
 	{KAN_DLA, "DLA", NULL, NULL},
-	{KAN_KSHA, "KSHA", NULL, NULL}
 };
 
 script_t script_kannada = {
