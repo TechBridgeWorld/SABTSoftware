@@ -11,7 +11,7 @@
 #include "script_common.h"
 
 #define SCRIPT_HINDI_FILESET "HIN_"
-#define SCRIPT_HINDI_LENGTH 48
+#define SCRIPT_HINDI_LENGTH 55
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Hindi glyphs is represented here
@@ -35,7 +35,7 @@
 #define HIN_KHA				0b101000
 #define HIN_GA				0b011011
 #define HIN_GHA				0b100011
-#define	HIN_NYA				0b101100
+#define HIN_NNA				0b101100
 
 #define HIN_CHA				0b001001
 #define HIN_CHHA			0b100001
@@ -72,6 +72,14 @@
 #define HIN_HA				0b010011
 
 #define HIN_KSHA			0b011111
+#define HIN_TRA_1			0b010000
+#define HIN_TRA_2			0b011110
+#define HIN_TRA_3			0b010111
+#define HIN_JNA				0b110001
+#define HIN_SHRA_1		0b001000
+#define HIN_SHRA_2		0b101001
+#define HIN_SHRA_3		0b010111
+
 
 glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH];
 
@@ -99,7 +107,7 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 	{HIN_KHA, "KHA", NULL, NULL},
 	{HIN_GA, "GA", NULL, NULL},
 	{HIN_GHA, "GHA", NULL, NULL},
-	{HIN_NYA, "NYA", NULL, NULL},
+	{HIN_NNA, "NNA", NULL, NULL},
 
 	{HIN_CHA, "CHA", NULL, NULL},
 	{HIN_CHHA, "CHHA", NULL, NULL},
@@ -135,7 +143,14 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 	{HIN_SA, "SA", NULL, NULL},
 	{HIN_HA, "HA", NULL, NULL},
 
-	{HIN_KSHA, "KSHA", NULL, NULL}
+	{HIN_KSHA, "KSHA", NULL, NULL},
+	{HIN_TRA_1, "TRA", NULL, &glyphs_hindi[58]},
+	{HIN_TRA_2, "TRA_2", &glyphs_hindi[57], &glyphs_hindi[59]},
+	{HIN_TRA_3, "TRA_3", &glyphs_hindi[58], NULL},
+	{HIN_JNA, "JNA", NULL, NULL},
+	{HIN_SHRA_1, "SHRA", NULL, &glyphs_hindi[62]},
+	{HIN_SHRA_2, "SHRA_2", &glyphs_hindi[61], &glyphs_hindi[63]},
+	{HIN_SHRA_3, "SHRA_3", &glyphs_hindi[62], NULL}
 };
 
 script_t script_hindi = {

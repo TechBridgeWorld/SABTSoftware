@@ -37,7 +37,7 @@
 #define KAN_KHA				0b101000
 #define KAN_GA				0b011011
 #define KAN_GHA				0b100011
-#define	KAN_NYA				0b101100
+#define KAN_NNA				0b101100
 
 #define KAN_CHA				0b001001
 #define KAN_CHHA			0b100001
@@ -101,8 +101,8 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_KHA, "KHA", NULL, NULL},
 	{KAN_GA, "GA", NULL, NULL},
 	{KAN_GHA, "GHA", NULL, NULL},
-	{KAN_NYA, "NYA", NULL, NULL},
-
+	{KAN_NNA, "NNA", NULL, NULL},
+	
 	{KAN_CHA, "CHA", NULL, NULL},
 	{KAN_CHHA, "CHHA", NULL, NULL},
 	{KAN_JA, "JA", NULL, NULL},
