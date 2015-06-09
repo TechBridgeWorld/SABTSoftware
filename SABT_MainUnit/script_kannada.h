@@ -17,17 +17,17 @@
 // NOTE: Only a subset of all Kannada glyphs is represented here
 #define KAN_A 				0b000001
 #define KAN_AA				0b011100
-#define KAN_I				  0b001010
+#define KAN_I				0b001010
 #define KAN_II				0b010100
-#define KAN_U			  	0b100101
+#define KAN_U				0b100101
 #define KAN_UU				0b110011
 #define KAN_RU_1 			0b010000	
 #define KAN_RU_2			0b010111
 
-#define KAN_E				  0b100010
+#define KAN_E				0b100010
 #define KAN_EE				0b010001
 #define KAN_AI				0b001100
-#define KAN_O			  	0b101101
+#define KAN_O				0b101101
 #define KAN_OO				0b010101
 #define KAN_AU				0b101010
 #define KAN_AM				0b110000
@@ -102,7 +102,7 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_GA, "GA", NULL, NULL},
 	{KAN_GHA, "GHA", NULL, NULL},
 	{KAN_NNA, "NNA", NULL, NULL},
-	
+
 	{KAN_CHA, "CHA", NULL, NULL},
 	{KAN_CHHA, "CHHA", NULL, NULL},
 	{KAN_JA, "JA", NULL, NULL},

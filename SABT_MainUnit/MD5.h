@@ -24,7 +24,6 @@
 #define MD5_STATE_PLAY_INTRO        13         // Plays "Welcome..." intro
 #define MD5_STATE_READ_DICT         14         // Load dictionary at beginning
 
-
 #define PRIME                       53   
 #define MAX_LEN                     10
 

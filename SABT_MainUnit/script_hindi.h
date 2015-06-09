@@ -17,11 +17,11 @@
 // NOTE: Only a subset of all Hindi glyphs is represented here
 #define HIN_A 				0b000001
 #define HIN_AA				0b011100
-#define HIN_I				  0b001010
+#define HIN_I				0b001010
 #define HIN_II				0b010100
-#define HIN_U				  0b100101
+#define HIN_U				0b100101
 #define HIN_UU				0b110011
-#define HIN_RU_1  		0b010000	
+#define HIN_RU_1  			0b010000	
 #define HIN_RU_2			0b010111
 
 #define HIN_EE				0b010001
@@ -76,9 +76,9 @@
 #define HIN_TRA_2			0b011110
 #define HIN_TRA_3			0b010111
 #define HIN_JNA				0b110001
-#define HIN_SHRA_1		0b001000
-#define HIN_SHRA_2		0b101001
-#define HIN_SHRA_3		0b010111
+#define HIN_SHRA_1			0b001000
+#define HIN_SHRA_2			0b101001
+#define HIN_SHRA_3			0b010111
 
 
 glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH];

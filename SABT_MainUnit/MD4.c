@@ -138,7 +138,7 @@ void md4_main(void)
   switch(md4_current_state)
   {
     case MD4_STATE_INITIAL:
-      play_mp3(MODE_FILESET, MP3_INTRO);
+      play_mp3(MODE_FILESET,MP3_INTRO);
       md4_current_state = MD4_STATE_CHOOSE_WORD;
       break;
 

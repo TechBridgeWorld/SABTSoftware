@@ -147,22 +147,22 @@ void md10_main(void) {
 	  cell_control = GET_CELL_CONTROL(cell);
 	  switch (cell_control) {
 	    case WITH_ENTER:
-			  PRINTF("ENTER");
-			  md10_current_state = MD10_STATE_CHECK;		  
-			  break;
-			case WITH_LEFT:
-			  PRINTF("LEFT");
-			  play_mp3("MD10","_NXT");
-			  md10_current_state = MD10_STATE_CELL2;
-			  break;
-			case WITH_RIGHT:
-			  PRINTF("RIGHT");		  
-			  play_mp3(LANG_FILESET,"BLNK");
-			  cell1_pattern = NO_DOTS;		  
-			  break;
-			case WITH_CANCEL:
-			  PRINTF("User pressed CANCEL");
-			  break;
+		  PRINTF("ENTER");
+		  md10_current_state = MD10_STATE_CHECK;		  
+		  break;
+		case WITH_LEFT:
+		  PRINTF("LEFT");
+		  play_mp3("MD10","_NXT");
+		  md10_current_state = MD10_STATE_CELL2;
+		  break;
+		case WITH_RIGHT:
+		  PRINTF("RIGHT");		  
+		  play_mp3(LANG_FILESET,"BLNK");
+		  cell1_pattern = NO_DOTS;		  
+		  break;
+		case WITH_CANCEL:
+		  PRINTF("User pressed CANCEL");
+		  break;
 	  }
 	  break;
 
