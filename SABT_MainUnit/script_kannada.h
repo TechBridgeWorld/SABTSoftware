@@ -11,7 +11,7 @@
 #include "script_common.h"
 
 #define SCRIPT_KANNADA_FILESET "KAN_"
-#define SCRIPT_KANNADA_LENGTH 51
+#define SCRIPT_KANNADA_LENGTH 50
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Kannada glyphs is represented here
@@ -37,7 +37,7 @@
 #define KAN_KHA				0b101000
 #define KAN_GA				0b011011
 #define KAN_GHA				0b100011
-#define	KAN_NYA				0b101100
+#define KAN_NNA				0b101100
 
 #define KAN_CHA				0b001001
 #define KAN_CHHA			0b100001
@@ -64,7 +64,7 @@
 #define KAN_MA				0b001101
 
 #define KAN_YA				0b111101
-#define KAN_RA				0b001111
+#define KAN_RA				0b010111 //changed from 0b001111 as that is PA (6/1/15)
 #define KAN_LA				0b000111
 #define KAN_VA				0b100111
 
@@ -74,7 +74,6 @@
 #define KAN_HA				0b010011
 
 #define KAN_DLA				0b111000
-#define KAN_KSHA			0b011111
 
 glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH];
 
@@ -102,7 +101,7 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_KHA, "KHA", NULL, NULL},
 	{KAN_GA, "GA", NULL, NULL},
 	{KAN_GHA, "GHA", NULL, NULL},
-	{KAN_NYA, "NYA", NULL, NULL},
+	{KAN_NNA, "NNA", NULL, NULL},
 
 	{KAN_CHA, "CHA", NULL, NULL},
 	{KAN_CHHA, "CHHA", NULL, NULL},
@@ -139,7 +138,6 @@ glyph_t glyphs_kannada[SCRIPT_KANNADA_LENGTH] = {
 	{KAN_HA, "HA", NULL, NULL},
 
 	{KAN_DLA, "DLA", NULL, NULL},
-	{KAN_KSHA, "KSHA", NULL, NULL}
 };
 
 script_t script_kannada = {

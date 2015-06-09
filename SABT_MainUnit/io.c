@@ -197,7 +197,7 @@ bool get_line(void) {
 	}
 	switch (control) {
 		// ENTER - Advance cell, add EOT and return true
-		case 0b11:
+		case WITH_ENTER:
 			io_line_next_cell();
 			io_line[io_line_cell_index] = END_OF_TEXT;
 			io_line_ready = false;
@@ -207,7 +207,7 @@ bool get_line(void) {
 		/* RIGHT is used to switch to previous cell because Brialle is entered
 			this way */
 		// RIGHT - Select prev cell
-		case 0b01:
+		case WITH_RIGHT:
 			play_mp3(lang_fileset, MP3_PREV_CELL);
 			io_line_prev_cell();
 			if (!pattern) {
@@ -216,10 +216,10 @@ bool get_line(void) {
 			return false;
 			break;
 
-		/* RIGHT is used to switch to next cell because Brialle is entered
+		/* LEFT is used to switch to next cell because Brialle is entered
 			this way */
 		// LEFT - Select next cell
-		case 0b10:
+		case WITH_LEFT:
 			play_mp3(lang_fileset, MP3_NEXT_CELL);
 			io_line_next_cell();
 			if (!pattern) {
@@ -229,7 +229,7 @@ bool get_line(void) {
 			break;
 
 		// CANCEL - Clear current cell
-		case 0b00:
+		case WITH_CANCEL:
 			io_line_clear_cell();
 			return false;
 			break;

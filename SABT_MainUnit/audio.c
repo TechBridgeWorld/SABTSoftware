@@ -224,11 +224,13 @@ void play_dot_sequence(glyph_t *this_glyph) {
 	if (this_glyph != NULL) {
 		pattern = this_glyph->pattern;
 		play_pattern(pattern);
+		// for multi-cell letters
 		if (this_glyph->next != NULL) {
 			// Plays all the next glyphs in the linked list
 			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
 				this_glyph->next->sound);
-			play_mp3(lang_fileset, MP3_NEXT_CELL);
+			// play "ENTER" so user knows to press enter btwn multiple-cell letters
+			play_mp3(lang_fileset, "SETR");
 			play_dot_sequence(this_glyph->next);
 			play_silence(250);
 		}

@@ -204,8 +204,12 @@ glyph_t* get_next_glyph(script_t* script) {
 
 	script->index++;
 
-	// Return NULL if reached end of script
-	if (script->index >= script->length) {
+	// wrap around if we go forward after the last letter
+	if (script->index == script->length) {
+		script->index = 0;
+	}
+	// Return NULL if outside script length
+	else if (script->index > script->length) {
 		script->index = script->length;
 		return NULL;
 	}
@@ -230,8 +234,12 @@ glyph_t* get_prev_glyph(script_t* script) {
 
 	script->index--;
 
-	// Return NULL if reached end of script
-	if (script->index <= -1) {
+	// wrap around if we go back before the first letter
+	if (script->index == -1) {
+		script->index = script->length - 1;
+	}
+	// Return NULL if outside script length
+	else if (script->index < -1) {
 		script->index = -1;
 		return NULL;
 	}

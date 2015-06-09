@@ -8,7 +8,7 @@
 #define _MD5_H_
 
 // State definitions
-#define MD5_STATE_INITIAL           0          // Just started, plays welcome message
+#define MD5_STATE_INITIAL           0          // Just started, load dictionary if needed
 #define MD5_STATE_SETUP_VARS        1          // Sets up variables
 #define MD5_STATE_WAIT_INPUT_1      2          // Player 1 enters word
 #define MD5_STATE_PROC_INPUT_1      3          // Check for valid input word
@@ -21,6 +21,8 @@
 #define MD5_STATE_CHECK_MATCH       10         // Valid input was entered
 #define MD5_STATE_EVALUATE_GAME     11         // Check for win or lose
 #define MD5_STATE_READ_WORD         12         // User has finished the game
+#define MD5_STATE_PLAY_INTRO        13         // Plays "Welcome..." intro
+#define MD5_STATE_READ_DICT         14         // Load dictionary at beginning
 
 #define PRIME                       53   
 #define MAX_LEN                     10
