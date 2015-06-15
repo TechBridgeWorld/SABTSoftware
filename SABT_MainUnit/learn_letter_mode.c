@@ -238,38 +238,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			case LEFT:
 			sprintf(dbgstr, "[%s] Previous letter\n\r", mode_name);
 			PRINTF(dbgstr);
-			switch (submode) {
-				case SUBMODE_LEARN:
-				curr_glyph = get_prev_glyph(SCRIPT_ADDRESS);
-				if (curr_glyph == NULL) {
-					curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-				}
-				break;
-				case SUBMODE_PLAY:
-				curr_glyph = get_random_glyph(SCRIPT_ADDRESS);
-				break;
-				default:
-				break;
-			}
-			play_glyph(curr_glyph);
-			scrolled = true;
-			break;
-
-			case RIGHT:
-			sprintf(dbgstr, "[%s] Next letter\n\r", mode_name);
-			PRINTF(dbgstr);
-			switch (submode) {
-				case SUBMODE_LEARN:
+			curr_glyph = get_prev_glyph(SCRIPT_ADDRESS);
+			if (curr_glyph == NULL) {
 				curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-				if (curr_glyph == NULL) {
-					curr_glyph = get_prev_glyph(SCRIPT_ADDRESS);
-				}
-				break;
-				case SUBMODE_PLAY:
-				curr_glyph = get_random_glyph(SCRIPT_ADDRESS);
-				break;
-				default:
-				break;
 			}
 			play_glyph(curr_glyph);
 			scrolled = true;

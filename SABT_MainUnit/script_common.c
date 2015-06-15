@@ -212,6 +212,7 @@ word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 * @brief Returns a random last-order glyph from the current script
 * @param script_t* - Script to get random glyph from
 * @return glyph_t* - Pointer to random glyph
+DEPRECATED
 */
 glyph_t* get_random_glyph(script_t* script) {
 	glyph_t* curr_glyph = &(script->glyphs[timer_rand() % script->length]);
