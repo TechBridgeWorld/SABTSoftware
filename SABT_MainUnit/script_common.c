@@ -37,6 +37,35 @@ void reset_script_indices(script_t* script) {
 }
 
 /**
+ * @brief Returns an integer between i and j-1
+ * @param: i and j
+ * return: a random number between them
+ * (including i, not including j)
+ */
+int random_between(int i, int j) {
+	int range = j - i;
+	return i + (rand() % range);
+}
+
+/**
+* @brief Performs a Fisher-Yates shuffle on the
+* indices of all the letters in the script,
+* producing a random ordering of letters.
+* @param an array of indices into script->glyph,
+* and the number of those that are valid entries
+* @return void
+*/
+void shuffle(script_t* script) {
+	int random_i, temp;
+	for (int i = 0; i < script->num_letters; i++) {
+		random_i = random_between(i, script->num_letters);
+		temp = script->letters[i];
+		script->letters[i] = script->letters[random_i];
+		script->letters[random_i] = temp;
+	}
+}
+
+/**
 * @brief Pattern matches from a string of patterns to a glyph by traversing
 *	the script provided
 * @param script_t* script - Pointer to script to search in
@@ -199,28 +228,22 @@ glyph_t* get_random_glyph(script_t* script) {
 * @glyph_t* - Pointer to next glyph
 */
 glyph_t* get_next_glyph(script_t* script) {
-
-	glyph_t* curr_glyph;
+	int curr_index;
 
 	script->index++;
 
 	// wrap around if we go forward after the last letter
-	if (script->index == script->length) {
+	if (script->index == script->num_letters) {
 		script->index = 0;
 	}
 	// Return NULL if outside script length
-	else if (script->index > script->length) {
-		script->index = script->length;
+	else if (script->index > script->num_letters) {
+		script->index = script->num_letters;
 		return NULL;
 	}
 
-	curr_glyph = &(script->glyphs[script->index]);
-	//
-	if (curr_glyph -> prev == NULL) {
-		return curr_glyph;
-	} else {
-		return get_next_glyph(script);
-	}
+	curr_index = script->letters[script->index];
+	return &(script->glyphs[curr_index]);
 }
 
 /**
@@ -229,14 +252,13 @@ glyph_t* get_next_glyph(script_t* script) {
 * @glyph_t* - Pointer to previous glyph
 */
 glyph_t* get_prev_glyph(script_t* script) {
-
-	glyph_t* curr_glyph;
+	int curr_index;
 
 	script->index--;
 
 	// wrap around if we go back before the first letter
 	if (script->index == -1) {
-		script->index = script->length - 1;
+		script->index = script->num_letters - 1;
 	}
 	// Return NULL if outside script length
 	else if (script->index < -1) {
@@ -244,13 +266,8 @@ glyph_t* get_prev_glyph(script_t* script) {
 		return NULL;
 	}
 
-	curr_glyph = &(script->glyphs[script->index]);
-	if (curr_glyph -> prev == NULL) {
-		return curr_glyph;
-	} else {
-		return get_prev_glyph(script);
-	}
-
+	curr_index = script->letters[script->index];
+	return &(script->glyphs[curr_index]);
 }
 
 

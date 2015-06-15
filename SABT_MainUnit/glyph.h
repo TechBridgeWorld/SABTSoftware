@@ -35,11 +35,11 @@ struct script_old {
 // one glyph each.
 struct script {
 	int length;				/* Length of glyph array */
-	int numletters;			/* Number of actual letters (<= length) */
+	int num_letters;			/* Number of actual letters (<= length) */
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of glyphs */
-	int* letter_index;		/* Pointer to array of valid indices into glyphs */
+	int* letters;		/* Pointer to array of valid indices into glyphs */
 	};
 
 

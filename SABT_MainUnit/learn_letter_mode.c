@@ -73,6 +73,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				sprintf(dbgstr, "[%s] Submode: Play\n\r", mode_name);
 				PRINTF(dbgstr);
 				play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
+				shuffle(SCRIPT_ADDRESS);
 				submode = SUBMODE_PLAY;
 				next_state = STATE_GENQUES;
 				break;
@@ -94,7 +95,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 		}
 		break;
 
-		case STATE_GENQUES:
+		case STATE_GENQUES:			// TO DO: INTEGRATE THESE?
 		switch (submode) {
 
 			case SUBMODE_LEARN:
@@ -108,7 +109,14 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				break;
 
 			case SUBMODE_PLAY:
-				curr_glyph = get_random_glyph(SCRIPT_ADDRESS);
+				curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
+				if (curr_glyph == NULL) {
+					reset_script_indices(SCRIPT_ADDRESS);
+					next_state = STATE_GENQUES;
+					shuffle(SCRIPT_ADDRESS);
+					curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
+					break;
+					}
 				break;
 
 			default:
