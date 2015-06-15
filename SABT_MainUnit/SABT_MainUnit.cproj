@@ -74,6 +74,21 @@
     <Compile Include="learn_letter_mode.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="script_digits.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_english.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_eng_contraction.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_hindi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="script_kannada.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sound_game_mode.c">
       <SubType>compile</SubType>
     </Compile>
