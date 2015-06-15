@@ -12,6 +12,7 @@
 
 #define SCRIPT_HINDI_FILESET "HIN_"
 #define SCRIPT_HINDI_LENGTH 55
+#define SCRIPT_HINDI_NUM_LETTERS 50
 
 // Devanagari script bit patterns
 // NOTE: Only a subset of all Hindi glyphs is represented here

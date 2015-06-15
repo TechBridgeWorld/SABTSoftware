@@ -51,7 +51,7 @@ glyph_t contraction_pattern[SCRIPT_CONTRACTION_PATTERN_LENGTH] = {
 
 // Patterns used to form braille cells  
 
-script_t script_eng_contraction = {
+script_old_t script_eng_contraction = {
 	SCRIPT_CONTRACTION_LENGTH,
 	0,
 	SCRIPT_CONTRACTION_FILESET,

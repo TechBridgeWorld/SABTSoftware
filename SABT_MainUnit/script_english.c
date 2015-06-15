@@ -29,9 +29,17 @@ glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
 	{ENG_Z, "Z", NULL, NULL}
 };
 
+int english_letters[SCRIPT_ENGLISH_NUM_LETTERS] = {
+	0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+	10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+	20, 21, 22, 23, 24, 25 };
+
+
 script_t script_english = {
+	SCRIPT_ENGLISH_LENGTH,
 	SCRIPT_ENGLISH_LENGTH,
 	0,
 	SCRIPT_ENGLISH_FILESET,
-	english_glyphs
+	english_glyphs,
+	english_letters
 };

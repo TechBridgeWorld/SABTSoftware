@@ -11,7 +11,8 @@
 #include "script_common.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"
-#define SCRIPT_ENGLISH_LENGTH 26 // 26 Alphabets
+#define SCRIPT_ENGLISH_LENGTH 26 // 26 glyphs
+#define SCRIPT_ENGLISH_NUM_LETTERS 26 // 26 letters
 
 // English Alphabets - bit pattern
 

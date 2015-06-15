@@ -14,9 +14,15 @@ glyph_t glyphs_digits[SCRIPT_DIGITS_LENGTH] = {
 	{NUMSIGN, "#NUM", NULL, NULL}
 };
 
+int letters_digits[SCRIPT_DIGITS_LENGTH] = {
+	0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+	10 };
+
 script_t script_digits = {
+	SCRIPT_DIGITS_LENGTH,
 	SCRIPT_DIGITS_LENGTH,
 	0,
 	SCRIPT_DIGITS_FILESET,
-	glyphs_digits
+	glyphs_digits,
+	letters_digits
 };

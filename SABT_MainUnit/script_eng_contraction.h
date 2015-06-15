@@ -67,7 +67,7 @@
 
 extern glyph_t contraction_glyphs[SCRIPT_CONTRACTION_LENGTH];
 extern glyph_t contraction_pattern[SCRIPT_CONTRACTION_PATTERN_LENGTH];
-extern script_t script_eng_contraction;
+extern script_old_t script_eng_contraction;
 
 #endif /* _SCRIPT_ENG_CONTRACTION_H_ */
 
