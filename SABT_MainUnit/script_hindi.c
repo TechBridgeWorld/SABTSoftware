@@ -59,13 +59,13 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 	{HIN_HA, "HA", NULL, NULL},		// 46
 
 	{HIN_KSHA, "KSHA", NULL, NULL},								// 47
-	{HIN_TRA_1, "TRA", NULL, &glyphs_hindi[58]},				// 48
-	{HIN_TRA_2, "TRA_2", &glyphs_hindi[57], &glyphs_hindi[59]},	// 49
-	{HIN_TRA_3, "TRA_3", &glyphs_hindi[58], NULL},				// 50
+	{HIN_TRA_1, "TRA", NULL, &glyphs_hindi[49]},				// 48
+	{HIN_TRA_2, "TRA_2", &glyphs_hindi[48], &glyphs_hindi[50]},	// 49
+	{HIN_TRA_3, "TRA_3", &glyphs_hindi[49], NULL},				// 50
 	{HIN_JNA, "JNA", NULL, NULL},								// 51
-	{HIN_SHRA_1, "SHRA", NULL, &glyphs_hindi[62]},				// 52
-	{HIN_SHRA_2, "SHRA2", &glyphs_hindi[61], &glyphs_hindi[63]},// 53
-	{HIN_SHRA_3, "SHRA3", &glyphs_hindi[62], NULL}				// 54
+	{HIN_SHRA_1, "SHRA", NULL, &glyphs_hindi[53]},				// 52
+	{HIN_SHRA_2, "SHRA2", &glyphs_hindi[52], &glyphs_hindi[54]},// 53
+	{HIN_SHRA_3, "SHRA3", &glyphs_hindi[53], NULL}				// 54
 };
 
 int letters_hindi[SCRIPT_HINDI_NUM_LETTERS] = {
