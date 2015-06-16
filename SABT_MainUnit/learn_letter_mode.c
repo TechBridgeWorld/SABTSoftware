@@ -50,7 +50,7 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	cell_control = 0;
 	incorrect_tries = 0;
 	scrolled = false;
-	sprintf(dbgstr, "[%s] Mode reset\n\r", mode_name;
+	sprintf(dbgstr, "[%s] Mode reset\n\r", mode_name);
 	PRINTF(dbgstr);
 }
 
