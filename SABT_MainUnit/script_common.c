@@ -228,12 +228,11 @@ word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 */
 glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
 	// increment the index
-	if (script->index < script->num_letters - 1)
-		script->index++;
+	script->index++;
 
 	// if we're out of letters, reset index and
 	// shuffle or unshuffle as needed
-	else {
+	if (script->index >= script->num_letters - 1) {
 		script->index = 0;
 		if (should_shuffle)
 			shuffle(script);
@@ -252,18 +251,13 @@ glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
 */
 glyph_t* get_prev_glyph(script_t* script, bool should_shuffle) {
 	// decrement the index
-	if (script->index != 0)
-		script->index--;
+	script->index--;
 
 	// if we're already at the beginning, reset index
-	// to end and shuffle/unshuffle as needed
-	else {
+	// to end. Don't shuffle since they presumably
+	// want to repeat what they did.
+	if (script->index < 0)
 		script->index = script->num_letters - 1;
-		if (should_shuffle)
-			shuffle(script);
-		else
-			unshuffle(script);
-	}
 	
 	// return the first glyph of the script->index'th letter
 	return &(script->glyphs[script->letters[script->index]]);

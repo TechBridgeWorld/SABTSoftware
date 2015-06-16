@@ -42,7 +42,7 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	next_state = STATE_MENU;
 	user_response = NO_DOTS;
 	submode = SUBMODE_NULL;	
-	index = 0;
+	index = -1;
 	curr_glyph = NULL;
 	user_glyph = NULL;
 	cell = 0;
@@ -213,6 +213,14 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					sprintf(dbgstr, "[%s] Previous letter\n\r", mode_name);
 					PRINTF(dbgstr);
 					curr_glyph = get_prev_glyph(SCRIPT_ADDRESS, should_shuffle);
+					play_glyph(curr_glyph);
+					scrolled = true;
+					break;
+					
+				case RIGHT:
+					sprintf(dbgstr, "[%s] Next letter\n\r", mode_name);
+					PRINTF(dbgstr);
+					curr_glyph = get_next_glyph(SCRIPT_ADDRESS, should_shuffle);
 					play_glyph(curr_glyph);
 					scrolled = true;
 					break;
