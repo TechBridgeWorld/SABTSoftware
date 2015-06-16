@@ -36,6 +36,14 @@ void reset_script_indices(script_t* script) {
 	script->index = -1;
 }
 
+void reset_script_queue(script_t* script, bool shuffle_me) {
+	reset_script_indices(script);
+	if (shuffle_me)
+		shuffle(script);
+	else
+		unshuffle(script);
+}
+
 /**
  * @brief Returns an integer between i and j-1
  * @param: i and j
@@ -44,7 +52,7 @@ void reset_script_indices(script_t* script) {
  */
 int random_between(int i, int j) {
 	int range = j - i;
-	return i + (rand() % range);
+	return i + (timer_rand() % range);
 }
 
 /**
@@ -62,6 +70,12 @@ void shuffle(script_t* script) {
 		temp = script->letters[i];
 		script->letters[i] = script->letters[random_i];
 		script->letters[random_i] = temp;
+	}
+}
+
+void unshuffle(script_t* script) {
+	for (int i = 0; i < script->num_letters; i++) {
+		script->letters[i] = i;
 	}
 }
 

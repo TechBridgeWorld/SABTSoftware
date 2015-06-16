@@ -41,6 +41,7 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	next_state = STATE_MENU;
 	user_response = NO_DOTS;
 	submode = SUBMODE_NULL;
+	unshuffle(new_script);
 	index = 0;
 	curr_glyph = NULL;
 	user_glyph = NULL;
@@ -95,39 +96,17 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 		}
 		break;
 
-		case STATE_GENQUES:			// TO DO: INTEGRATE THESE?
-		switch (submode) {
-
-			case SUBMODE_LEARN:
+		case STATE_GENQUES:
+			curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
+			if (curr_glyph == NULL) {
+				reset_script_queue(SCRIPT_ADDRESS, submode-1); // shuffles if play; unshuffles if learn
 				curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-				if (curr_glyph == NULL) {
-					reset_script_indices(SCRIPT_ADDRESS);
-					next_state = STATE_GENQUES;
-					curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-					break;
-				}
-				break;
-
-			case SUBMODE_PLAY:
-				curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-				if (curr_glyph == NULL) {
-					reset_script_indices(SCRIPT_ADDRESS);
-					next_state = STATE_GENQUES;
-					shuffle(SCRIPT_ADDRESS);
-					curr_glyph = get_next_glyph(SCRIPT_ADDRESS);
-					break;
-					}
-				break;
-
-			default:
-				break;
-
-		}
-		sprintf(dbgstr, "[%s] Next glyph: %s\n\r",mode_name, curr_glyph->sound);
-		PRINTF(dbgstr);
-		play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
-		next_state = STATE_PROMPT;
-		break;
+			}
+			sprintf(dbgstr, "[%s] Next glyph: %s\n\r",mode_name, curr_glyph->sound);
+			PRINTF(dbgstr);
+			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
+			next_state = STATE_PROMPT;
+			break;
 
 		case STATE_PROMPT:
 		switch(submode) {
