@@ -49,7 +49,7 @@
 #define MP3_TIMES	"TIMS"
 #define MP3_YOU_ANSWERED "UANS"
 // Skip prompt
-#define MP3_SKIP "SKIP"
+#define MP3_SKIP "RMEN"
 #define MP3_THE_ANSWER_IS "TAIS"
 
 // Limits

@@ -36,7 +36,7 @@
 // Mode MP3 constants
 #define MP3_MENU "MENU"
 #define MP3_FOR_X_PRESS_DOTS "FXPD"
-#define MP3_REPROMPT "RMEN"
+#define MP3_REPROMPT "SKIP"
 #define MP3_INSTRUCTIONS "INST"
 
 #define MAX_INCORRECT_TRIES 3

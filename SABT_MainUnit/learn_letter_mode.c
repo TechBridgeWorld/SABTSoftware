@@ -33,7 +33,6 @@ static char cell = 0;
 static char cell_pattern = 0;
 static char cell_control = 0;
 static int incorrect_tries = 0;
-static bool scrolled = false;
 
 void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
 	set_mode_globals(new_script, new_lang_fileset, new_mode_fileset);
@@ -49,7 +48,6 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	cell_pattern = 0;
 	cell_control = 0;
 	incorrect_tries = 0;
-	scrolled = false;
 	sprintf(dbgstr, "[%s] Mode reset\n\r", mode_name);
 	PRINTF(dbgstr);
 }
@@ -98,13 +96,15 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 
 		case STATE_GENQUES:
 			curr_glyph = get_next_glyph(SCRIPT_ADDRESS, submode);
-			sprintf(dbgstr, "[%s] Next glyph: %s\n\r",mode_name, curr_glyph->sound);
+			sprintf(dbgstr, "[%s] State: GENQUES. Next glyph: %s\n\r",mode_name, curr_glyph->sound);
 			PRINTF(dbgstr);
 			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
 			next_state = STATE_PROMPT;
 			break;
 
 		case STATE_PROMPT:
+			sprintf(dbgstr, "In prompt.\n\r");
+			PRINTF(dbgstr);
 			switch(submode) {
 				case SUBMODE_LEARN:
 					play_glyph(curr_glyph);
@@ -127,7 +127,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			if (io_user_abort == true) {
 				sprintf(dbgstr, "[%s] User aborted input\n\r", mode_name);
 				PRINTF(dbgstr);
-				next_state = STATE_REPROMPT;
+				next_state = STATE_PROMPT;
 				io_init();
 			}
 			cell = get_cell();
@@ -135,6 +135,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				break;
 			cell_pattern = GET_CELL_PATTERN(cell);
 			cell_control = GET_CELL_CONTROL(cell);
+			sprintf(dbgstr, "Pattern %d, control %d.\n\r", cell_pattern, cell_control);
+			PRINTF(dbgstr);
+						
 			switch (cell_control) {
 				case WITH_ENTER:
 					user_glyph = search_script(SCRIPT_ADDRESS, cell_pattern);
@@ -146,14 +149,17 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					next_state = STATE_PROMPT;
 					break;
 				case WITH_RIGHT:
-					next_state = STATE_REPROMPT;
+					next_state = STATE_GENQUES;
 					break;
 				case WITH_CANCEL:
+					next_state = STATE_PROMPT;
 					break;
 			}
 			break;
 
 		case STATE_CHECK:
+			sprintf(dbgstr, "[%s} State: CHECK.\n\r", mode_name);
+			PRINTF(dbgstr);
 			if (glyph_equals(curr_glyph, user_glyph)) {
 				if (curr_glyph -> next == NULL) {
 					incorrect_tries = 0;
@@ -186,49 +192,6 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				}
 			}
 		break;
-
-		case STATE_REPROMPT:
-			switch(create_dialog("SKIP", ENTER_CANCEL | LEFT_RIGHT)) {
-				case NO_DOTS:
-					break;
-
-				case CANCEL:
-					sprintf(dbgstr, "[%s] Reissuing prompt\n\r", mode_name);
-					PRINTF(dbgstr);
-					next_state = STATE_PROMPT;
-					scrolled = false;
-					break;
-
-				case ENTER:
-					sprintf(dbgstr, "[%s] Skipping character\n\r", mode_name);
-					PRINTF(dbgstr);
-					if (scrolled)
-						next_state = STATE_PROMPT;
-					else
-						next_state = STATE_GENQUES;
-					scrolled = false;
-					break;
-
-				case LEFT:
-					sprintf(dbgstr, "[%s] Previous letter\n\r", mode_name);
-					PRINTF(dbgstr);
-					curr_glyph = get_prev_glyph(SCRIPT_ADDRESS, should_shuffle);
-					play_glyph(curr_glyph);
-					scrolled = true;
-					break;
-					
-				case RIGHT:
-					sprintf(dbgstr, "[%s] Next letter\n\r", mode_name);
-					PRINTF(dbgstr);
-					curr_glyph = get_next_glyph(SCRIPT_ADDRESS, should_shuffle);
-					play_glyph(curr_glyph);
-					scrolled = true;
-					break;
-
-				default:
-					break;
-			}
-				break;
 
 		default:
 			break;
