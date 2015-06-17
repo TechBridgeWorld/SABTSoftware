@@ -39,21 +39,12 @@ void reset_script_indices(script_t* script) {
 void reset_script_queue(script_t* script, bool should_shuffle) {
 	reset_script_indices(script);
 	if (should_shuffle)
-		shuffle(script);
+		shuffle_alphabet(script);
 	else
-		unshuffle(script);
+		unshuffle_alphabet(script);
 }
 
-/**
- * @brief Returns an integer between i and j-1
- * @param: i and j
- * return: a random number between them
- * (including i, not including j)
- */
-int random_between(int i, int j) {
-	int range = j - i;
-	return i + (timer_rand() % range);
-}
+
 
 /**
 * @brief Performs a Fisher-Yates shuffle on the
@@ -63,20 +54,19 @@ int random_between(int i, int j) {
 * and the number of those that are valid entries
 * @return void
 */
-void shuffle(script_t* script) {
-	int random_i, temp;
-	for (int i = 0; i < script->num_letters; i++) {
-		random_i = random_between(i, script->num_letters);
-		temp = script->letters[i];
-		script->letters[i] = script->letters[random_i];
-		script->letters[random_i] = temp;
-	}
+void shuffle_alphabet(script_t* script) {
+	shuffle(script->num_letters, script->letters);
 }
 
-void unshuffle(script_t* script) {
-	for (int i = 0; i < script->num_letters; i++) {
-		script->letters[i] = i;
-	}
+/**
+* @brief Sorts script->letters, putting the
+* indices back order.
+* @param an array of indices into script->glyph,
+* and the number of those that are valid entries
+* @return void
+*/
+void unshuffle_alphabet(script_t* script) {
+	unshuffle(script->num_letters, script->letters);
 }
 
 /**
@@ -232,12 +222,10 @@ glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
 
 	// if we're out of letters, reset index and
 	// shuffle or unshuffle as needed
-	if (script->index >= script->num_letters - 1) {
+	if (script->index >= script->num_letters) {
 		script->index = 0;
 		if (should_shuffle)
-			shuffle(script);
-		else
-			unshuffle(script);
+			shuffle_alphabet(script);
 	}
 
 	// return the first glyph of the script->index'th letter

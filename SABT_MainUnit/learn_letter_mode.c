@@ -5,6 +5,32 @@
  *
  * @brief code for helper functions "learning letter modes" (MD 2,7,8,12)
  * @author: Edward Cai
+ * Edited by Marjorie Carlson
+ *
+ * This file provides the functionality for all the modes for learning letters 
+ * (English, Hindi, etc.) At the menu, the user chooses between "learning" mode
+ * (1), which tells them the correct dots, and which iterates through the alphabet
+ * in order; and "practicing" mode (2), which does not prompt them with the correct
+ * dots, and which shuffles the alphabet first (as well as after each time the
+ * student completes the entire alphabet.)
+ *
+ * Students must input the correct dots for the prompted letter and then press
+ * enter, at which point the mode will check their answer and respond appropriately.
+ * They may replay the question by hitting cancel or left, and skip to the next
+ * letter by hitting right arrow.
+ *
+ * The states are: MENU -> GENQUES (gets the next letter) -> PROMPT (plays
+ * the letter, and its dot sequence if in learn mode) -> INPUT (gets the inputted
+ * cell; if it's a cell terminated by enter, goes to CHECK; if input is cancel or
+ * left arrow, goes back to PROMPT to replay question; if input is right arrow, goes
+ * back to GENQUES to skip to the next letter. CHECK checks whether the input was
+ * correct; if the input was correct, then it plays tada and goes to GENQUES *if*
+ * the inputted glyph was the last glyph in the current letter; if there are more
+ * glyphs in this letter, it goes back to input to get them. If the input was
+ * incorrect, it goes back to the first glyph in this letter and returns to PROMPT
+ * for another attempt, unless the user is out of tries, in which case it plays
+ * the dot sequence and returns to INPUT for another attempt.
+ * 
  */ 
 
 // Standard libraries
@@ -64,6 +90,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					PRINTF(dbgstr);			
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_LEARN;
+					unshuffle_alphabet(SCRIPT_ADDRESS);
 					next_state = STATE_GENQUES;
 					break;
 
@@ -72,7 +99,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					PRINTF(dbgstr);
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_PLAY;
-					shuffle(SCRIPT_ADDRESS);
+					shuffle_alphabet(SCRIPT_ADDRESS);
 					should_shuffle = true;
 					next_state = STATE_GENQUES;
 					break;
@@ -95,7 +122,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			break;
 
 		case STATE_GENQUES:
-			curr_glyph = get_next_glyph(SCRIPT_ADDRESS, submode);
+			curr_glyph = get_next_glyph(SCRIPT_ADDRESS, should_shuffle);
 			sprintf(dbgstr, "[%s] State: GENQUES. Next glyph: %s\n\r",mode_name, curr_glyph->sound);
 			PRINTF(dbgstr);
 			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
@@ -145,14 +172,12 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					sprintf(dbgstr, "[%s] Checking answer \n\r", mode_name);
 					PRINTF(dbgstr);
 					break;
+				case WITH_CANCEL:
 				case WITH_LEFT:
 					next_state = STATE_PROMPT;
 					break;
 				case WITH_RIGHT:
 					next_state = STATE_GENQUES;
-					break;
-				case WITH_CANCEL:
-					next_state = STATE_PROMPT;
 					break;
 			}
 			break;

@@ -36,8 +36,8 @@ extern script_t script_common;
 
 void reset_script_indices(script_t* script);
 void reset_script_queue(script_t* script, bool should_shuffle);
-void shuffle(script_t* script);
-void unshuffle(script_t* script);
+void shuffle_alphabet(script_t* script);
+void unshuffle_alphabet(script_t* script);
 glyph_t* get_glyph(script_t* script, char* patterns, int* index);
 glyph_t* search_script(script_t* script, char pattern);
 glyph_t* get_next_glyph(script_t* script, bool should_shuffle);
