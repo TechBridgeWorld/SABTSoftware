@@ -61,7 +61,7 @@ void ui_check_modes(void)
   }*/
 
   /** ACTIVATED MODES ON SABT **/
-  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,;");
+  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,13,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -373,7 +373,9 @@ void ui_call_mode_yes_answer(void)
 	case 10:
 	  md10_call_mode_yes_answer();
 	  break;
-
+    case 13:
+          md13_call_mode_yes_answer();
+          break;
 
     default:
       break;
@@ -403,6 +405,10 @@ void ui_call_mode_no_answer(void)
     case 10:
 	  md10_call_mode_no_answer();
 	  break;
+    case 13:
+          md13_call_mode_no_answer();
+          break;
+
     default:
       break;
   }
@@ -433,7 +439,9 @@ void ui_input_dot_to_current_mode(char this_dot)
         case 10:
 		  md10_input_dot(this_dot);
 		  break;
-
+        case 13:
+              md13_input_dot(this_dot);
+              break;
         default:
           break;
       }
@@ -471,6 +479,9 @@ void ui_input_cell_to_current_mode(char this_cell)
 	  case 10:
         md10_input_cell(this_cell);
         break;
+      case 13:
+            md13_input_cell(this_cell);
+            break;
       default:
         break;
     }
@@ -529,6 +540,9 @@ void ui_run_main_of_current_mode(void)
       case 12:
         md12_main();
         break;
+      case 13:
+            md13_main();
+            break;
 
       default:
         break;
@@ -581,6 +595,8 @@ void ui_reset_the_current_mode(void)
 
       case 12:
         md12_reset();
+      case 13:
+        md13_reset();
 
       default:
         break;
@@ -602,6 +618,9 @@ void ui_call_mode_left(void) {
 	case 10:
 	  md10_call_mode_left();
 	  break;
+    case 13:
+      md13_call_mode_left();
+      break;
 
     default:
       break;
@@ -621,6 +640,9 @@ void ui_call_mode_right(void) {
 	case 10:
 	  md10_call_mode_right();
 	  break;  
+    case 13:
+      md13_call_mode_left();
+      break;
 
     default:
       break;
