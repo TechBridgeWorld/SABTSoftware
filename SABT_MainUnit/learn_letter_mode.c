@@ -90,7 +90,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					PRINTF(dbgstr);			
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_LEARN;
-					unshuffle_alphabet(SCRIPT_ADDRESS);
+					unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					next_state = STATE_GENQUES;
 					break;
 
@@ -99,7 +99,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					PRINTF(dbgstr);
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_PLAY;
-					shuffle_alphabet(SCRIPT_ADDRESS);
+					shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					should_shuffle = true;
 					next_state = STATE_GENQUES;
 					break;
@@ -122,7 +122,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			break;
 
 		case STATE_GENQUES:
-			curr_glyph = get_next_glyph(SCRIPT_ADDRESS, should_shuffle);
+			curr_glyph = get_next_letter(SCRIPT_ADDRESS, should_shuffle);
 			sprintf(dbgstr, "[%s] State: GENQUES. Next glyph: %s\n\r",mode_name, curr_glyph->sound);
 			PRINTF(dbgstr);
 			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
@@ -209,7 +209,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				PRINTF(dbgstr);			
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);
+				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	
 				next_state = STATE_PROMPT;
 				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
 					play_glyph(curr_glyph);
