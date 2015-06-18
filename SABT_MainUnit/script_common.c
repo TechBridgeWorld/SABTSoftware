@@ -187,12 +187,8 @@ word_node_t* free_word(word_node_t* this_word) {
  * @return glyph_t* - pointer to first glyph in the linked list
  */
 glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
-	if (curr_glyph->prev == NULL) {
-		return curr_glyph;
-	} else {
-		curr_glyph = search_script(curr_script,curr_glyph->prev->pattern);
-		return get_root(curr_script,curr_glyph);
-	}
+	int index = curr_script->letters[curr_script->index];
+	return &(curr_script->glyphs[index]);
 }
 
 /**

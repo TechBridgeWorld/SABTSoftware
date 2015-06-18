@@ -172,7 +172,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					sprintf(dbgstr, "[%s] Checking answer \n\r", mode_name);
 					PRINTF(dbgstr);
 					break;
-				case WITH_CANCEL:
+/*				case WITH_CANCEL: // for easy debugging access to multiglyph letters
+					SCRIPT_ADDRESS->index = 42;
+					next_state = STATE_GENQUES; */
 				case WITH_LEFT:
 					next_state = STATE_PROMPT;
 					break;
@@ -195,7 +197,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					next_state = STATE_GENQUES;
 				}
 				else {
-					curr_glyph = get_next(SCRIPT_ADDRESS, curr_glyph);
+					curr_glyph = curr_glyph->next;
 					play_mp3(LANG_FILESET, MP3_NEXT_CELL);
 					play_dot_sequence(curr_glyph);
 					next_state = STATE_INPUT;

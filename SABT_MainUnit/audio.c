@@ -230,7 +230,7 @@ void play_dot_sequence(glyph_t *this_glyph) {
 			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
 				this_glyph->next->sound);
 			// play "ENTER" so user knows to press enter btwn multiple-cell letters
-			play_mp3(lang_fileset, "SETR");
+			play_mp3(lang_fileset, "DOTE");
 			play_dot_sequence(this_glyph->next);
 			play_silence(250);
 		}
