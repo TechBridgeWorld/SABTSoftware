@@ -495,15 +495,15 @@ bool io_parse_number(int* res) {
 
 	*res = 0;
 
-	for (i = 1; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
+	for (i = 0; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
 		curr_glyph = io_parsed[i];
 		curr_digit = get_digit(curr_glyph);
 		if (curr_digit < 0) {
 			return false;
-		} else {
+		} else if (*res > 0){
 			*res *= 10;
-			*res += curr_digit; 
 		}
+        *res += curr_digit;
 	}
 	io_parsed[i] = NULL;
 	return true;

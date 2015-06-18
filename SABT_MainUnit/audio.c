@@ -295,7 +295,31 @@ void play_number(int number) {
 					play_mp3(lang_fileset, mp3);
 					play_mp3(lang_fileset, "#HUN");
 					break;
-
+                
+                case PLACE_THOUSANDS:
+                    play_mp3(lang_fileset,mp3);
+                    play_mp3(lang_fileset, "#THO");
+                    break;
+                    
+                case PLACE_TEN_THOUSANDS:
+                    if (curr_digit == 1) {
+                        // If teen, play teen and return immediately
+                        sprintf(mp3, "#%d", number);
+                        play_mp3(lang_fileset, mp3);
+                        return;
+                    } else {
+                        // Is a multiple of ten
+                        sprintf(mp3, "#%d0", curr_digit);
+                        play_mp3(lang_fileset, mp3);
+                    }
+                    number -= curr_digit * ten_to_the(digits - 1);
+                    digits--;
+                    curr_digit = number / ten_to_the(digits - 1);
+                    sprintf(mp3, "#%d", curr_digit);
+                    play_mp3(lang_fileset, mp3);
+                    play_mp3(lang_fileset, "#THO");
+                    break;
+                    
 				default:
 					PRINTF("[Audio] Error: Number greater than 3 digits\n\r");
 					quit_mode();
@@ -321,4 +345,16 @@ void play_line(glyph_t** line) {
 			return;
 		}
 	}
+}
+
+void play_string(char* word, int word_len){
+    for (int i = 0; i < word_len; i++){
+        if (word[i] != '0') {
+            char buf[10];
+            sprintf(buf, "%c", word[i]);
+            //play_mp3(LANG_FILESET,buf);
+        } else{
+            //play_mp3(LANG_FILESET,MP3_BLANK);
+        }
+    }
 }
