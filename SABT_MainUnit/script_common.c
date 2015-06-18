@@ -36,6 +36,39 @@ void reset_script_indices(script_t* script) {
 	script->index = -1;
 }
 
+void reset_script_queue(script_t* script, bool should_shuffle) {
+	reset_script_indices(script);
+	if (should_shuffle)
+		shuffle_alphabet(script);
+	else
+		unshuffle_alphabet(script);
+}
+
+
+
+/**
+* @brief Performs a Fisher-Yates shuffle on the
+* indices of all the letters in the script,
+* producing a random ordering of letters.
+* @param an array of indices into script->glyph,
+* and the number of those that are valid entries
+* @return void
+*/
+void shuffle_alphabet(script_t* script) {
+	shuffle(script->num_letters, script->letters);
+}
+
+/**
+* @brief Sorts script->letters, putting the
+* indices back order.
+* @param an array of indices into script->glyph,
+* and the number of those that are valid entries
+* @return void
+*/
+void unshuffle_alphabet(script_t* script) {
+	unshuffle(script->num_letters, script->letters);
+}
+
 /**
 * @brief Pattern matches from a string of patterns to a glyph by traversing
 *	the script provided
@@ -178,49 +211,25 @@ word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 	return curr_word;
 }
 
-
-/**
-* @brief Returns a random last-order glyph from the current script
-* @param script_t* - Script to get random glyph from
-* @return glyph_t* - Pointer to random glyph
-*/
-glyph_t* get_random_glyph(script_t* script) {
-	glyph_t* curr_glyph = &(script->glyphs[timer_rand() % script->length]);
-	if (curr_glyph->prev == NULL) {
-		return curr_glyph;
-	} else {
-		return get_random_glyph(script);
-	}
-}
-
 /**
 * @brief Returns the next glyph from the current script
 * @param void
 * @glyph_t* - Pointer to next glyph
 */
-glyph_t* get_next_glyph(script_t* script) {
-
-	glyph_t* curr_glyph;
-
+glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
+	// increment the index
 	script->index++;
 
-	// wrap around if we go forward after the last letter
-	if (script->index == script->length) {
+	// if we're out of letters, reset index and
+	// shuffle or unshuffle as needed
+	if (script->index >= script->num_letters) {
 		script->index = 0;
-	}
-	// Return NULL if outside script length
-	else if (script->index > script->length) {
-		script->index = script->length;
-		return NULL;
+		if (should_shuffle)
+			shuffle_alphabet(script);
 	}
 
-	curr_glyph = &(script->glyphs[script->index]);
-	//
-	if (curr_glyph -> prev == NULL) {
-		return curr_glyph;
-	} else {
-		return get_next_glyph(script);
-	}
+	// return the first glyph of the script->index'th letter
+	return &(script->glyphs[script->letters[script->index]]);
 }
 
 /**
@@ -228,29 +237,18 @@ glyph_t* get_next_glyph(script_t* script) {
 * @param void
 * @glyph_t* - Pointer to previous glyph
 */
-glyph_t* get_prev_glyph(script_t* script) {
-
-	glyph_t* curr_glyph;
-
+glyph_t* get_prev_glyph(script_t* script, bool should_shuffle) {
+	// decrement the index
 	script->index--;
 
-	// wrap around if we go back before the first letter
-	if (script->index == -1) {
-		script->index = script->length - 1;
-	}
-	// Return NULL if outside script length
-	else if (script->index < -1) {
-		script->index = -1;
-		return NULL;
-	}
-
-	curr_glyph = &(script->glyphs[script->index]);
-	if (curr_glyph -> prev == NULL) {
-		return curr_glyph;
-	} else {
-		return get_prev_glyph(script);
-	}
-
+	// if we're already at the beginning, reset index
+	// to end. Don't shuffle since they presumably
+	// want to repeat what they did.
+	if (script->index < 0)
+		script->index = script->num_letters - 1;
+	
+	// return the first glyph of the script->index'th letter
+	return &(script->glyphs[script->letters[script->index]]);
 }
 
 

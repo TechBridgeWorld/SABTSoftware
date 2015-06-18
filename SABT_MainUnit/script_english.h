@@ -11,7 +11,8 @@
 #include "script_common.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"
-#define SCRIPT_ENGLISH_LENGTH 26 // 26 Alphabets
+#define SCRIPT_ENGLISH_LENGTH 26 // 26 glyphs
+#define SCRIPT_ENGLISH_NUM_LETTERS 26 // 26 letters
 
 // English Alphabets - bit pattern
 
@@ -42,41 +43,7 @@
 #define ENG_Y 0b111101
 #define ENG_Z 0b110101
 
-static glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
-	{ENG_A, "A", NULL, NULL},
-	{ENG_B, "B", NULL, NULL},
-	{ENG_C, "C", NULL, NULL},
-	{ENG_D, "D", NULL, NULL},
-	{ENG_E, "E", NULL, NULL},
-	{ENG_F, "F", NULL, NULL},
-	{ENG_G, "G", NULL, NULL},
-	{ENG_H, "H", NULL, NULL},
-	{ENG_I, "I", NULL, NULL},
-	{ENG_J, "J", NULL, NULL},
-	{ENG_K, "K", NULL, NULL},
-	{ENG_L, "L", NULL, NULL},
-	{ENG_M, "M", NULL, NULL},
-	{ENG_N, "N", NULL, NULL},
-	{ENG_O, "O", NULL, NULL},
-	{ENG_P, "P", NULL, NULL},
-	{ENG_Q, "Q", NULL, NULL},
-	{ENG_R, "R", NULL, NULL},
-	{ENG_S, "S", NULL, NULL},
-	{ENG_T, "T", NULL, NULL},
-	{ENG_U, "U", NULL, NULL},
-	{ENG_V, "V", NULL, NULL},
-	{ENG_W, "W", NULL, NULL},
-	{ENG_X, "X", NULL, NULL},
-	{ENG_Y, "Y", NULL, NULL},
-	{ENG_Z, "Z", NULL, NULL}
-};
- 
-static script_t script_english = {
-	SCRIPT_ENGLISH_LENGTH,
-	0,
-	SCRIPT_ENGLISH_FILESET,
-	english_glyphs
-};
+extern script_t script_english;
 
 #endif /* _SCRIPT_ENGLISH_H_ */
 
