@@ -130,7 +130,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			break;
 
 		case STATE_PROMPT:
-			sprintf(dbgstr, "In prompt.\n\r");
+			sprintf(dbgstr, "[%s] State: PROMPT.",mode_name);
 			PRINTF(dbgstr);
 			switch(submode) {
 				case SUBMODE_LEARN:
@@ -140,7 +140,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					break;
 
 				case SUBMODE_PLAY:
-					play_silence(500);
+				//	play_silence(500);
 					play_glyph(curr_glyph);
 					break;
 
@@ -172,9 +172,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					sprintf(dbgstr, "[%s] Checking answer \n\r", mode_name);
 					PRINTF(dbgstr);
 					break;
-/*				case WITH_CANCEL: // for easy debugging access to multiglyph letters
-					SCRIPT_ADDRESS->index = 42;
-					next_state = STATE_GENQUES; */
+				case WITH_CANCEL: // for easy debugging access to multiglyph letters
+/*					SCRIPT_ADDRESS->index = 47;
+					next_state = STATE_GENQUES;*/
 				case WITH_LEFT:
 					next_state = STATE_PROMPT;
 					break;
@@ -199,7 +199,11 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				else {
 					curr_glyph = curr_glyph->next;
 					play_mp3(LANG_FILESET, MP3_NEXT_CELL);
-					play_dot_sequence(curr_glyph);
+					
+					if (submode == SUBMODE_LEARN)
+						play_dot_sequence(curr_glyph);
+					else
+						play_glyph(curr_glyph);
 					next_state = STATE_INPUT;
 				}
 			}
