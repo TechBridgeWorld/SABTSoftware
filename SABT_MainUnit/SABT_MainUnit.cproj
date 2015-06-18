@@ -74,6 +74,12 @@
     <Compile Include="learn_letter_mode.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MD13.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD13.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="script_digits.c">
       <SubType>compile</SubType>
     </Compile>
