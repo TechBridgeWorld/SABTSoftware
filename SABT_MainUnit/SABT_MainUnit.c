@@ -38,9 +38,67 @@ void timer_routine(void)
 }
 
 /**
- * @brief the main routine
- * @return Void
+ * @brief The SABT's main routine.
+ * @return void, but should never return.
+ * @bug Handling of cancel is erratic depending on whether
+ * an mp3 is *believed* to be playing.
+ *
+ * Initializes the system by resetting flags, checking modes,
+ * etc. (This used to read in the dictionary; now it doesn't.)
+ * Interrupt handlers are set to flip bools if the timer has
+ * gone off, if data has been received from the UI, and if
+ * data has been received from the PC.
+ * 
+ * Then, in an infinite loop:
+ * 1. If the UI interrupt handler has been called, data has
+ * been received from the user interface; store it and note
+ * whether a complete message has been received.
+ * 2. If the PC interrupt handler has been called, data has
+ * been received from the PC; store it and note whether a
+ * complete message has been received.
+ * 3. If the timer interrupt has been called, setting the
+ * timer bool to true, reset it to false. (This has no effect.)
+ * 4. If there is a complete message from the PC, respond to it.
+ * (If it was type x, send an ACK; if it was M, update modes
+ * accordingly.)
+ * 5. If there is a complete message from the UI board, take action.
+ * Many of these actions depend on whether the user is in a mode
+ * or the main menu, and whether an mp3 is playing. NOTE: playing_sound
+ * is set to true when the MCU begins sending the mp3 file to the
+ * sound card, and set to false when it finishes sending the file.
+ * This does not necessarily correspond to actual play time.
+ *
+ *  INPUT                        |   ACTION TAKEN
+ * -------------------------------------------------------
+ *  Volume up                    |   Increment volume
+ *  Volume down                  |   Decrement volume
+ *  Short cancel, mp3 is playing |   Stop the mp3
+ *  Long cancel                  |   Quit back to main menu
+ *  Error message, no mp3 playing|   Print error message
+ *  Error message, mp3 is playing|   No action
+ * -------------------------------------------------------
+ *  IF NO MODE IS ACTIVE         |
+ *  (USER IS IN MAIN MENU):      |
+ * -------------------------------------------------------
+ *  Left                         |   Scroll to previous mode
+ *  Right                        |   Scroll to next mode
+ *  Enter                        |   Select current mode
+ *  Short cancel, no mp3 playing |   No action
+ * -------------------------------------------------------
+ *  IF A MODE IS ACTIVE:         |
+ * -------------------------------------------------------
+ *  Left                         |   Send "Left" to mode
+ *  Right                        |   Send "Right" to mode
+ *  Enter                        |   Send "Yes" to mode
+ *  Short cancel, no mp3 playing |   Send "No" to mode
+ *  Dot or cell, no mp3 playing  |   Send to current mode
+ *  Dot or cell, mp3 playing     |   No action
+ * 
+ * 6. Run one step of the currently active mode.
+ * 7. If there's a queued mp3, play it.
+ * Note: during this function, interrupt handlers 
  */
+  
 int main(void)
 {
   initialize_system();

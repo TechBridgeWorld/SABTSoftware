@@ -14,6 +14,7 @@ void initialize_ui(void);
 
 /**
  * @brief debugging function to add delay
+ * @bug This indicates a race condition somewhere!
  * @return Void
  */
 void delay(void)
@@ -31,7 +32,6 @@ void delay(void)
 /**
  * @brief interrupt handler 
  * @TODO - NEED TO FIGURE OUT WHAT INTERRUPT
- * @return Void
  */
 ISR(_VECTOR(20)){
   transmit_complete = true;
@@ -39,9 +39,43 @@ ISR(_VECTOR(20)){
 }
 
 /**
- * @brief the main execution loop for the primary ui board
- * Executes an infinite loop, should never return
- * @return Void
+ * @brief The primary user interface's main routine.
+ * @return void, but should never return
+ * @bug "delay" call between sending enter and the cell.
+ * @warning Is it necessary to send the entire cell with
+ * the enter, since we have already sent the dots that
+ * make up that cell? This work could be done by the
+ * main board instead.
+ *
+ * Initializes the system. Interrupt handlers are set to
+ * flip bools if data has been (sent to? or) received from
+ * the main board, and a timer interrupt is set to flip
+ * a timer bool every 780 cycles (set in timer.h).
+ * 
+ * In an infinite loop, check whether the timer interrupt
+ * has gone off (i.e. 780 cycles have elapsed). If so:
+ * 
+ * 1. Check each command button in turn to see if it has been
+ * pressed. (This info is stored at PINC.) If a button has been
+ * pressed, set BUTTON_ON for that command. If "cancel"
+ * was long-pressed, set BUTTON_ON for that, too.
+ * 
+ * 2. Iterate through the command buttons' BUTTON_ON. If it
+ * has been set, send that command to the MCU. If cancel and
+ * the long-cancel were both detected, send a long cancel.
+ * If enter was detected, send "enter," delay, create a bitmap
+ * representing the entire cell, and send that cell.
+ * 
+ * 3. Iterate through the six dots. If that dot has been
+ * pressed, add it to the current cell *and* send the dot
+ * to the MCU. Row and column are both set to 1 since the primary
+ * board only has one cell. A dot is NOT sent if it has already
+ * been sent in the last 10 iterations through the loop -- this
+ * is presumably for debounce.
+ *
+ * 4. Increment each dot's iteration counter (for the 10-iteration
+ * check in step 3).
+ *
  */
 int main(void)
 {
