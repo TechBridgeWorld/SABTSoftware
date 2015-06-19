@@ -215,7 +215,7 @@ void play_pattern(unsigned char pattern) {
 }
 
 /**
- * @brief Play dot sequence corresponding to an glyph, checks for NULL arg
+ * @brief Play dot sequence corresponding to a glyph, checks for NULL arg
  * @param glyph_t *this_glyph - glyph to play dot sequence for
  * @return void
  */
@@ -230,9 +230,8 @@ void play_dot_sequence(glyph_t *this_glyph) {
 			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
 				this_glyph->next->sound);
 			// play "ENTER" so user knows to press enter btwn multiple-cell letters
-			play_mp3(lang_fileset, "SETR");
+			play_mp3(lang_fileset, "DOTE");
 			play_dot_sequence(this_glyph->next);
-			play_silence(250);
 		}
 	} else {
 		play_mp3(lang_fileset, MP3_INVALID_PATTERN);

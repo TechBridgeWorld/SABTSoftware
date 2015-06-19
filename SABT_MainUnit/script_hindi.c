@@ -9,7 +9,7 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 	{HIN_U, "U", NULL, NULL},		// 4
 	{HIN_UU, "UU", NULL, NULL},		// 5
 	{HIN_RU_1, "RU", NULL, &glyphs_hindi[7]},  // 6
-	{HIN_RU_2, "RU_2", &glyphs_hindi[6] ,NULL}, // 7
+	{HIN_RU_2, "NCEL", &glyphs_hindi[6] ,NULL}, // 7
 
 	{HIN_EE, "EE", NULL, NULL},		// 8
 	{HIN_AI, "AI", NULL, NULL},		// 9
@@ -60,12 +60,12 @@ glyph_t glyphs_hindi[SCRIPT_HINDI_LENGTH] = {
 
 	{HIN_KSHA, "KSHA", NULL, NULL},								// 47
 	{HIN_TRA_1, "TRA", NULL, &glyphs_hindi[49]},				// 48
-	{HIN_TRA_2, "TRA_2", &glyphs_hindi[48], &glyphs_hindi[50]},	// 49
-	{HIN_TRA_3, "TRA_3", &glyphs_hindi[49], NULL},				// 50
+	{HIN_TRA_2, "NCEL", &glyphs_hindi[48], &glyphs_hindi[50]},	// 49
+	{HIN_TRA_3, "NCEL", &glyphs_hindi[49], NULL},				// 50
 	{HIN_JNA, "JNA", NULL, NULL},								// 51
 	{HIN_SHRA_1, "SHRA", NULL, &glyphs_hindi[53]},				// 52
-	{HIN_SHRA_2, "SHRA2", &glyphs_hindi[52], &glyphs_hindi[54]},// 53
-	{HIN_SHRA_3, "SHRA3", &glyphs_hindi[53], NULL}				// 54
+	{HIN_SHRA_2, "NCEL", &glyphs_hindi[52], &glyphs_hindi[54]},// 53
+	{HIN_SHRA_3, "NCEL", &glyphs_hindi[53], NULL}				// 54
 };
 
 int letters_hindi[SCRIPT_HINDI_NUM_LETTERS] = {
