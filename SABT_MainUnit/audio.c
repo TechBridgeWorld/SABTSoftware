@@ -349,12 +349,13 @@ void play_line(glyph_t** line) {
 
 void play_string(char* word, int word_len){
     for (int i = 0; i < word_len; i++){
-        if (word[i] != '0') {
+        if (word[i] != '\0') {
             char buf[10];
             sprintf(buf, "%c", word[i]);
-            //play_mp3(LANG_FILESET,buf);
+			//PRINTF(buf);
+            play_mp3("ENG_",buf);
         } else{
-            //play_mp3(LANG_FILESET,MP3_BLANK);
+            play_mp3("ENG_","BLNK");
         }
     }
 }
