@@ -9,6 +9,7 @@
 #include "globals.h"
 #include "audio.h"
 #include "script_common.h"
+#include "letter_globals.h"
 
 #include <stdbool.h>
 
@@ -284,7 +285,7 @@ bool get_number(bool* valid, int* res) {
 * @param glyph_t* res - Pointer to placeholder for pointer
 * @return bool - true if ready for further processing
 */
-bool get_character(glyph_t** res) {
+bool get_first_glyph(glyph_t** res) {
 	
 	// Let user finish input
 	if (!get_line()) {
@@ -303,11 +304,41 @@ bool get_character(glyph_t** res) {
 		*res = NULL;
 		return true;
 	} else {
+        PRINTF("io_convert");
+        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        PRINTF(dbgstr);
 		*res = io_parsed[0];
-		sprintf(dbgstr, "[IO] Returning character: %s\n\r", (*res)->sound);
-		PRINTF(dbgstr);
+		
 		return true;
 	}
+}
+
+bool get_character(bool* valid, char* character){
+    // Let user finish input
+    if (!get_line()) {
+        return false;
+    }
+    
+    PRINTF("[IO] Line accepted\n\r");
+    
+    /*
+     If conversion is unsuccessful, return NULL, otherwise return first
+     character
+     */
+    if (!io_convert_line()) {
+        PRINTF("[IO] Line conversion unsuccessful\n\r");
+        play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+        *valid = false;
+        return true;
+    } else {
+        PRINTF("io_convert");
+        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        PRINTF(dbgstr);
+        *character = get_letter_from_bits(io_parsed[0]->pattern);
+        if(character == '\0') *valid = false;
+        else *valid = true;
+        return true;
+    }
 }
 
 // ********************************
@@ -472,7 +503,7 @@ bool io_convert_line(void) {
 		if (curr_glyph == NULL) {
 			return false;
 		} else {
-			sprintf(dbgstr, "[IO] Parsed glyph: %s\n\r", curr_glyph->sound);
+			sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s\n\r", parse_index, curr_glyph->sound);
 			PRINTF(dbgstr);
 			io_parsed[parse_index] = curr_glyph;
 		}
@@ -481,6 +512,8 @@ bool io_convert_line(void) {
 	// If control returns from loop then matching glyphs were found for all
 	// raw cells, add a NULL terminator and return true
 	io_parsed[line_index] = NULL;
+    sprintf(dbgstr, "[IO] line index[%d]: \n\r", line_index);
+    PRINTF(dbgstr);
 	return true;
 }
 

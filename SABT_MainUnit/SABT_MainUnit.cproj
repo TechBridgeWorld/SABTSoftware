@@ -68,6 +68,12 @@
   </PropertyGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
   <ItemGroup>
+    <Compile Include="dictionary.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="dictionary.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="learn_letter_mode.c">
       <SubType>compile</SubType>
     </Compile>
