@@ -1,12 +1,12 @@
 /**
-* @file glyph.c
+* @file datastructures.c
 * @brief Common functions involving glyphs
 * @author Vivek Nair (viveknair@cmu.edu)
 */
 
 #include <stdbool.h>
 #include <stddef.h>
-#include "glyph.h"
+#include "datastructures.h"
 #include "globals.h"
 
 /**

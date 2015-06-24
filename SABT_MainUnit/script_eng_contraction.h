@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_ENG_CONTRACTION_H_
 #define _SCRIPT_ENG_CONTRACTION_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 #include "script_common.h"
 
 #define SCRIPT_CONTRACTION_FILESET "ENG_" // Followed by 0,1, ..., 6 depending on the pattern used

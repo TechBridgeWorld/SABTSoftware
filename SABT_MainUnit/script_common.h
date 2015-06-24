@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_COMMON_H_
 #define _SCRIPT_COMMON_H_ 
 
-#include "glyph.h"
+#include "datastructures.h"
 #include <stdbool.h>
 #include <stddef.h>
 

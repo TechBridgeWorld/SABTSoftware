@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_ENGLISH_H_
 #define _SCRIPT_ENGLISH_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 #include "script_common.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"

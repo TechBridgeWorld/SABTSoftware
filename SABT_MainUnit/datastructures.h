@@ -4,33 +4,40 @@
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 
-#ifndef _GLYPH_H_
-#define _GLYPH_H_
+#ifndef _DATASTRUCTURES_H_
+#define _DATASTRUCTURES_H_
 
 #include <stdbool.h>
 
 typedef struct glyph glyph_t;
 typedef struct letter letter_t;
 typedef struct word word_t;
+typedef struct alphabet alphabet_t;
 typedef struct script script_t;
 typedef struct script_old script_old_t;
 typedef struct word_node word_node_t;
 
 // Stores information about single glyph; used to build scripts
-struct glyph {
+struct glyph{
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
 	glyph_t* prev;			/* Pointer to previous glyph in linked list */
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
-struct letter {
+struct letter{
 	int num_glyphs;
 	glyph_t* first_glyph;
 	char sound[5];
 };
 
-struct word {
+struct word{
+	int num_letters;
+	letter_t* first_letter;
+	char sound[5];
+};
+
+struct alphabet{
 	int num_letters;
 	letter_t* first_letter;
 	char sound[5];
@@ -65,4 +72,4 @@ struct word_node {
 // Common glyph functions
 bool glyph_equals(glyph_t* g1, glyph_t* g2);
 
-#endif /* _GLYPH_H_ */
+#endif /* _DATASTRUCTURES_H_ */

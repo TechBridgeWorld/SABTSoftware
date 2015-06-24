@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_DIGITS_H_
 #define _SCRIPT_DIGITS_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 #include <stddef.h>
 
 // Language fileset can be overriden

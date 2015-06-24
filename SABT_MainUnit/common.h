@@ -7,7 +7,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 
 //Used for cyclic traversal of lists
 #define PLUS_ONE_MOD(X, BOUND) ((X + 1 > BOUND - 1) ? (0) : (X + 1))	
@@ -22,5 +22,7 @@ int get_num_of_digits(int);
 void play_requested_dot(char);
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);
+void init_index_arr(int *index_arr, int arr_len);
+void init_char_arr(char* arr, int len);
 
 #endif /* _COMMON_H_ */

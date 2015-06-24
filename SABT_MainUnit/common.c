@@ -8,7 +8,7 @@
 #include "audio.h"
 #include "common.h"
 #include "script_common.h"
-#include "glyph.h"
+#include "datastructures.h"
 
 #include <stdbool.h>
 
@@ -154,3 +154,21 @@ void unshuffle(int len, int* int_array) {
 		}
 	}
 }
+
+
+/**
+ * @brief Initialize an index array
+ */
+void init_index_arr(int *index_arr, int arr_len){
+    for (int i = 0; i < arr_len; i++){
+        index_arr[i] = i;
+    }
+}
+
+void init_char_arr(char* arr, int len){
+    for (int i = 0; i < len; i++){
+        arr[i] = '\0';
+    }
+}
+
+

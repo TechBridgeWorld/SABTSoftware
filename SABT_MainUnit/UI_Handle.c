@@ -61,7 +61,7 @@ void ui_check_modes(void)
   }*/
 
   /** ACTIVATED MODES ON SABT **/
-  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,13,;");
+  strcpy(file_content, "2, 4, 14, 13, ;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -369,13 +369,12 @@ void ui_call_mode_yes_answer(void)
     case 9:
       md9_call_mode_yes_answer();
       break;
-
-	case 10:
-	  md10_call_mode_yes_answer();
-	  break;
+	  case 10:
+	    md10_call_mode_yes_answer();
+	    break;
     case 13:
-          md13_call_mode_yes_answer();
-          break;
+      md13_call_mode_yes_answer();
+      break;
 
     default:
       break;
@@ -403,11 +402,11 @@ void ui_call_mode_no_answer(void)
       md9_call_mode_no_answer();
       break;
     case 10:
-	  md10_call_mode_no_answer();
-	  break;
+	    md10_call_mode_no_answer();
+	    break;
     case 13:
-          md13_call_mode_no_answer();
-          break;
+      md13_call_mode_no_answer();
+      break;
 
     default:
       break;
@@ -437,13 +436,14 @@ void ui_input_dot_to_current_mode(char this_dot)
           break;
 
         case 10:
-		  md10_input_dot(this_dot);
-		  break;
+		      md10_input_dot(this_dot);
+		      break;
         case 13:
-              md13_input_dot(this_dot);
-              break;
+          md13_input_dot(this_dot);
+          break;
         default:
           break;
+
       }
   } else {
     play_mp3("ENG_",MP3_INVALID_PATTERN);
@@ -476,12 +476,12 @@ void ui_input_cell_to_current_mode(char this_cell)
       case 9:
         md9_input_cell(this_cell);
         break;
-	  case 10:
+	    case 10:
         md10_input_cell(this_cell);
         break;
       case 13:
-            md13_input_cell(this_cell);
-            break;
+        md13_input_cell(this_cell);
+        break;
       default:
         break;
     }
@@ -533,16 +533,19 @@ void ui_run_main_of_current_mode(void)
         break;
       case 10:
 	  	  md10_main();
-		  break;
-	  case 11:
+		    break;
+	    case 11:
 	  	  md11_main();
 		    break;
       case 12:
         md12_main();
         break;
       case 13:
-            md13_main();
-            break;
+        md13_main();
+        break;
+      case 14:
+        md14_main();
+        break;
 
       default:
         break;
@@ -586,17 +589,21 @@ void ui_reset_the_current_mode(void)
       case 9:
         md9_reset();
         break;
-	  case 10:
-	    md10_reset();  
+	    case 10:
+	      md10_reset();  
         break;
-	  case 11:
-	    md11_reset();  
+	    case 11:
+	      md11_reset();  
         break;
-
       case 12:
         md12_reset();
+        break;
       case 13:
         md13_reset();
+        break;
+      case 14:
+        md14_reset();
+        break;
 
       default:
         break;
@@ -615,13 +622,12 @@ void ui_call_mode_left(void) {
     case 9:
       md9_call_mode_left();
       break;
-	case 10:
-	  md10_call_mode_left();
-	  break;
+	  case 10:
+	    md10_call_mode_left();
+	    break;
     case 13:
       md13_call_mode_left();
       break;
-
     default:
       break;
   }
@@ -637,11 +643,11 @@ void ui_call_mode_right(void) {
     case 9:
       md9_call_mode_right();
       break;    
-	case 10:
-	  md10_call_mode_right();
-	  break;  
+	  case 10:
+	    md10_call_mode_right();
+	    break;  
     case 13:
-      md13_call_mode_left();
+      md13_call_mode_right();
       break;
 
     default:

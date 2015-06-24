@@ -13,7 +13,7 @@
 #include "Globals.h"
 #include "Modes.h"
 #include "audio.h"
-#include "glyph.h"
+#include "datastructures.h"
 #include "common.h"
 #include "letter_globals.h"
 #include "script_common.h"
