@@ -56,7 +56,8 @@ bool get_line(void);
 
 // Intermediate IO functions
 bool get_number(bool* valid, int* res);
-bool get_character(glyph_t** res);
+bool get_character(bool* valid, char* character);
+bool get_first_glyph(glyph_t** res);
 bool parse_letter(void);
 bool parse_digit(void);
 bool parse_symbol(void);

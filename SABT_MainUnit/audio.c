@@ -215,7 +215,7 @@ void play_pattern(unsigned char pattern) {
 }
 
 /**
- * @brief Play dot sequence corresponding to an glyph, checks for NULL arg
+ * @brief Play dot sequence corresponding to a glyph, checks for NULL arg
  * @param glyph_t *this_glyph - glyph to play dot sequence for
  * @return void
  */
@@ -230,9 +230,8 @@ void play_dot_sequence(glyph_t *this_glyph) {
 			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
 				this_glyph->next->sound);
 			// play "ENTER" so user knows to press enter btwn multiple-cell letters
-			play_mp3(lang_fileset, "SETR");
+			play_mp3(lang_fileset, "DOTE");
 			play_dot_sequence(this_glyph->next);
-			play_silence(250);
 		}
 	} else {
 		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
@@ -295,7 +294,31 @@ void play_number(int number) {
 					play_mp3(lang_fileset, mp3);
 					play_mp3(lang_fileset, "#HUN");
 					break;
-
+                
+                case PLACE_THOUSANDS:
+                    play_mp3(lang_fileset,mp3);
+                    play_mp3(lang_fileset, "#THO");
+                    break;
+                    
+                case PLACE_TEN_THOUSANDS:
+                    if (curr_digit == 1) {
+                        // If teen, play teen and return immediately
+                        sprintf(mp3, "#%d", number);
+                        play_mp3(lang_fileset, mp3);
+                        return;
+                    } else {
+                        // Is a multiple of ten
+                        sprintf(mp3, "#%d0", curr_digit);
+                        play_mp3(lang_fileset, mp3);
+                    }
+                    number -= curr_digit * ten_to_the(digits - 1);
+                    digits--;
+                    curr_digit = number / ten_to_the(digits - 1);
+                    sprintf(mp3, "#%d", curr_digit);
+                    play_mp3(lang_fileset, mp3);
+                    play_mp3(lang_fileset, "#THO");
+                    break;
+                    
 				default:
 					PRINTF("[Audio] Error: Number greater than 3 digits\n\r");
 					quit_mode();
@@ -321,4 +344,17 @@ void play_line(glyph_t** line) {
 			return;
 		}
 	}
+}
+
+void play_string(char* word, int word_len){
+    for (int i = 0; i < word_len; i++){
+        if (word[i] != '\0') {
+            char buf[10];
+            sprintf(buf, "%c", word[i]);
+			//PRINTF(buf);
+            play_mp3("ENG_",buf);
+        } else{
+            play_mp3("ENG_","BLNK");
+        }
+    }
 }

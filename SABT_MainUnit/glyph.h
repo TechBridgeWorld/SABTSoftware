@@ -11,6 +11,7 @@
 
 typedef struct glyph glyph_t;
 typedef struct script script_t;
+typedef struct script_old script_old_t;
 typedef struct word_node word_node_t;
 
 // Stores information about single glyph; used to build scripts
@@ -21,13 +22,26 @@ struct glyph {
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
-// Structure representing a script
-struct script {
+// Structure representing a script (alphabet) - deprecated
+struct script_old {
 	int length;				/* Length of first cell glyph array */
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
 };
+
+// Structure representing a script/alphabet.
+// Now represents both the glyphs and the letters, which may be more than
+// one glyph each.
+struct script {
+	int length;				/* Length of glyph array */
+	int num_letters;			/* Number of actual letters (<= length) */
+	int index;				/* Current index */
+	char fileset[5];		/* Fileset on SD card; 4 characters long */
+	glyph_t* glyphs; 		/* Pointer to array of glyphs */
+	int* letters;		/* Pointer to array of valid indices into glyphs */
+	};
+
 
 struct word_node {
 	glyph_t* data;

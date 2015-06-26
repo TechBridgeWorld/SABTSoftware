@@ -9,6 +9,7 @@
 #include "globals.h"
 #include "audio.h"
 #include "script_common.h"
+#include "letter_globals.h"
 
 #include <stdbool.h>
 
@@ -204,7 +205,7 @@ bool get_line(void) {
 			return true;
 			break;
 
-		/* RIGHT is used to switch to previous cell because Brialle is entered
+		/* RIGHT is used to switch to previous cell because Braille is entered
 			this way */
 		// RIGHT - Select prev cell
 		case WITH_RIGHT:
@@ -216,7 +217,7 @@ bool get_line(void) {
 			return false;
 			break;
 
-		/* LEFT is used to switch to next cell because Brialle is entered
+		/* LEFT is used to switch to next cell because Braille is entered
 			this way */
 		// LEFT - Select next cell
 		case WITH_LEFT:
@@ -284,7 +285,7 @@ bool get_number(bool* valid, int* res) {
 * @param glyph_t* res - Pointer to placeholder for pointer
 * @return bool - true if ready for further processing
 */
-bool get_character(glyph_t** res) {
+bool get_first_glyph(glyph_t** res) {
 	
 	// Let user finish input
 	if (!get_line()) {
@@ -303,11 +304,41 @@ bool get_character(glyph_t** res) {
 		*res = NULL;
 		return true;
 	} else {
+        PRINTF("io_convert");
+        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        PRINTF(dbgstr);
 		*res = io_parsed[0];
-		sprintf(dbgstr, "[IO] Returning character: %s\n\r", (*res)->sound);
-		PRINTF(dbgstr);
+		
 		return true;
 	}
+}
+
+bool get_character(bool* valid, char* character){
+    // Let user finish input
+    if (!get_line()) {
+        return false;
+    }
+    
+    PRINTF("[IO] Line accepted\n\r");
+    
+    /*
+     If conversion is unsuccessful, return NULL, otherwise return first
+     character
+     */
+    if (!io_convert_line()) {
+        PRINTF("[IO] Line conversion unsuccessful\n\r");
+        play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+        *valid = false;
+        return true;
+    } else {
+        PRINTF("io_convert");
+        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        PRINTF(dbgstr);
+        *character = get_letter_from_bits(io_parsed[0]->pattern);
+        if(character == '\0') *valid = false;
+        else *valid = true;
+        return true;
+    }
 }
 
 // ********************************
@@ -472,7 +503,7 @@ bool io_convert_line(void) {
 		if (curr_glyph == NULL) {
 			return false;
 		} else {
-			sprintf(dbgstr, "[IO] Parsed glyph: %s\n\r", curr_glyph->sound);
+			sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s\n\r", parse_index, curr_glyph->sound);
 			PRINTF(dbgstr);
 			io_parsed[parse_index] = curr_glyph;
 		}
@@ -481,6 +512,8 @@ bool io_convert_line(void) {
 	// If control returns from loop then matching glyphs were found for all
 	// raw cells, add a NULL terminator and return true
 	io_parsed[line_index] = NULL;
+    sprintf(dbgstr, "[IO] line index[%d]: \n\r", line_index);
+    PRINTF(dbgstr);
 	return true;
 }
 
@@ -495,15 +528,15 @@ bool io_parse_number(int* res) {
 
 	*res = 0;
 
-	for (i = 1; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
+	for (i = 0; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
 		curr_glyph = io_parsed[i];
 		curr_digit = get_digit(curr_glyph);
 		if (curr_digit < 0) {
 			return false;
-		} else {
+		} else if (*res > 0){
 			*res *= 10;
-			*res += curr_digit; 
 		}
+        *res += curr_digit;
 	}
 	io_parsed[i] = NULL;
 	return true;
