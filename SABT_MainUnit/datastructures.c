@@ -13,6 +13,7 @@
 * @brief Compares 2 glyphs
 * @param glyph_t* g1, g2 - The 2 glyphs to compare
 * @bool true if cell patterns match, false otherwise
+
 */
 bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 	sprintf(dbgstr, "[Script] Glyph 1: %s\n\r", g1->sound);

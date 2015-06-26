@@ -10,38 +10,110 @@
 #include <stdbool.h>
 
 typedef struct glyph glyph_t;
-typedef struct letter letter_t;
-typedef struct word word_t;
-typedef struct alphabet alphabet_t;
 typedef struct script script_t;
+
+// deprecated
 typedef struct script_old script_old_t;
 typedef struct word_node word_node_t;
 
+#define DOTS0      0b000000
+#define DOTS1      0b000001
+#define DOTS2      0b000010
+#define DOTS12     0b000011
+#define DOTS3      0b000100
+#define DOTS13     0b000101
+#define DOTS23     0b000110
+#define DOTS123    0b000111
+#define DOTS4      0b001000
+#define DOTS14     0b001001
+#define DOTS24     0b001010
+#define DOTS124    0b001011
+#define DOTS34     0b001100
+#define DOTS134    0b001101
+#define DOTS234    0b001110
+#define DOTS1234   0b001111
+#define DOTS5      0b010000
+#define DOTS15     0b010001
+#define DOTS25     0b010010
+#define DOTS125    0b010011
+#define DOTS35     0b010100
+#define DOTS135    0b010101
+#define DOTS235    0b010110
+#define DOTS1235   0b010111
+#define DOTS45     0b011000
+#define DOTS145    0b011001
+#define DOTS245    0b011010
+#define DOTS1245   0b011011
+#define DOTS345    0b011100
+#define DOTS1345   0b011101
+#define DOTS2345   0b011110
+#define DOTS12345  0b011111
+#define DOTS6      0b100000
+#define DOTS16     0b100001
+#define DOTS26     0b100010
+#define DOTS126    0b100011
+#define DOTS36     0b100100
+#define DOTS136    0b100101
+#define DOTS236    0b100110
+#define DOTS1236   0b100111
+#define DOTS046    0b101000
+#define DOTS146    0b101001
+#define DOTS246    0b101010
+#define DOTS1246   0b101011
+#define DOTS346    0b101100
+#define DOTS1346   0b101101
+#define DOTS2346   0b101110
+#define DOTS12346  0b101111
+#define DOTS56     0b110000
+#define DOTS156    0b110001
+#define DOT256     0b110010
+#define DOTS1256   0b110011
+#define DOTS356    0b110100
+#define DOTS1356   0b110101
+#define DOTS2356   0b110110
+#define DOTS12356  0b110111
+#define DOTS456    0b111000
+#define DOTS1456   0b111001
+#define DOTS2456   0b111010
+#define DOTS12456  0b111011
+#define DOTS3456   0b111100
+#define DOTS13456  0b111101
+#define DOTS23456  0b111110
+#define DOTS123456 0b111111
+
 // Stores information about single glyph; used to build scripts
-struct glyph{
+struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
 	glyph_t* prev;			/* Pointer to previous glyph in linked list */
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
-struct letter{
-	int num_glyphs;
-	glyph_t* first_glyph;
-	char sound[5];
-};
+typedef struct cell {
+	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
+} cell_t;
 
-struct word{
-	int num_letters;
-	letter_t* first_letter;
+typedef struct letter {
+	char name[4];
+	char language[3];
+	cell_t* cells;
+	int num_cells;
 	char sound[5];
-};
+} letter_t;
 
-struct alphabet{
+typedef struct word {   // should capitalization go here???
+	char name[10];
+	int length_name;
+	char language[3];
+	letter_t* letters;
 	int num_letters;
-	letter_t* first_letter;
 	char sound[5];
-};
+} word_t;
+
+typedef struct alphabet {
+	letter_t* letters;
+	int num_letters;
+} alphabet_t;
 
 // Structure representing a script (alphabet) - deprecated
 struct script_old {
@@ -56,12 +128,12 @@ struct script_old {
 // one glyph each.
 struct script {
 	int length;				/* Length of glyph array */
-	int num_letters;			/* Number of actual letters (<= length) */
+	int num_letters;			/* Number of actual letters (<length) */
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of glyphs */
 	int* letters;		/* Pointer to array of valid indices into glyphs */
-	};
+};
 
 
 struct word_node {
