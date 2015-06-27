@@ -250,6 +250,7 @@ void play_number(int number) {
 	int curr_digit = -1;
 	int digits = -1;
 	char mp3[5] = "";
+    char dbgbuf[20] = "";
 
 
 	// If number is just 0, play #0 and return
@@ -266,13 +267,20 @@ void play_number(int number) {
 
 	// Count number of digits
 	digits = get_num_of_digits(number);
-
+    
+    sprintf(dbgbuf, "[Play_number]number:#%d digits:%d\r\n", number, digits);
+    PRINTF(dbgbuf);
+    
 	while (number != 0) {
 		// Extract current digit and adjust number
 		curr_digit = number / ten_to_the(digits - 1);
 
 		if (curr_digit != 0) {
 			sprintf(mp3, "#%d", curr_digit);
+            
+            //sprintf(dbgbuf, "[Play_number]curr number:%d curr digit:%d digits%d\r\n",number, curr_digit, digits);
+            //PRINTF(dbgbuf);
+            
 			switch (digits) {
 				case PLACE_ONES:
 					play_mp3(lang_fileset, mp3);
@@ -294,31 +302,35 @@ void play_number(int number) {
 				case PLACE_HUNDREDS:
 					play_mp3(lang_fileset, mp3);
 					play_mp3(lang_fileset, "#HUN");
+                    //sprintf(dbgbuf, "[Play_number]%d hundred played\r\n", curr_digit);
+                    //PRINTF(dbgbuf);
 					break;
                 
                 case PLACE_THOUSANDS:
                     play_mp3(lang_fileset,mp3);
                     play_mp3(lang_fileset, "#THO");
+                    //sprintf(dbgbuf, "[Play_number]%d thousand played\r\n", curr_digit);
+                    //PRINTF(dbgbuf);
                     break;
                     
-                case PLACE_TEN_THOUSANDS:
-                    if (curr_digit == 1) {
-                        // If teen, play teen and return immediately
-                        sprintf(mp3, "#%d", number);
-                        play_mp3(lang_fileset, mp3);
-                        return;
-                    } else {
-                        // Is a multiple of ten
-                        sprintf(mp3, "#%d0", curr_digit);
-                        play_mp3(lang_fileset, mp3);
-                    }
-                    number -= curr_digit * ten_to_the(digits - 1);
-                    digits--;
-                    curr_digit = number / ten_to_the(digits - 1);
-                    sprintf(mp3, "#%d", curr_digit);
-                    play_mp3(lang_fileset, mp3);
-                    play_mp3(lang_fileset, "#THO");
-                    break;
+//                case PLACE_TEN_THOUSANDS:
+//                    if (curr_digit == 1) {
+//                        // If teen, play teen and return immediately
+//                        sprintf(mp3, "#%d", number);
+//                        play_mp3(lang_fileset, mp3);
+//                        return;
+//                    } else {
+//                        // Is a multiple of ten
+//                        sprintf(mp3, "#%d0", curr_digit);
+//                        play_mp3(lang_fileset, mp3);
+//                    }
+//                    number -= curr_digit * ten_to_the(digits - 1);
+//                    digits--;
+//                    curr_digit = number / ten_to_the(digits - 1);
+//                    sprintf(mp3, "#%d", curr_digit);
+//                    play_mp3(lang_fileset, mp3);
+//                    play_mp3(lang_fileset, "#THO");
+//                    break;
                     
 				default:
 					PRINTF("[Audio] Error: Number greater than 3 digits\n\r");
