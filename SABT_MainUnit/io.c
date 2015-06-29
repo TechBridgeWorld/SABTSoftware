@@ -533,10 +533,10 @@ bool io_parse_number(int* res) {
 		curr_digit = get_digit(curr_glyph);
 		if (curr_digit < 0) {
 			return false;
-		} else if (*res > 0){
-			*res *= 10;
-		}
+        } else {
+        *res *= 10;
         *res += curr_digit;
+        }
 	}
 	io_parsed[i] = NULL;
 	return true;
