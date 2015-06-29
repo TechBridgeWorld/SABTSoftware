@@ -51,6 +51,7 @@
 #define MP3_NUMBERS_ARE "NUMR"
 #define MP3_AND "AND"
 #define MP3_ENTER "ENTR"
+#define MP3_SUBMIT "SUMT"
 
 /**
  *  Limits
@@ -118,12 +119,17 @@ void md13_play_question(){
 	play_mp3(MODE_FILESET, MP3_ENTER);
 }
 
+void md13_play_answer(){
+    int answer = random_between(md_op_1, md_op_2);
+    play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
+    play_number(answer);
+}
 
 void md13_main(void) {
     switch (md_next_state) {
 		case STATE_INTRO:
 			play_mp3(MODE_FILESET, MP3_INTRO);
-			play_mp3(MODE_FILESET, MP3_SKIP);
+			play_mp3(MODE_FILESET, MP3_SUBMIT);
 			md_next_state = STATE_LVLSEL;
 			break;
         case STATE_LVLSEL:
@@ -214,10 +220,13 @@ void md13_main(void) {
                 md_incorrect_tries++;
                 play_mp3(LANG_FILESET, MP3_INCORRECT);
                 if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
-                    //md13_play_answer();
+                    md_next_state = STATE_REPROMPT;
                 }
-                play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-                md_next_state = STATE_PROMPT;
+                else
+				{
+					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+					md_next_state = STATE_PROMPT;
+				}
             }
             break;
             
@@ -231,7 +240,7 @@ void md13_main(void) {
                     
                     // Playing answer
                 case RIGHT: case LEFT:
-                    //md9_play_answer();
+                    md13_play_answer();
                     break;
                     
                     // Skipping question

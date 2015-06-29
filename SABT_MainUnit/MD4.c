@@ -107,6 +107,17 @@ bool place_letter()
     PRINTF("no match\r\n");
     return false;
 }
+
+void choose_next_word(){
+	int num_words = dict.num_words;
+	if (dict.index >= num_words - 1){
+		shuffle(num_words, dict.index_array);
+		dict.index = 0;
+	}
+	chosen_word = dict.words[dict.index_array[dict.index]];
+	dict.index++;
+}
+
 /**
  *  Placing hints by adding correct letters into the input letter(working as if
  *  already entered the correct letters). Shuffle the index to decide where to put
@@ -115,6 +126,10 @@ bool place_letter()
  */
 void place_hint(int num_hint){
     int chosen_word_len = strlen(chosen_word);
+    while (num_hint == chosen_word_len) { //make sure answer is not given right away
+        choose_next_word();
+        chosen_word_len = strlen(chosen_word);
+    }
     int index_arr[chosen_word_len];
     int hint_i;
     init_index_arr(index_arr, chosen_word_len);
@@ -162,6 +177,7 @@ bool is_past_mistake(char entered_letter){
 }
 
 
+
 void md4_reset(void) {
     PRINTF("*** MD4 - one player hangman ***\n\r");
     
@@ -176,8 +192,7 @@ void md4_reset(void) {
     md_incorrect_tries = 0;
 }
 
-void md4_main(void) {
-	int num_words;	
+void md4_main(void) {	
     switch (md_next_state) {
         case STATE_INTRO:
 			shuffle(dict.num_words, dict.index_array);
@@ -187,15 +202,7 @@ void md4_main(void) {
             break;
             
         case STATE_GENQUES:
-			
-            num_words = dict.num_words;
-            if (dict.index >= num_words - 1){
-                shuffle(num_words, dict.index_array);
-                dict.index = 0;
-                }
-            chosen_word = dict.words[dict.index_array[dict.index]];
-            dict.index++;
-            
+            choose_next_word();
             char buf[10];
             sprintf(buf, "word:%s\r\n", chosen_word);
             PRINTF(buf);
@@ -208,7 +215,7 @@ void md4_main(void) {
             init_char_arr(mistake_pool, MAX_INCORRECT_GUESS);
             init_char_arr(input_word, MAX_WORD_LEN);
             md_last_dot = create_dialog(MP3_LEVEL,
-                                        DOT_1 | DOT_2 | DOT_3 );
+                                        DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL);
             switch (md_last_dot) {
 					case NO_DOTS:
 						break;
@@ -224,6 +231,9 @@ void md4_main(void) {
                         place_hint(3);
 						md_next_state = STATE_PROMPT;
                         break;
+					case ENTER:
+						md_next_state = STATE_PROMPT;
+						break;
             }
             
             break;
