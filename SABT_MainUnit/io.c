@@ -10,6 +10,7 @@
 #include "audio.h"
 #include "script_common.h"
 #include "letter_globals.h"
+#include "script_digits.h"
 
 #include <stdbool.h>
 
@@ -256,7 +257,6 @@ bool get_line(void) {
 * @return bool - true once user input is complete and parsed, false if pending
 */
 bool get_number(bool* valid, int* res) {
-
 	// Pending completion of user input
 	if (!get_line()) {
 		return false;
@@ -274,7 +274,6 @@ bool get_number(bool* valid, int* res) {
 		*valid = true;
 		return true;
 	} else {
-		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 		*valid = false;
 		return true;
 	}
@@ -527,11 +526,20 @@ bool io_parse_number(int* res) {
 	int i = 0, curr_digit = 0;
 
 	*res = 0;
-
-	for (i = 0; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
+    curr_glyph = io_parsed[0];
+    if (curr_glyph->pattern != NUMSIGN) {
+        play_mp3(lang_fileset, MP3_NUMSIGN_MISSED);
+        return false;
+    }
+    if (io_parsed[1] == NULL || is_blank(io_parsed[1])){
+        play_mp3(lang_fileset, MP3_NO_NUMBER);
+        return false;
+    }
+	for (i = 1; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
 		curr_glyph = io_parsed[i];
 		curr_digit = get_digit(curr_glyph);
 		if (curr_digit < 0) {
+            play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 			return false;
         } else {
         *res *= 10;

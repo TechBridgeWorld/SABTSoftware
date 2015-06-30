@@ -171,8 +171,6 @@ bool is_past_mistake(char entered_letter){
         if (mistake_pool[i] == entered_letter) return true;
         i++;
     }
-    mistake_pool[num_mistakes] = entered_letter;
-    num_mistakes++;
     return false;
 }
 
@@ -242,11 +240,7 @@ void md4_main(void) {
             play_mp3(MODE_FILESET, MP3_SO_FAR);
             play_string(input_word, strlen(chosen_word));
             play_mp3(MODE_FILESET, MP3_GUESS);
-            if (!strncmp(input_word, chosen_word, strlen(chosen_word))){
-                md_next_state = STATE_CHECKANS;
-            }else{
-                md_next_state = STATE_INPUT;
-            }
+            md_next_state = STATE_INPUT;
             break;
             
         case STATE_INPUT:
@@ -271,8 +265,10 @@ void md4_main(void) {
         case STATE_CHECKANS:
 			if (place_letter() ||
                 (!strncmp(input_word, chosen_word, strlen(chosen_word)))
-                ) {
-				play_mp3(LANG_FILESET, MP3_YES);
+                ) 
+				{
+				 play_mp3(LANG_FILESET, MP3_YES);
+				
 				 if (!strncmp(input_word, chosen_word, strlen(chosen_word)))
 				 {
 					 play_mp3(MODE_FILESET,MP3_YOU_WIN);  // "you have guessed the word!"
@@ -285,8 +281,12 @@ void md4_main(void) {
 				play_mp3(LANG_FILESET,MP3_NO);
 				if (num_mistakes == MAX_INCORRECT_GUESS)
 				{
+					play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
+					play_number(num_mistakes);
+					play_mp3(MODE_FILESET, MP3_MISTAKES);
 					play_mp3(MODE_FILESET,MP3_YOU_LOSE); // "you have made max mistakes the word you missed was"
 					play_string(chosen_word, strlen(chosen_word));
+					play_mp3(MODE_FILESET, MP3_NEW_WORD);
 					md_next_state = STATE_GENQUES;
 				}
 				else
@@ -295,11 +295,14 @@ void md4_main(void) {
 					{
 						mistake_pool[num_mistakes] = entered_letter;
 						num_mistakes++;
-                        PRINTF("[mode]not past mis");
+                        PRINTF("[mode]not past mis\r\n");
 					} else 
 					{
 						play_mp3(MODE_FILESET, MP3_PAST_MISTAKE);		
 					}
+                    play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
+                    play_number(num_mistakes);
+                    play_mp3(MODE_FILESET, MP3_MISTAKES);
 					md_next_state = STATE_PROMPT;
 				}
 			} 
