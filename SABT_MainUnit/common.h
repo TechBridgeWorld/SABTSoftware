@@ -20,8 +20,6 @@ void quit_mode(void);
 int ten_to_the(int);
 int get_num_of_digits(int);
 void play_requested_dot(char);
-void shuffle(int len, int* int_array);
-void unshuffle(int len, int* int_array);
 void init_index_arr(int *index_arr, int arr_len);
 void init_char_arr(char* arr, int len);
 

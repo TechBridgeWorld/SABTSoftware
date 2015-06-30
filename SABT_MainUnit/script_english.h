@@ -9,6 +9,7 @@
 
 #include "datastructures.h"
 #include "script_common.h"
+ #include "string.h"
 
 #define SCRIPT_ENGLISH_FILESET "ENG_"
 #define SCRIPT_ENGLISH_LENGTH 26 // 26 glyphs
@@ -44,6 +45,7 @@
 #define ENG_Z 0b110101
 
 extern script_t script_english;
+void turn_string_into_eng_word(char* string, word_t* word);
 
 #endif /* _SCRIPT_ENGLISH_H_ */
 

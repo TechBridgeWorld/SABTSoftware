@@ -1,5 +1,5 @@
 /*
- * @file md14_mode.c
+ * @file MD14.c
  *
  * @brief Mode 14: spelling bee
  * @author: Marjorie Carlson (marjorie@cmu.edu)
@@ -38,30 +38,24 @@
 #define LANGUAGE "ENG_"
 #define MODE_FILESET "MD14"
 
-static char *dictionary[11] = {"rock", "tree", "sky", "apple", "car", "dog",
-    "cat", "water", "floor", "leaf", "road"};
-static int index_arr[11] = {0,1,2,3,4,5,6,7,8,9,10};
-static dictionary_t dict = {
-    dictionary,
-    11,
-    0,
-    index_arr
-};
-
 int  md14_num_mistakes;
 char cell;
 char cell_pattern;
 char cell_control;
 bool scrolled;
 char* lang_fileset;
+wordlist_t dict;
 
-char *chosen_word;
+
+word_t chosen_word;
 char input_word[MAX_WORD_LEN];
 int  length_entered_word;
 //static char md_last_dot = NO_DOTS;
 char next_state = MD14_STATE_NULL;
 static glyph_t* user_glyph;
 static glyph_t* curr_glyph;
+static cell_t user_cell;
+static cell_t curr_cell;
 static word_node_t* user_word;
 static script_t* this_script;
 
@@ -75,6 +69,12 @@ void md14_reset() {
 	length_entered_word = 0;
 	next_state = MD14_STATE_INTRO;
 	scrolled = false;
+	word_t cat, dog, cow;
+	turn_string_into_eng_word("cat", &cat);
+	turn_string_into_eng_word("dog", &dog);
+	turn_string_into_eng_word("cow", &cow);
+	word_t wl[3] = {cat, dog, cow};
+	initialize_wordlist(3, wl, &dict);
 
 	user_glyph = NULL;
 	curr_glyph = NULL;
@@ -94,9 +94,7 @@ void md14_main() {
   		break;
     case MD14_STATE_INTRO:
     	PRINTF("In intro state\n\r");
-    	// todo
     	play_mp3(MODE_FILESET, "INT");
-    	dict.index = dict.num_words;
 		next_state = MD14_STATE_LVLSEL;
 		break;
 
@@ -115,27 +113,23 @@ void md14_main() {
 	  
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
-		if (dict.index >= dict.num_words) {
-			shuffle(dict.num_words, dict.index_array);
+/*		if (dict.index >= dict.length) {
+			shuffle(dict.length, dict.order);
 			dict.index = 0;
-		}
-		chosen_word = dict.words[dict.index_array[dict.index]];
+		} */
+		chosen_word = dict.words[dict.index];// [dict.order[dict.index]];
 		dict.index++;
-
-		char chosen_word_as_chars[10];
-		sprintf(chosen_word_as_chars, "word:%s\r\n", chosen_word);
-        PRINTF(chosen_word_as_chars);
-        play_mp3(LANGUAGE, "PRSS");
-        // @todo: say "Please spell:"
-        // @todo: read whole word, not letters!
-        play_string(chosen_word, strlen(chosen_word));
+		sprintf(dbgstr, "[MD14] Next word: %s\n\r", chosen_word.name);
+		PRINTF(dbgstr);
+        play_mp3(MODE_FILESET, "SPEL");
+        speak_word(&chosen_word);
 		next_state = MD14_STATE_INPUT;
-	  break;
+	  	break;
 	  
 
 	case MD14_STATE_INPUT:
 	if (io_user_abort == true) {
-		PRINTF("[MD3] User aborted input\n\r");
+		PRINTF("[MD14] User aborted input\n\r");
 		next_state = MD14_STATE_REPROMPT;
 		io_init();
 	}
@@ -147,9 +141,9 @@ void md14_main() {
 	cell_control = GET_CELL_CONTROL(cell);
 	switch (cell_control) {
 		case WITH_ENTER:
-		user_glyph = search_script(this_script, cell_pattern);
+		user_cell.pattern = cell_pattern;
 		next_state = MD14_STATE_CHECK;
-		PRINTF("[MD3] Checking answer\n\r");
+		PRINTF("[MD14] Checking answer\n\r");
 		break;
 		case WITH_LEFT:
 		next_state = MD14_STATE_PROMPT;
@@ -164,36 +158,35 @@ void md14_main() {
 
 	case MD14_STATE_CHECK:
 		PRINTF("In check state\n\r");
-		curr_glyph = search_script(this_script, get_bits_from_letter(chosen_word[length_entered_word]));
-		if (glyph_equals(curr_glyph, user_glyph)) {
-			play_glyph(curr_glyph);
+
+		sprintf(dbgstr, "[Current cell: %x, user cell: %x.\n\r", curr_cell.pattern, user_cell.pattern);
+		PRINTF(dbgstr);
+
+		get_next_cell_in_word(&chosen_word, &curr_cell);
+		if (cell_equals(&curr_cell, &user_cell)) {
+			// @todo: play cell!
+			play_mp3(LANGUAGE, "GOOD");
 			md14_num_mistakes = 0;
-			length_entered_word++;
-			user_word = add_glyph_to_word(user_word, user_glyph);
-			if(length_entered_word != strlen(chosen_word)) { // not done
-			  play_mp3(LANGUAGE, "GOOD");
-			  next_state = MD14_STATE_INPUT;
+			if (chosen_word.curr_letter == chosen_word.num_letters) { // done
+				play_mp3(LANGUAGE, "NCWK");
+				speak_word(&chosen_word);
+			  	md14_num_mistakes = 0;
+			  	next_state = MD14_STATE_GENQUES; // @todo: reset everything else
 			}
-			else { // finished word
-			  play_mp3(LANGUAGE,  "GOOD");
-			  play_mp3(LANGUAGE, "NCWK");
-			  play_word(user_word);
-			  md14_num_mistakes = 0;
-			  next_state = MD14_STATE_GENQUES;
-			}
+			else // correct but not done
+				next_state = MD14_STATE_INPUT;
 		}
-		
 		else { // incorrect letter
-			play_glyph(user_glyph);
+			// @todo: play glyph entered
 			md14_num_mistakes++;
-			PRINTF("[MD3] User answered incorrectly\n\r");
+			PRINTF("[MD14] User answered incorrectly\n\r");
 			play_mp3(LANGUAGE, "NO");
 			play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-			play_word(user_word);
+			speak_correct_letters(&chosen_word);
 			if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
-				play_glyph(curr_glyph);
+				//@todo: play current glyph play_glyph(curr_glyph);
 				play_mp3(MODE_FILESET, "PRSS");
-				play_dot_sequence(curr_glyph);
+				//@todo: play current dot sequence play_dot_sequence(curr_glyph);
 			}
 			next_state = MD14_STATE_INPUT;
 		}
@@ -205,13 +198,13 @@ void md14_main() {
 				break;
 
 			case CANCEL: case LEFT:
-				PRINTF("[MD3] Reissuing prompt");
+				PRINTF("[MD14] Reissuing prompt");
 				next_state = MD14_STATE_PROMPT;
 				scrolled = false;
 				break;
 
 			case ENTER:
-				PRINTF("[MD3] Skipping chosen_word");
+				PRINTF("[MD14] Skipping chosen_word");
 				if (scrolled)
 					next_state = MD14_STATE_PROMPT;
 				else

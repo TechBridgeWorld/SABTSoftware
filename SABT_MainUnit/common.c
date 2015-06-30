@@ -18,8 +18,7 @@
 * @param char* - Pointer to mode fileset string
 * @return void
 */
-void set_mode_globals(script_t* new_script, char* new_lang_fileset,
-	char* new_mode_fileset) {
+void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
 	lang_script = new_script;
 	lang_fileset = new_lang_fileset;
 	mode_fileset = new_mode_fileset;
@@ -105,54 +104,6 @@ void play_requested_dot(char play_dot)
   char req_mp3[10];
   sprintf((char*)req_mp3, "dot_%c", play_dot);
   play_mp3(NULL,req_mp3);
-}
-
-/**
- * @brief Returns an integer between i and j-1
- * @param: i and j
- * return: a random number between them
- * (including i, not including j)
- */
-int random_between(int i, int j) {
-	int range = j - i;
-	return i + (timer_rand() % range);
-}
-
-/**
-* @brief Performs a Fisher-Yates shuffle on the
-* an int array of length len.
-* @param a length, an int array
-* @return void
-*/
-void shuffle(int len, int* int_array) {
-	int random_i, temp;
-	for (int i = 0; i < len; i++) {
-		random_i = random_between(i, len);
-		temp = int_array[i];
-		int_array[i] = int_array[random_i];
-		int_array[random_i] = temp;
-	}
-}
-
-/**
-* @brief Uses selection sort to unshuffle
-* an int array. Undoes shuffle.
-* @param a length, an int array
-* @return void
-*/
-void unshuffle(int len, int* int_array) {
-	for (int i = 0; i < len; i++) {
-		int min = i;
-		for (int j = i+1; j < len; j++) {
-			if (int_array[j] < int_array[min])
-				min = j;
-		}
-		if (i != min) {
-			int temp = int_array[i];
-			int_array[i] = int_array[min];
-			int_array[min] = temp;
-		}
-	}
 }
 
 

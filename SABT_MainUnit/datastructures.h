@@ -9,13 +9,6 @@
 
 #include <stdbool.h>
 
-typedef struct glyph glyph_t;
-typedef struct script script_t;
-
-// deprecated
-typedef struct script_old script_old_t;
-typedef struct word_node word_node_t;
-
 #define DOTS0      0b000000
 #define DOTS1      0b000001
 #define DOTS2      0b000010
@@ -81,6 +74,12 @@ typedef struct word_node word_node_t;
 #define DOTS23456  0b111110
 #define DOTS123456 0b111111
 
+#define ENGLISH 0
+#define HINDI 1
+#define KANNADA 2
+
+typedef struct glyph glyph_t;
+
 // Stores information about single glyph; used to build scripts
 struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
@@ -94,20 +93,21 @@ typedef struct cell {
 } cell_t;
 
 typedef struct letter {
-	char name[4];
-	char language[3];
+	char name[5];
+	char lang_enum;
 	cell_t* cells;
 	int num_cells;
-	char sound[5];
 } letter_t;
 
 typedef struct word {   // should capitalization go here???
 	char name[10];
 	int length_name;
-	char language[3];
+	char lang_enum;
 	letter_t* letters;
 	int num_letters;
-	char sound[5];
+	char sound[7];
+	int curr_letter;
+	int curr_glyph;
 } word_t;
 
 typedef struct alphabet {
@@ -115,33 +115,53 @@ typedef struct alphabet {
 	int num_letters;
 } alphabet_t;
 
+typedef struct wordlist {
+	int length;
+	word_t* words;
+	int* order;
+	int index;
+} wordlist_t;
+
 // Structure representing a script (alphabet) - deprecated
-struct script_old {
+typedef struct script_old {
 	int length;				/* Length of first cell glyph array */
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
-};
+} script_old_t;
 
 // Structure representing a script/alphabet.
 // Now represents both the glyphs and the letters, which may be more than
 // one glyph each.
-struct script {
+
+typedef struct script {
 	int length;				/* Length of glyph array */
 	int num_letters;			/* Number of actual letters (<length) */
 	int index;				/* Current index */
 	char fileset[5];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of glyphs */
 	int* letters;		/* Pointer to array of valid indices into glyphs */
-};
+} script_t;
 
 
-struct word_node {
+typedef struct word_node {
 	glyph_t* data;
 	struct word_node* next;	
-};
+} word_node_t;
 
-// Common glyph functions
+// Common functions
+char* get_lang(word_t* word);
+void speak_word(word_t* word);
+void speak_letters_in_word(word_t* word);
+void speak_correct_letters(word_t* word);
+void word_to_string(word_t* word, char* string);
+void word_to_cell_array(word_t* word, cell_t* arr);
+void get_next_cell_in_word(word_t* word, cell_t* next_cell);
+bool cell_equals(cell_t* cell1, cell_t* cell2);
+bool letter_equals(letter_t* letter1, letter_t* letter2);
 bool glyph_equals(glyph_t* g1, glyph_t* g2);
+void initialize_wordlist(int length, word_t* words, wordlist_t* list);
+void shuffle(int len, int* int_array);
+void unshuffle(int len, int* int_array);
 
 #endif /* _DATASTRUCTURES_H_ */

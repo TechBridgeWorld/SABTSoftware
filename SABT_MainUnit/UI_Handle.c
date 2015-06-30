@@ -61,7 +61,7 @@ void ui_check_modes(void)
   }*/
 
   /** ACTIVATED MODES ON SABT **/
-  strcpy(file_content, "2, 4, 14, 13, ;");
+  strcpy(file_content, "2, 4, 9, 14, 13, ;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -108,7 +108,7 @@ void ui_check_modes(void)
   }
 
   // Print the number of modes found to a string
-  sprintf(debug, "%d modes deteceted\n\r", number_of_modes);
+  sprintf(debug, "%d modes detected\n\r", number_of_modes);
   PRINTF(debug);
 
   //Send the actual modes to debug stream

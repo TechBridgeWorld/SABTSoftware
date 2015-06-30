@@ -1,5 +1,5 @@
 /*
- * @file sound_game_mode.h
+ * @file MD14.h
  *
  * @brief Function declarations for mode 14, spelling bee
  * @author: Marjorie Carlson (marjorie@cmu.edu)

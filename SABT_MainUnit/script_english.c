@@ -2,7 +2,6 @@
 
 #define NUM_ENG_LETTERS 26
 
-
 glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
 	{ENG_A, "A", NULL, NULL},
 	{ENG_B, "B", NULL, NULL},
@@ -77,35 +76,35 @@ cell_t x = {DOTS1346};
 cell_t y = {DOTS13456};
 cell_t z = {DOTS1356};
 
-#define ENG_LETTER_A {"a", "ENG", &a, 1, "A"}
-#define ENG_LETTER_B {"b", "ENG", &b, 1, "B"}
-#define ENG_LETTER_C {"c", "ENG", &c, 1, "C"}
-#define ENG_LETTER_D {"d", "ENG", &d, 1, "D"}
-#define ENG_LETTER_E {"e", "ENG", &e, 1, "E"}
-#define ENG_LETTER_F {"f", "ENG", &f, 1, "F"}
-#define ENG_LETTER_G {"g", "ENG", &g, 1, "G"}
-#define ENG_LETTER_H {"h", "ENG", &h, 1, "H"}
-#define ENG_LETTER_I {"i", "ENG", &i, 1, "I"}
-#define ENG_LETTER_J {"j", "ENG", &j, 1, "J"}
-#define ENG_LETTER_K {"k", "ENG", &k, 1, "K"}
-#define ENG_LETTER_L {"l", "ENG", &l, 1, "L"}
-#define ENG_LETTER_M {"m", "ENG", &m, 1, "M"}
-#define ENG_LETTER_N {"n", "ENG", &n, 1, "N"}
-#define ENG_LETTER_O {"o", "ENG", &o, 1, "O"}
-#define ENG_LETTER_P {"p", "ENG", &p, 1, "P"}
-#define ENG_LETTER_Q {"q", "ENG", &q, 1, "Q"}
-#define ENG_LETTER_R {"r", "ENG", &r, 1, "R"}
-#define ENG_LETTER_S {"s", "ENG", &s, 1, "S"}
-#define ENG_LETTER_T {"t", "ENG", &t, 1, "T"}
-#define ENG_LETTER_U {"u", "ENG", &u, 1, "U"}
-#define ENG_LETTER_V {"v", "ENG", &v, 1, "V"}
-#define ENG_LETTER_W {"w", "ENG", &w, 1, "W"}
-#define ENG_LETTER_X {"x", "ENG", &x, 1, "X"}
-#define ENG_LETTER_Y {"y", "ENG", &y, 1, "Y"}
-#define ENG_LETTER_Z {"z", "ENG", &z, 1, "Z"}
+#define ENG_LETTER_A {"a", ENGLISH, &a, 1}
+#define ENG_LETTER_B {"b", ENGLISH, &b, 1}
+#define ENG_LETTER_C {"c", ENGLISH, &c, 1}
+#define ENG_LETTER_D {"d", ENGLISH, &d, 1}
+#define ENG_LETTER_E {"e", ENGLISH, &e, 1}
+#define ENG_LETTER_F {"f", ENGLISH, &f, 1}
+#define ENG_LETTER_G {"g", ENGLISH, &g, 1}
+#define ENG_LETTER_H {"h", ENGLISH, &h, 1}
+#define ENG_LETTER_I {"i", ENGLISH, &i, 1}
+#define ENG_LETTER_J {"j", ENGLISH, &j, 1}
+#define ENG_LETTER_K {"k", ENGLISH, &k, 1}
+#define ENG_LETTER_L {"l", ENGLISH, &l, 1}
+#define ENG_LETTER_M {"m", ENGLISH, &m, 1}
+#define ENG_LETTER_N {"n", ENGLISH, &n, 1}
+#define ENG_LETTER_O {"o", ENGLISH, &o, 1}
+#define ENG_LETTER_P {"p", ENGLISH, &p, 1}
+#define ENG_LETTER_Q {"q", ENGLISH, &q, 1}
+#define ENG_LETTER_R {"r", ENGLISH, &r, 1}
+#define ENG_LETTER_S {"s", ENGLISH, &s, 1}
+#define ENG_LETTER_T {"t", ENGLISH, &t, 1}
+#define ENG_LETTER_U {"u", ENGLISH, &u, 1}
+#define ENG_LETTER_V {"v", ENGLISH, &v, 1}
+#define ENG_LETTER_W {"w", ENGLISH, &w, 1}
+#define ENG_LETTER_X {"x", ENGLISH, &x, 1}
+#define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
+#define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
 
 cell_t cap_a[2] = {{DOTS6}, {DOTS1}}; // just testing 2-cell concept
-#define ENG_LETTER_CAPA {"A", "ENG", cap_a, 2, "A"}
+#define ENG_LETTER_CAPA {"A", ENGLISH, cap_a, 2}
 
 letter_t eng_a = ENG_LETTER_A;
 letter_t eng_b = ENG_LETTER_B;
@@ -143,3 +142,12 @@ letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z };
 
 alphabet_t english_alphabet = {all_letters, 26};
+
+void turn_string_into_eng_word(char* string, word_t* word) {
+	for (int i = 0; i < strlen(string); i++) {
+		word->name[i] = string[i];
+	}
+	word->lang_enum = ENGLISH;
+	word->curr_letter = 0;
+	word->curr_glyph = 0;
+}
