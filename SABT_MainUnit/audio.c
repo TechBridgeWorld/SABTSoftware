@@ -249,7 +249,7 @@ void play_number(int number) {
 	int curr_digit = -1;
 	int digits = -1;
 	char mp3[5] = "";
-    char dbgbuf[20] = "";
+    //char dbgbuf[20] = "";
 
 
 	// If number is just 0, play #0 and return
@@ -267,18 +267,18 @@ void play_number(int number) {
 	// Count number of digits
 	digits = get_num_of_digits(number);
     
-    sprintf(dbgbuf, "[Play_number]number:#%d digits:%d\r\n", number, digits);
-    PRINTF(dbgbuf);
+    //sprintf(dbgbuf, "[Play_number]number:#%d digits:%d\r\n", number, digits);
+    //PRINTF(dbgbuf);
     
 	while (number != 0) {
 		// Extract current digit and adjust number
 		curr_digit = number / ten_to_the(digits - 1);
-
+		//sprintf(dbgbuf, "[Play_number]curr digit:%d\r\n", curr_digit);
+		//PRINTF(dbgbuf);
 		if (curr_digit != 0) {
 			sprintf(mp3, "#%d", curr_digit);
             
-            //sprintf(dbgbuf, "[Play_number]curr number:%d curr digit:%d digits%d\r\n",number, curr_digit, digits);
-            //PRINTF(dbgbuf);
+            
             
 			switch (digits) {
 				case PLACE_ONES:
