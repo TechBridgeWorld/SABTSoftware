@@ -38,48 +38,27 @@
 #define LANGUAGE "ENG_"
 #define MODE_FILESET "MD14"
 
-int  md14_num_mistakes;
-char cell;
-char cell_pattern;
-char cell_control;
-bool scrolled;
-char* lang_fileset;
-wordlist_t dict;
-
-
-word_t chosen_word;
-char input_word[MAX_WORD_LEN];
-int  length_entered_word;
-//static char md_last_dot = NO_DOTS;
 char next_state = MD14_STATE_NULL;
-static glyph_t* user_glyph;
-static glyph_t* curr_glyph;
+
+int  md14_num_mistakes = 0;
+char cell = 0;
+char cell_pattern = 0;
+char cell_control = 0;
+bool scrolled = false;
+
+wordlist_t dict;
+word_t chosen_word;
+
 static cell_t user_cell;
 static cell_t curr_cell;
-static word_node_t* user_word;
-static script_t* this_script;
 
 void md14_reset() {
-	this_script = &script_english;
-	lang_fileset = "ENG_";
 	md14_num_mistakes = 0;
 	cell = 0;
 	cell_pattern = 0;
 	cell_control = 0;
-	length_entered_word = 0;
 	next_state = MD14_STATE_INTRO;
 	scrolled = false;
-	word_t cat, dog, cow;
-	turn_string_into_eng_word("cat", &cat);
-	turn_string_into_eng_word("dog", &dog);
-	turn_string_into_eng_word("cow", &cow);
-	word_t wl[3] = {cat, dog, cow};
-	initialize_wordlist(3, wl, &dict);
-
-	user_glyph = NULL;
-	curr_glyph = NULL;
-	user_word = NULL;
-
 }
 
 /**
@@ -89,12 +68,20 @@ void md14_reset() {
 void md14_main() {
   switch(next_state)
   {
-  	case MD14_STATE_NULL:
-  		md14_reset();
-  		break;
     case MD14_STATE_INTRO:
     	PRINTF("In intro state\n\r");
     	play_mp3(MODE_FILESET, "INT");
+		word_t cat, dog, cow;
+		parse_string_into_eng_word("cat", &cat);
+		parse_string_into_eng_word("dog", &dog);
+		parse_string_into_eng_word("cow", &cow);
+		word_t wl[3] = {cat, dog, cow};
+		initialize_wordlist(3, wl, &dict);
+		/*		if (dict.index >= dict.length) {
+			shuffle(dict.length, dict.order);
+			dict.index = 0;
+		} */
+
 		next_state = MD14_STATE_LVLSEL;
 		break;
 
@@ -113,16 +100,12 @@ void md14_main() {
 	  
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
-/*		if (dict.index >= dict.length) {
-			shuffle(dict.length, dict.order);
-			dict.index = 0;
-		} */
 		chosen_word = dict.words[dict.index];// [dict.order[dict.index]];
 		dict.index++;
 		sprintf(dbgstr, "[MD14] Next word: %s\n\r", chosen_word.name);
 		PRINTF(dbgstr);
         play_mp3(MODE_FILESET, "SPEL");
-        speak_word(&chosen_word);
+//        speak_word(&chosen_word);
 		next_state = MD14_STATE_INPUT;
 	  	break;
 	  
@@ -169,7 +152,7 @@ void md14_main() {
 			md14_num_mistakes = 0;
 			if (chosen_word.curr_letter == chosen_word.num_letters) { // done
 				play_mp3(LANGUAGE, "NCWK");
-				speak_word(&chosen_word);
+	//			speak_word(&chosen_word);
 			  	md14_num_mistakes = 0;
 			  	next_state = MD14_STATE_GENQUES; // @todo: reset everything else
 			}
@@ -182,7 +165,7 @@ void md14_main() {
 			PRINTF("[MD14] User answered incorrectly\n\r");
 			play_mp3(LANGUAGE, "NO");
 			play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-			speak_correct_letters(&chosen_word);
+	//		speak_correct_letters(&chosen_word);
 			if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
 				//@todo: play current glyph play_glyph(curr_glyph);
 				play_mp3(MODE_FILESET, "PRSS");
