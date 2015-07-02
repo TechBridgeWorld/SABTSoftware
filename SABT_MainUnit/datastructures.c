@@ -3,6 +3,8 @@
 * @author Marjorie Carlson (marjorie@cmu.edu)
 * @date Summer 2015
 * @brief Basic functions for creating and accessing cells, letters & words
+* @warning THE BELOW FUNCTIONS HAVE ONLY BEEN TESTED ON ENGLISH LETTERS/WORDS.
+* They still need to be tested on multi-cell letters (Hindi, Kannada).
 */
 
 #include <stdbool.h>
