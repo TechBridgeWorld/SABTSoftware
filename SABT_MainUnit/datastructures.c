@@ -325,11 +325,10 @@ void print_words_in_list(wordlist_t* wl) {
  * @param Ints i and j, delineating the range
  * @return A random int between i and j-1 inclusive.
  * @warning THIS IS NOT RETURNING RANDOM NUMBERS
+ * @warning MAYBE WORKS IF YOU CALL SRAND ONCE FROM MAIN?
  */
 int random_between(int i, int j) {
-	time_t t;
 	int range = j - i;
-	srand((unsigned) time(&t));
 	return i + (rand() % range);
 }
 

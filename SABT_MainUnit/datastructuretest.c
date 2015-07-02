@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "datastructures.h"
 #include "script_english.h"
 #include "script_hindi.h"
 
 int main() {
+	time_t t;
+	srand((unsigned) time(&t));
 	cell_t a_cell, b_cell, c_cell, hin_a_cell, all_cell, blank_cell, null_cell;
 	a_cell.pattern = DOTS1;
 	b_cell.pattern = DOTS12;
