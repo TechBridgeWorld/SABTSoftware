@@ -76,7 +76,7 @@ void md14_main() {
 		parse_string_into_eng_word("dog", &dog);
 		parse_string_into_eng_word("cow", &cow);
 		word_t wl[3] = {cat, dog, cow};
-		initialize_wordlist(3, wl, &dict);
+		initialize_wordlist(wl, 3, &dict);
 		/*		if (dict.index >= dict.length) {
 			shuffle(dict.length, dict.order);
 			dict.index = 0;

@@ -79,12 +79,16 @@
 #define HINDI 2
 #define KANNADA 3
 
+ #define MAX_WORD_LENGTH     10
+ #define MAX_MP3_NAME_LENGTH  5
+ #define MAX_FILESET_LENGTH	  5
+
 typedef struct glyph glyph_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
-	char sound[5];			/* BBBB in AAA_BBBB.mp3 soundfile */
+	char sound[MAX_MP3_NAME_LENGTH];			/* BBBB in AAA_BBBB.mp3 soundfile */
 	glyph_t* prev;			/* Pointer to previous glyph in linked list */
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
@@ -94,7 +98,7 @@ typedef struct cell {
 } cell_t;
 
 typedef struct letter {
-	char name[5];
+	char name[MAX_MP3_NAME_LENGTH];
 	char lang_enum;
 	cell_t* cells;
 	int num_cells;
@@ -103,7 +107,7 @@ typedef struct letter {
 // check_letter shoudl just call check_glyph recursively -- the output and input should happen in there
 
 typedef struct word {
-	char name[10];
+	char name[MAX_WORD_LENGTH];
 	int length_name;
 	char lang_enum;
 	letter_t* letters;
@@ -118,8 +122,8 @@ typedef struct alphabet {
 } alphabet_t;
 
 typedef struct wordlist {
-	int length;
 	word_t* words;
+	int num_words;
 	int* order;
 	int index;
 } wordlist_t;
@@ -128,7 +132,7 @@ typedef struct wordlist {
 typedef struct script_old {
 	int length;				/* Length of first cell glyph array */
 	int index;				/* Current index */
-	char fileset[5];		/* Fileset on SD card; 4 characters long */
+	char fileset[MAX_FILESET_LENGTH];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
 } script_old_t;
 
@@ -140,7 +144,7 @@ typedef struct script {
 	int length;				/* Length of glyph array */
 	int num_letters;			/* Number of actual letters (<length) */
 	int index;				/* Current index */
-	char fileset[5];		/* Fileset on SD card; 4 characters long */
+	char fileset[MAX_FILESET_LENGTH];		/* Fileset on SD card; 4 characters long */
 	glyph_t* glyphs; 		/* Pointer to array of glyphs */
 	int* letters;		/* Pointer to array of valid indices into glyphs */
 } script_t;
@@ -152,18 +156,21 @@ typedef struct word_node {
 } word_node_t;
 
 // Cell functions
+void print_cell_pattern(cell_t* cell);
 bool cell_equals(cell_t* cell1, cell_t* cell2);
 bool glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
-void print_cell_pattern(cell_t* cell);
 
 // Letter functions
 bool letter_equals(letter_t* letter1, letter_t* letter2);
+letter_t* get_eng_letter_by_char(char c);
+void print_letter(letter_t* letter);
 
 // Word functions
 void parse_string_into_eng_word(char* string, word_t* word);
 void word_to_cell_array(word_t* word, cell_t* arr);
 void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
+void print_letters_in_word(word_t* word);
 
 #ifdef DEBUGMODE
 #else
@@ -175,6 +182,7 @@ void speak_correct_letters(word_t* word);
 // Wordlist functions
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list);
+void print_words_in_list(wordlist_t* wl);
 
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);

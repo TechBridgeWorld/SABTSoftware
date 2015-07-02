@@ -84,3 +84,18 @@ script_t script_hindi = {
 	glyphs_hindi,
 	letters_hindi
 };
+
+// new stuff
+
+cell_t hin_a =    {DOTS1};
+cell_t hin_cont = {DOTS5};
+cell_t hin_sha =  {DOTS146};
+cell_t hin_ra =   {DOTS1235};
+
+cell_t shra_cells[3] = {{DOTS5}, {DOTS146}, {DOTS1235}};
+
+#define HIN_LETTER_A {"a", HINDI, &hin_a, 1}
+#define HIN_LETTER_SHRA {"a", HINDI, shra_cells, 3}
+
+letter_t hindi_a    = HIN_LETTER_A;
+letter_t hindi_shra = HIN_LETTER_SHRA;

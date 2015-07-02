@@ -103,9 +103,6 @@ cell_t z = {DOTS1356};
 #define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
 #define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
 
-cell_t cap_a[2] = {{DOTS6}, {DOTS1}}; // just testing 2-cell concept
-#define ENG_LETTER_CAPA {"A", ENGLISH, cap_a, 2}
-
 letter_t eng_a = ENG_LETTER_A;
 letter_t eng_b = ENG_LETTER_B;
 letter_t eng_c = ENG_LETTER_C;
@@ -142,4 +139,3 @@ letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z };
 
 alphabet_t english_alphabet = {all_letters, 26};
-

@@ -7,13 +7,14 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <time.h>
 #include "datastructures.h"
 #include "globals.h"
+#include "script_english.h"
+// #include "audio.h"
 
-#ifdef DEBUGMODE
-#else
-	#include "audio.h"
-#endif
+
 
 /*******************
 *  CELL FUNCTIONS  *
@@ -81,7 +82,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 	#ifdef DEBUGMODE
 		printf("[Script] Glyph 1: %s, Glyph 2: %s\n", g1->sound, g2->sound);
 	#else
-		sprintf(dbgst√r, "[Script] Glyph 1: %s\n\rScript] Glyph 2: %s\n\r",
+		sprintf(dbgstr, "[Script] Glyph 1: %s, Glyph 2: %s\n\r",
 			g1->sound, g2->sound);
 		PRINTF(dbgstr);
 	#endif
@@ -108,7 +109,7 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 		printf("[Script] Letter 1: %s (%d), Letter 2: %s (%d)\n", letter1->name, letter1->lang_enum,
 				letter2->name, letter2->lang_enum);
 	#else
-		sprintf(dbgstr, "[Script] Letter 1: %s\n\r[Script] Letter 2: %s\n\r",
+		sprintf(dbgstr, "[Script] Letter 1: %s, Letter 2: %s\n\r",
 			letter1->name, letter2->name);
 		PRINTF(dbgstr);
 	#endif
@@ -128,25 +129,46 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 	}
 }
 
+letter_t* get_eng_letter_by_char(char c){
+	for (int i = 0; i < english_alphabet.num_letters; i++){
+		if (c == english_alphabet.letters[i].name[0])
+			return &english_alphabet.letters[i];
+	}
+	return NULL;
+}
+
+/**
+* Print the name of a letter.
+* @param Pointer to the letter.
+* @return void
+*/
+void print_letter(letter_t* letter){
+	printf("%s", letter->name);
+}
+
 /*******************
 *  WORD FUNCTIONS  *
 *******************/
 
 /**
-* Create a word (in English) from a character string.
+* Create a word (in English) from a character string. (Cuts off string
+* at 9 characters -- max word length.)
 * @param A string containing the word; the word struct to initialize.
 * @return Void; function initializes word.
 * @bug DOES NOT INITIALIZE THE LETTER ARRAY
+* @bug cuts off strings > 10 letters long
 */
 void parse_string_into_eng_word(char* string, word_t* word) {
-	// @todo: what to do if string too long?
-	for (int i = 0; i < strlen(string); i++) {
-		word->name[i] = string[i]; // how do I get the letters in there?
+	int length = (strlen(string) < MAX_WORD_LENGTH) ? strlen(string) : MAX_WORD_LENGTH;
+	static letter_t letters_in_word[MAX_WORD_LENGTH];
+	for (int i = 0; i < length; i++) {
+		word->name[i] = string[i];
+		letters_in_word[i] = *get_eng_letter_by_char(string[i]);
 	}
-	word->length_name = word->num_letters = strlen(string);
+	word->length_name = word->num_letters = length;
+	word->curr_letter = word->curr_glyph = 0;
 	word->lang_enum = ENGLISH;
-	word->curr_letter = 0;
-	word->curr_glyph = 0;
+	word->letters = letters_in_word;
 }
 
 /**
@@ -159,6 +181,7 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 	int array_index = 0;
 	for (int i = 0; i < word->num_letters; i++){
 		letter_t this_letter = word->letters[i];
+//		printf("i = %d, letter = %c, cells %d\n", i, this_letter.name[0], this_letter.num_cells);
 		for (int j = 0; j < this_letter.num_cells; j++) {
 			arr[array_index] = this_letter.cells[j];
 			array_index++;
@@ -170,13 +193,12 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 * Iterate through word, get the next cell in it.
 * @param The word struct and an (uninitialized) cell pointer.
 * @return Void; function returns pointer in next_cell.
-* @bug CURRENTLY BUGGY
 */
 void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 	letter_t this_letter = word->letters[word->curr_letter];
 	// if this is a one-glyph letter, return its glyph & move to next letter
 	if (this_letter.num_cells == 1) {
-		next_cell = &(this_letter.cells[0]);
+		*next_cell = this_letter.cells[0];
 		word->curr_letter++;
 	}
 	else { // if >1 glyph, get current glyph and increment
@@ -187,6 +209,13 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 			word->curr_letter++;
 		}
 	}
+}
+
+void print_letters_in_word(word_t* word) {
+	for (int i = 0; i < word->num_letters; i++) {
+		print_letter(&word->letters[i]);
+	}
+	printf("\n");
 }
 
 /**
@@ -221,7 +250,7 @@ char* get_lang(word_t* word){
 * @warning Untested
 */
 void speak_word(word_t* word) {
-	play_mp3(get_lang(word), word->sound);
+	play_mp3(get_lang(word), word->name);
 }
 
 /**
@@ -262,13 +291,13 @@ void speak_correct_letters(word_t* word){
 * @param Number of words; pointer to word array;
 * pointer to the wordlist to initialize.
 * @return Void; function initializes list.
-* @todo Add shuffle once tested.
+* @BUG DOES NOT INITIALIZE THE ORDER
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
-	list->length = num_words;
+	list->num_words = num_words;
 	list->index = 0;
 	list->words = words;
-//	shuffle(num_words, (list->order));
+	shuffle(num_words, (list->order));
 }
 
 /**
@@ -284,14 +313,23 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 	initialize_wordlist(words, num_strings, list);
 }
 
+void print_words_in_list(wordlist_t* wl) {
+	for (int i = 0; i < wl->num_words; i++) {
+		print_letters_in_word(&wl->words[wl->order[i]]);
+	}
+}
+
 /**
  * Find a random number between i and j, inclusive of
  * i but not j. Helper function for shuffle.
  * @param Ints i and j, delineating the range
  * @return A random int between i and j-1 inclusive.
+ * @warning THIS IS NOT RETURNING RANDOM NUMBERS
  */
 int random_between(int i, int j) {
+	time_t t;
 	int range = j - i;
+	srand((unsigned) time(&t));
 	return i + (rand() % range);
 }
 
@@ -299,11 +337,13 @@ int random_between(int i, int j) {
 * Perform Fisher-Yates shuffle on an int array of length len.
 * @param A length len, an int array int_array.
 * @return Void; function modifies int_array.
+* @warning NOT FULLY TESTED -- randomness looks questionable
 */
 void shuffle(int len, int* int_array) {
 	int random_i, temp;
 	for (int i = 0; i < len; i++) {
 		random_i = random_between(i, len);
+//		printf("i = %d, random i = %d\n", i, random_i);
 		temp = int_array[i];
 		int_array[i] = int_array[random_i];
 		int_array[random_i] = temp;
