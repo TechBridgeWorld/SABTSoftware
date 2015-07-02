@@ -11,20 +11,27 @@ int main() {
 	blank.pattern = DOTS0;
 
 	// test of print_cell_pattern
+	printf("0x000001 =? ");
 	print_cell_pattern(&a);
+	printf("0x000011 =? ");
 	print_cell_pattern(&b);
+	printf("0x111111 =? ");
 	print_cell_pattern(&all);
+	printf("Blank cell =? ");
 	print_cell_pattern(&blank);
+	printf("[?] =? ");
 	print_cell_pattern(&null);
-	printf("\n\n");
+	printf("Compare above to test print_cell_pattern.\n\n");
 
 	// test of cell_equals
 	bool same1 = cell_equals(&a, &a);
 	bool diff1 = !cell_equals(&a, &b);
 	bool cognate1 = cell_equals(&a, &hin_a);
 	bool empty1 = !cell_equals(&a, &blank);
+	bool bothempty1 = cell_equals(&blank, &blank);
 	bool notinitialized1 = !cell_equals(&a, &null);
-	printf("Cell_equals working: %s\n\n\n", (same1 && diff1 && cognate1 && empty1 && notinitialized1) ? "true" : "false");
+	printf("Cell_equals %s.\n\n", (same1 && diff1 && cognate1 &&
+			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
 
 	// test of letter_equals
 
@@ -40,7 +47,7 @@ int main() {
 	bool cognate2 = !letter_equals(&a_letter, &hin_a_letter);
 	bool empty2 = !letter_equals(&a_letter, &blank_letter);
 	bool notinitialized2 = !letter_equals(&a_letter, &null_letter);
-	printf("Letter_equals working: %s\n\n\n", (same2 && diff2 && cognate2 && empty2 && notinitialized2) ? "true" : "false");
+	printf("Letter_equals %s.\n\n", (same2 && diff2 && cognate2 && empty2 && notinitialized2) ? "works" : "IS BROKEN");
 
 	// test of parse_string_into_eng_word and word_to_string
 

@@ -173,8 +173,8 @@ void speak_correct_letters(word_t* word);
 #endif
 
 // Wordlist functions
-void initialize_wordlist(int length, word_t* words, wordlist_t* list);
-void strings_to_wordlist(char** strings, int num_strings, wordlist_t list);
+void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
+void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list);
 
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);
