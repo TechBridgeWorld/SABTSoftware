@@ -74,9 +74,10 @@
 #define DOTS23456  0b111110
 #define DOTS123456 0b111111
 
-#define ENGLISH 0
-#define HINDI 1
-#define KANNADA 2
+#define UNIVERSAL 0
+#define ENGLISH 1
+#define HINDI 2
+#define KANNADA 3
 
 typedef struct glyph glyph_t;
 
@@ -99,16 +100,17 @@ typedef struct letter {
 	int num_cells;
 } letter_t;
 
-typedef struct word {   // should capitalization go here???
+// check_letter shoudl just call check_glyph recursively -- the output and input should happen in there
+
+typedef struct word {
 	char name[10];
 	int length_name;
 	char lang_enum;
 	letter_t* letters;
 	int num_letters;
-	char sound[7];
 	int curr_letter;
 	int curr_glyph;
-} word_t;
+} word_t; 
 
 typedef struct alphabet {
 	letter_t* letters;
@@ -149,18 +151,31 @@ typedef struct word_node {
 	struct word_node* next;	
 } word_node_t;
 
-// Common functions
+// Cell functions
+bool cell_equals(cell_t* cell1, cell_t* cell2);
+bool glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
+void print_cell_pattern(cell_t* cell);
+
+// Letter functions
+bool letter_equals(letter_t* letter1, letter_t* letter2);
+
+// Word functions
+void parse_string_into_eng_word(char* string, word_t* word);
+void word_to_cell_array(word_t* word, cell_t* arr);
+void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
+
+#ifdef DEBUGMODE
+#else
 void speak_word(word_t* word);
 void speak_letters_in_word(word_t* word);
 void speak_correct_letters(word_t* word);
-void word_to_string(word_t* word, char* string);
-void word_to_cell_array(word_t* word, cell_t* arr);
-void get_next_cell_in_word(word_t* word, cell_t* next_cell);
-bool cell_equals(cell_t* cell1, cell_t* cell2);
-bool letter_equals(letter_t* letter1, letter_t* letter2);
-bool glyph_equals(glyph_t* g1, glyph_t* g2);
+#endif
+
+// Wordlist functions
 void initialize_wordlist(int length, word_t* words, wordlist_t* list);
+void strings_to_wordlist(char** strings, int num_strings, wordlist_t list);
+
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);
 

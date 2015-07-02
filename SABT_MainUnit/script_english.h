@@ -45,7 +45,6 @@
 #define ENG_Z 0b110101
 
 extern script_t script_english;
-void turn_string_into_eng_word(char* string, word_t* word);
 
 #endif /* _SCRIPT_ENGLISH_H_ */
 

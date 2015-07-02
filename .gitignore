@@ -1,3 +1,4 @@
+
 *.o
 *.o.d
 *.elf
@@ -13,5 +14,9 @@ SABT/
 documentation
 .vagrant
 SABT_MainUnit/default/*
+SABT_MainUnit/test
+SABT_MainUnit/Makefile
 UserInterface(Primary)/default/*
 Reference/share_fold_mac (vboxsrv) (F) - Shortcut.lnk
+avr-libc*
+*~

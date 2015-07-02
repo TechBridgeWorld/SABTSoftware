@@ -121,5 +121,3 @@ void init_char_arr(char* arr, int len){
         arr[i] = '\0';
     }
 }
-
-

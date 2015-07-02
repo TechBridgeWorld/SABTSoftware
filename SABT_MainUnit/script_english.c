@@ -143,11 +143,3 @@ letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 
 alphabet_t english_alphabet = {all_letters, 26};
 
-void turn_string_into_eng_word(char* string, word_t* word) {
-	for (int i = 0; i < strlen(string); i++) {
-		word->name[i] = string[i];
-	}
-	word->lang_enum = ENGLISH;
-	word->curr_letter = 0;
-	word->curr_glyph = 0;
-}
