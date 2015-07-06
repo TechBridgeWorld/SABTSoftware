@@ -25,7 +25,8 @@
 /**
 * Print the pattern of a cell in 0xnnnnnn format.
 * @param Pointer to the cell
-* @return void
+* @return Void
+* @remark Tested. (Language-agnostic.)
 */
 void print_cell_pattern(cell_t* cell){
 	if (cell->pattern) {
@@ -57,6 +58,7 @@ void print_cell_pattern(cell_t* cell){
 * @param Pointers to the two cells.
 * @return Boolean; true if equal, false if
 * unequal OR >=1 cell is null.
+* @remark Tested in English.
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
 	#ifdef DEBUGMODE
@@ -105,6 +107,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 * @return Boolean; true if equal, false if unequal (which includes
 * one or more being null or the letters being the same sound in different
 * languages.)
+* @remark Tested in English.
 */
 bool letter_equals(letter_t* letter1, letter_t* letter2) {
 	#ifdef DEBUGMODE
@@ -131,6 +134,14 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 	}
 }
 
+/**
+* Given an English char (e.g. 'a', retrieve the English letter
+* whose name begins with that char. Assumes names are one char each
+* and thus that only one letter corresponds to each char.
+* @param A char representing an English letter.
+* @return A pointer to a letter; null if no match is found.
+* @remark Tested in English. WILL NOT WORK IN OTHER LANGUAGES.
+*/
 letter_t* get_eng_letter_by_char(char c){
 	for (int i = 0; i < english_alphabet.num_letters; i++){
 		if (c == english_alphabet.letters[i].name[0])
@@ -143,6 +154,7 @@ letter_t* get_eng_letter_by_char(char c){
 * Print the name of a letter.
 * @param Pointer to the letter.
 * @return void
+* remark Tested in English
 */
 void print_letter(letter_t* letter){
 	printf("%s", letter->name);
@@ -153,19 +165,37 @@ void print_letter(letter_t* letter){
 *******************/
 
 /**
+* Create a new word in English. (To be deprecated once create-from-string works.)
+* @param The word as a string and letter array, number of letters, and the word
+* struct to initialize.
+* @return void
+* remark Tested in English
+*/
+void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word) {
+	strcpy(word->name, string);
+	word->letters = letter_array;
+	word->length_name = word->num_letters = num_letters;
+	word->lang_enum = ENGLISH;
+	word->curr_letter = word->curr_glyph = 0;
+}
+
+/**
 * Create a word (in English) from a character string. (Cuts off string
-* at 9 characters -- max word length.)
+* at 10 characters -- max word length.)
 * @param A string containing the word; the word struct to initialize.
 * @return Void; function initializes word.
-* @bug DOES NOT INITIALIZE THE LETTER ARRAY
-* @bug cuts off strings > 10 letters long
+* @warning cuts off strings > MAX_WORD_LENGTH letters long
+* @bug THIS DOENS'T WORK IF USED TWICE IN A ROW -- THE LETTERS CONTAIN
+* THE MOST RECENTLY INPUTTED WORD!
 */
 void parse_string_into_eng_word(char* string, word_t* word) {
+	strcpy(word->name, string);
 	int length = (strlen(string) < MAX_WORD_LENGTH) ? strlen(string) : MAX_WORD_LENGTH;
 	static letter_t letters_in_word[MAX_WORD_LENGTH];
 	for (int i = 0; i < length; i++) {
-		word->name[i] = string[i];
+//		word->name[i] = string[i];
 		letters_in_word[i] = *get_eng_letter_by_char(string[i]);
+
 	}
 	word->length_name = word->num_letters = length;
 	word->curr_letter = word->curr_glyph = 0;
@@ -177,7 +207,7 @@ void parse_string_into_eng_word(char* string, word_t* word) {
 * Fill an array of cells with the glyphs representing a word.
 * @param The word struct and an (uninitialized) array of cells.
 * @return Void; function returns pointer in arr.
-* @bug CURRENTLY BUGGY
+* @remark Tested in English.
 */
 void word_to_cell_array(word_t* word, cell_t* arr){
 	int array_index = 0;
@@ -195,6 +225,7 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 * Iterate through word, get the next cell in it.
 * @param The word struct and an (uninitialized) cell pointer.
 * @return Void; function returns pointer in next_cell.
+* @remark Tested in English.
 */
 void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 	letter_t this_letter = word->letters[word->curr_letter];
@@ -213,17 +244,25 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 	}
 }
 
-void print_letters_in_word(word_t* word) {
-	for (int i = 0; i < word->num_letters; i++) {
+/**
+* Print a word, not by printing its name but by printing the name
+* of each letter in the word. (Used for testing & by print_words_in_list.)
+* @param The word struct.
+* @return Void.
+* @remark Tested in English.
+*/
+void print_word(word_t* word) {
+	printf("%s (spelled: ", word->name);
+	for (int i = 0; i < word->num_letters; i++)
 		print_letter(&word->letters[i]);
-	}
-	printf("\n");
+	printf(")\n");
 }
 
 /**
 * Returns a word's appropriate language prefix.
 * @param A pointer to a word struct.
 * @return A string with the language prefix.
+* @remark Tested in English.
 */
 char* get_lang(word_t* word){
 	switch (word->lang_enum) {
@@ -289,17 +328,31 @@ void speak_correct_letters(word_t* word){
 
 /**
 * Initialize a wordlist from an array of words. Can be used
-* as helper function to strings_to_wordlist.
+* as helper function to strings_to_wordlist. If the array is
+* longer than MAX_WORDLIST_LENGTH, only the first
+* MAX_WORDLIST_LENGTH elements will be indexed in "order".
 * @param Number of words; pointer to word array;
 * pointer to the wordlist to initialize.
 * @return Void; function initializes list.
-* @BUG DOES NOT INITIALIZE THE ORDER
+* @remark Tested lightly in English.
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
-	list->num_words = num_words;
+	static int order[MAX_WORDLIST_LENGTH];
+	list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
 	list->index = 0;
 	list->words = words;
-	shuffle(num_words, (list->order));
+	list->order = order;
+	for (int i = 0; i < MAX_WORDLIST_LENGTH; i++) {
+		if (i < list->num_words) {
+			list->order[i] = i;
+//			printf("In initialize_wordlist. Item %d is: %s\n", i, list->words[i].name);
+		}
+		else {
+			list->order[i] = -1;
+//			printf("In initialize_wordlist. Item %d is -1\n", i);
+		}
+	}
+	//shuffle(num_words, list->order);
 }
 
 /**
@@ -307,17 +360,29 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 * @param Pointer to an array of strings; number of strings
 * in the array; pointer to the wordlist to initialize.
 * @return Void; function initializes list.
+* @bug BUGGY
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
-	word_t words[num_strings];
-	for (int i = 0; i < num_strings; i++)
+	static word_t words[MAX_WORDLIST_LENGTH];
+	for (int i = 0; i < num_strings; i++) {
 		parse_string_into_eng_word(strings[i], &(words[i]));
+	}
+		for (int i = 0; i < num_strings; i++) {
+	}
+
 	initialize_wordlist(words, num_strings, list);
 }
 
+/**
+* Iterates through wordlist, prints each word in it, in
+* the order specified by the "order" array.
+* @param Pointer to the wordlist.
+* @return Void.
+* @remark Tested in English.
+*/
 void print_words_in_list(wordlist_t* wl) {
 	for (int i = 0; i < wl->num_words; i++) {
-		print_letters_in_word(&wl->words[wl->order[i]]);
+		print_word(&wl->words[wl->order[i]]);
 	}
 }
 
@@ -339,6 +404,8 @@ int random_between(int i, int j) {
 * @param A length len, an int array int_array.
 * @return Void; function modifies int_array.
 * @warning NOT FULLY TESTED -- randomness looks questionable
+* @remark Consider implementing an "unshuffle wordlist"
+* function.s
 */
 void shuffle(int len, int* int_array) {
 	int random_i, temp;
@@ -355,6 +422,9 @@ void shuffle(int len, int* int_array) {
 * Sort an int array using selection sort.
 * @param A length len, an int array int_array.
 * @return Void; function modifies int_array.
+* @remark Tested.
+* @remark Consider implementing an "unshuffle
+* wordlist function."
 */
 void unshuffle(int len, int* int_array) {
 	for (int i = 0; i < len; i++) {

@@ -79,9 +79,12 @@
 #define HINDI 2
 #define KANNADA 3
 
- #define MAX_WORD_LENGTH     10
+ #define MAX_WORD_LENGTH     20
+ #define MAX_WORDLIST_LENGTH 10
  #define MAX_MP3_NAME_LENGTH  5
  #define MAX_FILESET_LENGTH	  5
+
+ #define ARRAYLEN(x)  (sizeof(x) / sizeof((x)[0]))
 
 typedef struct glyph glyph_t;
 
@@ -166,11 +169,12 @@ letter_t* get_eng_letter_by_char(char c);
 void print_letter(letter_t* letter);
 
 // Word functions
-void parse_string_into_eng_word(char* string, word_t* word);
+void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word);
+// void parse_string_into_eng_word(char* string, word_t* word); // BUGGY
 void word_to_cell_array(word_t* word, cell_t* arr);
 void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
-void print_letters_in_word(word_t* word);
+void print_word(word_t* word);
 
 #ifdef DEBUGMODE
 #else
@@ -181,7 +185,7 @@ void speak_correct_letters(word_t* word);
 
 // Wordlist functions
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
-void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list);
+// void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
 void print_words_in_list(wordlist_t* wl);
 
 void shuffle(int len, int* int_array);
