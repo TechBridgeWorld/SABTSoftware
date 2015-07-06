@@ -52,6 +52,8 @@
 #define MP3_AND "AND"
 #define MP3_ENTER "ENTR"
 #define MP3_SUBMIT "SUMT"
+#define MP3_AND_MISTAKES "AMSK"
+#define MP3_MISTAKES "MSTK"
 
 /**
  *  Limits
@@ -71,7 +73,7 @@ static int md_res = -1;
 static int md_usr_res = -1;
 static bool md_input_ready = false;
 static bool md_input_valid = false;
-static bool md_incorrect_tries = 0;
+static int md_incorrect_tries = 0;
 
 void md13_reset(void) {
     PRINTF("*** MD13 - Math Problems ***\n\r");
@@ -89,7 +91,6 @@ void md13_reset(void) {
     md_usr_res = -1;
     md_input_ready = false;
     md_input_valid = false;
-    md_incorrect_tries = 0;
 }
 
 int md13_generate_number(){
@@ -180,6 +181,7 @@ void md13_main(void) {
         case STATE_GENQUES:
             md13_generate_question();
             md_next_state = STATE_PROMPT;
+            md_incorrect_tries = 0;
             break;
             
         case STATE_PROMPT:
@@ -209,17 +211,23 @@ void md13_main(void) {
             
         case STATE_CHECKANS:
             if ((md_usr_res >= md_op_1 && md_usr_res <= md_op_2) ||
-                 (md_usr_res >= md_op_2 && md_usr_res <= md_op_1)) {
+                 (md_usr_res >= md_op_2 && md_usr_res <= md_op_1))
+            {
                 // Correct answer
-                md_incorrect_tries = 0;
                 play_mp3(LANG_FILESET, MP3_CORRECT);
                 play_mp3(SYS_FILESET, MP3_TADA);
                 md_next_state = STATE_LVLSEL;
-            } else {
+            }
+            else
+            {
                 // Wrong answer
-                md_incorrect_tries++;
+                md_incorrect_tries += 1;
                 play_mp3(LANG_FILESET, MP3_INCORRECT);
-                if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
+                play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
+                play_number(md_incorrect_tries);
+                play_mp3(MODE_FILESET, MP3_MISTAKES);
+                if (md_incorrect_tries >= MAX_INCORRECT_TRIES)
+                {
                     md_next_state = STATE_REPROMPT;
                 }
                 else
@@ -239,8 +247,13 @@ void md13_main(void) {
                     break;
                     
                     // Playing answer
-                case RIGHT: case LEFT:
+                case RIGHT:
+                    md13_play_question();
+                    md_next_state = STATE_GENQUES;
+                    break;
+                case LEFT:
                     md13_play_answer();
+                    md_next_state = STATE_GENQUES;
                     break;
                     
                     // Skipping question
