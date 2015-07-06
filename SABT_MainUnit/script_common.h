@@ -30,6 +30,8 @@
 #define MP3_NEXT_LETTER "NLET"
 #define MP3_BLANK "BLNK"
 #define MP3_NEXT_PATTERN "NPAT"
+#define MP3_NUMSIGN_MISSED "NUMS"
+#define MP3_NO_NUMBER "NNUM"
 
 extern script_t* lang_script;
 extern script_t script_common;
