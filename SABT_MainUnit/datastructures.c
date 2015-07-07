@@ -10,11 +10,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <time.h>
 #include "datastructures.h"
 #include "globals.h"
 #include "script_english.h"
-// #include "audio.h"
+#include "audio.h"
 
 
 
@@ -291,7 +290,7 @@ char* get_lang(word_t* word){
 * @warning Untested
 */
 void speak_word(word_t* word) {
-	play_mp3(get_lang(word), word->name);
+	play_mp3("V_", word->name);
 }
 
 /**
@@ -345,14 +344,12 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 	for (int i = 0; i < MAX_WORDLIST_LENGTH; i++) {
 		if (i < list->num_words) {
 			list->order[i] = i;
-//			printf("In initialize_wordlist. Item %d is: %s\n", i, list->words[i].name);
 		}
 		else {
 			list->order[i] = -1;
-//			printf("In initialize_wordlist. Item %d is -1\n", i);
 		}
 	}
-	//shuffle(num_words, list->order);
+	shuffle(num_words, list->order);
 }
 
 /**
@@ -384,6 +381,17 @@ void print_words_in_list(wordlist_t* wl) {
 	for (int i = 0; i < wl->num_words; i++) {
 		print_word(&wl->words[wl->order[i]]);
 	}
+}
+
+/**
+* Iterate through wordlist, get the next word in it.
+* @param The wordlist struct and an (uninitialized) word pointer.
+* @return Void; function returns pointer in next_word.
+* @remark Not tested.
+*/
+void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
+	*next_word = &(wl->words[wl->order[wl->index]]); // added indirection to iterate in randomized order
+	wl->index++;
 }
 
 /**

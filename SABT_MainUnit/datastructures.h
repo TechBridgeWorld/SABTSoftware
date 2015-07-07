@@ -144,12 +144,12 @@ typedef struct script_old {
 // one glyph each.
 
 typedef struct script {
-	int length;				/* Length of glyph array */
-	int num_letters;			/* Number of actual letters (<length) */
-	int index;				/* Current index */
-	char fileset[MAX_FILESET_LENGTH];		/* Fileset on SD card; 4 characters long */
-	glyph_t* glyphs; 		/* Pointer to array of glyphs */
-	int* letters;		/* Pointer to array of valid indices into glyphs */
+	int length;				          /* Length of glyph array */
+	int num_letters;			      /* Number of actual letters (<length) */
+	int index;			         	  /* Current index */
+	char fileset[MAX_FILESET_LENGTH]; /* Fileset on SD card; 4 characters long */
+	glyph_t* glyphs; 		          /* Pointer to array of glyphs */
+	int* letters;		              /* Pointer to array of valid indices into glyphs */
 } script_t;
 
 
@@ -187,6 +187,7 @@ void speak_correct_letters(word_t* word);
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
 // void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
 void print_words_in_list(wordlist_t* wl);
+void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
 
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);

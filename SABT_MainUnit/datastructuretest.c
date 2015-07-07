@@ -65,6 +65,7 @@ int main() {
 	word_t goat = {"goat", 4, ENGLISH, goat_letters, 4, 0, 0};
 	letter_t ox_letters[2] = {eng_o, eng_x};
 	word_t ox = {"ox", 2, ENGLISH, ox_letters, 2, 0, 0};
+	letter_t chicken_letters[7] = {eng_c, eng_h, eng_i, eng_c, eng_k, eng_e, eng_n};
 	print_word(&goat);
 	print_word(&ox);
 	print_word(&goat);
@@ -104,23 +105,34 @@ int main() {
 	printf("Parse_string_into_eng_word %s\n\n", horse_stats_right ? "works if the above says horse sheep." : "IS BROKEN."); */
 
 	// test of initialize_english_word
-	word_t goat2, ox2;
+	word_t goat2, ox2, chicken;
 	initialize_english_word("goat", goat_letters, 4, &goat2);
 	initialize_english_word("ox", ox_letters, 2, &ox2);
+	initialize_english_word("chicken", chicken_letters, 7, &chicken);
 	print_word(&goat2);
 	print_word(&ox2);
+	print_word(&chicken);
 	print_word(&goat2);
+	printf("Inialize_english_word works if the above reads 'goat ox chicken goat.'\n\n");
 
-	// test of initialize_wordlist -- broken
-/*	word_t animals[2] = {goat, horse};
+
+	// test of initialize_wordlist
+	word_t animals[3] = {goat2, ox2, chicken};
 	word_t* no_animals;
 	wordlist_t wl;
 	initialize_wordlist(animals, ARRAYLEN(animals), &wl);
 	print_words_in_list(&wl);
-	printf("Initialize_wordlist %s.\n\n", (wl.num_words == 2) ? "works if the above says goat & horse in any order" : "IS BROKEN");
+	printf("Initialize_wordlist & print_words_in_list %s.\n\n", (wl.num_words == 3) ? "work if the above says goat, ox & chicken in any order" : "ARE BROKEN");
 
-	// test of strings_to_wordlist
-	char* animal_strings[2] = {"dog", "cat"};
+	// test of get_next_word_in_wordlist
+	word_t* curr_word;
+	for (int i = 0; i < 3; i++) {
+		get_next_word_in_wordlist(&wl, &curr_word);
+		printf("%dth word: %s\n", i, curr_word->name);
+	}
+
+	// test of strings_to_wordlist -- broken
+/*	char* animal_strings[2] = {"dog", "cat"};
 	wordlist_t wl2;
 	strings_to_wordlist(animal_strings, 2, &wl2);
 	print_words_in_list(&wl2); */
