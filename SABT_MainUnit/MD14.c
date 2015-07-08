@@ -27,8 +27,6 @@
 #define MD14_STATE_PROMPT 0x04
 #define MD14_STATE_INPUT 0x05
 #define MD14_STATE_CHECK 0x06
-#define MD14_STATE_REPROMPT 0x07
-#define MD14_STATE_SUMMARY 0x08
 
 //bounds
 #define MAX_INCORRECT_GUESS 8
@@ -62,17 +60,7 @@ void md14_reset() {
 	scrolled = false;
 }
 
-/**
- * @brief  Step through the main stages in the code.
- * @return Void
- */
-void md14_main() {
-  switch(next_state)
-  {
-    case MD14_STATE_INTRO:
-    	PRINTF("In intro state\n\r");
-    	play_mp3(MODE_FILESET, "INT");
-    	lang_fileset = "ENG_";
+void set_level_med(){
 		word_t adapt, water, steam, marsh, flood, larva;
 		letter_t adapt_letters[5] = {eng_a, eng_d, eng_a, eng_p, eng_t};
 		letter_t water_letters[5] = {eng_w, eng_a, eng_t, eng_e, eng_r};
@@ -88,12 +76,26 @@ void md14_main() {
 		initialize_english_word("LARVA", larva_letters, 5, &larva);
 		word_t wl[6] = {adapt, water, steam, marsh, flood, larva};
 		initialize_wordlist(wl, 6, &dict);
+	}
 
+/**
+ * @brief  Step through the main stages in the code.
+ * @return Void
+ */
+void md14_main() {
+  switch(next_state)
+  {
+    case MD14_STATE_INTRO:
+    	PRINTF("In intro state\n\r");
+    	play_mp3(MODE_FILESET, "INT");
+    	lang_fileset = "ENG_";
+		mode_fileset = "MD14";
 		next_state = MD14_STATE_LVLSEL;
 		break;
 
 	case MD14_STATE_LVLSEL:
 	    PRINTF("In level set state\n\r");
+	    set_level_med();
 /*		play_mp3(MODE_FILESET, "LVLS");
         md_last_dot = create_dialog(MP3_LEVEL, DOT_1 | DOT_2 | DOT_3 );
         switch (md_last_dot) {
@@ -119,7 +121,7 @@ void md14_main() {
 	case MD14_STATE_INPUT:
 	if (io_user_abort == true) {
 		PRINTF("[MD14] User aborted input\n\r");
-		next_state = MD14_STATE_REPROMPT;
+		next_state = MD14_STATE_PROMPT;
 		io_init();
 	}
 	cell = get_cell();
@@ -138,7 +140,7 @@ void md14_main() {
 		next_state = MD14_STATE_PROMPT;
 		break;
 		case WITH_RIGHT:
-		next_state = MD14_STATE_REPROMPT;
+		next_state = MD14_STATE_GENQUES;
 		break;
 		case WITH_CANCEL:
 		break;
@@ -164,10 +166,11 @@ void md14_main() {
 		else { // incorrect letter
 			// @todo: play glyph entered
 			md14_num_mistakes++;
+			chosen_word->curr_letter--; // only works in English
 			PRINTF("[MD14] User answered incorrectly\n\r");
 			play_mp3(LANGUAGE, "NO");
 			play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-			speak_correct_letters(chosen_word);
+			speak_letters_so_far(chosen_word);
 			if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
 				play_mp3(MODE_FILESET, "PRSS");
 				//@todo: play current dot sequence play_dot_sequence(curr_glyph);
@@ -175,35 +178,6 @@ void md14_main() {
 			next_state = MD14_STATE_INPUT;
 		}
 		break;
-	
-	case MD14_STATE_REPROMPT:
-		switch(create_dialog("SKIP", ENTER_CANCEL | LEFT_RIGHT)) {
-			case NO_DOTS:
-				break;
-
-			case CANCEL: case LEFT:
-				PRINTF("[MD14] Reissuing prompt");
-				next_state = MD14_STATE_PROMPT;
-				scrolled = false;
-				break;
-
-			case ENTER:
-				PRINTF("[MD14] Skipping chosen_word");
-				if (scrolled)
-					next_state = MD14_STATE_PROMPT;
-				else
-					next_state = MD14_STATE_GENQUES;
-				scrolled = false;
-				break;
-
-			case RIGHT:
-				next_state = MD14_STATE_GENQUES;
-				break;
-
-			default:
-				break;
-	}
-	break;
 
 	default:
 	break;

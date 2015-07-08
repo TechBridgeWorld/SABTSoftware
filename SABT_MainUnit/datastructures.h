@@ -172,6 +172,8 @@ void print_letter(letter_t* letter);
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word);
 // void parse_string_into_eng_word(char* string, word_t* word); // BUGGY
 void word_to_cell_array(word_t* word, cell_t* arr);
+void decrement_word_index(word_t* word);
+void increment_word_index(word_t* word);
 void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
 void print_word(word_t* word);
@@ -180,7 +182,7 @@ void print_word(word_t* word);
 #else
 void speak_word(word_t* word);
 void speak_letters_in_word(word_t* word);
-void speak_correct_letters(word_t* word);
+void speak_letters_so_far(word_t* word);
 #endif
 
 // Wordlist functions
@@ -189,6 +191,7 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
 void print_words_in_list(wordlist_t* wl);
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
 
+int random_between(int i, int j);
 void shuffle(int len, int* int_array);
 void unshuffle(int len, int* int_array);
 

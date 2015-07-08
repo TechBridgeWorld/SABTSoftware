@@ -22,7 +22,7 @@
 *******************/
 
 /**
-* Print the pattern of a cell in 0xnnnnnn format.
+* Print the pattern of a cell in 0bnnnnnn format.
 * @param Pointer to the cell
 * @return Void
 * @remark Tested. (Language-agnostic.)
@@ -37,9 +37,9 @@ void print_cell_pattern(cell_t* cell){
 			counter++;
 		}
 		#ifdef DEBUGMODE
-			printf("0x%s\n", binary);
+			printf("0b%s\n", binary);
 		#else
-			sprintf(dbgstr, "0x%s\n", binary);
+			sprintf(dbgstr, "0b%s\n", binary);
 			PRINTF(dbgstr);
 		#endif
 	}
@@ -57,7 +57,7 @@ void print_cell_pattern(cell_t* cell){
 * @param Pointers to the two cells.
 * @return Boolean; true if equal, false if
 * unequal OR >=1 cell is null.
-* @remark Tested in English.
+* @remark Tested.
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
 	#ifdef DEBUGMODE
@@ -106,7 +106,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 * @return Boolean; true if equal, false if unequal (which includes
 * one or more being null or the letters being the same sound in different
 * languages.)
-* @remark Tested in English.
+* @remark Tested in English & lightly in Hindi.
 */
 bool letter_equals(letter_t* letter1, letter_t* letter2) {
 	#ifdef DEBUGMODE
@@ -153,7 +153,7 @@ letter_t* get_eng_letter_by_char(char c){
 * Print the name of a letter.
 * @param Pointer to the letter.
 * @return void
-* remark Tested in English
+* remark Tested in English and lightly in Hindi
 */
 void print_letter(letter_t* letter){
 	printf("%s", letter->name);
@@ -206,14 +206,14 @@ void parse_string_into_eng_word(char* string, word_t* word) {
 * Fill an array of cells with the glyphs representing a word.
 * @param The word struct and an (uninitialized) array of cells.
 * @return Void; function returns pointer in arr.
-* @remark Tested in English.
+* @remark Tested lightly in English and Hindi.
 */
 void word_to_cell_array(word_t* word, cell_t* arr){
 	int array_index = 0;
 	for (int i = 0; i < word->num_letters; i++){
 		letter_t this_letter = word->letters[i];
-//		printf("i = %d, letter = %c, cells %d\n", i, this_letter.name[0], this_letter.num_cells);
 		for (int j = 0; j < this_letter.num_cells; j++) {
+//			printf("array_index = %d, i = %d, j = %d, letter = %c, cells %d\n", array_index, i, j, this_letter.name[0], this_letter.num_cells);
 			arr[array_index] = this_letter.cells[j];
 			array_index++;
 		}
@@ -221,26 +221,44 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 }
 
 /**
+* Each word contains curr_letter and curr_glyph indices to
+* represent the cell we're about to access. Increment_word_index
+* increments curr_glyph, if we're not already at the last cell
+* in the curr_letter, or curr_letter if we are.
+* @param The word struct.
+* @return Void; function modifies word.
+* @remark Tested lightly in English and Hindi.
+*/
+void increment_word_index(word_t* word) {
+	letter_t this_letter = word->letters[word->curr_letter];
+	if (word->curr_glyph < this_letter.num_cells - 1)
+		word->curr_glyph++;
+	else {
+		word->curr_letter++;
+		word->curr_glyph = 0;
+	}
+}
+
+void decrement_word_index(word_t* word) {
+	if (word->curr_glyph > 0)
+		word->curr_glyph--;
+	else if (word->curr_letter > 0) {
+		word->curr_letter--;
+		letter_t prev_letter = word->letters[word->curr_letter];
+		word->curr_glyph = prev_letter.num_cells - 1;
+	}
+}
+
+/**
 * Iterate through word, get the next cell in it.
 * @param The word struct and an (uninitialized) cell pointer.
 * @return Void; function returns pointer in next_cell.
-* @remark Tested in English.
+* @remark Tested lightly in English.
 */
 void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 	letter_t this_letter = word->letters[word->curr_letter];
-	// if this is a one-glyph letter, return its glyph & move to next letter
-	if (this_letter.num_cells == 1) {
-		*next_cell = this_letter.cells[0];
-		word->curr_letter++;
-	}
-	else { // if >1 glyph, get current glyph and increment
-		next_cell = &(this_letter.cells[word->curr_glyph]);
-		word->curr_glyph++;
-		if (word->curr_glyph == this_letter.num_cells) { // last glyph in letter
-			word->curr_glyph = 0; // reset to first glyph in next letter
-			word->curr_letter++;
-		}
-	}
+	*next_cell = this_letter.cells[word->curr_glyph];
+	increment_word_index(word);
 }
 
 /**
@@ -248,12 +266,15 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 * of each letter in the word. (Used for testing & by print_words_in_list.)
 * @param The word struct.
 * @return Void.
-* @remark Tested in English.
+* @remark Tested in English and Hindi.
 */
 void print_word(word_t* word) {
 	printf("%s (spelled: ", word->name);
-	for (int i = 0; i < word->num_letters; i++)
+	for (int i = 0; i < word->num_letters; i++) {
 		print_letter(&word->letters[i]);
+		if (i < (word->num_letters - 1))
+			printf("-");
+	}
 	printf(")\n");
 }
 
@@ -313,7 +334,7 @@ void speak_letters_in_word(word_t* word){
 * @return Void.
 * @warning Untested
 */
-void speak_correct_letters(word_t* word){
+void speak_letters_so_far(word_t* word){
 	char* lang = get_lang(word);
 	for (int i = 0; i < word->curr_letter; i++)
 		play_mp3(lang, word->letters[i].name);
@@ -448,3 +469,62 @@ void unshuffle(int len, int* int_array) {
 		}
 	}
 }
+/*
+// return: 0 if done with word, 1 if mistake
+// needs access to globals: current_word; how does
+// it get user's cell?
+// num_mistakes; lang_fileset
+char check_input(cell_t* cell) {
+	cell_t goal_cell;
+	get_next_cell_in_word(chosen_word, &goal);
+	if (cell_equals(&goal_cell, cell)) {
+		play_mp3(lang_fileset, "GOOD");
+		num_mistakes = 0;
+
+		// done with letter
+		if 
+	}
+
+	// cases:
+	// cell correct, not done with letter
+	// letter correct
+	// letter incorrect, out of mistakes
+	// letter incorrect, not out of mistakes
+}
+
+			if (glyph_equals(curr_glyph, user_glyph)) {
+				if (curr_glyph -> next == NULL) {
+					incorrect_tries = 0;
+					sprintf(dbgstr, "[%s] User answered correctly\n\r", mode_name);
+					PRINTF(dbgstr);
+					play_mp3(LANG_FILESET, MP3_CORRECT);
+					play_mp3(SYS_FILESET, MP3_TADA);
+					next_state = STATE_GENQUES;
+				}
+				else {
+					curr_glyph = curr_glyph->next;
+					play_mp3(LANG_FILESET, MP3_NEXT_CELL);
+					
+					if (submode == SUBMODE_LEARN)
+						play_dot_sequence(curr_glyph);
+					else
+						play_glyph(curr_glyph);
+					next_state = STATE_INPUT;
+				}
+			}
+			else {
+				incorrect_tries++;
+				sprintf(dbgstr, "[%s] User answered incorrectly\n\r", mode_name);;
+				PRINTF(dbgstr);			
+				play_mp3(LANG_FILESET, MP3_INCORRECT);
+				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	
+				next_state = STATE_PROMPT;
+				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+					play_glyph(curr_glyph);
+					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
+					play_dot_sequence(curr_glyph);
+					next_state = STATE_INPUT;
+				}
+			}
+ */

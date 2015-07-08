@@ -83,6 +83,7 @@
 
 extern letter_t hindi_a;
 extern letter_t hindi_shra;
+extern letter_t hindi_i;
 
 extern script_t script_hindi;
 

@@ -43,14 +43,15 @@ int main() {
 	letter_t blank_letter = {" ", UNIVERSAL, &blank_cell, 1};
 	letter_t null_letter;
 
-	/* test of letter_equals
-	bool same2 = letter_equals(&eng_a, &eng_a);
+	// test of letter_equals
+/*	bool same2 = letter_equals(&eng_a, &eng_a);
+	bool samehin = letter_equals(&hindi_shra, &hindi_shra);
 	bool diff2 = !letter_equals(&eng_a, &eng_b);
 	bool cognate2 = !letter_equals(&eng_a, &hindi_a);
 	bool diffnum = !letter_equals(&hindi_a, &hindi_shra);
 	bool empty2 = !letter_equals(&eng_a, &blank_letter);
 	bool notinitialized2 = !letter_equals(&eng_a, &null_letter);
-	printf("Letter_equals %s.\n\n", (same2 && diff2 && cognate2 && diffnum && empty2 && notinitialized2) ? "works" : "IS BROKEN"); */
+	printf("Letter_equals %s.\n\n", (same2 && samehin && diff2 && cognate2 && diffnum && empty2 && notinitialized2) ? "works" : "IS BROKEN"); */
 
 	// test of get_eng_letter_by_char and print_letter
 	letter_t* foo = get_eng_letter_by_char('z');
@@ -58,38 +59,64 @@ int main() {
 	print_letter(foo);
 	print_letter(bar);
 	print_letter(foo);
-	printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zaz.'\n\n");
+	print_letter(&hindi_a);
+	print_letter(&hindi_shra);
 
-	// test of print_letters_in_word;
+	printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zazashra.'\n\n");
+
+	// test of print_word;
 	letter_t goat_letters[4] = {eng_g, eng_o, eng_a, eng_t};
+	letter_t sri_letters[2] = {hindi_shra, hindi_i};
 	word_t goat = {"goat", 4, ENGLISH, goat_letters, 4, 0, 0};
 	letter_t ox_letters[2] = {eng_o, eng_x};
 	word_t ox = {"ox", 2, ENGLISH, ox_letters, 2, 0, 0};
+	word_t sri = {"Sri", 2, HINDI, sri_letters, 2, 0, 0};
 	letter_t chicken_letters[7] = {eng_c, eng_h, eng_i, eng_c, eng_k, eng_e, eng_n};
 	print_word(&goat);
 	print_word(&ox);
 	print_word(&goat);
-	printf("Print_letters_in_word works if the above reads 'goat ox goat.'\n\n");
+	print_word(&sri);
+	printf("Print_word works if the above reads 'goat ox goat Sri.'\n\n");
 
-	/* test of word_to_cell_array
+	//test of word_to_cell_array
 	cell_t array[4];
-	word_to_cell_array(&goat, array);
+	cell_t array2[2];
 	bool cell_array_correct = true;
-	for (int i = 0; i < 4; i++) {
-		if (!cell_equals(&array[i], &goat_letters[i].cells[0]))
-			cell_array_correct = false;
-	}
-	printf("Word_to_cell_array %s.\n\n", word_to_cell_array ? "works" : "IS BROKEN"); */
 
-	/* test of get_next_cell_in_word
+
+	word_to_cell_array(&goat, array);
+	for (int i = 0; i < 4; i++) {
+		printf("%s = %x =? %x\n", goat_letters[i].name, goat_letters[i].cells[0].pattern, array[i].pattern);
+	}
+
+	word_to_cell_array(&sri, array2);
+	int array_index = 0;
+	for (int i = 0; i < 2; i++) {
+		letter_t this_letter = sri_letters[i];
+		for (int j = 0; j < this_letter.num_cells; j++) {
+			printf("%s(%d) = %x =? %x\n", sri_letters[i].name, j,
+				sri_letters[i].cells[j].pattern, array2[array_index].pattern);
+			array_index++;
+		}
+	}
+	printf("\n");
+
+	// test of get_next_cell_in_word
 	cell_t next_cell;
-	bool next_cell_correct = true;
 	for (int i = 0; i < 4; i++) {
 		get_next_cell_in_word(&goat, &next_cell);
-		if (!cell_equals(&next_cell, &goat_letters[i].cells[0]))
-			next_cell_correct = false;
+		print_cell_pattern(&next_cell);
 	}
-	printf("Get_next_cell_in_word %s.\n\n", next_cell_correct ? "works" : "IS BROKEN"); */
+	printf("\n");
+	for (int i = 0; i < 4; i++) {
+		get_next_cell_in_word(&sri, &next_cell);
+		print_cell_pattern(&next_cell);
+	}
+	printf("Get_next_cell_in_word works if the above is 0b011011 0b010101 0b000001 0b011110 0b010000 0b101001 0b010111 0b001010\n\n");
+
+/*	for (int i = 0; i < 2; i++) {
+		get_next_cell_in_word
+	} */
 
 	/* test of get_lang
 	printf("%s\n", get_lang(&goat));
@@ -130,6 +157,7 @@ int main() {
 		get_next_word_in_wordlist(&wl, &curr_word);
 		printf("%dth word: %s\n", i, curr_word->name);
 	}
+	printf("get_next_word_in_wordlist works if the above is goat, ox and chicken, in the same order as above.\n\n");
 
 	// test of strings_to_wordlist -- broken
 /*	char* animal_strings[2] = {"dog", "cat"};
@@ -137,8 +165,9 @@ int main() {
 	strings_to_wordlist(animal_strings, 2, &wl2);
 	print_words_in_list(&wl2); */
 
-	/* test of random_between
-   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000)); */
+	// test of random_between
+   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));
+   	printf("Should contain random numbers between 0 & 1, 5 & 10, 0 & 1000.\n");
 
 	/* test of shuffle
 	int bar[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
