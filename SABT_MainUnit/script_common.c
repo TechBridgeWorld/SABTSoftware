@@ -28,45 +28,17 @@ glyph_t blank_cell = {
 };
 
 /**
-* @brief Resets a script's indices
-* @param script_t* - Pointer to script to reset
+* @brief Resets the alphabet and reshuffles or unshuffles
+* it as needed.
+* @param the alphabet's script struct and a bool indicating
+* whether it should be shuffled (i.e., we're in "practice" mode)
+* or not (i.e., we're in "learn" mode).
 * @return void
 */
-void reset_script_indices(script_t* script) {
-	script->index = -1;
-}
-
 void reset_script_queue(script_t* script, bool should_shuffle) {
-	reset_script_indices(script);
+	script->index = -1;
 	if (should_shuffle)
-		shuffle_alphabet(script);
-	else
-		unshuffle_alphabet(script);
-}
-
-
-
-/**
-* @brief Performs a Fisher-Yates shuffle on the
-* indices of all the letters in the script,
-* producing a random ordering of letters.
-* @param an array of indices into script->glyph,
-* and the number of those that are valid entries
-* @return void
-*/
-void shuffle_alphabet(script_t* script) {
-	shuffle(script->num_letters, script->letters);
-}
-
-/**
-* @brief Sorts script->letters, putting the
-* indices back order.
-* @param an array of indices into script->glyph,
-* and the number of those that are valid entries
-* @return void
-*/
-void unshuffle_alphabet(script_t* script) {
-	unshuffle(script->num_letters, script->letters);
+		shuffle(script->num_letters, script->letters);
 }
 
 /**
@@ -135,17 +107,6 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 }
 
 /**
- * @brief Returns the glyph in the script the corresponds to 
- * curr_glyph -> next
- * @param glyph_t* curr_glyph pointer to glyph to find next of
- * @param script_t* script - Script to look in
- * @return glyph_t* - Corresponding to next in the linked list
- */
-glyph_t* get_next(script_t* curr_script, glyph_t* curr_glyph) {
-	return search_script(curr_script, curr_glyph->next->pattern);
-}
-
-/**
 * @brief Adds added_glyph to the end of a word_node
 * @param word_node_t* curr_word pointer to word being added to
 * @param glyph_t* added_glyph pointer to glyph being added
@@ -187,12 +148,8 @@ word_node_t* free_word(word_node_t* this_word) {
  * @return glyph_t* - pointer to first glyph in the linked list
  */
 glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
-	if (curr_glyph->prev == NULL) {
-		return curr_glyph;
-	} else {
-		curr_glyph = search_script(curr_script,curr_glyph->prev->pattern);
-		return get_root(curr_script,curr_glyph);
-	}
+	int index = curr_script->letters[curr_script->index];
+	return &(curr_script->glyphs[index]);
 }
 
 /**
@@ -212,20 +169,21 @@ word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 }
 
 /**
-* @brief Returns the next glyph from the current script
-* @param void
-* @glyph_t* - Pointer to next glyph
+* @brief Returns the first glyph of the next letter
+* @param the current script and whether it should be shuffled
+* if we're cycling back to the beginning of the alphabet.
+* @glyph_t* - Pointer to the first glyph in the next letter
 */
-glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
+glyph_t* get_next_letter(script_t* script, bool should_shuffle) {
 	// increment the index
 	script->index++;
 
 	// if we're out of letters, reset index and
-	// shuffle or unshuffle as needed
+	// shuffle as needed
 	if (script->index >= script->num_letters) {
 		script->index = 0;
 		if (should_shuffle)
-			shuffle_alphabet(script);
+			shuffle(script->num_letters, script->letters);
 	}
 
 	// return the first glyph of the script->index'th letter
@@ -233,11 +191,12 @@ glyph_t* get_next_glyph(script_t* script, bool should_shuffle) {
 }
 
 /**
-* @brief Returns the previous glyph from the current script
-* @param void
-* @glyph_t* - Pointer to previous glyph
+* @brief Returns the first glyph of the previous letter
+* @param the current script
+* @glyph_t* - Pointer to the first glyph in the next letter
+* NB: this is not currently used.
 */
-glyph_t* get_prev_glyph(script_t* script, bool should_shuffle) {
+glyph_t* get_prev_letter(script_t* script) {
 	// decrement the index
 	script->index--;
 

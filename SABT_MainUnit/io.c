@@ -206,7 +206,7 @@ bool get_line(void) {
 			return true;
 			break;
 
-		/* RIGHT is used to switch to previous cell because Brialle is entered
+		/* RIGHT is used to switch to previous cell because Braille is entered
 			this way */
 		// RIGHT - Select prev cell
 		case WITH_RIGHT:
@@ -218,7 +218,7 @@ bool get_line(void) {
 			return false;
 			break;
 
-		/* LEFT is used to switch to next cell because Brialle is entered
+		/* LEFT is used to switch to next cell because Braille is entered
 			this way */
 		// LEFT - Select next cell
 		case WITH_LEFT:
