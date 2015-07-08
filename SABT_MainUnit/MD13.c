@@ -120,31 +120,32 @@ void md13_reset(void) {
     md_game_status = FIRST_QUES;
 }
 
-
-
-int md13_generate_number(){
+void md13_generate_question(){
     switch (md_level) {
         case LEVEL_1:
-            return random_between(10,100);
-        case LEVEL_2:
-            return random_between(100,10000);
-        default:
-			return 0;
+            md_op_1 = random_between(1,49);
+            sprintf(dbgstr, "[MD13] Operand 1: %d\n\r", md_op_1);
+            PRINTF(dbgstr);
+            md_op_2 = random_between(51,100);
+            sprintf(dbgstr, "[MD13] Operand 2: %d\n\r", md_op_2);
+            PRINTF(dbgstr);
             break;
-    }    
-}
-
-void md13_generate_question(){
-    md_op_1 = md13_generate_number();
-    sprintf(dbgstr, "[MD13] Operand 1: %d\n\r", md_op_1);
-    PRINTF(dbgstr);
-    md_op_2 = md13_generate_number();
-    while ((md_op_2 >= md_op_1 - 2 )
-           && (md_op_2 <= md_op_1 + 2)) {
-        md_op_2 = md13_generate_number();
+        case LEVEL_2:
+            md_op_1 = random_between(1,49);
+            md_op_1 *= 100;
+            sprintf(dbgstr, "[MD13] Operand 1: %d\n\r", md_op_1);
+            PRINTF(dbgstr);
+            md_op_2 = random_between(51,100);
+            md_op_2 *= 100;
+            sprintf(dbgstr, "[MD13] Operand 2: %d\n\r", md_op_2);
+            PRINTF(dbgstr);
+            break;
+        default:
+            PRINTF("[MODE13]Error generating question");
+            break;
     }
-    sprintf(dbgstr, "[MD13] Operand 2: %d\n\r", md_op_2);
-    PRINTF(dbgstr);
+    
+    
 }
 
 void md13_play_question(){
@@ -350,11 +351,7 @@ bool check_answer(){
 void md13_main(void) {
     switch (md_next_state) {
 		case STATE_INTRO:
-			play_mp3(MODE_FILESET, MP3_INTRO);
-			md_next_state = STATE_LVLSEL;
-			break;
-        case STATE_LVLSEL:
-            md_last_dot = create_dialog(MP3_LVLSEL,
+            md_last_dot = create_dialog(MP3_INTRO,
                                         ( DOT_1 | DOT_2 ));
             switch (md_last_dot) {
                     
@@ -485,12 +482,13 @@ void md13_main(void) {
                     
                     // Playing answer
                 case LEFT:
-                    md13_play_question();
                     md_next_state = STATE_PROMPT;
+                    io_init();
                     break;
                 case RIGHT:
                     md13_play_answer();
                     md_next_state = STATE_GENQUES;
+                    io_init();
                     break;
                     
                     // Skipping question
@@ -498,9 +496,9 @@ void md13_main(void) {
                     md_next_state = STATE_GENQUES;
                     break;
                     
-                    // Try again
+                    // Restart the mode
                 case CANCEL:
-                    md_next_state = STATE_PROMPT;
+                    md_next_state = STATE_INTRO;
                     break;
                     
                 default:
