@@ -502,7 +502,8 @@ bool io_convert_line(void) {
 		if (curr_glyph == NULL) {
 			return false;
 		} else {
-			sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s\n\r", parse_index, curr_glyph->sound);
+			//sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s pattern:%x\n\r", parse_index, curr_glyph->sound, curr_glyph->pattern);
+            sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s\n\r", parse_index, curr_glyph->sound);
 			PRINTF(dbgstr);
 			io_parsed[parse_index] = curr_glyph;
 		}

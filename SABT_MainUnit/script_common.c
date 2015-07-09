@@ -52,8 +52,9 @@ void reset_script_queue(script_t* script, bool should_shuffle) {
 glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 	char curr_pattern = patterns[*index];
 	glyph_t* curr_glyph;
-
-	sprintf(dbgstr, "[IO] Current pattern: 0x%x\n\r", curr_pattern);
+    
+	//sprintf(dbgstr, "[IO] Searching current pattern: 0x%x in %s\n\r", curr_pattern, script->fileset);
+    sprintf(dbgstr, "[IO] Searching current pattern: 0x%x\n\r", curr_pattern);
 	PRINTF(dbgstr);
 	
 	// Return if EOT
@@ -76,8 +77,8 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 			return NULL;
 		}
 	}
-		PRINTF("[IO] No subscript; returning glyph\n\r");
-		return curr_glyph;
+    PRINTF("[IO] No subscript; returning glyph\n\r");
+    return curr_glyph;
 }
 
 /**
