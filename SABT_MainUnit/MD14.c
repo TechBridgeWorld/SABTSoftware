@@ -30,7 +30,7 @@
 #define MD14_STATE_REPROMPT 0x07
 
 //bounds
-#define MAX_INCORRECT_GUESS 8
+#define MAX_INCORRECT_GUESS 3
 #define MAX_WORD_LEN 20
 
  // Used to set global fileset variables
@@ -44,7 +44,6 @@ int  md14_num_mistakes = 0;
 char cell = 0;
 char cell_pattern = 0;
 char cell_control = 0;
-bool scrolled = false;
 
 wordlist_t dict;
 word_t* chosen_word;
@@ -58,25 +57,12 @@ void md14_reset() {
 	cell_pattern = 0;
 	cell_control = 0;
 	next_state = MD14_STATE_INTRO;
-	scrolled = false;
 }
 
 void set_level_med(){
-		word_t adapt, water, steam, marsh, flood, larva;
-		letter_t adapt_letters[5] = {eng_a, eng_d, eng_a, eng_p, eng_t};
-		letter_t water_letters[5] = {eng_w, eng_a, eng_t, eng_e, eng_r};
-		letter_t steam_letters[5] = {eng_s, eng_t, eng_e, eng_a, eng_m};
-		letter_t marsh_letters[5] = {eng_m, eng_a, eng_r, eng_s, eng_h};
-		letter_t flood_letters[5] = {eng_f, eng_l, eng_o, eng_o, eng_d};
-		letter_t larva_letters[5] = {eng_l, eng_a, eng_r, eng_v, eng_a};
-		initialize_english_word("ADAPT", adapt_letters, 5, &adapt);
-		initialize_english_word("WATER", water_letters, 5, &water);
-		initialize_english_word("STEAM", steam_letters, 5, &steam);
-		initialize_english_word("MARSH", marsh_letters, 5, &marsh);
-		initialize_english_word("FLOOD", flood_letters, 5, &flood);
-		initialize_english_word("LARVA", larva_letters, 5, &larva);
-		word_t wl[6] = {adapt, water, steam, marsh, flood, larva};
-		initialize_wordlist(wl, 6, &dict);
+		char* science_words[6] = {"adapt", "water", "steam", "marsh", "flood", "larva"};
+		strings_to_wordlist(science_words, 6, &dict);
+		print_words_in_list(&dict);
 	}
 
 /**
@@ -89,6 +75,7 @@ void md14_main() {
     case MD14_STATE_INTRO:
     	PRINTF("In intro state\n\r");
     	play_mp3(MODE_FILESET, "INT");
+    	play_mp3(MODE_FILESET, "INST");
     	lang_fileset = "ENG_";
 		mode_fileset = "MD14";
 		next_state = MD14_STATE_LVLSEL;
@@ -97,11 +84,6 @@ void md14_main() {
 	case MD14_STATE_LVLSEL:
 	    PRINTF("In level set state\n\r");
 	    set_level_med();
-	    for (int i = 0; i < dict.num_words; i++) {
-			sprintf(dbgstr, "%d ", dict.order[i]);
-			PRINTF(dbgstr);
-		}
-		PRINTF("\n");
 
 /*		play_mp3(MODE_FILESET, "LVLS");
         md_last_dot = create_dialog(MP3_LEVEL, DOT_1 | DOT_2 | DOT_3 );
@@ -125,7 +107,7 @@ void md14_main() {
 
 	 case MD14_STATE_PROMPT:
 	 	PRINTF("In prompt state\n\r");
-	 	play_mp3(MODE_FILESET, "SPEL");
+	 	play_mp3(LANGUAGE, "SPEL");
 	 	speak_word(chosen_word);
 	 	next_state = MD14_STATE_INPUT;
 	 	break;
@@ -160,14 +142,17 @@ void md14_main() {
 		PRINTF(dbgstr);
 
 		if (cell_equals(&curr_cell, &user_cell)) {
-			play_mp3(LANGUAGE, "GOOD");
 			md14_num_mistakes = 0;
 			if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
-				play_mp3(LANGUAGE, "NCWK");
-			  	next_state = MD14_STATE_GENQUES; // @todo: reset everything else
+				play_mp3(LANGUAGE, "CORR");
+				play_mp3("SYS_", "TADA");
+				md14_reset();
+			  	next_state = MD14_STATE_GENQUES;
 			}
-			else // correct but not done
+			else {// correct but not done
+				play_mp3(LANGUAGE, "GOOD");
 				next_state = MD14_STATE_INPUT;
+			}
 		}
 		else {// incorrect letter
 			play_mp3(LANGUAGE, "NO");
@@ -182,13 +167,14 @@ void md14_main() {
 		PRINTF("In reprompt state\n\r");
 
 		if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
-			play_mp3(MODE_FILESET, "PRSS");
+			play_mp3(LANGUAGE, "PRSS");
 			play_pattern(curr_cell.pattern);
 		}
 		else {
+			play_mp3(LANGUAGE, "SPEL");
 	 		speak_word(chosen_word);
 	 		if (chosen_word->curr_glyph > -1) {// not at beginning of word
-	 			play_mp3("MD4_", "SOFA"); // @todo move this on SD card
+	 			play_mp3(MODE_FILESET, "SOFA");
 	 			speak_letters_so_far(chosen_word);
 	 		}
 	 	}

@@ -107,14 +107,12 @@ typedef struct letter {
 	int num_cells;
 } letter_t;
 
-// check_letter shoudl just call check_glyph recursively -- the output and input should happen in there
-
 typedef struct word {
 	char name[MAX_WORD_LENGTH];
 	int length_name;
-	char lang_enum;
 	letter_t* letters;
 	int num_letters;
+	char lang_enum;
 	int curr_letter;
 	int curr_glyph;
 } word_t; 
@@ -122,12 +120,14 @@ typedef struct word {
 typedef struct alphabet {
 	letter_t* letters;
 	int num_letters;
+	char lang_enum;
+	// other info can eventually go in here
 } alphabet_t;
 
 typedef struct wordlist {
 	word_t* words;
-	int num_words;
 	int* order;
+	int num_words;
 	int index;
 } wordlist_t;
 

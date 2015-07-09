@@ -29,7 +29,7 @@ int main() {
 	print_cell_pattern(&null_cell);
 	printf("Compare above to test print_cell_pattern.\n\n"); */
 
-	/* test of cell_equals
+	// test of cell_equals
 	bool same1 = cell_equals(&a_cell, &a_cell);
 	bool diff1 = !cell_equals(&a_cell, &b_cell);
 	bool cognate1 = cell_equals(&a_cell, &hin_a_cell);
@@ -37,7 +37,7 @@ int main() {
 	bool bothempty1 = cell_equals(&blank_cell, &blank_cell);
 	bool notinitialized1 = !cell_equals(&a_cell, &null_cell);
 	printf("Cell_equals %s.\n\n", (same1 && diff1 && cognate1 &&
-			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN"); */
+			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
 
 
 	// test of letter_equals
@@ -160,10 +160,10 @@ int main() {
 	printf("get_next_word_in_wordlist works if the above is goat, ox and chicken, in the same order as above.\n\n"); */
 
 	// test of strings_to_wordlist -- broken
-/*	char* animal_strings[2] = {"dog", "cat"};
+	char* animal_strings[2] = {"dog", "cat"};
 	wordlist_t wl2;
 	strings_to_wordlist(animal_strings, 2, &wl2);
-	print_words_in_list(&wl2); */
+	print_words_in_list(&wl2);
 
 	// test of random_between
 //   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));

@@ -10,12 +10,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include "datastructures.h"
 #include "globals.h"
 #include "script_english.h"
 #include "audio.h"
-
-
 
 /*******************
 *  CELL FUNCTIONS  *
@@ -24,7 +23,7 @@
 /**
 * Print the pattern of a cell in 0bnnnnnn format.
 * @param Pointer to the cell
-* @return Void
+* @return Void; prints output.
 * @remark Tested. (Language-agnostic.)
 */
 void print_cell_pattern(cell_t* cell){
@@ -36,37 +35,24 @@ void print_cell_pattern(cell_t* cell){
 			binary[counter] =((pattern & i) == i) ? '1' : '0';
 			counter++;
 		}
-		#ifdef DEBUGMODE
-			printf("0b%s\n", binary);
-		#else
-			sprintf(dbgstr, "0b%s\n", binary);
-			PRINTF(dbgstr);
-		#endif
+		sprintf(dbgstr, "0b%s\n", binary);
+		PRINTF(dbgstr);
 	}
 	else {
-		#ifdef DEBUGMODE
-			printf("Blank cell\n");
-		#else
 			PRINTF("Blank cell\n");
-		#endif
 	}
 }
 
 /**
 * Determine whether two cells are equal.
 * @param Pointers to the two cells.
-* @return Boolean; true if equal, false if
-* unequal OR >=1 cell is null.
+* @return Boolean; true if equal, false if unequal OR >=1 cell is null.
 * @remark Tested. (Language-agnostic.)
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
-	#ifdef DEBUGMODE
-		printf("[Script] Cell 1: 0x%x, Cell 2: 0x%x\n", cell1->pattern, cell2->pattern);
-	#else
-		sprintf(dbgstr, "[Script] Cell 1: 0x%x\n\r[Script] Cell 2: 0x%x\n\r",
-			cell1->pattern, cell2->pattern);
-		PRINTF(dbgstr);
-	#endif
+	sprintf(dbgstr, "[Cell_equals script] Cell 1: 0x%x\n\r[Script] Cell 2: 0x%x\n\r",
+		cell1->pattern, cell2->pattern);
+	PRINTF(dbgstr);
 
 	if (cell1 == NULL || cell2 == NULL)
 		return false;
@@ -77,18 +63,13 @@ bool cell_equals(cell_t* cell1, cell_t* cell2) {
 /**
 * Determine whether two glyphs are equal.
 * @param Pointers to the two glyphs.
-* @return Boolean; true if equal, false if
-* unequal OR >=1 glyph is null.
+* @return Boolean; true if equal, false if unequal OR >=1 glyph is null.
 * @warning Will be deprecated?
 */
 bool glyph_equals(glyph_t* g1, glyph_t* g2) {
-	#ifdef DEBUGMODE
-		printf("[Script] Glyph 1: %s, Glyph 2: %s\n", g1->sound, g2->sound);
-	#else
-		sprintf(dbgstr, "[Script] Glyph 1: %s, Glyph 2: %s\n\r",
-			g1->sound, g2->sound);
-		PRINTF(dbgstr);
-	#endif
+	sprintf(dbgstr, "[Glyph_equals] Glyph 1: %s, Glyph 2: %s\n\r",
+		g1->sound, g2->sound);
+	PRINTF(dbgstr);
 
 	if (g1 == NULL || g2 == NULL)
 		return false;
@@ -109,14 +90,9 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 * @remark Tested in English & lightly in Hindi.
 */
 bool letter_equals(letter_t* letter1, letter_t* letter2) {
-	#ifdef DEBUGMODE
-		printf("[Script] Letter 1: %s (%d), Letter 2: %s (%d)\n", letter1->name, letter1->lang_enum,
-				letter2->name, letter2->lang_enum);
-	#else
-		sprintf(dbgstr, "[Script] Letter 1: %s, Letter 2: %s\n\r",
-			letter1->name, letter2->name);
-		PRINTF(dbgstr);
-	#endif
+	sprintf(dbgstr, "[Letter_equals] Letter 1: %s, Letter 2: %s\n\r",
+		letter1->name, letter2->name);
+	PRINTF(dbgstr);
 
 	// not equal if one doesn't exist; if of different langs; if of different lengths
 	if ((letter1 == NULL || letter2 == NULL)
@@ -156,7 +132,8 @@ letter_t* get_eng_letter_by_char(char c){
 * remark Tested in English and Hindi.
 */
 void print_letter(letter_t* letter){
-	printf("%s", letter->name);
+	sprintf(dbgstr, "%s", letter->name);
+	PRINTF(dbgstr);
 }
 
 /*******************
@@ -191,17 +168,16 @@ void initialize_english_word(char* string, letter_t* letter_array, int num_lette
 void parse_string_into_eng_word(char* string, word_t* word) {
 	strcpy(word->name, string);
 	int length = (strlen(string) < MAX_WORD_LENGTH) ? strlen(string) : MAX_WORD_LENGTH;
-	static letter_t letters_in_word[MAX_WORD_LENGTH];
+	letter_t* letters_in_word;
+	letters_in_word = (letter_t*) malloc(sizeof(letter_t) * length);
 	for (int i = 0; i < length; i++) {
-//		word->name[i] = string[i];
 		letters_in_word[i] = *get_eng_letter_by_char(string[i]);
-
 	}
+	word->letters = letters_in_word;
 	word->length_name = word->num_letters = length;
 	word->curr_letter = 0;
 	word->curr_glyph = -1;
 	word->lang_enum = ENGLISH;
-	word->letters = letters_in_word;
 }
 
 /**
@@ -215,7 +191,6 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 	for (int i = 0; i < word->num_letters; i++){
 		letter_t this_letter = word->letters[i];
 		for (int j = 0; j < this_letter.num_cells; j++) {
-//			printf("array_index = %d, i = %d, j = %d, letter = %c, cells %d\n", array_index, i, j, this_letter.name[0], this_letter.num_cells);
 			arr[array_index] = this_letter.cells[j];
 			array_index++;
 		}
@@ -276,13 +251,14 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 * @remark Tested in English and Hindi.
 */
 void print_word(word_t* word) {
-	printf("%s (spelled: ", word->name);
+	sprintf(dbgstr, "%s (spelled: ", word->name);
+	PRINTF(dbgstr);
 	for (int i = 0; i < word->num_letters; i++) {
 		print_letter(&word->letters[i]);
 		if (i < (word->num_letters - 1))
-			printf("-");
+			PRINTF("-");
 	}
-	printf(")\n");
+	PRINTF(")\n");
 }
 
 /**
@@ -348,6 +324,9 @@ void speak_letters_so_far(word_t* word){
 }
 #endif
 
+// @todo: void free_word(word_t* word);
+
+
 
 /***********************
 *  WORDLIST FUNCTIONS  *
@@ -388,14 +367,12 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 * @bug BUGGY
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
-	static word_t words[MAX_WORDLIST_LENGTH];
-	for (int i = 0; i < num_strings; i++) {
+	int length = (num_strings < MAX_WORDLIST_LENGTH) ? num_strings : MAX_WORD_LENGTH;
+	word_t* words;
+	words = (word_t*) malloc(sizeof(word_t) * length);
+	for (int i = 0; i < length; i++)
 		parse_string_into_eng_word(strings[i], &(words[i]));
-	}
-		for (int i = 0; i < num_strings; i++) {
-	}
-
-	initialize_wordlist(words, num_strings, list);
+	initialize_wordlist(words, length, list);
 }
 
 /**
@@ -422,24 +399,18 @@ void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
 		shuffle(wl->num_words, wl->order);
 
 	int randomized_index = wl->order[wl->index];
-	#ifdef DEBUGMODE
-		printf("i %d o %d w %s\n",  wl->index, randomized_index, (wl->words[randomized_index]).name);
-	#else
-		sprintf(dbgstr, "i %d o %d w %s\n",  wl->index, randomized_index, (wl->words[randomized_index]).name);
-		PRINTF(dbgstr);
-	#endif
 	*next_word = &(wl->words[randomized_index]); // added indirection to iterate in randomized order
 
 	wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
 }
+
+// @todo: void free_wordlist(wordlist_t* wl);
 
 /**
  * Find a random number between i and j, inclusive of
  * i but not j. Helper function for shuffle.
  * @param Ints i and j, delineating the range
  * @return A random int between i and j-1 inclusive.
- * @warning THIS IS NOT RETURNING RANDOM NUMBERS
- * @warning MAYBE WORKS IF YOU CALL SRAND ONCE FROM MAIN?
  */
 int random_between(int i, int j) {
 	int range = j - i;
@@ -452,9 +423,9 @@ int random_between(int i, int j) {
 * Perform Fisher-Yates shuffle on an int array of length len.
 * @param A length len, an int array int_array.
 * @return Void; function modifies int_array.
-* @warning NOT FULLY TESTED -- randomness looks questionable
-* @remark Consider implementing an "unshuffle wordlist"
-* function.s
+* @remark Tested
+* @remark Consider implementing a "shuffle wordlist"
+* function.
 */
 void shuffle(int len, int* int_array) {
 	int random_i, temp;
@@ -472,7 +443,7 @@ void shuffle(int len, int* int_array) {
 * @return Void; function modifies int_array.
 * @remark Tested.
 * @remark Consider implementing an "unshuffle
-* wordlist function."
+* wordlist" function.
 */
 void unshuffle(int len, int* int_array) {
 	for (int i = 0; i < len; i++) {
