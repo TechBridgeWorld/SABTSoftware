@@ -258,7 +258,7 @@ void print_word(word_t* word) {
 		if (i < (word->num_letters - 1))
 			PRINTF("-");
 	}
-	PRINTF(")\n");
+	PRINTF(")\n\r");
 }
 
 /**
@@ -414,8 +414,7 @@ void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
  */
 int random_between(int i, int j) {
 	int range = j - i;
-	int rand_num = rand();
-	int retval = i + (rand_num % range);
+	int retval = i + (rand() % range);
 	return retval;
 }
 

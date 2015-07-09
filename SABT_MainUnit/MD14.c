@@ -1,7 +1,7 @@
 /*
  * @file MD14.c
  *
- * @brief Mode 14: spelling bee
+ * @brief Mode 14: spelling practice
  * @author: Marjorie Carlson (marjorie@cmu.edu)
  */ 
 
@@ -40,7 +40,9 @@
 
 char next_state = MD14_STATE_NULL;
 
-int  md14_num_mistakes = 0;
+int md14_words_spelled = 0;
+int  md14_curr_mistakes = 0;
+int md14_total_mistakes = 0;
 char cell = 0;
 char cell_pattern = 0;
 char cell_control = 0;
@@ -52,17 +54,49 @@ static cell_t user_cell;
 static cell_t curr_cell;
 
 void md14_reset() {
-	md14_num_mistakes = 0;
+	md14_curr_mistakes = 0;
 	cell = 0;
 	cell_pattern = 0;
 	cell_control = 0;
 	next_state = MD14_STATE_INTRO;
 }
 
+void stats(){
+	play_mp3(MODE_FILESET, "STS1");      // "You have spelled"
+	play_number(md14_words_spelled);     // #
+	if (md14_words_spelled == 1)
+		play_mp3(MODE_FILESET, "STS2"); // "word, and have made"
+	else
+		play_mp3(MODE_FILESET, "STS3");  // "words, and have made"
+	play_number(md14_total_mistakes);    // #
+	if (md14_total_mistakes == 1)
+		play_mp3(MODE_FILESET, "STS4");  // "mistake"
+	else
+		play_mp3(MODE_FILESET, "STS5");  // "mistakes"
+}
+
+void correct_answer(){
+	play_mp3(LANGUAGE, "CORR");
+	play_mp3("SYS_", "TADA");
+	md14_words_spelled++;
+	stats();
+	md14_reset();
+}
+
+void incorrect_answer() {
+	play_mp3(LANGUAGE, "NO");
+	play_mp3(LANGUAGE, MP3_TRY_AGAIN);
+	decrement_word_index(chosen_word);
+	md14_curr_mistakes++;
+	md14_total_mistakes++;
+
+}
+
+
 void set_level_med(){
-		char* science_words[6] = {"adapt", "water", "steam", "marsh", "flood", "larva"};
-		strings_to_wordlist(science_words, 6, &dict);
-		print_words_in_list(&dict);
+	char* science_words[6] = {"adapt", "water", "steam", "marsh", "flood", "larva"};
+	strings_to_wordlist(science_words, 6, &dict);
+	print_words_in_list(&dict);
 	}
 
 /**
@@ -79,6 +113,7 @@ void md14_main() {
     	lang_fileset = "ENG_";
 		mode_fileset = "MD14";
 		next_state = MD14_STATE_LVLSEL;
+		srand(timer_rand());
 		break;
 
 	case MD14_STATE_LVLSEL:
@@ -98,7 +133,7 @@ void md14_main() {
 	  
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
-		md14_num_mistakes = 0;
+		md14_curr_mistakes = 0;
 		get_next_word_in_wordlist(&dict, &chosen_word);
 		sprintf(dbgstr, "[MD14] Next word: %s\n\r", chosen_word->name);
 		PRINTF(dbgstr);
@@ -129,6 +164,7 @@ void md14_main() {
 			next_state = MD14_STATE_REPROMPT;
 			break;
 			case WITH_RIGHT:
+			stats();
 			next_state = MD14_STATE_GENQUES;
 			break;
 			case WITH_CANCEL:
@@ -142,11 +178,9 @@ void md14_main() {
 		PRINTF(dbgstr);
 
 		if (cell_equals(&curr_cell, &user_cell)) {
-			md14_num_mistakes = 0;
+			md14_curr_mistakes = 0;
 			if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
-				play_mp3(LANGUAGE, "CORR");
-				play_mp3("SYS_", "TADA");
-				md14_reset();
+				correct_answer();
 			  	next_state = MD14_STATE_GENQUES;
 			}
 			else {// correct but not done
@@ -155,10 +189,7 @@ void md14_main() {
 			}
 		}
 		else {// incorrect letter
-			play_mp3(LANGUAGE, "NO");
-			play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-			decrement_word_index(chosen_word);
-			md14_num_mistakes++;
+			incorrect_answer();
 			next_state = MD14_STATE_REPROMPT;
 		}
 		break;
@@ -166,7 +197,7 @@ void md14_main() {
 	case MD14_STATE_REPROMPT:
 		PRINTF("In reprompt state\n\r");
 
-		if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
+		if (md14_curr_mistakes >= MAX_INCORRECT_GUESS) {
 			play_mp3(LANGUAGE, "PRSS");
 			play_pattern(curr_cell.pattern);
 		}
