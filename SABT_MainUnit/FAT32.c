@@ -158,10 +158,10 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
 }
 
 /**
- * @brief function gets DIR/FILE list or a single file address or deletes specified
- *         file.  Will find starting location for the file. 
- *         Globals used in this function appendFileSector, appendFileLocation,
- *         appendStartCluster, file_size
+ * @brief function gets DIR/FILE list or a single file address or deletes
+ *         specified file.  Will find starting location for the file.
+ *         Globals used in this function appendFileSector, 
+ *         appendFileLocation, appendStartCluster, file_size
  * @param flag - unsigned char, can be GET_LIST, GET_FILE or DELETE
  * @param file_name - unsinged char *, pointer to the file name to operate on
  * @return struct dir_Structure * - first cluster of file if flag = GET_FILE
@@ -316,7 +316,7 @@ unsigned char read_file (unsigned char flag, unsigned char *file_name)
 
     for(j = 0; j < sector_per_cluster; j++)
     {
-      sd_read_single_block(first_sector + j);
+       sd_read_single_block(first_sector + j);
 
       for(k = 0; k < 512; k++)
       {
@@ -659,7 +659,7 @@ unsigned char read_dict_file()
   // READ in 281 clusters
 
   cluster = curr_dict_cluster;
-  for(k = 0; k < CLUSTERS_PER_RUN; k++)
+  for(k = 0; k < CLUSTERS_PER_RUN; k++) //60
   {
     dict_clusters[dict_cluster_cnt] = cluster;
     dict_cluster_cnt ++;
@@ -669,7 +669,7 @@ unsigned char read_dict_file()
     for(j=0; j<sector_per_cluster; j++)
     {
       sd_read_single_dict_block(first_sector + j);
-      for(i = 0; i < BUFFER_SIZE; i ++){
+      for(i = 0; i < BUFFER_SIZE; i ++){ //512
         if(dict_buffer[i] =='+'){
           end_of_file = true;
         }  
@@ -689,7 +689,7 @@ unsigned char read_dict_file()
       }
 
     }
-    count ++;
+    count ++;//number of sectors read
 
     //if the buffer ends in a \n, then this cluster starts on its own word
     if(curr_char == '\n')
