@@ -54,20 +54,20 @@
 /**
  *  prompts
  */
-#define MP3_LVLSEL "LVLS"  //level select
+#define MP3_LVLSEL "DIFF"  //level select
 
 #define MP3_YOU_ANSWERED "UANS"
 // Skip prompt
 #define MP3_SKIP "SKIP"
 #define MP3_THE_ANSWER_IS "TAIS"
-#define MP3_INTRO "INST"
+#define MP3_INTRO "WELC"
 #define MP3_AND "AND"
 #define MP3_ENTER "ENTR"
 #define MP3_SUBMIT "SUMT"
 #define MP3_AND_MISTAKES "AMSK"
 #define MP3_MISTAKES "MSTK"
-#define MP3_BETWEEN "BETW"
-#define MP3_NEXT "NEXN"
+#define MP3_BETWEEN "ERNM"
+#define MP3_NEXT "NXTN"
 #define MP3_ODD "ODDN"
 #define MP3_EVEN "EVEN"
 #define MP3_TEN "TENN"
@@ -75,6 +75,9 @@
 #define MP3_TENR "TENR"
 #define MP3_HUNR "HUNR"
 #define MP3_BONO "BONO"
+#define MP3_ONE_MISTAKE "MONE"
+#define MP3_MULT_MISTAKES "MLFT"
+#define MP3_YOU_HAVE "MPRE"
 
 /**
  *  Limits
@@ -348,10 +351,24 @@ bool check_answer(){
     }
 }
 
+void play_mistake(){
+    play_mp3(MODE_FILESET, MP3_YOU_HAVE);
+    play_number(MAX_INCORRECT_TRIES - md_incorrect_tries);
+    if (MAX_INCORRECT_TRIES - md_incorrect_tries == 1){
+        play_mp3(MODE_FILESET, MP3_ONE_MISTAKE);
+    }else{
+        play_mp3(MODE_FILESET, MP3_MULT_MISTAKES);
+    }
+}
+
 void md13_main(void) {
     switch (md_next_state) {
 		case STATE_INTRO:
-            md_last_dot = create_dialog(MP3_INTRO,
+            play_mp3(MODE_FILESET, MP3_INTRO);
+            md_next_state = STATE_LVLSEL;
+            break;
+        case STATE_LVLSEL:
+            md_last_dot = create_dialog(MP3_LVLSEL,
                                         ( DOT_1 | DOT_2 ));
             switch (md_last_dot) {
                     
@@ -437,15 +454,13 @@ void md13_main(void) {
                 // Wrong answer
                 md_incorrect_tries += 1;
                 play_mp3(LANG_FILESET, MP3_INCORRECT);
-                play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
-                play_number(md_incorrect_tries);
-                play_mp3(MODE_FILESET, MP3_MISTAKES);
                 if (md_incorrect_tries >= MAX_INCORRECT_TRIES)
                 {
                     md_next_state = STATE_REPROMPT;
                 }
                 else
 				{
+                    play_mistake();
 					play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 					md_next_state = STATE_PROMPT;
 				}

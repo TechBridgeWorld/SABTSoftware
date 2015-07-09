@@ -39,6 +39,13 @@
 #define MP3_LEVEL "LVLS"
 #define MP3_THE_ANSWER_IS "TAIS"
 #define MP3_PAST_MISTAKE "PMIS"
+#define MP3_ONE_MISTAKE "MONE"
+#define MP3_MULT_MISTAKES "MLFT"
+#define MP3_YOU_HAVE "MPRE"
+#define MP3_ONE_MISTAKE "MONE"
+#define MP3_MULT_MISTAKES "MLFT"
+#define MP3_YOU_HAVE "MPRE"
+
 
 //bounds
 #define MAX_INCORRECT_GUESS 8
@@ -174,6 +181,16 @@ bool is_past_mistake(char entered_letter){
     return false;
 }
 
+void md4_play_mistake(){
+    play_mp3(MODE_FILESET, MP3_YOU_HAVE);
+    play_number(MAX_INCORRECT_GUESS - num_mistakes);
+    if (MAX_INCORRECT_GUESS - num_mistakes == 1){
+        play_mp3(MODE_FILESET, MP3_ONE_MISTAKE);
+    }else{
+        play_mp3(MODE_FILESET, MP3_MULT_MISTAKES);
+    }
+}
+
 
 
 void md4_reset(void) {
@@ -281,9 +298,6 @@ void md4_main(void) {
 				play_mp3(LANG_FILESET,MP3_NO);
 				if (num_mistakes == MAX_INCORRECT_GUESS)
 				{
-					play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
-					play_number(num_mistakes);
-					play_mp3(MODE_FILESET, MP3_MISTAKES);
 					play_mp3(MODE_FILESET,MP3_YOU_LOSE); // "you have made max mistakes the word you missed was"
 					play_string(chosen_word, strlen(chosen_word));
 					play_mp3(MODE_FILESET, MP3_NEW_WORD);
@@ -300,9 +314,7 @@ void md4_main(void) {
 					{
 						play_mp3(MODE_FILESET, MP3_PAST_MISTAKE);		
 					}
-                    play_mp3(MODE_FILESET, MP3_AND_MISTAKES);
-                    play_number(num_mistakes);
-                    play_mp3(MODE_FILESET, MP3_MISTAKES);
+                    md4_play_mistake();
 					md_next_state = STATE_PROMPT;
 				}
 			} 
@@ -316,10 +328,15 @@ void md4_main(void) {
                     break;
                     
                     // Playing answer
-                case RIGHT: case LEFT:
+                case RIGHT:
                     play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
                     play_string(chosen_word, strlen(chosen_word));
 					md_next_state = STATE_GENQUES;
+                    io_init();
+                    break;
+                case LEFT:
+                    md_next_state = STATE_PROMPT;
+                    io_init();
                     break;
                     
                     // Skipping question
@@ -330,6 +347,7 @@ void md4_main(void) {
                     // Try again
                 case CANCEL:
                     md_next_state = STATE_PROMPT;
+                    io_init();
                     break;
                     
                 default:
