@@ -57,7 +57,7 @@ void print_cell_pattern(cell_t* cell){
 * @param Pointers to the two cells.
 * @return Boolean; true if equal, false if
 * unequal OR >=1 cell is null.
-* @remark Tested.
+* @remark Tested. (Language-agnostic.)
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
 	#ifdef DEBUGMODE
@@ -153,7 +153,7 @@ letter_t* get_eng_letter_by_char(char c){
 * Print the name of a letter.
 * @param Pointer to the letter.
 * @return void
-* remark Tested in English and lightly in Hindi
+* remark Tested in English and Hindi.
 */
 void print_letter(letter_t* letter){
 	printf("%s", letter->name);

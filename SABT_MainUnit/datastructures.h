@@ -170,7 +170,7 @@ void print_letter(letter_t* letter);
 
 // Word functions
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word);
-// void parse_string_into_eng_word(char* string, word_t* word); // BUGGY
+void parse_string_into_eng_word(char* string, word_t* word); // BUGGY
 void word_to_cell_array(word_t* word, cell_t* arr);
 void decrement_word_index(word_t* word);
 void increment_word_index(word_t* word);
@@ -187,7 +187,7 @@ void speak_letters_so_far(word_t* word);
 
 // Wordlist functions
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
-// void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
+void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
 void print_words_in_list(wordlist_t* wl);
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
 

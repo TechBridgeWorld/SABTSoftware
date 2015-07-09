@@ -40,10 +40,10 @@ int main() {
 			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN"); */
 
 
+	// test of letter_equals
 	letter_t blank_letter = {" ", UNIVERSAL, &blank_cell, 1};
 	letter_t null_letter;
 
-	// test of letter_equals
 /*	bool same2 = letter_equals(&eng_a, &eng_a);
 	bool samehin = letter_equals(&hindi_shra, &hindi_shra);
 	bool diff2 = !letter_equals(&eng_a, &eng_b);
@@ -53,7 +53,7 @@ int main() {
 	bool notinitialized2 = !letter_equals(&eng_a, &null_letter);
 	printf("Letter_equals %s.\n\n", (same2 && samehin && diff2 && cognate2 && diffnum && empty2 && notinitialized2) ? "works" : "IS BROKEN"); */
 
-	// test of get_eng_letter_by_char and print_letter
+/*	// test of get_eng_letter_by_char and print_letter
 	letter_t* foo = get_eng_letter_by_char('z');
 	letter_t* bar = get_eng_letter_by_char('a');
 	print_letter(foo);
@@ -114,24 +114,24 @@ int main() {
 	}
 	printf("Get_next_cell_in_word works if the above is 0b011011 0b010101 0b000001 0b011110 0b010000 0b101001 0b010111 0b001010\n\n");
 
-/*	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		get_next_cell_in_word
-	} */
+	}
 
-	/* test of get_lang
+	// test of get_lang
 	printf("%s\n", get_lang(&goat));
 	printf("Get_lang works if the above reads 'ENG_.'\n\n"); */
 
 	// test of parse_string_into_eng_word -- THIS DOES NOT WORK
-/*	word_t horse, sheep;
+	word_t horse, sheep;
 	parse_string_into_eng_word("horse", &horse);
 	parse_string_into_eng_word("sheep", &sheep);
 	bool horse_stats_right = (horse.length_name == 5) && (horse.num_letters == 5) && (horse.lang_enum == ENGLISH);
 	print_word(&horse);
 	print_word(&sheep);
-	printf("Parse_string_into_eng_word %s\n\n", horse_stats_right ? "works if the above says horse sheep." : "IS BROKEN."); */
+	printf("Parse_string_into_eng_word %s\n\n", horse_stats_right ? "works if the above says horse sheep." : "IS BROKEN.");
 
-	// test of initialize_english_word
+/*	// test of initialize_english_word
 	word_t goat2, ox2, chicken;
 	initialize_english_word("goat", goat_letters, 4, &goat2);
 	initialize_english_word("ox", ox_letters, 2, &ox2);
@@ -157,7 +157,7 @@ int main() {
 		get_next_word_in_wordlist(&wl, &curr_word);
 		printf("%dth word: %s\n", i, curr_word->name);
 	}
-	printf("get_next_word_in_wordlist works if the above is goat, ox and chicken, in the same order as above.\n\n");
+	printf("get_next_word_in_wordlist works if the above is goat, ox and chicken, in the same order as above.\n\n"); */
 
 	// test of strings_to_wordlist -- broken
 /*	char* animal_strings[2] = {"dog", "cat"};
@@ -166,8 +166,8 @@ int main() {
 	print_words_in_list(&wl2); */
 
 	// test of random_between
-   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));
-   	printf("Should contain random numbers between 0 & 1, 5 & 10, 0 & 1000.\n");
+//   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));
+ //  	printf("Should contain random numbers between 0 & 1, 5 & 10, 0 & 1000.\n");
 
 	/* test of shuffle
 	int bar[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
