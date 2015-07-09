@@ -175,7 +175,8 @@ void initialize_english_word(char* string, letter_t* letter_array, int num_lette
 	word->letters = letter_array;
 	word->length_name = word->num_letters = num_letters;
 	word->lang_enum = ENGLISH;
-	word->curr_letter = word->curr_glyph = 0;
+	word->curr_letter = 0;
+	word->curr_glyph = -1;
 }
 
 /**
@@ -197,7 +198,8 @@ void parse_string_into_eng_word(char* string, word_t* word) {
 
 	}
 	word->length_name = word->num_letters = length;
-	word->curr_letter = word->curr_glyph = 0;
+	word->curr_letter = 0;
+	word->curr_glyph = -1;
 	word->lang_enum = ENGLISH;
 	word->letters = letters_in_word;
 }
@@ -240,9 +242,14 @@ void increment_word_index(word_t* word) {
 }
 
 void decrement_word_index(word_t* word) {
-	if (word->curr_glyph > 0)
+	// if you're at the first cell, reset to letter 0, glyph -1
+	if (word->curr_letter == 0 && word->curr_glyph == 0)
+		word->curr_glyph = -1;
+	// if you're partway through a letter, decrement curr_glyph
+	else if (word->curr_glyph > 0)
 		word->curr_glyph--;
-	else if (word->curr_letter > 0) {
+	// otherwise, decrement curr_letter
+	else {
 		word->curr_letter--;
 		letter_t prev_letter = word->letters[word->curr_letter];
 		word->curr_glyph = prev_letter.num_cells - 1;
@@ -256,10 +263,10 @@ void decrement_word_index(word_t* word) {
 * @remark Tested lightly in English.
 */
 void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
+	increment_word_index(word);
 	letter_t this_letter = word->letters[word->curr_letter];
 	*next_cell = this_letter.cells[word->curr_glyph];
-	increment_word_index(word);
-}
+	}
 
 /**
 * Print a word, not by printing its name but by printing the name
@@ -336,7 +343,7 @@ void speak_letters_in_word(word_t* word){
 */
 void speak_letters_so_far(word_t* word){
 	char* lang = get_lang(word);
-	for (int i = 0; i < word->curr_letter; i++)
+	for (int i = 0; i <= word->curr_letter; i++)
 		play_mp3(lang, word->letters[i].name);
 }
 #endif
@@ -411,8 +418,19 @@ void print_words_in_list(wordlist_t* wl) {
 * @remark Not tested.
 */
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
-	*next_word = &(wl->words[wl->order[wl->index]]); // added indirection to iterate in randomized order
-	wl->index++;
+	if (wl->index == 0) // if at beginning of list, reshuffle
+		shuffle(wl->num_words, wl->order);
+
+	int randomized_index = wl->order[wl->index];
+	#ifdef DEBUGMODE
+		printf("i %d o %d w %s\n",  wl->index, randomized_index, (wl->words[randomized_index]).name);
+	#else
+		sprintf(dbgstr, "i %d o %d w %s\n",  wl->index, randomized_index, (wl->words[randomized_index]).name);
+		PRINTF(dbgstr);
+	#endif
+	*next_word = &(wl->words[randomized_index]); // added indirection to iterate in randomized order
+
+	wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
 }
 
 /**
@@ -425,7 +443,9 @@ void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
  */
 int random_between(int i, int j) {
 	int range = j - i;
-	return i + (rand() % range);
+	int rand_num = rand();
+	int retval = i + (rand_num % range);
+	return retval;
 }
 
 /**
@@ -440,7 +460,6 @@ void shuffle(int len, int* int_array) {
 	int random_i, temp;
 	for (int i = 0; i < len; i++) {
 		random_i = random_between(i, len);
-//		printf("i = %d, random i = %d\n", i, random_i);
 		temp = int_array[i];
 		int_array[i] = int_array[random_i];
 		int_array[random_i] = temp;

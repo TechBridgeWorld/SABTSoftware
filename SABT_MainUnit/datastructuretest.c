@@ -67,10 +67,10 @@ int main() {
 	// test of print_word;
 	letter_t goat_letters[4] = {eng_g, eng_o, eng_a, eng_t};
 	letter_t sri_letters[2] = {hindi_shra, hindi_i};
-	word_t goat = {"goat", 4, ENGLISH, goat_letters, 4, 0, 0};
+	word_t goat = {"goat", 4, ENGLISH, goat_letters, 4, 0, -1};
 	letter_t ox_letters[2] = {eng_o, eng_x};
-	word_t ox = {"ox", 2, ENGLISH, ox_letters, 2, 0, 0};
-	word_t sri = {"Sri", 2, HINDI, sri_letters, 2, 0, 0};
+	word_t ox = {"ox", 2, ENGLISH, ox_letters, 2, 0, -1};
+	word_t sri = {"Sri", 2, HINDI, sri_letters, 2, 0, -1};
 	letter_t chicken_letters[7] = {eng_c, eng_h, eng_i, eng_c, eng_k, eng_e, eng_n};
 	print_word(&goat);
 	print_word(&ox);

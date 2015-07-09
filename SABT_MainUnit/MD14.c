@@ -27,6 +27,7 @@
 #define MD14_STATE_PROMPT 0x04
 #define MD14_STATE_INPUT 0x05
 #define MD14_STATE_CHECK 0x06
+#define MD14_STATE_REPROMPT 0x07
 
 //bounds
 #define MAX_INCORRECT_GUESS 8
@@ -96,6 +97,12 @@ void md14_main() {
 	case MD14_STATE_LVLSEL:
 	    PRINTF("In level set state\n\r");
 	    set_level_med();
+	    for (int i = 0; i < dict.num_words; i++) {
+			sprintf(dbgstr, "%d ", dict.order[i]);
+			PRINTF(dbgstr);
+		}
+		PRINTF("\n");
+
 /*		play_mp3(MODE_FILESET, "LVLS");
         md_last_dot = create_dialog(MP3_LEVEL, DOT_1 | DOT_2 | DOT_3 );
         switch (md_last_dot) {
@@ -109,43 +116,43 @@ void md14_main() {
 	  
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
+		md14_num_mistakes = 0;
 		get_next_word_in_wordlist(&dict, &chosen_word);
 		sprintf(dbgstr, "[MD14] Next word: %s\n\r", chosen_word->name);
 		PRINTF(dbgstr);
-        play_mp3(MODE_FILESET, "SPEL");
-        speak_word(chosen_word);
-		next_state = MD14_STATE_INPUT;
+		next_state = MD14_STATE_PROMPT;
 	  	break;
-	  
+
+	 case MD14_STATE_PROMPT:
+	 	PRINTF("In prompt state\n\r");
+	 	play_mp3(MODE_FILESET, "SPEL");
+	 	speak_word(chosen_word);
+	 	next_state = MD14_STATE_INPUT;
+	 	break;
 
 	case MD14_STATE_INPUT:
-	if (io_user_abort == true) {
-		PRINTF("[MD14] User aborted input\n\r");
-		next_state = MD14_STATE_PROMPT;
-		io_init();
-	}
-	cell = get_cell();
-	if (cell == NO_DOTS) {
+		cell = get_cell();
+		if (cell == NO_DOTS) {
+			break;
+		}
+		cell_pattern = GET_CELL_PATTERN(cell);
+		cell_control = GET_CELL_CONTROL(cell);
+		switch (cell_control) {
+			case WITH_ENTER:
+			user_cell.pattern = cell_pattern;
+			next_state = MD14_STATE_CHECK;
+			PRINTF("[MD14] Checking answer\n\r");
+			break;
+			case WITH_LEFT:
+			next_state = MD14_STATE_REPROMPT;
+			break;
+			case WITH_RIGHT:
+			next_state = MD14_STATE_GENQUES;
+			break;
+			case WITH_CANCEL:
+			break;
+		}
 		break;
-	}
-	cell_pattern = GET_CELL_PATTERN(cell);
-	cell_control = GET_CELL_CONTROL(cell);
-	switch (cell_control) {
-		case WITH_ENTER:
-		user_cell.pattern = cell_pattern;
-		next_state = MD14_STATE_CHECK;
-		PRINTF("[MD14] Checking answer\n\r");
-		break;
-		case WITH_LEFT:
-		next_state = MD14_STATE_PROMPT;
-		break;
-		case WITH_RIGHT:
-		next_state = MD14_STATE_GENQUES;
-		break;
-		case WITH_CANCEL:
-		break;
-	}
-	break;
 
 	case MD14_STATE_CHECK:
 		get_next_cell_in_word(chosen_word, &curr_cell);
@@ -155,31 +162,40 @@ void md14_main() {
 		if (cell_equals(&curr_cell, &user_cell)) {
 			play_mp3(LANGUAGE, "GOOD");
 			md14_num_mistakes = 0;
-			if (chosen_word->curr_letter == chosen_word->num_letters) { // done
+			if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
 				play_mp3(LANGUAGE, "NCWK");
-			  	md14_num_mistakes = 0;
 			  	next_state = MD14_STATE_GENQUES; // @todo: reset everything else
 			}
 			else // correct but not done
 				next_state = MD14_STATE_INPUT;
 		}
-		else { // incorrect letter
-			// @todo: play glyph entered
-			md14_num_mistakes++;
-			chosen_word->curr_letter--; // only works in English
-			PRINTF("[MD14] User answered incorrectly\n\r");
+		else {// incorrect letter
 			play_mp3(LANGUAGE, "NO");
 			play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-			speak_letters_so_far(chosen_word);
-			if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
-				play_mp3(MODE_FILESET, "PRSS");
-				//@todo: play current dot sequence play_dot_sequence(curr_glyph);
-			}
-			next_state = MD14_STATE_INPUT;
+			decrement_word_index(chosen_word);
+			md14_num_mistakes++;
+			next_state = MD14_STATE_REPROMPT;
 		}
 		break;
 
+	case MD14_STATE_REPROMPT:
+		PRINTF("In reprompt state\n\r");
+
+		if (md14_num_mistakes >= MAX_INCORRECT_GUESS) {
+			play_mp3(MODE_FILESET, "PRSS");
+			play_pattern(curr_cell.pattern);
+		}
+		else {
+	 		speak_word(chosen_word);
+	 		if (chosen_word->curr_glyph > -1) {// not at beginning of word
+	 			play_mp3("MD4_", "SOFA"); // @todo move this on SD card
+	 			speak_letters_so_far(chosen_word);
+	 		}
+	 	}
+	 	next_state = MD14_STATE_INPUT;
+	 	break;
+
 	default:
-	break;
+		break;
   }
 }
