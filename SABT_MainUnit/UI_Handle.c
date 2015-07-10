@@ -61,7 +61,7 @@ void ui_check_modes(void)
   }*/
 
   /** ACTIVATED MODES ON SABT **/
-  strcpy(file_content, "2, 4, 9, 14, 13,;");
+  strcpy(file_content, "14,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);

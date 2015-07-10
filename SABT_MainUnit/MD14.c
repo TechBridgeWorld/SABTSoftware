@@ -18,6 +18,7 @@
 #include "script_common.h"
 #include "script_english.h" 
 #include "dictionary.h"
+#include "vocab_nature.h"
 
 
 #define MD14_STATE_NULL 0x00
@@ -46,6 +47,7 @@ int md14_total_mistakes = 0;
 char cell = 0;
 char cell_pattern = 0;
 char cell_control = 0;
+static char md_last_dot = 0;
 
 wordlist_t dict;
 word_t* chosen_word;
@@ -89,15 +91,7 @@ void incorrect_answer() {
 	decrement_word_index(chosen_word);
 	md14_curr_mistakes++;
 	md14_total_mistakes++;
-
 }
-
-
-void set_level_med(){
-	char* science_words[6] = {"adapt", "water", "steam", "marsh", "flood", "larva"};
-	strings_to_wordlist(science_words, 6, &dict);
-	print_words_in_list(&dict);
-	}
 
 /**
  * @brief  Step through the main stages in the code.
@@ -109,7 +103,6 @@ void md14_main() {
     case MD14_STATE_INTRO:
     	PRINTF("In intro state\n\r");
     	play_mp3(MODE_FILESET, "INT");
-    	play_mp3(MODE_FILESET, "INST");
     	lang_fileset = "ENG_";
 		mode_fileset = "MD14";
 		next_state = MD14_STATE_LVLSEL;
@@ -117,20 +110,36 @@ void md14_main() {
 		break;
 
 	case MD14_STATE_LVLSEL:
-	    PRINTF("In level set state\n\r");
-	    set_level_med();
-
-/*		play_mp3(MODE_FILESET, "LVLS");
-        md_last_dot = create_dialog(MP3_LEVEL, DOT_1 | DOT_2 | DOT_3 );
+        md_last_dot = create_dialog("LVLS", (DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5 | DOT_6));
         switch (md_last_dot) {
-			case NO_DOTS:
+
+        	case NO_DOTS:
+        		break;
+
         	case '1':
+        		PRINTF("1\n");
+        		strings_to_wordlist(three, 25, &dict); //todo: calculate length of array?
+				print_words_in_list(&dict);
+        		play_mp3(MODE_FILESET, "INST");
+        		next_state = MD14_STATE_GENQUES;
+        		break;
+
         	case '2':
-        	case '3':
+        		PRINTF("1\n");
+        		strings_to_wordlist(four, 45, &dict);
+				print_words_in_list(&dict);
+        		play_mp3(MODE_FILESET, "INST");
+        		next_state = MD14_STATE_GENQUES;
+        		break;
+
+        	// todo: add other cases; figure out too-long words
+
+        	default:
+        		PRINTF("-");
 				break;
-		} */
-		next_state = MD14_STATE_GENQUES;
-	  
+		}
+		break;
+
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
 		md14_curr_mistakes = 0;
@@ -185,6 +194,7 @@ void md14_main() {
 			}
 			else {// correct but not done
 				play_mp3(LANGUAGE, "GOOD");
+				play_mp3(LANGUAGE, "NLET");
 				next_state = MD14_STATE_INPUT;
 			}
 		}

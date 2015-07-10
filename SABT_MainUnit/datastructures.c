@@ -145,6 +145,7 @@ void print_letter(letter_t* letter){
 * @param The word as a string and letter array, number of letters, and the word
 * struct to initialize.
 * @return void
+* @todo What to do if string is too long? Need to rename mp3.
 * remark Tested in English
 */
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word) {
@@ -360,18 +361,33 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 }
 
 /**
-* Initialize a wordlist from an array of strings.
+* Initialize a wordlist from an array of strings, or a
+* random subset thereof.
 * @param Pointer to an array of strings; number of strings
 * in the array; pointer to the wordlist to initialize.
 * @return Void; function initializes list.
-* @bug BUGGY
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
-	int length = (num_strings < MAX_WORDLIST_LENGTH) ? num_strings : MAX_WORD_LENGTH;
+	int length = (num_strings < MAX_WORDLIST_LENGTH) ? num_strings : MAX_WORDLIST_LENGTH;
 	word_t* words;
 	words = (word_t*) malloc(sizeof(word_t) * length);
-	for (int i = 0; i < length; i++)
-		parse_string_into_eng_word(strings[i], &(words[i]));
+
+	if (num_strings < MAX_WORDLIST_LENGTH) {
+		for (int i = 0; i < length; i++)
+			parse_string_into_eng_word(strings[i], &(words[i]));
+	}
+
+	else { // if too many strings, pick WORDLIST_LENGTH ones randomly.
+		// shuffle the words
+		int indices[MAX_WORDLIST_LENGTH];
+		for (int i = 0; i < MAX_WORDLIST_LENGTH; i++)
+			indices[i] = i;
+		shuffle(MAX_WORDLIST_LENGTH, indices);
+
+		// get MAX_WORDLIST_LENGTH of the strings, in random order
+		for (int i = 0; i < length; i++)
+			parse_string_into_eng_word(strings[indices[i]], &(words[i]));
+	}
 	initialize_wordlist(words, length, list);
 }
 
@@ -392,7 +408,7 @@ void print_words_in_list(wordlist_t* wl) {
 * Iterate through wordlist, get the next word in it.
 * @param The wordlist struct and an (uninitialized) word pointer.
 * @return Void; function returns pointer in next_word.
-* @remark Not tested.
+* @remark Tested lightly in English.
 */
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
 	if (wl->index == 0) // if at beginning of list, reshuffle
@@ -422,7 +438,7 @@ int random_between(int i, int j) {
 * Perform Fisher-Yates shuffle on an int array of length len.
 * @param A length len, an int array int_array.
 * @return Void; function modifies int_array.
-* @remark Tested
+* @remark Tested lightly. Needs srand to be called first.
 * @remark Consider implementing a "shuffle wordlist"
 * function.
 */

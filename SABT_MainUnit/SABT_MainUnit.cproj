@@ -135,6 +135,9 @@
     <Compile Include="USART_PC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="vocab_nature.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="VS1053.h">
       <SubType>compile</SubType>
     </Compile>
