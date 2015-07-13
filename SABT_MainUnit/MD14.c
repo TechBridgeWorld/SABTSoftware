@@ -18,7 +18,7 @@
 #include "script_common.h"
 #include "script_english.h" 
 #include "dictionary.h"
-#include "vocab_nature.h"
+#include "vocab.h"
 
 
 #define MD14_STATE_NULL 0x00
@@ -118,7 +118,7 @@ void md14_main() {
 
         	case '1':
         		PRINTF("1\n");
-        		strings_to_wordlist(three, 25, &dict); //todo: calculate length of array?
+        		strings_to_wordlist(easy, 25, &dict); //todo: calculate length of array?
 				print_words_in_list(&dict);
         		play_mp3(MODE_FILESET, "INST");
         		next_state = MD14_STATE_GENQUES;
@@ -126,7 +126,7 @@ void md14_main() {
 
         	case '2':
         		PRINTF("1\n");
-        		strings_to_wordlist(four, 45, &dict);
+        		strings_to_wordlist(medium, 45, &dict);
 				print_words_in_list(&dict);
         		play_mp3(MODE_FILESET, "INST");
         		next_state = MD14_STATE_GENQUES;

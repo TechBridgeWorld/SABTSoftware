@@ -44,6 +44,7 @@
 #define ENG_Y 0b111101
 #define ENG_Z 0b110101
 
+// new stuff
 extern letter_t eng_a;
 extern letter_t eng_b;
 extern letter_t eng_c;
@@ -70,6 +71,7 @@ extern letter_t eng_w;
 extern letter_t eng_x;
 extern letter_t eng_y;
 extern letter_t eng_z;
+extern letter_t eng_capital;
 
 extern script_t script_english;
 extern alphabet_t english_alphabet;

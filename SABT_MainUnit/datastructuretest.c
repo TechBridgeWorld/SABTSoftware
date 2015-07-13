@@ -30,14 +30,14 @@ int main() {
 	printf("Compare above to test print_cell_pattern.\n\n"); */
 
 	// test of cell_equals
-	bool same1 = cell_equals(&a_cell, &a_cell);
+/*	bool same1 = cell_equals(&a_cell, &a_cell);
 	bool diff1 = !cell_equals(&a_cell, &b_cell);
 	bool cognate1 = cell_equals(&a_cell, &hin_a_cell);
 	bool empty1 = !cell_equals(&a_cell, &blank_cell);
 	bool bothempty1 = cell_equals(&blank_cell, &blank_cell);
 	bool notinitialized1 = !cell_equals(&a_cell, &null_cell);
 	printf("Cell_equals %s.\n\n", (same1 && diff1 && cognate1 &&
-			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
+			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN"); */
 
 
 	// test of letter_equals
@@ -51,55 +51,69 @@ int main() {
 	bool diffnum = !letter_equals(&hindi_a, &hindi_shra);
 	bool empty2 = !letter_equals(&eng_a, &blank_letter);
 	bool notinitialized2 = !letter_equals(&eng_a, &null_letter);
-	printf("Letter_equals %s.\n\n", (same2 && samehin && diff2 && cognate2 && diffnum && empty2 && notinitialized2) ? "works" : "IS BROKEN"); */
+	printf("Letter_equals %s.\n\n", (same2 && samehin && diff2 && cognate2 && diffnum && empty2 && notinitialized2) ? "works" : "IS BROKEN");
 
-/*	// test of get_eng_letter_by_char and print_letter
+	// test of get_eng_letter_by_char and print_letter
 	letter_t* foo = get_eng_letter_by_char('z');
 	letter_t* bar = get_eng_letter_by_char('a');
 	print_letter(foo);
 	print_letter(bar);
 	print_letter(foo);
+	printf(" ");
 	print_letter(&hindi_a);
+	printf(" ");
 	print_letter(&hindi_shra);
 
-	printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zazashra.'\n\n");
+	printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zaz a shra.'\n\n"); */
+
+	// test of parse_string_into_eng_word
+/*	word_t goat, ox, chicken, myname, blank, notchars, funnycap, quitelong, verylong;
+	parse_string_into_eng_word("goat", &goat);
+	parse_string_into_eng_word("ox", &ox);
+	parse_string_into_eng_word("chicken", &chicken);
+	parse_string_into_eng_word("Marjorie", &myname);
+	parse_string_into_eng_word("", &blank);
+	parse_string_into_eng_word(":-)", &notchars);
+	parse_string_into_eng_word("pH", &funnycap);
+	parse_string_into_eng_word("abcdefghijklmnopqrst", &quitelong);
+	parse_string_into_eng_word("abcdefghijklmnopqrstu", &verylong); */
+
 
 	// test of print_word;
-	letter_t goat_letters[4] = {eng_g, eng_o, eng_a, eng_t};
 	letter_t sri_letters[2] = {hindi_shra, hindi_i};
-	word_t goat = {"goat", 4, ENGLISH, goat_letters, 4, 0, -1};
-	letter_t ox_letters[2] = {eng_o, eng_x};
-	word_t ox = {"ox", 2, ENGLISH, ox_letters, 2, 0, -1};
-	word_t sri = {"Sri", 2, HINDI, sri_letters, 2, 0, -1};
-	letter_t chicken_letters[7] = {eng_c, eng_h, eng_i, eng_c, eng_k, eng_e, eng_n};
-	print_word(&goat);
+	word_t sri = {"sri", 2,  sri_letters, 2, HINDI, 0, -1};
+/*	print_word(&goat);
 	print_word(&ox);
+	print_word(&chicken);
 	print_word(&goat);
 	print_word(&sri);
-	printf("Print_word works if the above reads 'goat ox goat Sri.'\n\n");
+	print_word(&myname);
+	print_word(&blank);
+	print_word(&notchars);
+	print_word(&funnycap);
+	print_word(&quitelong);
+	print_word(&verylong); */
 
+/*
 	//test of word_to_cell_array
-	cell_t array[4];
-	cell_t array2[2];
-	bool cell_array_correct = true;
+	cell_t goat_array[4];
+	cell_t sri_array[4];
+	cell_t me_array[9];
 
+	word_to_cell_array(&goat, goat_array);
+	word_to_cell_array(&sri, sri_array);
+	word_to_cell_array(&myname, me_array);
 
-	word_to_cell_array(&goat, array);
-	for (int i = 0; i < 4; i++) {
-		printf("%s = %x =? %x\n", goat_letters[i].name, goat_letters[i].cells[0].pattern, array[i].pattern);
+	for (int i = 0; i < 4; i++){
+		print_cell_pattern(&goat_array[i]);
+	}
+	for (int i = 0; i < 4; i++){
+		print_cell_pattern(&sri_array[i]);
+	}
+	for (int i = 0; i < 9; i++){
+		print_cell_pattern(&me_array[i]);
 	}
 
-	word_to_cell_array(&sri, array2);
-	int array_index = 0;
-	for (int i = 0; i < 2; i++) {
-		letter_t this_letter = sri_letters[i];
-		for (int j = 0; j < this_letter.num_cells; j++) {
-			printf("%s(%d) = %x =? %x\n", sri_letters[i].name, j,
-				sri_letters[i].cells[j].pattern, array2[array_index].pattern);
-			array_index++;
-		}
-	}
-	printf("\n");
 
 	// test of get_next_cell_in_word
 	cell_t next_cell;
@@ -112,39 +126,18 @@ int main() {
 		get_next_cell_in_word(&sri, &next_cell);
 		print_cell_pattern(&next_cell);
 	}
-	printf("Get_next_cell_in_word works if the above is 0b011011 0b010101 0b000001 0b011110 0b010000 0b101001 0b010111 0b001010\n\n");
-
-	for (int i = 0; i < 2; i++) {
-		get_next_cell_in_word
+	printf("\n");
+	for (int i = 0; i < 9; i++) {
+		get_next_cell_in_word(&myname, &next_cell);
+		print_cell_pattern(&next_cell);
 	}
 
 	// test of get_lang
 	printf("%s\n", get_lang(&goat));
-	printf("Get_lang works if the above reads 'ENG_.'\n\n"); */
-
-	// test of parse_string_into_eng_word -- THIS DOES NOT WORK
-	word_t horse, sheep;
-	parse_string_into_eng_word("horse", &horse);
-	parse_string_into_eng_word("sheep", &sheep);
-	bool horse_stats_right = (horse.length_name == 5) && (horse.num_letters == 5) && (horse.lang_enum == ENGLISH);
-	print_word(&horse);
-	print_word(&sheep);
-	printf("Parse_string_into_eng_word %s\n\n", horse_stats_right ? "works if the above says horse sheep." : "IS BROKEN.");
-
-/*	// test of initialize_english_word
-	word_t goat2, ox2, chicken;
-	initialize_english_word("goat", goat_letters, 4, &goat2);
-	initialize_english_word("ox", ox_letters, 2, &ox2);
-	initialize_english_word("chicken", chicken_letters, 7, &chicken);
-	print_word(&goat2);
-	print_word(&ox2);
-	print_word(&chicken);
-	print_word(&goat2);
-	printf("Inialize_english_word works if the above reads 'goat ox chicken goat.'\n\n");
-
+	printf("Get_lang works if the above reads 'ENG_.'\n\n");
 
 	// test of initialize_wordlist
-	word_t animals[3] = {goat2, ox2, chicken};
+	word_t animals[3] = {goat, ox, chicken};
 	word_t* no_animals;
 	wordlist_t wl;
 	initialize_wordlist(animals, ARRAYLEN(animals), &wl);
@@ -153,17 +146,37 @@ int main() {
 
 	// test of get_next_word_in_wordlist
 	word_t* curr_word;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 6; i++) {
+		if (i % 3 == 0)
+			printf("\n");
 		get_next_word_in_wordlist(&wl, &curr_word);
-		printf("%dth word: %s\n", i, curr_word->name);
+		printf("%s\n", curr_word->name);
 	}
-	printf("get_next_word_in_wordlist works if the above is goat, ox and chicken, in the same order as above.\n\n"); */
+	printf("get_next_word_in_wordlist works if the three animals now appear in ~3 orders.\n\n"); */
 
-	// test of strings_to_wordlist -- broken
-	char* animal_strings[2] = {"dog", "cat"};
-	wordlist_t wl2;
-	strings_to_wordlist(animal_strings, 2, &wl2);
-	print_words_in_list(&wl2);
+	// test of strings_to_wordlist
+	char* small[1] = {"hi"};
+	char* animal_strings[3] = {"dog", "cat", "mouse"};
+	char* too_long_empty[22] = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+								"1", "1", "1", "1", "1", "1", "1", "1", "1"};
+	char* too_long[21] = {"gibbon", "gorilla", "orangutang", "chimpanzee", "bonobo",
+						 "spider", "howler", "tamarin", "siamang", "macaque", "lemur",
+						 "sifaka", "ayeaye", "loris", "potto", "angwantibo", "bushbaby",
+						 "tarsier", "marmoset", "capuchin", "human"};
+ 	char* dont_all_parse[2] = {"yes", "no?"};
+	wordlist_t tiny, pets, primates, empty, bools;
+	strings_to_wordlist(small, ARRAYLEN(small), &tiny);
+	strings_to_wordlist(animal_strings, ARRAYLEN(animal_strings), &pets);
+	strings_to_wordlist(too_long, ARRAYLEN(too_long), &primates);
+	strings_to_wordlist(too_long_empty, ARRAYLEN(too_long_empty), &empty);
+	strings_to_wordlist(dont_all_parse, ARRAYLEN(dont_all_parse), &bools);
+
+	print_words_in_list(&tiny);
+	print_words_in_list(&pets);
+	print_words_in_list(&empty);
+	print_words_in_list(&primates);
+	print_words_in_list(&pets);
+	print_words_in_list(&bools);
 
 	// test of random_between
 //   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));

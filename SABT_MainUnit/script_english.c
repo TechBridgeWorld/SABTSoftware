@@ -75,6 +75,7 @@ cell_t w = {DOTS2456};
 cell_t x = {DOTS1346};
 cell_t y = {DOTS13456};
 cell_t z = {DOTS1356};
+cell_t capital = {DOTS6};
 
 #define ENG_LETTER_A {"a", ENGLISH, &a, 1}
 #define ENG_LETTER_B {"b", ENGLISH, &b, 1}
@@ -102,6 +103,7 @@ cell_t z = {DOTS1356};
 #define ENG_LETTER_X {"x", ENGLISH, &x, 1}
 #define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
 #define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
+#define ENG_CAPITAL  {"[cap]", ENGLISH, &capital, 1}
 
 letter_t eng_a = ENG_LETTER_A;
 letter_t eng_b = ENG_LETTER_B;
@@ -129,6 +131,7 @@ letter_t eng_w = ENG_LETTER_W;
 letter_t eng_x = ENG_LETTER_X;
 letter_t eng_y = ENG_LETTER_Y;
 letter_t eng_z = ENG_LETTER_Z;
+letter_t eng_capital = ENG_CAPITAL;
 
 letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 	ENG_LETTER_C, ENG_LETTER_D, ENG_LETTER_E, ENG_LETTER_F,

@@ -110,18 +110,28 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 }
 
 /**
-* Given an English char (e.g. 'a', retrieve the English letter
+* Given an English char (e.g. 'a'), retrieve the English letter
 * whose name begins with that char. Assumes names are one char each
 * and thus that only one letter corresponds to each char.
-* @param A char representing an English letter.
+* @param A char representing an English letter. NULL if none exist
 * @return A pointer to a letter; null if no match is found.
 * @remark Tested in English. WILL NOT WORK IN OTHER LANGUAGES.
+* @remark Turns all letters into lower-case.
 */
 letter_t* get_eng_letter_by_char(char c){
+	char this_char;
 	for (int i = 0; i < english_alphabet.num_letters; i++){
-		if (c == english_alphabet.letters[i].name[0])
+		this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
+		if (this_char < 'a' || this_char > 'z') {
+			sprintf(dbgstr, "GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
+			PRINTF(dbgstr);
+			return NULL;
+		}
+		else if (this_char == english_alphabet.letters[i].name[0])
 			return &english_alphabet.letters[i];
 	}
+	sprintf(dbgstr, "GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
+	PRINTF(dbgstr);
 	return NULL;
 }
 
@@ -158,27 +168,73 @@ void initialize_english_word(char* string, letter_t* letter_array, int num_lette
 }
 
 /**
-* Create a word (in English) from a character string. (Cuts off string
-* at 10 characters -- max word length.)
+* Create a word (in English) from a character string. Assumes one cell per
+* letter, but does check for capitalization of first word.
 * @param A string containing the word; the word struct to initialize.
-* @return Void; function initializes word.
-* @warning cuts off strings > MAX_WORD_LENGTH letters long
-* @bug THIS DOENS'T WORK IF USED TWICE IN A ROW -- THE LETTERS CONTAIN
-* THE MOST RECENTLY INPUTTED WORD!
+* @return 1 if function initialized word; 0 if it failed.
+* @remark Tested thoroughly.
 */
-void parse_string_into_eng_word(char* string, word_t* word) {
-	strcpy(word->name, string);
-	int length = (strlen(string) < MAX_WORD_LENGTH) ? strlen(string) : MAX_WORD_LENGTH;
-	letter_t* letters_in_word;
-	letters_in_word = (letter_t*) malloc(sizeof(letter_t) * length);
-	for (int i = 0; i < length; i++) {
-		letters_in_word[i] = *get_eng_letter_by_char(string[i]);
+int parse_string_into_eng_word(char* string, word_t* word) {
+	int num_cells = strlen(string);
+	bool is_capitalized = false;
+	int word_index = 0;
+
+	// if the word is capitalized, leave space for cap character
+	if (string[0] >= 'A' && string[0] <= 'Z') {
+		is_capitalized = true;
+		num_cells++;
 	}
+
+	// if the word is too long, return failure
+	if (num_cells > MAX_WORD_LENGTH) {
+		sprintf(dbgstr, "PARSE_STRING FAILED: '%s' IS TOO LONG\n", string);
+		PRINTF(dbgstr);
+//		PRINTF("PARSE_STRING FAILED: WORDS MUST BE <=20 CHARS\n");
+		return 0;
+	}
+
+	// create the word
+	strcpy(word->name, string);
+	letter_t* letters_in_word;
+	letters_in_word = (letter_t*) malloc(sizeof(letter_t) * num_cells);
+	if (letters_in_word == 0) // if malloc fails, return failure
+		return 0;
+
+	// iterate through both string and letter_t array. In most cases
+	// the ith element of the string is copied into the ith element of
+	// the letter array. However, if the word is capitalized, the 0th
+	// element of the letter array is the capital letter, and then
+	// the ith letter of the string goes into the i+1th index of the array.
+	int letter_index = 0;
+	if (is_capitalized) {
+		letters_in_word[0] = eng_capital;
+		letter_index = 1;
+	}
+
+
+	for (int string_index = 0; string_index < strlen(string); string_index++) {
+			letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
+			if (this_letter == NULL) { // if failed to get a letter, return failure
+				sprintf(dbgstr, "PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n", string);
+				PRINTF(dbgstr);
+				return 0;
+			}
+			letters_in_word[letter_index] = *this_letter;
+			letter_index++;
+		}
+
+	if (num_cells == 0) {
+		PRINTF("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n");
+		return 0;
+	}
+
 	word->letters = letters_in_word;
-	word->length_name = word->num_letters = length;
+	word->length_name = strlen(string); // length of English representation of word
+	word->num_letters = num_cells;      // length of Braille representation of word
 	word->curr_letter = 0;
 	word->curr_glyph = -1;
 	word->lang_enum = ENGLISH;
+	return 1;
 }
 
 /**
@@ -252,6 +308,11 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 * @remark Tested in English and Hindi.
 */
 void print_word(word_t* word) {
+	if (word->letters == NULL) {
+		sprintf(dbgstr, "PRINT_WORD FAILED: '%s' CONTAINS NO LETTERS\n", word->name);
+		PRINTF(dbgstr);
+		return;
+	}
 	sprintf(dbgstr, "%s (spelled: ", word->name);
 	PRINTF(dbgstr);
 	for (int i = 0; i < word->num_letters; i++) {
@@ -259,7 +320,8 @@ void print_word(word_t* word) {
 		if (i < (word->num_letters - 1))
 			PRINTF("-");
 	}
-	PRINTF(")\n\r");
+	sprintf(dbgstr, (") [%d]\n\r"), word->num_letters);
+	PRINTF(dbgstr);
 }
 
 /**
@@ -342,10 +404,15 @@ void speak_letters_so_far(word_t* word){
 * pointer to the wordlist to initialize.
 * @return Void; function initializes list.
 * @remark Tested lightly in English.
+* @BUG Sometimes buggy when used several times in a row.
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
-	static int order[MAX_WORDLIST_LENGTH];
+	if (num_words == 0) {
+		printf("No words. Wordlist uninitialized.\n");
+		return;
+	}
 	list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
+	int* order = (int*) malloc(num_words*sizeof(int));
 	list->index = 0;
 	list->words = words;
 	list->order = order;
@@ -358,6 +425,7 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 		}
 	}
 	shuffle(num_words, list->order);
+	printf("Wordlist initialized. Num_words = %d.\n", num_words);
 }
 
 /**
@@ -366,29 +434,62 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 * @param Pointer to an array of strings; number of strings
 * in the array; pointer to the wordlist to initialize.
 * @return Void; function initializes list.
+* @BUG: Data gets corrupted if num_strings is incorrect.
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
-	int length = (num_strings < MAX_WORDLIST_LENGTH) ? num_strings : MAX_WORDLIST_LENGTH;
-	word_t* words;
-	words = (word_t*) malloc(sizeof(word_t) * length);
+	static word_t* words;
+	int str_index, word_index; // will iterate separtely through string array and word array
+	printf("num_strings = %d\n", num_strings);
+	// iterate through strings and parse them into words. If there are too many strings,
+	// randomly pick MAX_WORDLIST_LENGTH of them. If any string fails to parse into
+	// a word, shrink the wordlist, reset the word_index iterator, and keep going.
 
-	if (num_strings < MAX_WORDLIST_LENGTH) {
-		for (int i = 0; i < length; i++)
-			parse_string_into_eng_word(strings[i], &(words[i]));
+	if (num_strings <= MAX_WORDLIST_LENGTH) {
+		str_index = word_index = 0;
+		words = (word_t*) malloc(sizeof(word_t) * num_strings);
+		if (words == 0) {
+			printf("MALLOC FAILED!!!\n");
+			exit(0);
+		}
+		// iterate through strings; parse into words; increment index into word array only when parsing succeeds
+		for (str_index = 0; str_index < num_strings; str_index++) {
+			printf("parsing word %d: %s\n", str_index, strings[str_index]);
+			if (parse_string_into_eng_word(strings[str_index], &(words[word_index])))
+				word_index++;
+		}
 	}
 
-	else { // if too many strings, pick WORDLIST_LENGTH ones randomly.
-		// shuffle the words
-		int indices[MAX_WORDLIST_LENGTH];
-		for (int i = 0; i < MAX_WORDLIST_LENGTH; i++)
+	else { // too many strings. Shuffle the words & pick the first MAX_WORDLIST_LENGTH.
+		str_index = word_index = 0;
+		words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
+		if (words == 0) {
+			printf("MALLOC FAILED!!!\n");
+			exit(0);
+		}
+		int indices[num_strings];
+		for (int i = 0; i < num_strings; i++) {
 			indices[i] = i;
-		shuffle(MAX_WORDLIST_LENGTH, indices);
+		}
+		shuffle(num_strings, indices);
 
 		// get MAX_WORDLIST_LENGTH of the strings, in random order
-		for (int i = 0; i < length; i++)
-			parse_string_into_eng_word(strings[indices[i]], &(words[i]));
+		// iterate through words; parse strings into it; increment string index each time,
+		// but decrement word_index if parsing fails so it'll increment back to same place
+		// in the next loop
+		for (word_index = 0; word_index < MAX_WORDLIST_LENGTH; word_index++) {
+			if (str_index == MAX_WORDLIST_LENGTH) {// stop if we're out of strings -- could happen if
+				printf("Out of strings!\n");
+				break;                            // lots of strings are unparseable
+			}
+
+			if (!parse_string_into_eng_word(strings[indices[str_index]], &(words[word_index]))) {
+				word_index--;
+			}
+			str_index++;
+		}
 	}
-	initialize_wordlist(words, length, list);
+	printf("Initializing wordlist %p with the %d words at %p\n", list, word_index, words);
+	initialize_wordlist(words, word_index, list); //word_index = length of list
 }
 
 /**
@@ -399,7 +500,9 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 * @remark Tested in English.
 */
 void print_words_in_list(wordlist_t* wl) {
+	printf("\nwl length %d\n", wl->num_words);
 	for (int i = 0; i < wl->num_words; i++) {
+		printf("wl %p, i = %d, order = %d: ", wl, i, wl->order[i]);
 		print_word(&wl->words[wl->order[i]]);
 	}
 }

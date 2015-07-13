@@ -75,12 +75,12 @@
 #define DOTS123456 0b111111
 
 #define UNIVERSAL 0
-#define ENGLISH 1
-#define HINDI 2
-#define KANNADA 3
+#define ENGLISH   1
+#define HINDI     2
+#define KANNADA   3
 
  #define MAX_WORD_LENGTH     20
- #define MAX_WORDLIST_LENGTH 10
+ #define MAX_WORDLIST_LENGTH 20
  #define MAX_MP3_NAME_LENGTH  5
  #define MAX_FILESET_LENGTH	  5
 
@@ -170,7 +170,7 @@ void print_letter(letter_t* letter);
 
 // Word functions
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word);
-void parse_string_into_eng_word(char* string, word_t* word); // BUGGY
+int parse_string_into_eng_word(char* string, word_t* word);
 void word_to_cell_array(word_t* word, cell_t* arr);
 void decrement_word_index(word_t* word);
 void increment_word_index(word_t* word);
