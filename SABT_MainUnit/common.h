@@ -9,6 +9,8 @@
 
 #include "datastructures.h"
 
+#define ARRAYLEN(x)  (sizeof(x) / sizeof((x)[0]))
+
 //Used for cyclic traversal of lists
 #define PLUS_ONE_MOD(X, BOUND) ((X + 1 > BOUND - 1) ? (0) : (X + 1))	
 #define MINUS_ONE_MOD(X, BOUND) ((X - 1 < 0) ? (BOUND - 1) : (X - 1))

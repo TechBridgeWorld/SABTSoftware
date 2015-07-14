@@ -1,7 +1,7 @@
 /*
  * @file MD14.h
  *
- * @brief Function declarations for mode 14, spelling bee
+ * @brief Function declarations for mode 14, spelling practice
  * @author: Marjorie Carlson (marjorie@cmu.edu)
  */ 
 

@@ -39,42 +39,50 @@
 #define LANG_FILESET "ENG_"
 #define MODE_FILESET "MD14"
 
-char next_state = MD14_STATE_NULL;
+char md14_next_state = MD14_STATE_NULL;
 
 int md14_words_spelled = 0;
 int  md14_curr_mistakes = 0;
 int md14_total_mistakes = 0;
-char cell = 0;
-char cell_pattern = 0;
-char cell_control = 0;
-static char md_last_dot = 0;
+char md14_cell = 0;
+char md14_cell_pattern = 0;
+char md14_cell_control = 0;
+static char md14_last_dot = 0;
 
-wordlist_t dict;
-word_t* chosen_word;
+wordlist_t md14_dict;
+word_t* md14_chosen_word;
 
-static cell_t user_cell;
-static cell_t curr_cell;
+static cell_t md14_user_cell;
+static cell_t md14_curr_cell;
 
 void md14_reset() {
 	md14_curr_mistakes = 0;
-	cell = 0;
-	cell_pattern = 0;
-	cell_control = 0;
-	next_state = MD14_STATE_INTRO;
+	md14_cell = 0;
+	md14_cell_pattern = 0;
+	md14_cell_control = 0;
+	md14_next_state = MD14_STATE_INTRO;
 }
 
 void stats(){
-	play_mp3(MODE_FILESET, "STS1");      // "You have spelled"
-	play_number(md14_words_spelled);     // #
-	if (md14_words_spelled == 1)
-		play_mp3(MODE_FILESET, "STS2"); // "word, and have made"
-	else
-		play_mp3(MODE_FILESET, "STS3");  // "words, and have made"
-	play_number(md14_total_mistakes);    // #
-	if (md14_total_mistakes == 1)
-		play_mp3(MODE_FILESET, "STS4");  // "mistake"
-	else
-		play_mp3(MODE_FILESET, "STS5");  // "mistakes"
+	play_mp3(MODE_FILESET, "STS1");         // "You have spelled"
+	play_number(md14_words_spelled);        // # of words
+	if (md14_total_mistakes == 0) {
+		if (md14_words_spelled == 1)
+			play_mp3(MODE_FILESET,"WORD");  // word.   [if 1 word, 0 mistakes]
+		else
+			play_mp3(MODE_FILESET,"WRDS");  // words.  [if !1 word, 0 mistakes] 
+	}
+	else {
+		if (md14_words_spelled == 1)
+			play_mp3(MODE_FILESET, "STS2"); // "word, and have made" [if 1 word, >0 mistakes]
+		else
+			play_mp3(MODE_FILESET, "STS3");  // "words, and have made" [if >1 word, >0 mistakes]
+		play_number(md14_total_mistakes);    // # of md15_curr_mistakes		
+		if (md14_total_mistakes == 1)
+			play_mp3(MODE_FILESET, "STS4");  // "mistake" [if 1 mistake]
+		else
+			play_mp3(MODE_FILESET, "STS5");  // "mistakes" [if >1 mistakes]
+	}
 }
 
 void correct_answer(){
@@ -88,7 +96,7 @@ void correct_answer(){
 void incorrect_answer() {
 	play_mp3(LANGUAGE, "NO");
 	play_mp3(LANGUAGE, MP3_TRY_AGAIN);
-	decrement_word_index(chosen_word);
+	decrement_word_index(md14_chosen_word);
 	md14_curr_mistakes++;
 	md14_total_mistakes++;
 }
@@ -98,44 +106,45 @@ void incorrect_answer() {
  * @return Void
  */
 void md14_main() {
-  switch(next_state)
+  switch(md14_next_state)
   {
     case MD14_STATE_INTRO:
     	PRINTF("In intro state\n\r");
-    	play_mp3(MODE_FILESET, "INT");
+    	play_mp3(MODE_FILESET, "WELC");
     	lang_fileset = "ENG_";
 		mode_fileset = "MD14";
-		next_state = MD14_STATE_LVLSEL;
+		md14_next_state = MD14_STATE_LVLSEL;
 		srand(timer_rand());
 		break;
 
 	case MD14_STATE_LVLSEL:
-        md_last_dot = create_dialog("LVLS", (DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5 | DOT_6));
-        switch (md_last_dot) {
+        md14_last_dot = create_dialog("LVLS", (DOT_1 | DOT_2));
+        switch (md14_last_dot) {
 
         	case NO_DOTS:
         		break;
 
         	case '1':
-        		PRINTF("1\n");
-        		strings_to_wordlist(easy, 25, &dict); //todo: calculate length of array?
-				print_words_in_list(&dict);
+        		play_mp3(LANGUAGE, "EASY");
+        		strings_to_wordlist(easy, ARRAYLEN(easy), &md14_dict);
+				print_words_in_list(&md14_dict);
         		play_mp3(MODE_FILESET, "INST");
-        		next_state = MD14_STATE_GENQUES;
+        		md14_next_state = MD14_STATE_GENQUES;
         		break;
 
         	case '2':
-        		PRINTF("1\n");
-        		strings_to_wordlist(medium, 45, &dict);
-				print_words_in_list(&dict);
+        		play_mp3(LANGUAGE, "HARD");
+        		strings_to_wordlist(medium, ARRAYLEN(medium), &md14_dict);
+				print_words_in_list(&md14_dict);
         		play_mp3(MODE_FILESET, "INST");
-        		next_state = MD14_STATE_GENQUES;
+        		md14_next_state = MD14_STATE_GENQUES;
         		break;
 
-        	// todo: add other cases; figure out too-long words
+        	// todo: add case 3; figure out too-long words
 
         	default:
-        		PRINTF("-");
+        		play_mp3(LANGUAGE, "INVP");
+        		PRINTF("Invalid entry.");
 				break;
 		}
 		break;
@@ -143,38 +152,38 @@ void md14_main() {
 	case MD14_STATE_GENQUES:
 		PRINTF("In genques state\n\r");
 		md14_curr_mistakes = 0;
-		get_next_word_in_wordlist(&dict, &chosen_word);
-		sprintf(dbgstr, "[MD14] Next word: %s\n\r", chosen_word->name);
+		get_next_word_in_wordlist(&md14_dict, &md14_chosen_word);
+		sprintf(dbgstr, "[MD14] Next word: %s\n\r", md14_chosen_word->name);
 		PRINTF(dbgstr);
-		next_state = MD14_STATE_PROMPT;
+		md14_next_state = MD14_STATE_PROMPT;
 	  	break;
 
 	 case MD14_STATE_PROMPT:
 	 	PRINTF("In prompt state\n\r");
 	 	play_mp3(LANGUAGE, "SPEL");
-	 	speak_word(chosen_word);
-	 	next_state = MD14_STATE_INPUT;
+	 	speak_word(md14_chosen_word);
+	 	md14_next_state = MD14_STATE_INPUT;
 	 	break;
 
 	case MD14_STATE_INPUT:
-		cell = get_cell();
-		if (cell == NO_DOTS) {
+		md14_cell = get_cell();
+		if (md14_cell == NO_DOTS) {
 			break;
 		}
-		cell_pattern = GET_CELL_PATTERN(cell);
-		cell_control = GET_CELL_CONTROL(cell);
-		switch (cell_control) {
+		md14_cell_pattern = GET_CELL_PATTERN(md14_cell);
+		md14_cell_control = GET_CELL_CONTROL(md14_cell);
+		switch (md14_cell_control) {
 			case WITH_ENTER:
-			user_cell.pattern = cell_pattern;
-			next_state = MD14_STATE_CHECK;
+			md14_user_cell.pattern = md14_cell_pattern;
+			md14_next_state = MD14_STATE_CHECK;
 			PRINTF("[MD14] Checking answer\n\r");
 			break;
 			case WITH_LEFT:
-			next_state = MD14_STATE_REPROMPT;
+			md14_next_state = MD14_STATE_REPROMPT;
 			break;
 			case WITH_RIGHT:
 			stats();
-			next_state = MD14_STATE_GENQUES;
+			md14_next_state = MD14_STATE_GENQUES;
 			break;
 			case WITH_CANCEL:
 			break;
@@ -182,25 +191,25 @@ void md14_main() {
 		break;
 
 	case MD14_STATE_CHECK:
-		get_next_cell_in_word(chosen_word, &curr_cell);
-		sprintf(dbgstr, "In check state. Current cell: %x, user cell: %x.\n\r", curr_cell.pattern, user_cell.pattern);
+		get_next_cell_in_word(md14_chosen_word, &md14_curr_cell);
+		sprintf(dbgstr, "In check state. Current cell: %x, user cell: %x.\n\r", md14_curr_cell.pattern, md14_user_cell.pattern);
 		PRINTF(dbgstr);
 
-		if (cell_equals(&curr_cell, &user_cell)) {
+		if (cell_equals(&md14_curr_cell, &md14_user_cell)) {
 			md14_curr_mistakes = 0;
-			if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
+			if (md14_chosen_word->curr_letter == md14_chosen_word->num_letters - 1) { // done
 				correct_answer();
-			  	next_state = MD14_STATE_GENQUES;
+			  	md14_next_state = MD14_STATE_GENQUES;
 			}
 			else {// correct but not done
 				play_mp3(LANGUAGE, "GOOD");
 				play_mp3(LANGUAGE, "NLET");
-				next_state = MD14_STATE_INPUT;
+				md14_next_state = MD14_STATE_INPUT;
 			}
 		}
 		else {// incorrect letter
-			incorrect_answer();
-			next_state = MD14_STATE_REPROMPT;
+			incorrect_answer(); // @todo mark invalid letters invalid
+			md14_next_state = MD14_STATE_REPROMPT;
 		}
 		break;
 
@@ -209,17 +218,17 @@ void md14_main() {
 
 		if (md14_curr_mistakes >= MAX_INCORRECT_GUESS) {
 			play_mp3(LANGUAGE, "PRSS");
-			play_pattern(curr_cell.pattern);
+			play_pattern(md14_curr_cell.pattern);
 		}
 		else {
 			play_mp3(LANGUAGE, "SPEL");
-	 		speak_word(chosen_word);
-	 		if (chosen_word->curr_glyph > -1) {// not at beginning of word
-	 			play_mp3(MODE_FILESET, "SOFA");
-	 			speak_letters_so_far(chosen_word);
+	 		speak_word(md14_chosen_word);
+	 		if (md14_chosen_word->curr_glyph > -1) {// not at beginning of word
+	 			play_mp3(MODE_FILESET, "SPLS");
+	 			speak_letters_so_far(md14_chosen_word);
 	 		}
 	 	}
-	 	next_state = MD14_STATE_INPUT;
+	 	md14_next_state = MD14_STATE_INPUT;
 	 	break;
 
 	default:

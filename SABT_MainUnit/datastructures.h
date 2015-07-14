@@ -79,12 +79,10 @@
 #define HINDI     2
 #define KANNADA   3
 
- #define MAX_WORD_LENGTH     20
- #define MAX_WORDLIST_LENGTH 20
+ #define MAX_WORD_LENGTH     15
+ #define MAX_WORDLIST_LENGTH 10
  #define MAX_MP3_NAME_LENGTH  5
  #define MAX_FILESET_LENGTH	  5
-
- #define ARRAYLEN(x)  (sizeof(x) / sizeof((x)[0]))
 
 typedef struct glyph glyph_t;
 

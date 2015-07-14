@@ -177,7 +177,6 @@ void initialize_english_word(char* string, letter_t* letter_array, int num_lette
 int parse_string_into_eng_word(char* string, word_t* word) {
 	int num_cells = strlen(string);
 	bool is_capitalized = false;
-	int word_index = 0;
 
 	// if the word is capitalized, leave space for cap character
 	if (string[0] >= 'A' && string[0] <= 'Z') {
@@ -187,7 +186,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 
 	// if the word is too long, return failure
 	if (num_cells > MAX_WORD_LENGTH) {
-		sprintf(dbgstr, "PARSE_STRING FAILED: '%s' IS TOO LONG\n", string);
+		sprintf(dbgstr, "PARSE_STRING FAILED: '%s' IS TOO LONG\n\r", string);
 		PRINTF(dbgstr);
 //		PRINTF("PARSE_STRING FAILED: WORDS MUST BE <=20 CHARS\n");
 		return 0;
@@ -215,7 +214,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 	for (int string_index = 0; string_index < strlen(string); string_index++) {
 			letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
 			if (this_letter == NULL) { // if failed to get a letter, return failure
-				sprintf(dbgstr, "PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n", string);
+				sprintf(dbgstr, "PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n\r", string);
 				PRINTF(dbgstr);
 				return 0;
 			}
@@ -224,7 +223,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 		}
 
 	if (num_cells == 0) {
-		PRINTF("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n");
+		PRINTF("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n\r");
 		return 0;
 	}
 
@@ -408,7 +407,7 @@ void speak_letters_so_far(word_t* word){
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 	if (num_words == 0) {
-		printf("No words. Wordlist uninitialized.\n");
+		PRINTF("No words. Wordlist uninitialized.\n\r");
 		return;
 	}
 	list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
@@ -425,7 +424,8 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 		}
 	}
 	shuffle(num_words, list->order);
-	printf("Wordlist initialized. Num_words = %d.\n", num_words);
+	sprintf(dbgstr, "Wordlist initialized. Num_words = %d.\n\r", num_words);
+	PRINTF(dbgstr);
 }
 
 /**
@@ -439,7 +439,6 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 	static word_t* words;
 	int str_index, word_index; // will iterate separtely through string array and word array
-	printf("num_strings = %d\n", num_strings);
 	// iterate through strings and parse them into words. If there are too many strings,
 	// randomly pick MAX_WORDLIST_LENGTH of them. If any string fails to parse into
 	// a word, shrink the wordlist, reset the word_index iterator, and keep going.
@@ -448,12 +447,13 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 		str_index = word_index = 0;
 		words = (word_t*) malloc(sizeof(word_t) * num_strings);
 		if (words == 0) {
-			printf("MALLOC FAILED!!!\n");
+			PRINTF("MALLOC FAILED!!!\n\r");
 			exit(0);
 		}
 		// iterate through strings; parse into words; increment index into word array only when parsing succeeds
 		for (str_index = 0; str_index < num_strings; str_index++) {
-			printf("parsing word %d: %s\n", str_index, strings[str_index]);
+			sprintf(dbgstr, "word_index: %d, str_index: %d, string %s\n\r", word_index, str_index, strings[str_index]);
+			PRINTF(dbgstr);
 			if (parse_string_into_eng_word(strings[str_index], &(words[word_index])))
 				word_index++;
 		}
@@ -463,7 +463,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 		str_index = word_index = 0;
 		words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
 		if (words == 0) {
-			printf("MALLOC FAILED!!!\n");
+			PRINTF("MALLOC FAILED!!!\n\r");
 			exit(0);
 		}
 		int indices[num_strings];
@@ -477,8 +477,10 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 		// but decrement word_index if parsing fails so it'll increment back to same place
 		// in the next loop
 		for (word_index = 0; word_index < MAX_WORDLIST_LENGTH; word_index++) {
+			sprintf(dbgstr, "word_index: %d, str_index: %d, indices: %d, string %s\n\r", word_index, str_index, indices[str_index], strings[indices[str_index]]);
+			PRINTF(dbgstr);
 			if (str_index == MAX_WORDLIST_LENGTH) {// stop if we're out of strings -- could happen if
-				printf("Out of strings!\n");
+				PRINTF("Out of strings!\n\r");
 				break;                            // lots of strings are unparseable
 			}
 
@@ -488,7 +490,6 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 			str_index++;
 		}
 	}
-	printf("Initializing wordlist %p with the %d words at %p\n", list, word_index, words);
 	initialize_wordlist(words, word_index, list); //word_index = length of list
 }
 
@@ -500,9 +501,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 * @remark Tested in English.
 */
 void print_words_in_list(wordlist_t* wl) {
-	printf("\nwl length %d\n", wl->num_words);
 	for (int i = 0; i < wl->num_words; i++) {
-		printf("wl %p, i = %d, order = %d: ", wl, i, wl->order[i]);
 		print_word(&wl->words[wl->order[i]]);
 	}
 }

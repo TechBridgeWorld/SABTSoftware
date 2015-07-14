@@ -61,7 +61,7 @@ void ui_check_modes(void)
   }*/
 
   /** ACTIVATED MODES ON SABT **/
-  strcpy(file_content, "14,;");
+  strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,13,14,15,;");
   // Print file contents to debug stream
   PRINTF("Mode file contents\n\r");
   PRINTF(file_content);
@@ -546,6 +546,9 @@ void ui_run_main_of_current_mode(void)
       case 14:
         md14_main();
         break;
+      case 15:
+        md15_main();
+        break;
 
       default:
         break;
@@ -603,6 +606,9 @@ void ui_reset_the_current_mode(void)
         break;
       case 14:
         md14_reset();
+        break;
+      case 15:
+        md15_reset();
         break;
 
       default:

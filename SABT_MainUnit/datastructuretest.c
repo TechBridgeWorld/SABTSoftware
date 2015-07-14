@@ -155,7 +155,7 @@ int main() {
 	printf("get_next_word_in_wordlist works if the three animals now appear in ~3 orders.\n\n"); */
 
 	// test of strings_to_wordlist
-	char* small[1] = {"hi"};
+/*	char* small[1] = {"hi"};
 	char* animal_strings[3] = {"dog", "cat", "mouse"};
 	char* too_long_empty[22] = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
 								"1", "1", "1", "1", "1", "1", "1", "1", "1"};
@@ -177,6 +177,13 @@ int main() {
 	print_words_in_list(&primates);
 	print_words_in_list(&pets);
 	print_words_in_list(&bools);
+*/
+//	char* easy_words[70] = {"air", "bog", "bud", "bug", "day", "den", "dew", "dig", "dry", "fly", "fog", "log", "low", "oil", "raw", "rot", "sap", "sun", "web", "wet", "fit", "top", "sea", "gas", "ray", "cave", "damp", "dirt", "drip", "drop", "dump", "east", "edge", "fall", "fern", "hive", "hole", "lake", "leaf", "mist", "mold", "nest", "pond", "rain", "rest", "ripe", "rock", "root", "salt", "soil", "stem", "tide", "tree", "weed", "west", "wind", "wood", "melt", "bite", "path", "wash", "mass", "hill", "lava", "life", "seed", "star", "moon", "fast", "slow"};
+	char* med_words[77] = {"adapt", "blade", "bloom", "brook", "cloud", "cycle", "fresh", "grass", "humid", "marsh", "night", "ocean", "plant", "river", "stone", "trash", "waste", "water", "ridge", "earth", "north", "south", "cliff", "gorge", "sleep", "moist", "steam", "coast", "sting", "renew", "flood", "erupt", "under", "joint", "float", "force", "repel", "solid", "larva", "orbit", "light", "sound", "absorb", "Arctic", "branch", "spring", "canopy", "canyon", "desert", "flower", "forest", "fungus", "growth", "insect", "mammal", "planet", "pollen", "stream", "system", "tundra", "valley", "ground", "winter", "summer", "rotten", "fossil", "nature", "matter", "energy", "record", "liquid", "motion", "sprout", "season", "magnet", "zigzag", "living"};
+
+	wordlist_t easy, med;
+	strings_to_wordlist(med_words, ARRAYLEN(med_words), &med);
+	print_words_in_list(&med);
 
 	// test of random_between
 //   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));
