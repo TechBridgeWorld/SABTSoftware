@@ -54,8 +54,8 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 	glyph_t* curr_glyph;
     
 	//sprintf(dbgstr, "[IO] Searching current pattern: 0x%x in %s\n\r", curr_pattern, script->fileset);
-    sprintf(dbgstr, "[IO] Searching current pattern: 0x%x\n\r", curr_pattern);
-	PRINTF(dbgstr);
+    //sprintf(dbgstr, "[IO] Searching current pattern: 0x%x\n\r", curr_pattern);
+	//PRINTF(dbgstr);
 	
 	// Return if EOT
 	if (curr_pattern == END_OF_TEXT) {
@@ -77,7 +77,7 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 			return NULL;
 		}
 	}
-    PRINTF("[IO] No subscript; returning glyph\n\r");
+    //PRINTF("[IO] No subscript; returning glyph\n\r");
     return curr_glyph;
 }
 
@@ -96,7 +96,9 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 	// Search through array of glyphs
 	for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
 		curr_glyph = &(curr_script->glyphs[glyph_index]);
-		if (curr_glyph && curr_glyph->pattern == pattern) {
+		if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
+            sprintf(dbgstr,"Search%s: %s (0x%x)\r\n",curr_script->fileset, curr_glyph->sound, curr_glyph->pattern);
+            PRINTF(dbgstr);
 			return curr_glyph;
 		}
 	}

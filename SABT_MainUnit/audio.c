@@ -17,7 +17,7 @@
 #include "FAT32.h"
 
 /* Maximum number of MP3s that can be queued at a given time */
-#define MAX_PLAYLIST_SIZE 32
+#define MAX_PLAYLIST_SIZE 64
 
 /* System files fileset on SD card */
 #define SYSTEM_FILESET "SYS_"
@@ -35,7 +35,7 @@ bool playlist_empty = true;
 
 /** Playlist supports queuing some files at a time with filenames of up to 13
 	characters */
-static char playlist[MAX_FILENAME_SIZE][MAX_PLAYLIST_SIZE];
+static char playlist[MAX_PLAYLIST_SIZE][MAX_FILENAME_SIZE];
 static short playlist_size = 0;
 static short playlist_index = 0;
 
@@ -244,11 +244,12 @@ void play_dot_sequence(glyph_t *this_glyph) {
 	9,999
 	@return void
 */
-void play_number(int number) {
+void play_number(long number) {
 	
 	int curr_digit = -1;
 	int digits = -1;
 	char mp3[5] = "";
+	bool played_and = false;
     //char dbgbuf[20] = "";
 
 
@@ -267,8 +268,8 @@ void play_number(int number) {
 	// Count number of digits
 	digits = get_num_of_digits(number);
     
-    //sprintf(dbgbuf, "[Play_number]number:#%d digits:%d\r\n", number, digits);
-    //PRINTF(dbgbuf);
+//    sprintf(dbgbuf, "[Play_number]number:#%ld digits:%d\r\n", number, digits);
+//    PRINTF(dbgbuf);
     
 	while (number != 0) {
 		// Extract current digit and adjust number
@@ -277,9 +278,7 @@ void play_number(int number) {
 		//PRINTF(dbgbuf);
 		if (curr_digit != 0) {
 			sprintf(mp3, "#%d", curr_digit);
-            
-            
-            
+			played_and = false;
 			switch (digits) {
 				case PLACE_ONES:
 					play_mp3(lang_fileset, mp3);
@@ -288,7 +287,8 @@ void play_number(int number) {
 				case PLACE_TENS:
 					if (curr_digit == 1) {
 						// If teen, play teen and return immediately
-						sprintf(mp3, "#%d", number);
+						curr_digit = number;
+						sprintf(mp3, "#%d", curr_digit);
 						play_mp3(lang_fileset, mp3);
 						return;
 					} else {
@@ -312,30 +312,37 @@ void play_number(int number) {
                     //PRINTF(dbgbuf);
                     break;
                     
-//                case PLACE_TEN_THOUSANDS:
-//                    if (curr_digit == 1) {
-//                        // If teen, play teen and return immediately
-//                        sprintf(mp3, "#%d", number);
-//                        play_mp3(lang_fileset, mp3);
-//                        return;
-//                    } else {
-//                        // Is a multiple of ten
-//                        sprintf(mp3, "#%d0", curr_digit);
-//                        play_mp3(lang_fileset, mp3);
-//                    }
-//                    number -= curr_digit * ten_to_the(digits - 1);
-//                    digits--;
-//                    curr_digit = number / ten_to_the(digits - 1);
-//                    sprintf(mp3, "#%d", curr_digit);
-//                    play_mp3(lang_fileset, mp3);
-//                    play_mp3(lang_fileset, "#THO");
-//                    break;
+                case PLACE_TEN_THOUSANDS:
+                    if (curr_digit == 1) {
+                        // Play teen and return immediately
+                        curr_digit = number / ten_to_the(digits - 2);
+                        number -= curr_digit * ten_to_the(digits - 2);
+                        digits -= 2;
+                        sprintf(mp3, "#%d", curr_digit);
+                        play_mp3(lang_fileset, mp3);
+                    } else {
+                        // Is a multiple of ten
+                        sprintf(mp3, "#%d0", curr_digit);
+                        play_mp3(lang_fileset, mp3);
+                        number -= curr_digit * ten_to_the(digits - 1);
+                        digits--;
+                        curr_digit = number / ten_to_the(digits - 1);
+                        sprintf(mp3, "#%d", curr_digit);
+                        play_mp3(lang_fileset, mp3);
+                    }
+                    play_mp3(lang_fileset, "#THO");
+                    break;
                     
 				default:
-					PRINTF("[Audio] Error: Number greater than 3 digits\n\r");
+					PRINTF("[Audio] Error: Number greater than 5 digits\n\r");
 					quit_mode();
 			}
-		}
+        } else {
+			if (!played_and) {
+				play_mp3("ENG_","AND");
+				played_and = true;
+			}
+        }
 		number -= curr_digit * ten_to_the(digits - 1);	
 		digits--;
 	}

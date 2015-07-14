@@ -503,7 +503,7 @@ bool io_convert_line(void) {
 			return false;
 		} else {
 			//sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s pattern:%x\n\r", parse_index, curr_glyph->sound, curr_glyph->pattern);
-            sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s\n\r", parse_index, curr_glyph->sound);
+            sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s(0x%x)\n\r", parse_index, curr_glyph->sound,curr_glyph->pattern);
 			PRINTF(dbgstr);
 			io_parsed[parse_index] = curr_glyph;
 		}
@@ -512,6 +512,7 @@ bool io_convert_line(void) {
 	// If control returns from loop then matching glyphs were found for all
 	// raw cells, add a NULL terminator and return true
 	io_parsed[line_index] = NULL;
+    io_init();
     sprintf(dbgstr, "[IO] line index[%d]: \n\r", line_index);
     PRINTF(dbgstr);
 	return true;

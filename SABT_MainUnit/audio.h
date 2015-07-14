@@ -23,7 +23,7 @@ void play_pattern(char pattern);
 void play_glyph(glyph_t *this_glyph);
 void play_dot_sequence(glyph_t *this_glyph);
 void play_silence(int milliseconds);
-void play_number(int number);
+void play_number(long number);
 void play_line(glyph_t** line);
 void play_word(word_node_t *this_word);
 void play_string(char* word, int word_len);
