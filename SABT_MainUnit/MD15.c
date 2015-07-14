@@ -35,7 +35,7 @@
 //bounds
 #define MAX_INCORRECT_GUESS 3
 #define MAX_WORD_LEN 20
-#define GAMELENGTH 2
+#define GAMELENGTH 5
 
  // Used to set global fileset variables
 #define LANGUAGE "ENG_"
