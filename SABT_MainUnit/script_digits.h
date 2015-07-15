@@ -11,7 +11,7 @@
 #include <stddef.h>
 
 // Language fileset can be overriden
-#define SCRIPT_DIGITS_FILESET "ENG_"
+#define SCRIPT_DIGITS_FILESET "DIG_"
 #define SCRIPT_DIGITS_LENGTH 11
 
 // Digit bit patterns

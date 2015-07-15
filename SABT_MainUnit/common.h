@@ -17,8 +17,8 @@ void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mo
 int timer_rand(void);
 char add_dot(char bits, char dot);
 void quit_mode(void);
-int ten_to_the(int);
-int get_num_of_digits(int);
+long ten_to_the(int);
+int get_num_of_digits(long);
 void play_requested_dot(char);
 int random_between(int i, int j);
 void shuffle(int len, int* int_array);
