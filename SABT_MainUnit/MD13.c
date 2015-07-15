@@ -41,11 +41,11 @@
  */
 #define QEST_BETWEEN    0x001
 #define QEST_EVEN_NUM   0x002
-#define QEST_ODD_NUM    0x003
+#define QEST_ODD_NUM    0x000
 #define QEST_TENS_NUM   0x004
 #define QEST_HUNDS_NUM  0x006
-#define QEST_ROUND_TEN  0x005
-#define QEST_ROUND_HUND 0x007
+#define QEST_ROUND_TEN  0x003
+#define QEST_ROUND_HUND 0x005
 
 #define NOT_ENTERED 0x00
 #define ENTERED 0x01
@@ -88,6 +88,8 @@
 #define MAX_INCORRECT_TRIES 3
 #define MAX_ANSWER_NUM 10
 #define QUES_TYPES 7
+#define EASY_QUES  5
+
 
 /**
  *  State variables
@@ -106,6 +108,9 @@ static int md_score = 0;
 static int md_answer[MAX_ANSWER_NUM];
 static int md_entered[MAX_ANSWER_NUM];
 static int md_num_answer = 0;
+static int md_ques_index[QUES_TYPES];
+static int md_ques_i;
+static int md_max_q;
 
 void init_array(int* array, int array_len){
     for (int i = 0; i < array_len; i++) {
@@ -113,6 +118,11 @@ void init_array(int* array, int array_len){
     }
 }
 
+void init_index(int bound){
+    for (int i = 0; i < bound; i++) {
+        md_ques_index[i] = i;
+    }
+}
 
 void md13_reset(void) {
     PRINTF("*** MD13 - Math Problems ***\n\r");
@@ -135,22 +145,28 @@ void md13_reset(void) {
     init_array(md_answer, MAX_ANSWER_NUM);
     init_array(md_entered, MAX_ANSWER_NUM);
     md_num_answer = 0;
+    md_ques_i = 0;
+    md_max_q = 0;
     
 }
 
 void md13_generate_op2(){
-	if ((md_question == QEST_EVEN_NUM) || (md_question == QEST_ODD_NUM)){
-		md_op_2 = (md_score > 3) ? (md_op_1 + 10) : (md_op_1 + md_score * 2 + 3);
-    } else if (md_question == QEST_ROUND_HUND){
-        md_op_2 = md_op_1 / 10 * 10 + 50 + random_between(1,9);
-    } else if (md_question == QEST_HUNDS_NUM){
-        md_op_2 = md_op_1 / 10 * 10 + 100 + random_between(1,9);
-    } else if ((md_question == QEST_ROUND_TEN) || (md_question == QEST_TENS_NUM)){
-        md_op_2 = md_op_1 / 10 * 10 + random_between(1,9);
-    } else {
-		md_op_2 = (md_score > 3) ? (md_op_1 + 5): (md_op_1 + md_score + 2);
-	}
-   
+    switch (md_question) {
+        case QEST_EVEN_NUM:
+            md_op_1 = (md_op_1 % 2 == 0) ? md_op_1 : md_op_1 + 1;
+            md_op_2 = (md_score > 3) ? (md_op_1 + 10) : (md_op_1 + md_score * 2 + 4);
+            break;
+        case QEST_ODD_NUM:
+            md_op_1 = (md_op_1 % 2 == 1) ? md_op_1 : md_op_1 + 1;
+            md_op_2 = (md_score > 3) ? (md_op_1 + 10) : (md_op_1 + md_score * 2 + 4);
+            break;
+        case QEST_ROUND_HUND: case QEST_HUNDS_NUM: case QEST_ROUND_TEN: case QEST_TENS_NUM:
+            md_op_2 = md_op_1 / 10 * 10 + random_between(1,9);
+            break;
+        default:
+            md_op_2 = (md_score > 3) ? (md_op_1 + 5): (md_op_1 + md_score + 2);
+            break;
+    }
     sprintf(dbgstr, "[MD13] Operand 1: %ld\n\r", md_op_1);
     PRINTF(dbgstr);
     sprintf(dbgstr, "[MD13] Operand 2: %ld\n\r", md_op_2);
@@ -161,8 +177,8 @@ void md13_generate_number(){
 	int base = 0;
     switch (md_level) {
         case LEVEL_1:
-			base = md_score * 20 + 1;
-            md_op_1 = random_between(base,base + 15);
+            base = (md_score >= 3) ? (60) : (md_score * 20 + 1);
+            md_op_1 = random_between(base,base + 20);
             md13_generate_op2();
             break;
         case LEVEL_2:
@@ -337,14 +353,12 @@ bool md13_all_entered(){
 }
 
 void md13_choose_ques(){
-    switch (md_score) {
-        case 0:
-            md_question = QEST_BETWEEN;
-            break;
-        default:
-            md_question = random_between(1,QUES_TYPES);
-            break;
+    if (md_ques_i == md_max_q) {
+        shuffle(md_max_q, md_ques_index);
+        md_ques_i = 0;
     }
+    md_question = md_ques_index[md_ques_i];
+    md_ques_i++;
    	sprintf(dbgstr,"[mode]q%d",md_question );
 	PRINTF(dbgstr);
     return;
@@ -378,6 +392,9 @@ void md13_main(void) {
                     PRINTF("[MD13] Level: 1\n\r");
                     md_level = LEVEL_1;
                     play_mp3(MODE_FILESET, MP3_SUBMIT);
+                    md_max_q = EASY_QUES;
+                    init_index(md_max_q);
+                    shuffle(md_max_q, md_ques_index);
                     md_next_state = STATE_GENQUES;
                     break;
                     
@@ -385,6 +402,9 @@ void md13_main(void) {
                     PRINTF("[MD13] Level: 2\n\r");
                     md_level = LEVEL_2;
                     play_mp3(MODE_FILESET, MP3_SUBMIT);
+                    md_max_q = QUES_TYPES;
+                    init_index(md_max_q);
+                    shuffle(md_max_q, md_ques_index);
                     md_next_state = STATE_GENQUES;
                     break;
                 
