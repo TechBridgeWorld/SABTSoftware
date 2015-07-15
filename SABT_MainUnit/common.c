@@ -61,7 +61,7 @@ void quit_mode(void) {
 * @param int n - Power
 * @return int - 10^n
 */
-int ten_to_the(int n) {
+long ten_to_the(int n) {
 	int res = 1;
 	if (n < 0) {
 		return 0;
@@ -80,7 +80,7 @@ int ten_to_the(int n) {
 * @param int - Number to determine number of digits for
 * @return int - Number of digits
 */
-int get_num_of_digits(int number) {
+int get_num_of_digits(long number) {
 	if (number < 0) {
 		number = -number;
 	}
