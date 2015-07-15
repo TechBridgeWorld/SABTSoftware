@@ -7,7 +7,7 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 
 // General constants
 #define MAX_INCORRECT_TRIES 3

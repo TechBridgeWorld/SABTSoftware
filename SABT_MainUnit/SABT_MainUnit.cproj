@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -15,7 +15,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <avrtool />
+    <avrtool/>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -68,6 +68,12 @@
   </PropertyGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
   <ItemGroup>
+    <Compile Include="datastructures.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="datastructures.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="dictionary.c">
       <SubType>compile</SubType>
     </Compile>
@@ -84,6 +90,18 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MD13.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD14.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD14.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD15.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MD15.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="script_digits.c">
@@ -111,6 +129,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="USART_PC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="vocab.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="vocab.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="VS1053.h">
@@ -180,9 +204,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MD9.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="glyph.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="io.h">
@@ -294,9 +315,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="io.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="glyph.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MD10.c">

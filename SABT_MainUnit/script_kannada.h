@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_KANNADA_H_
 #define _SCRIPT_KANNADA_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 #include "script_common.h"
 
 #define SCRIPT_KANNADA_FILESET "KAN_"

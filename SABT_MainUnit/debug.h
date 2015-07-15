@@ -13,8 +13,13 @@
 
 #include "usart_pc.h"
 
-#define PRINTF(msg) \
-  usart_transmit_string_to_pc((unsigned char*)msg)
+#ifdef DEBUGMODE
+	#define PRINTF(msg) \
+  		printf("%s", msg)
+ #else
+	#define PRINTF(msg) \
+  		usart_transmit_string_to_pc((unsigned char*)msg)
+#endif
 
 #define SENDBYTE(msg) \
   usart_transmit_byte_to_pc((unsigned char)msg)

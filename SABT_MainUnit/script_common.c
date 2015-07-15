@@ -4,7 +4,7 @@
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 
-#include "glyph.h"
+#include "datastructures.h"
 #include "script_common.h"
 #include "script_digits.h"
 #include "letter_globals.h"

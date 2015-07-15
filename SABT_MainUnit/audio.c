@@ -9,7 +9,7 @@
 #include <stdbool.h>
 
 #include "VS1053.h"
-#include "glyph.h"
+#include "datastructures.h"
 #include "Globals.h"
 #include "common.h"
 #include "io.h"
