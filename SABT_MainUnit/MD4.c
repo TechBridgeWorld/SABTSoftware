@@ -79,21 +79,6 @@ static dictionary_t dict = {
     index_arr
 };
 
-/**
- * @brief Initialize an index array
- */
-void init_index_arr(int *index_arr, int arr_len){
-    for (int i = 0; i < arr_len; i++){
-        index_arr[i] = i;
-    }
-}
-
-void init_char_arr(char* arr, int len){
-    for (int i = 0; i < len; i++){
-        arr[i] = '\0';
-    }
-}
-
 /*
  * @brief Try to place global entered_letter into global input_word.
  * @return bool - True on success (finds a match and places letter),
@@ -154,7 +139,7 @@ void place_hint(int num_hint){
  *        have been pressed
  * @return bool - true if a valid letter, false if not
  */
-bool md4_valid_letter(char button_bits)
+bool is_letter_valid(char button_bits)
 {
     char letter_from_bits = get_letter_from_bits(button_bits);
     if((letter_from_bits >= 'a') && (letter_from_bits <= 'z'))

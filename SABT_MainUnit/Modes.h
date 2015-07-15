@@ -24,4 +24,6 @@
 #include "MD11.h"// Everyday Noises Game
 #include "md12.h"// Kannada braille practice
 #include "MD13.h"// Number game
+#include "MD14.h"// Spelling practice
+#include "MD15.h"// Spelling bee game
 #endif /* _MODES_H_ */

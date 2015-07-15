@@ -7,7 +7,7 @@
 #ifndef _SCRIPT_HINDI_H_
 #define _SCRIPT_HINDI_H_
 
-#include "glyph.h"
+#include "datastructures.h"
 #include "script_common.h"
 
 #define SCRIPT_HINDI_FILESET "HIN_"
@@ -80,6 +80,10 @@
 #define HIN_SHRA_1			0b001000
 #define HIN_SHRA_2			0b101001
 #define HIN_SHRA_3			0b010111
+
+extern letter_t hindi_a;
+extern letter_t hindi_shra;
+extern letter_t hindi_i;
 
 extern script_t script_hindi;
 

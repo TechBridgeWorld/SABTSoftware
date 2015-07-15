@@ -9,7 +9,7 @@
 
 #include <stdbool.h>
 
-#include "glyph.h"
+#include "datastructures.h"
 
 extern bool playlist_empty;
 extern char* lang_fileset;
