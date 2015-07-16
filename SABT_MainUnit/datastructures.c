@@ -3,7 +3,7 @@
 * @author Marjorie Carlson (marjorie@cmu.edu)
 * @date Summer 2015
 * @brief Basic functions for creating and accessing cells, letters & words
-* @warning THE BELOW FUNCTIONS HAVE ONLY BEEN TESTED ON ENGLISH LETTERS/WORDS.
+* @warning MANY FUNCTIONS HAVE ONLY BEEN TESTED ON ENGLISH LETTERS/WORDS.
 * They still need to be tested on multi-cell letters (Hindi, Kannada).
 */
 
@@ -109,6 +109,7 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 	}
 }
 
+// @todo: make this function for other languages
 /**
 * Given an English char (e.g. 'a'), retrieve the English letter
 * whose name begins with that char. Assumes names are one char each
@@ -209,7 +210,6 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 		letters_in_word[0] = eng_capital;
 		letter_index = 1;
 	}
-
 
 	for (int string_index = 0; string_index < strlen(string); string_index++) {
 			letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
@@ -353,10 +353,19 @@ char* get_lang(word_t* word){
 * Play the mp3 associated with a word.
 * @param Pointer to the word.
 * @return Void.
-* @warning Untested
+* @BUG DOES NOT ALLOW FOR MULTIPLE WORDS WITH SAME FIRST
+* FIVE LETTERS. Eventually we should include, for example,
+* both "polluted" and "pollution", but currently this
+* would play pollu0.mp3 for both.
 */
 void speak_word(word_t* word) {
-	play_mp3("V_", word->name);
+	char mp3name[7];
+	sprintf(mp3name, "%s", word->name);
+	if (word->length_name > 6) {
+		mp3name[5] = '0';
+		mp3name[6] = '\0';
+	}
+	play_mp3("V_", mp3name);
 }
 
 /**
@@ -386,7 +395,16 @@ void speak_letters_so_far(word_t* word){
 }
 #endif
 
-// @todo: void free_word(word_t* word);
+/**
+* Free the malloced array in a word struct.
+* @return Void.
+* @warning Untested
+* @bug THIS WILL ABORT IF THE WORD'S LETTER ARRAY WAS
+* CREATED MANUALLY RATHER THAN MALLOCED.
+*/
+void free_word(word_t* word) {
+	free(word->letters);
+}
 
 
 
@@ -435,6 +453,9 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 * in the array; pointer to the wordlist to initialize.
 * @return Void; function initializes list.
 * @BUG: Data gets corrupted if num_strings is incorrect.
+* @todo: Consider only converting an individual string when needed,
+* instead of whole array at once. Uses less memory & easier to free_word
+* when needed
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 	static word_t* words;
@@ -447,6 +468,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 		str_index = word_index = 0;
 		words = (word_t*) malloc(sizeof(word_t) * num_strings);
 		if (words == 0) {
+			// @todo: record message for this indicating the device needs to be rebooted?
 			PRINTF("MALLOC FAILED!!!\n\r");
 			exit(0);
 		}
@@ -463,6 +485,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 		str_index = word_index = 0;
 		words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
 		if (words == 0) {
+			// @todo: record message for this indicating the device needs to be rebooted?
 			PRINTF("MALLOC FAILED!!!\n\r");
 			exit(0);
 		}
@@ -522,7 +545,21 @@ void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
 	wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
 }
 
-// @todo: void free_wordlist(wordlist_t* wl);
+/**
+* Free all malloced memory in a wordlist, i.e., the words'
+* letter arrays, the word array, and the order array.
+* @return Void.
+* @warning Untested
+* @bug FREE_WORD WILL ABORT IF THE WORD'S LETTER ARRAY WAS
+* CREATED MANUALLY RATHER THAN MALLOCED.
+*/
+void free_wordlist(wordlist_t* wl) {
+	for (int i = 0; i < wl->num_words; i++) {
+		free_word(&wl->words[i]);
+	}
+	free(wl->words);
+	free(wl->order);
+}
 
 /**
  * Find a random number between i and j, inclusive of
@@ -576,62 +613,8 @@ void unshuffle(int len, int* int_array) {
 		}
 	}
 }
-/*
-// return: 0 if done with word, 1 if mistake
-// needs access to globals: current_word; how does
-// it get user's cell?
-// num_mistakes; lang_fileset
-char check_input(cell_t* cell) {
-	cell_t goal_cell;
-	get_next_cell_in_word(chosen_word, &goal);
-	if (cell_equals(&goal_cell, cell)) {
-		play_mp3(lang_fileset, "GOOD");
-		num_mistakes = 0;
 
-		// done with letter
-		if 
-	}
 
-	// cases:
-	// cell correct, not done with letter
-	// letter correct
-	// letter incorrect, out of mistakes
-	// letter incorrect, not out of mistakes
-}
-
-			if (glyph_equals(curr_glyph, user_glyph)) {
-				if (curr_glyph -> next == NULL) {
-					incorrect_tries = 0;
-					sprintf(dbgstr, "[%s] User answered correctly\n\r", mode_name);
-					PRINTF(dbgstr);
-					play_mp3(LANG_FILESET, MP3_CORRECT);
-					play_mp3(SYS_FILESET, MP3_TADA);
-					next_state = STATE_GENQUES;
-				}
-				else {
-					curr_glyph = curr_glyph->next;
-					play_mp3(LANG_FILESET, MP3_NEXT_CELL);
-					
-					if (submode == SUBMODE_LEARN)
-						play_dot_sequence(curr_glyph);
-					else
-						play_glyph(curr_glyph);
-					next_state = STATE_INPUT;
-				}
-			}
-			else {
-				incorrect_tries++;
-				sprintf(dbgstr, "[%s] User answered incorrectly\n\r", mode_name);;
-				PRINTF(dbgstr);			
-				play_mp3(LANG_FILESET, MP3_INCORRECT);
-				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
-				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	
-				next_state = STATE_PROMPT;
-				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
-					play_glyph(curr_glyph);
-					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
-					play_dot_sequence(curr_glyph);
-					next_state = STATE_INPUT;
-				}
-			}
- */
+// @todo: Work out which common mode functions should be
+// global -- e.g., get_and_check_input; set_difficulty_level;
+// load_dictionary???

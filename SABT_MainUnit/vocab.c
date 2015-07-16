@@ -1,9 +1,38 @@
-char* easy[11] = {"fit", "cave", "fly", "log", "wind", "edge", "leaf", "life", "den", "air", "lava"};
+/**
+ * @file vocab.c
+ * @brief Three vocab lists of grades 1-3 science
+ * words. Provided by Mathru School/Maya Lassiter.
+ * @author Marjorie Carlson (marjorie@cmu.edu)
+ */
 
-char* medium[12] = {"cliff", "river", "blade", "force", "zigzag", "bloom", "branch", "cycle", "cloud", "ocean", "valley", "Arctic"};
+char* easy[69] = {"air",  "bite", "bud",  "bug",  "cave", "damp", "day",  "den",  "dew",  "dig", 
+				  "dirt", "drip", "drop", "dry",  "dump", "east", "edge", "fall", "fast", "fern",
+				  "fit",  "fly",  "fog",  "gas",  "hill", "hive", "hole", "lake", "lava", "leaf",
+				  "life", "log",  "low",  "mass", "melt", "mist", "mold", "moon", "oil",  "nest",
+				  "path", "pond", "rain", "raw",  "rays", "rest", "ripe", "rock", "root", "rot",
+				  "salt", "sap",  "sea",  "seed", "slow", "soil", "star", "stem", "sun",  "tide",
+				  "top",  "tree", "wash", "web",  "weed", "west", "wet", "wind", "wood"};
 
-char* easy_big[70] = {"air", "bog", "bud", "bug", "day", "den", "dew", "dig", "dry", "fly", "fog", "log", "low", "oil", "raw", "rot", "sap", "sun", "web", "wet", "fit", "top", "sea", "gas", "ray", "cave", "damp", "dirt", "drip", "drop", "dump", "east", "edge", "fall", "fern", "hive", "hole", "lake", "leaf", "mist", "mold", "nest", "pond", "rain", "rest", "ripe", "rock", "root", "salt", "soil", "stem", "tide", "tree", "weed", "west", "wind", "wood", "melt", "bite", "path", "wash", "mass", "hill", "lava", "life", "seed", "star", "moon", "fast", "slow"};
+char* medium[78] = {"Arctic", "absorb", "adapt", "blade", "bloom", "branch", "brook", "canopy", "canyon", "cliff",
+					"cloud", "coast", "cycle", "decay", "desert", "earth", "energy", "erupt", "float", "flood",
+					"flower", "force", "forest", "fossil", "fresh", "fungus", "gorge", "grass", "ground", "growth",
+					"humid", "insect", "joint", "larva", "light", "liquid", "living", "magnet", "mammal", "marsh",
+					"matter", "moist", "molten", "motion", "nature", "night", "north", "ocean", "orbit", "planet",
+					"plant", "pollen", "record", "renew", "repel", "ridge", "river", "rotten", "season", "sleep",
+					"solid", "sound", "south", "spring", "sprout", "steam", "sting", "stone", "stream", "summer",
+					"system", "tundra", "under", "valley", "waste", "water", "winter", "zigzag"};
 
-char* medium_big[77] = {"adapt", "blade", "bloom", "brook", "cloud", "cycle", "fresh", "grass", "humid", "marsh", "night", "ocean", "plant", "river", "stone", "trash", "waste", "water", "ridge", "earth", "north", "south", "cliff", "gorge", "sleep", "moist", "steam", "coast", "sting", "renew", "flood", "erupt", "under", "joint", "float", "force", "repel", "solid", "larva", "orbit", "light", "sound", "absorb", "Arctic", "branch", "spring", "canopy", "canyon", "desert", "flower", "forest", "fungus", "growth", "insect", "mammal", "planet", "pollen", "stream", "system", "tundra", "valley", "ground", "winter", "summer", "rotten", "fossil", "nature", "matter", "energy", "record", "liquid", "motion", "sprout", "season", "magnet", "zigzag", "living"};
-
-char* hard[64] = {"aquarium", "aquatic", "creature", "erosion", "extinct", "gravity", "habitat", "mangrove", "morning", "mountain", "recycle", "rotation", "sunrise", "survival", "weather", "mudslide", "sediment", "polluted", "monsoon", "fertile", "moisture", "variance", "extinct", "dispose", "describe", "melting", "freezing", "friction", "vibrate", "plates", "tsunami", "conserve", "omnivore", "drought", "function", "support", "offspring", "revolve", "pattern", "texture", "resource", "straight", "resemble", "pollution", "atmosphere", "condensation", "conservation", "ecosystem", "environment", "evaporate", "renewable", "hemisphere", "rockslide", "hibernate", "earthquake", "waterfall", "selection", "rainforest", "investigate", "temperature", "herbivore", "protection", "precipitation", "nonliving"};
+char* hard[64] = {"aquarium", "aquatic", "atmosphere", "cellular", "condensation",
+				  "conservation", /*"conserve", */ "creature", "describe", "dispose", 
+				  "drought", "earthquake", "ecosystem", "environment", "erosion",
+				  "evaporate", "extinct", "fertile", "freezing", "friction",
+				  "function", "gravity", "habitat", "hemisphere", "herbivore",
+				  "hibernate", "investigate", "mangrove", "melting", "moisture",
+				  "monsoon", "morning", "mountain", "mudslide", "nonliving",
+				  "offspring", "omnivore", "organism", "pattern", "plates",
+				  "polluted", /* "pollution" */ "precipitation", "protection", "rainforest",
+				  "recycle", "renewable", "resemble", "resource", "revolve",
+				  "rockslide", "rotation", "sediment", "selection", "straight",
+				  "structure", "sunrise", "support", "survival", "temperature",
+				  "texture", "tsunami", "variance", "vibrate", "waterfall",
+				  "weather"};
