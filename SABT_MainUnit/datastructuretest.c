@@ -11,34 +11,34 @@ int main() {
 	time_t t;
 	srand((unsigned) time(&t));
 	cell_t a_cell, b_cell, c_cell, hin_a_cell, all_cell, blank_cell, null_cell;
-	a_cell.pattern = DOTS1;
-	b_cell.pattern = DOTS12;
-	hin_a_cell.pattern = DOTS1;
-	all_cell.pattern = DOTS123456;
-	blank_cell.pattern = DOTS0;
+	a_cell.pattern = DOT1;
+	b_cell.pattern = DOT1 | DOT2;
+	hin_a_cell.pattern = DOT1;
+	all_cell.pattern = DOT1 | DOT2 | DOT3 | DOT4 | DOT5 | DOT6;
+	blank_cell.pattern = DOT0;
 
-	/* test of print_cell_pattern
-	printf("0x000001 =? ");
+	// test of print_cell_pattern
+	printf("0b000001 =? ");
 	print_cell_pattern(&a_cell);
-	printf("0x000011 =? ");
+	printf("0b000011 =? ");
 	print_cell_pattern(&b_cell);
-	printf("0x111111 =? ");
+	printf("0b111111 =? ");
 	print_cell_pattern(&all_cell);
 	printf("Blank cell =? ");
 	print_cell_pattern(&blank_cell);
 	printf("[?] =? ");
 	print_cell_pattern(&null_cell);
-	printf("Compare above to test print_cell_pattern.\n\n"); */
+	printf("Compare above to test print_cell_pattern.\n\n");
 
 	// test of cell_equals
-/*	bool same1 = cell_equals(&a_cell, &a_cell);
+	bool same1 = cell_equals(&a_cell, &a_cell);
 	bool diff1 = !cell_equals(&a_cell, &b_cell);
 	bool cognate1 = cell_equals(&a_cell, &hin_a_cell);
 	bool empty1 = !cell_equals(&a_cell, &blank_cell);
 	bool bothempty1 = cell_equals(&blank_cell, &blank_cell);
 	bool notinitialized1 = !cell_equals(&a_cell, &null_cell);
 	printf("Cell_equals %s.\n\n", (same1 && diff1 && cognate1 &&
-			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN"); */
+			empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
 
 
 	// test of letter_equals
@@ -68,7 +68,7 @@ int main() {
 	printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zaz a shra.'\n\n"); */
 
 	// test of parse_string_into_eng_word
-/*	word_t goat, ox, chicken, myname, blank, notchars, funnycap, quitelong, verylong;
+	word_t goat, ox, chicken, myname, blank, notchars, funnycap, quitelong, verylong;
 	parse_string_into_eng_word("goat", &goat);
 	parse_string_into_eng_word("ox", &ox);
 	parse_string_into_eng_word("chicken", &chicken);
@@ -77,13 +77,13 @@ int main() {
 	parse_string_into_eng_word(":-)", &notchars);
 	parse_string_into_eng_word("pH", &funnycap);
 	parse_string_into_eng_word("abcdefghijklmnopqrst", &quitelong);
-	parse_string_into_eng_word("abcdefghijklmnopqrstu", &verylong); */
+	parse_string_into_eng_word("abcdefghijklmnopqrstu", &verylong);
 
 
 	// test of print_word;
 	letter_t sri_letters[2] = {hindi_shra, hindi_i};
 	word_t sri = {"sri", 2,  sri_letters, 2, HINDI, 0, -1};
-/*	print_word(&goat);
+	print_word(&goat);
 	print_word(&ox);
 	print_word(&chicken);
 	print_word(&goat);
@@ -93,7 +93,7 @@ int main() {
 	print_word(&notchars);
 	print_word(&funnycap);
 	print_word(&quitelong);
-	print_word(&verylong); */
+	print_word(&verylong);
 
 /*
 	//test of word_to_cell_array
@@ -179,7 +179,7 @@ int main() {
 	print_words_in_list(&pets);
 	print_words_in_list(&bools);
 */
-//	char* easy_words[70] = {"air", "bog", "bud", "bug", "day", "den", "dew", "dig", "dry", "fly", "fog", "log", "low", "oil", "raw", "rot", "sap", "sun", "web", "wet", "fit", "top", "sea", "gas", "ray", "cave", "damp", "dirt", "drip", "drop", "dump", "east", "edge", "fall", "fern", "hive", "hole", "lake", "leaf", "mist", "mold", "nest", "pond", "rain", "rest", "ripe", "rock", "root", "salt", "soil", "stem", "tide", "tree", "weed", "west", "wind", "wood", "melt", "bite", "path", "wash", "mass", "hill", "lava", "life", "seed", "star", "moon", "fast", "slow"};
+	char* easy_words[70] = {"air", "bog", "bud", "bug", "day", "den", "dew", "dig", "dry", "fly", "fog", "log", "low", "oil", "raw", "rot", "sap", "sun", "web", "wet", "fit", "top", "sea", "gas", "ray", "cave", "damp", "dirt", "drip", "drop", "dump", "east", "edge", "fall", "fern", "hive", "hole", "lake", "leaf", "mist", "mold", "nest", "pond", "rain", "rest", "ripe", "rock", "root", "salt", "soil", "stem", "tide", "tree", "weed", "west", "wind", "wood", "melt", "bite", "path", "wash", "mass", "hill", "lava", "life", "seed", "star", "moon", "fast", "slow"};
 	char* med_words[77] = {"adapt", "blade", "bloom", "brook", "cloud", "cycle", "fresh", "grass", "humid", "marsh", "night", "ocean", "plant", "river", "stone", "trash", "waste", "water", "ridge", "earth", "north", "south", "cliff", "gorge", "sleep", "moist", "steam", "coast", "sting", "renew", "flood", "erupt", "under", "joint", "float", "force", "repel", "solid", "larva", "orbit", "light", "sound", "absorb", "Arctic", "branch", "spring", "canopy", "canyon", "desert", "flower", "forest", "fungus", "growth", "insect", "mammal", "planet", "pollen", "stream", "system", "tundra", "valley", "ground", "winter", "summer", "rotten", "fossil", "nature", "matter", "energy", "record", "liquid", "motion", "sprout", "season", "magnet", "zigzag", "living"};
 
 	wordlist_t easy, med;

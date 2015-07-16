@@ -21,6 +21,8 @@
   		usart_transmit_string_to_pc((unsigned char*)msg)
 #endif
 
+
+
 #define SENDBYTE(msg) \
   usart_transmit_byte_to_pc((unsigned char)msg)
 

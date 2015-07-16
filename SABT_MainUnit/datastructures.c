@@ -10,11 +10,26 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 #include "datastructures.h"
 #include "globals.h"
+#include "common.h"
 #include "script_english.h"
 #include "audio.h"
+
+void LOG_MSG(const char* format, ...) {
+    va_list args;
+    va_start( args, format );
+    #ifdef DEBUGMODE
+        vprintf(format, args );
+    #else
+        vsprintf(dbgstr, format, args);
+        usart_transmit_string_to_pc((unsigned char*)dbgstr);
+    va_end( args );
+    #endif
+}
 
 /*******************
 *  CELL FUNCTIONS  *
@@ -27,20 +42,18 @@
 * @remark Tested. (Language-agnostic.)
 */
 void print_cell_pattern(cell_t* cell){
-	if (cell->pattern) {
-		char pattern = cell->pattern;
-		char binary[7];	
-		int counter = 0;
-		for (int i = 32; i > 0; i >>= 1) {
-			binary[counter] =((pattern & i) == i) ? '1' : '0';
-			counter++;
-		}
-		sprintf(dbgstr, "0b%s\n", binary);
-		PRINTF(dbgstr);
-	}
-	else {
-			PRINTF("Blank cell\n");
-	}
+    if (cell->pattern) {
+        char binary[7]; 
+        int counter = 0;
+        for (int i = 32; i > 0; i >>= 1) {
+            binary[counter] =(cell->pattern & i) ? '1' : '0';
+            counter++;
+        }
+        binary[6] = '\0';
+        LOG_MSG("0b%s\n\r", binary);
+    }
+    else
+        LOG_MSG("Blank cell\n");
 }
 
 /**
@@ -50,14 +63,16 @@ void print_cell_pattern(cell_t* cell){
 * @remark Tested. (Language-agnostic.)
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
-	sprintf(dbgstr, "[Cell_equals script] Cell 1: 0x%x\n\r[Script] Cell 2: 0x%x\n\r",
-		cell1->pattern, cell2->pattern);
-	PRINTF(dbgstr);
+    if (cell1 == NULL || cell2 == NULL) {
+        LOG_MSG("Null cell pointer!\n");
+        return false;
+    }
 
-	if (cell1 == NULL || cell2 == NULL)
-		return false;
-	else
-		return (cell1->pattern == cell2->pattern);
+    LOG_MSG("Cell 1: ");
+    print_cell_pattern(cell1);
+    LOG_MSG("Cell 2: ");
+    print_cell_pattern(cell2);
+    return (cell1->pattern == cell2->pattern);
 }
 
 /**
@@ -67,14 +82,12 @@ bool cell_equals(cell_t* cell1, cell_t* cell2) {
 * @warning Will be deprecated?
 */
 bool glyph_equals(glyph_t* g1, glyph_t* g2) {
-	sprintf(dbgstr, "[Glyph_equals] Glyph 1: %s, Glyph 2: %s\n\r",
-		g1->sound, g2->sound);
-	PRINTF(dbgstr);
+    LOG_MSG("Glyph 1: %s, Glyph 2: %s\n\r", g1->sound, g2->sound);
 
-	if (g1 == NULL || g2 == NULL)
-		return false;
-	else
-		return (g1->pattern == g2->pattern);
+    if (g1 == NULL || g2 == NULL)
+        return false;
+    else
+        return (g1->pattern == g2->pattern);
 }
 
 
@@ -90,23 +103,21 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 * @remark Tested in English & lightly in Hindi.
 */
 bool letter_equals(letter_t* letter1, letter_t* letter2) {
-	sprintf(dbgstr, "[Letter_equals] Letter 1: %s, Letter 2: %s\n\r",
-		letter1->name, letter2->name);
-	PRINTF(dbgstr);
+    LOG_MSG("Letter 1: %s, Letter 2: %s\n\r", letter1->name, letter2->name);
 
-	// not equal if one doesn't exist; if of different langs; if of different lengths
-	if ((letter1 == NULL || letter2 == NULL)
-		| (letter1->lang_enum != letter2->lang_enum)
-		| (letter1->num_cells != letter2->num_cells)) {
-		return false;
-	}
-	else { // iterate through cells; if any are different, return false
-		for (int i = 0; i < letter1->num_cells; i++) {
-			if (!(cell_equals(&(letter1->cells[i]), &(letter2->cells[i]))))
-				return false;
-		}
-		return true;
-	}
+    // not equal if one doesn't exist; if of different langs; if of different lengths
+    if ((letter1 == NULL || letter2 == NULL)
+        | (letter1->lang_enum != letter2->lang_enum)
+        | (letter1->num_cells != letter2->num_cells)) {
+        return false;
+    }
+    else { // iterate through cells; if any are different, return false
+        for (int i = 0; i < letter1->num_cells; i++) {
+            if (!(cell_equals(&(letter1->cells[i]), &(letter2->cells[i]))))
+                return false;
+        }
+        return true;
+    }
 }
 
 // @todo: make this function for other languages
@@ -120,20 +131,18 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 * @remark Turns all letters into lower-case.
 */
 letter_t* get_eng_letter_by_char(char c){
-	char this_char;
-	for (int i = 0; i < english_alphabet.num_letters; i++){
-		this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
-		if (this_char < 'a' || this_char > 'z') {
-			sprintf(dbgstr, "GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
-			PRINTF(dbgstr);
-			return NULL;
-		}
-		else if (this_char == english_alphabet.letters[i].name[0])
-			return &english_alphabet.letters[i];
-	}
-	sprintf(dbgstr, "GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
-	PRINTF(dbgstr);
-	return NULL;
+    char this_char;
+    for (int i = 0; i < english_alphabet.num_letters; i++){
+        this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
+        if (this_char < 'a' || this_char > 'z') {
+            LOG_MSG("GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
+            return NULL;
+        }
+        else if (this_char == english_alphabet.letters[i].name[0])
+            return &english_alphabet.letters[i];
+    }
+    LOG_MSG("GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
+    return NULL;
 }
 
 /**
@@ -143,8 +152,7 @@ letter_t* get_eng_letter_by_char(char c){
 * remark Tested in English and Hindi.
 */
 void print_letter(letter_t* letter){
-	sprintf(dbgstr, "%s", letter->name);
-	PRINTF(dbgstr);
+    LOG_MSG("%s", letter->name);
 }
 
 /*******************
@@ -160,12 +168,12 @@ void print_letter(letter_t* letter){
 * remark Tested in English
 */
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word) {
-	strcpy(word->name, string);
-	word->letters = letter_array;
-	word->length_name = word->num_letters = num_letters;
-	word->lang_enum = ENGLISH;
-	word->curr_letter = 0;
-	word->curr_glyph = -1;
+    strcpy(word->name, string);
+    word->letters = letter_array;
+    word->length_name = word->num_letters = num_letters;
+    word->lang_enum = ENGLISH;
+    word->curr_letter = 0;
+    word->curr_glyph = -1;
 }
 
 /**
@@ -176,64 +184,61 @@ void initialize_english_word(char* string, letter_t* letter_array, int num_lette
 * @remark Tested thoroughly.
 */
 int parse_string_into_eng_word(char* string, word_t* word) {
-	int num_cells = strlen(string);
-	bool is_capitalized = false;
+    int num_cells = strlen(string);
+    bool is_capitalized = false;
 
-	// if the word is capitalized, leave space for cap character
-	if (string[0] >= 'A' && string[0] <= 'Z') {
-		is_capitalized = true;
-		num_cells++;
-	}
+    // if the word is capitalized, leave space for cap character
+    if (string[0] >= 'A' && string[0] <= 'Z') {
+        is_capitalized = true;
+        num_cells++;
+    }
 
-	// if the word is too long, return failure
-	if (num_cells > MAX_WORD_LENGTH) {
-		sprintf(dbgstr, "PARSE_STRING FAILED: '%s' IS TOO LONG\n\r", string);
-		PRINTF(dbgstr);
-//		PRINTF("PARSE_STRING FAILED: WORDS MUST BE <=20 CHARS\n");
-		return 0;
-	}
+    // if the word is too long, return failure
+    if (num_cells > MAX_WORD_LENGTH) {
+        LOG_MSG("PARSE_STRING FAILED: '%s' IS TOO LONG\n\r", string);
+        return 0;
+    }
 
-	// create the word
-	strcpy(word->name, string);
-	letter_t* letters_in_word;
-	letters_in_word = (letter_t*) malloc(sizeof(letter_t) * num_cells);
-	if (letters_in_word == 0) // if malloc fails, return failure
-		return 0;
+    // create the word
+    strcpy(word->name, string);
+    letter_t* letters_in_word;
+    letters_in_word = (letter_t*) malloc(sizeof(letter_t) * num_cells);
+    if (letters_in_word == 0) // if malloc fails, return failure
+        return 0;
 
-	// iterate through both string and letter_t array. In most cases
-	// the ith element of the string is copied into the ith element of
-	// the letter array. However, if the word is capitalized, the 0th
-	// element of the letter array is the capital letter, and then
-	// the ith letter of the string goes into the i+1th index of the array.
-	int letter_index = 0;
-	if (is_capitalized) {
-		letters_in_word[0] = eng_capital;
-		letter_index = 1;
-	}
+    // iterate through both string and letter_t array. In most cases
+    // the ith element of the string is copied into the ith element of
+    // the letter array. However, if the word is capitalized, the 0th
+    // element of the letter array is the capital letter, and then
+    // the ith letter of the string goes into the i+1th index of the array.
+    int letter_index = 0;
+    if (is_capitalized) {
+        letters_in_word[0] = eng_capital;
+        letter_index = 1;
+    }
 
-	for (int string_index = 0; string_index < strlen(string); string_index++) {
-			letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
-			if (this_letter == NULL) { // if failed to get a letter, return failure
-				sprintf(dbgstr, "PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n\r", string);
-				PRINTF(dbgstr);
-				return 0;
-			}
-			letters_in_word[letter_index] = *this_letter;
-			letter_index++;
-		}
+    for (int string_index = 0; string_index < strlen(string); string_index++) {
+            letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
+            if (this_letter == NULL) { // if failed to get a letter, return failure
+                LOG_MSG("PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n\r", string);
+                return 0;
+            }
+            letters_in_word[letter_index] = *this_letter;
+            letter_index++;
+        }
 
-	if (num_cells == 0) {
-		PRINTF("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n\r");
-		return 0;
-	}
+    if (num_cells == 0) {
+        LOG_MSG("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n\r");
+        return 0;
+    }
 
-	word->letters = letters_in_word;
-	word->length_name = strlen(string); // length of English representation of word
-	word->num_letters = num_cells;      // length of Braille representation of word
-	word->curr_letter = 0;
-	word->curr_glyph = -1;
-	word->lang_enum = ENGLISH;
-	return 1;
+    word->letters = letters_in_word;
+    word->length_name = strlen(string); // length of English representation of word
+    word->num_letters = num_cells;      // length of Braille representation of word
+    word->curr_letter = 0;
+    word->curr_glyph = -1;
+    word->lang_enum = ENGLISH;
+    return 1;
 }
 
 /**
@@ -243,14 +248,14 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 * @remark Tested lightly in English and Hindi.
 */
 void word_to_cell_array(word_t* word, cell_t* arr){
-	int array_index = 0;
-	for (int i = 0; i < word->num_letters; i++){
-		letter_t this_letter = word->letters[i];
-		for (int j = 0; j < this_letter.num_cells; j++) {
-			arr[array_index] = this_letter.cells[j];
-			array_index++;
-		}
-	}
+    int array_index = 0;
+    for (int i = 0; i < word->num_letters; i++){
+        letter_t this_letter = word->letters[i];
+        for (int j = 0; j < this_letter.num_cells; j++) {
+            arr[array_index] = this_letter.cells[j];
+            array_index++;
+        }
+    }
 }
 
 /**
@@ -263,28 +268,28 @@ void word_to_cell_array(word_t* word, cell_t* arr){
 * @remark Tested lightly in English and Hindi.
 */
 void increment_word_index(word_t* word) {
-	letter_t this_letter = word->letters[word->curr_letter];
-	if (word->curr_glyph < this_letter.num_cells - 1)
-		word->curr_glyph++;
-	else {
-		word->curr_letter++;
-		word->curr_glyph = 0;
-	}
+    letter_t this_letter = word->letters[word->curr_letter];
+    if (word->curr_glyph < this_letter.num_cells - 1)
+        word->curr_glyph++;
+    else {
+        word->curr_letter++;
+        word->curr_glyph = 0;
+    }
 }
 
 void decrement_word_index(word_t* word) {
-	// if you're at the first cell, reset to letter 0, glyph -1
-	if (word->curr_letter == 0 && word->curr_glyph == 0)
-		word->curr_glyph = -1;
-	// if you're partway through a letter, decrement curr_glyph
-	else if (word->curr_glyph > 0)
-		word->curr_glyph--;
-	// otherwise, decrement curr_letter
-	else {
-		word->curr_letter--;
-		letter_t prev_letter = word->letters[word->curr_letter];
-		word->curr_glyph = prev_letter.num_cells - 1;
-	}
+    // if you're at the first cell, reset to letter 0, glyph -1
+    if (word->curr_letter == 0 && word->curr_glyph == 0)
+        word->curr_glyph = -1;
+    // if you're partway through a letter, decrement curr_glyph
+    else if (word->curr_glyph > 0)
+        word->curr_glyph--;
+    // otherwise, decrement curr_letter
+    else {
+        word->curr_letter--;
+        letter_t prev_letter = word->letters[word->curr_letter];
+        word->curr_glyph = prev_letter.num_cells - 1;
+    }
 }
 
 /**
@@ -294,10 +299,10 @@ void decrement_word_index(word_t* word) {
 * @remark Tested lightly in English.
 */
 void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
-	increment_word_index(word);
-	letter_t this_letter = word->letters[word->curr_letter];
-	*next_cell = this_letter.cells[word->curr_glyph];
-	}
+    increment_word_index(word);
+    letter_t this_letter = word->letters[word->curr_letter];
+    *next_cell = this_letter.cells[word->curr_glyph];
+    }
 
 /**
 * Print a word, not by printing its name but by printing the name
@@ -307,20 +312,17 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 * @remark Tested in English and Hindi.
 */
 void print_word(word_t* word) {
-	if (word->letters == NULL) {
-		sprintf(dbgstr, "PRINT_WORD FAILED: '%s' CONTAINS NO LETTERS\n", word->name);
-		PRINTF(dbgstr);
-		return;
-	}
-	sprintf(dbgstr, "%s (spelled: ", word->name);
-	PRINTF(dbgstr);
-	for (int i = 0; i < word->num_letters; i++) {
-		print_letter(&word->letters[i]);
-		if (i < (word->num_letters - 1))
-			PRINTF("-");
-	}
-	sprintf(dbgstr, (") [%d]\n\r"), word->num_letters);
-	PRINTF(dbgstr);
+    if (word->letters == NULL) {
+        LOG_MSG("PRINT_WORD FAILED: '%s' CONTAINS NO LETTERS\n", word->name);
+        return;
+    }
+    LOG_MSG("%s (spelled: ", word->name);
+    for (int i = 0; i < word->num_letters; i++) {
+        print_letter(&word->letters[i]);
+        if (i < (word->num_letters - 1))
+            LOG_MSG("-");
+    }
+    LOG_MSG(") [%d]\n\r", word->num_letters);
 }
 
 /**
@@ -330,20 +332,20 @@ void print_word(word_t* word) {
 * @remark Tested in English.
 */
 char* get_lang(word_t* word){
-	switch (word->lang_enum) {
-		case ENGLISH:
-			return "ENG_";
-			break;
-		case HINDI:
-			return "HIN_";
-			break;
-		case KANNADA:
-			return "KAN_";
-			break;
-		default:
-			return "SYS_";
-			break;
-	}
+    switch (word->lang_enum) {
+        case ENGLISH:
+            return "ENG_";
+            break;
+        case HINDI:
+            return "HIN_";
+            break;
+        case KANNADA:
+            return "KAN_";
+            break;
+        default:
+            return "SYS_";
+            break;
+    }
 }
 
 #ifdef DEBUGMODE
@@ -359,13 +361,13 @@ char* get_lang(word_t* word){
 * would play pollu0.mp3 for both.
 */
 void speak_word(word_t* word) {
-	char mp3name[7];
-	sprintf(mp3name, "%s", word->name);
-	if (word->length_name > 6) {
-		mp3name[5] = '0';
-		mp3name[6] = '\0';
-	}
-	play_mp3("V_", mp3name);
+    char mp3name[7];
+    sprintf(mp3name, "%s", word->name);
+    if (word->length_name > 6) {
+        mp3name[5] = '0';
+        mp3name[6] = '\0';
+    }
+    play_mp3("V_", mp3name);
 }
 
 /**
@@ -375,9 +377,9 @@ void speak_word(word_t* word) {
 * @warning Untested
 */
 void speak_letters_in_word(word_t* word){
-	char* lang = get_lang(word);
-	for (int i = 0; i < word->num_letters; i++)
-		play_mp3(lang, word->letters[i].name);
+    char* lang = get_lang(word);
+    for (int i = 0; i < word->num_letters; i++)
+        play_mp3(lang, word->letters[i].name);
 }
 
 /**
@@ -389,9 +391,9 @@ void speak_letters_in_word(word_t* word){
 * @warning Untested
 */
 void speak_letters_so_far(word_t* word){
-	char* lang = get_lang(word);
-	for (int i = 0; i <= word->curr_letter; i++)
-		play_mp3(lang, word->letters[i].name);
+    char* lang = get_lang(word);
+    for (int i = 0; i <= word->curr_letter; i++)
+        play_mp3(lang, word->letters[i].name);
 }
 #endif
 
@@ -403,7 +405,7 @@ void speak_letters_so_far(word_t* word){
 * CREATED MANUALLY RATHER THAN MALLOCED.
 */
 void free_word(word_t* word) {
-	free(word->letters);
+    free(word->letters);
 }
 
 
@@ -424,26 +426,25 @@ void free_word(word_t* word) {
 * @BUG Sometimes buggy when used several times in a row.
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
-	if (num_words == 0) {
-		PRINTF("No words. Wordlist uninitialized.\n\r");
-		return;
-	}
-	list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
-	int* order = (int*) malloc(num_words*sizeof(int));
-	list->index = 0;
-	list->words = words;
-	list->order = order;
-	for (int i = 0; i < MAX_WORDLIST_LENGTH; i++) {
-		if (i < list->num_words) {
-			list->order[i] = i;
-		}
-		else {
-			list->order[i] = -1;
-		}
-	}
-	shuffle(num_words, list->order);
-	sprintf(dbgstr, "Wordlist initialized. Num_words = %d.\n\r", num_words);
-	PRINTF(dbgstr);
+    if (num_words == 0) {
+        LOG_MSG("No words. Wordlist uninitialized.\n\r");
+        return;
+    }
+    list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
+    int* order = (int*) malloc(num_words*sizeof(int));
+    list->index = 0;
+    list->words = words;
+    list->order = order;
+    for (int i = 0; i < MAX_WORDLIST_LENGTH; i++) {
+        if (i < list->num_words) {
+            list->order[i] = i;
+        }
+        else {
+            list->order[i] = -1;
+        }
+    }
+    shuffle(num_words, list->order);
+    LOG_MSG("Wordlist initialized. Num_words = %d.\n\r", num_words);
 }
 
 /**
@@ -458,62 +459,60 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
 * when needed
 */
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
-	static word_t* words;
-	int str_index, word_index; // will iterate separtely through string array and word array
-	// iterate through strings and parse them into words. If there are too many strings,
-	// randomly pick MAX_WORDLIST_LENGTH of them. If any string fails to parse into
-	// a word, shrink the wordlist, reset the word_index iterator, and keep going.
+    static word_t* words;
+    int str_index, word_index; // will iterate separtely through string array and word array
+    // iterate through strings and parse them into words. If there are too many strings,
+    // randomly pick MAX_WORDLIST_LENGTH of them. If any string fails to parse into
+    // a word, shrink the wordlist, reset the word_index iterator, and keep going.
 
-	if (num_strings <= MAX_WORDLIST_LENGTH) {
-		str_index = word_index = 0;
-		words = (word_t*) malloc(sizeof(word_t) * num_strings);
-		if (words == 0) {
-			// @todo: record message for this indicating the device needs to be rebooted?
-			PRINTF("MALLOC FAILED!!!\n\r");
-			exit(0);
-		}
-		// iterate through strings; parse into words; increment index into word array only when parsing succeeds
-		for (str_index = 0; str_index < num_strings; str_index++) {
-			sprintf(dbgstr, "word_index: %d, str_index: %d, string %s\n\r", word_index, str_index, strings[str_index]);
-			PRINTF(dbgstr);
-			if (parse_string_into_eng_word(strings[str_index], &(words[word_index])))
-				word_index++;
-		}
-	}
+    if (num_strings <= MAX_WORDLIST_LENGTH) {
+        str_index = word_index = 0;
+        words = (word_t*) malloc(sizeof(word_t) * num_strings);
+        if (words == 0) {
+            // @todo: record message for this indicating the device needs to be rebooted?
+            LOG_MSG("MALLOC FAILED!!!\n\r");
+            exit(0);
+        }
+        // iterate through strings; parse into words; increment index into word array only when parsing succeeds
+        for (str_index = 0; str_index < num_strings; str_index++) {
+            LOG_MSG("word_index: %d, str_index: %d, string %s\n\r", word_index, str_index, strings[str_index]);
+            if (parse_string_into_eng_word(strings[str_index], &(words[word_index])))
+                word_index++;
+        }
+    }
 
-	else { // too many strings. Shuffle the words & pick the first MAX_WORDLIST_LENGTH.
-		str_index = word_index = 0;
-		words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
-		if (words == 0) {
-			// @todo: record message for this indicating the device needs to be rebooted?
-			PRINTF("MALLOC FAILED!!!\n\r");
-			exit(0);
-		}
-		int indices[num_strings];
-		for (int i = 0; i < num_strings; i++) {
-			indices[i] = i;
-		}
-		shuffle(num_strings, indices);
+    else { // too many strings. Shuffle the words & pick the first MAX_WORDLIST_LENGTH.
+        str_index = word_index = 0;
+        words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
+        if (words == 0) {
+            // @todo: record message for this indicating the device needs to be rebooted?
+            LOG_MSG("MALLOC FAILED!!!\n\r");
+            exit(0);
+        }
+        int indices[num_strings];
+        for (int i = 0; i < num_strings; i++) {
+            indices[i] = i;
+        }
+        shuffle(num_strings, indices);
 
-		// get MAX_WORDLIST_LENGTH of the strings, in random order
-		// iterate through words; parse strings into it; increment string index each time,
-		// but decrement word_index if parsing fails so it'll increment back to same place
-		// in the next loop
-		for (word_index = 0; word_index < MAX_WORDLIST_LENGTH; word_index++) {
-			sprintf(dbgstr, "word_index: %d, str_index: %d, indices: %d, string %s\n\r", word_index, str_index, indices[str_index], strings[indices[str_index]]);
-			PRINTF(dbgstr);
-			if (str_index == MAX_WORDLIST_LENGTH) {// stop if we're out of strings -- could happen if
-				PRINTF("Out of strings!\n\r");
-				break;                            // lots of strings are unparseable
-			}
+        // get MAX_WORDLIST_LENGTH of the strings, in random order
+        // iterate through words; parse strings into it; increment string index each time,
+        // but decrement word_index if parsing fails so it'll increment back to same place
+        // in the next loop
+        for (word_index = 0; word_index < MAX_WORDLIST_LENGTH; word_index++) {
+            LOG_MSG("word_index: %d, str_index: %d, indices: %d, string %s\n\r", word_index, str_index, indices[str_index], strings[indices[str_index]]);
+            if (str_index == MAX_WORDLIST_LENGTH) {// stop if we're out of strings -- could happen if
+                LOG_MSG("Out of strings!\n\r");
+                break;                            // lots of strings are unparseable
+            }
 
-			if (!parse_string_into_eng_word(strings[indices[str_index]], &(words[word_index]))) {
-				word_index--;
-			}
-			str_index++;
-		}
-	}
-	initialize_wordlist(words, word_index, list); //word_index = length of list
+            if (!parse_string_into_eng_word(strings[indices[str_index]], &(words[word_index]))) {
+                word_index--;
+            }
+            str_index++;
+        }
+    }
+    initialize_wordlist(words, word_index, list); //word_index = length of list
 }
 
 /**
@@ -524,9 +523,9 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 * @remark Tested in English.
 */
 void print_words_in_list(wordlist_t* wl) {
-	for (int i = 0; i < wl->num_words; i++) {
-		print_word(&wl->words[wl->order[i]]);
-	}
+    for (int i = 0; i < wl->num_words; i++) {
+        print_word(&wl->words[wl->order[i]]);
+    }
 }
 
 /**
@@ -536,13 +535,13 @@ void print_words_in_list(wordlist_t* wl) {
 * @remark Tested lightly in English.
 */
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
-	if (wl->index == 0) // if at beginning of list, reshuffle
-		shuffle(wl->num_words, wl->order);
+    if (wl->index == 0) // if at beginning of list, reshuffle
+        shuffle(wl->num_words, wl->order);
 
-	int randomized_index = wl->order[wl->index];
-	*next_word = &(wl->words[randomized_index]); // added indirection to iterate in randomized order
+    int randomized_index = wl->order[wl->index];
+    *next_word = &(wl->words[randomized_index]); // added indirection to iterate in randomized order
 
-	wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
+    wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
 }
 
 /**
@@ -554,11 +553,11 @@ void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
 * CREATED MANUALLY RATHER THAN MALLOCED.
 */
 void free_wordlist(wordlist_t* wl) {
-	for (int i = 0; i < wl->num_words; i++) {
-		free_word(&wl->words[i]);
-	}
-	free(wl->words);
-	free(wl->order);
+    for (int i = 0; i < wl->num_words; i++) {
+        free_word(&wl->words[i]);
+    }
+    free(wl->words);
+    free(wl->order);
 }
 
 /**
@@ -568,9 +567,9 @@ void free_wordlist(wordlist_t* wl) {
  * @return A random int between i and j-1 inclusive.
  */
 int random_between(int i, int j) {
-	int range = j - i;
-	int retval = i + (rand() % range);
-	return retval;
+    int range = j - i;
+    int retval = i + (rand() % range);
+    return retval;
 }
 
 /**
@@ -582,13 +581,13 @@ int random_between(int i, int j) {
 * function.
 */
 void shuffle(int len, int* int_array) {
-	int random_i, temp;
-	for (int i = 0; i < len; i++) {
-		random_i = random_between(i, len);
-		temp = int_array[i];
-		int_array[i] = int_array[random_i];
-		int_array[random_i] = temp;
-	}
+    int random_i, temp;
+    for (int i = 0; i < len; i++) {
+        random_i = random_between(i, len);
+        temp = int_array[i];
+        int_array[i] = int_array[random_i];
+        int_array[random_i] = temp;
+    }
 }
 
 /**
@@ -600,18 +599,18 @@ void shuffle(int len, int* int_array) {
 * wordlist" function.
 */
 void unshuffle(int len, int* int_array) {
-	for (int i = 0; i < len; i++) {
-		int min = i;
-		for (int j = i+1; j < len; j++) {
-			if (int_array[j] < int_array[min])
-				min = j;
-		}
-		if (i != min) {
-			int temp = int_array[i];
-			int_array[i] = int_array[min];
-			int_array[min] = temp;
-		}
-	}
+    for (int i = 0; i < len; i++) {
+        int min = i;
+        for (int j = i+1; j < len; j++) {
+            if (int_array[j] < int_array[min])
+                min = j;
+        }
+        if (i != min) {
+            int temp = int_array[i];
+            int_array[i] = int_array[min];
+            int_array[min] = temp;
+        }
+    }
 }
 
 
