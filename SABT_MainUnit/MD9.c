@@ -245,6 +245,7 @@ void md9_main(void) {
 		case STATE_INPUT:
 			if (io_user_abort == true) {
 				PRINTF("[MD12] User aborted input\n\r");
+                play_mp3(SYS_FILESET,"HLPM");
 				md_next_state = STATE_REPROMPT;
 				io_init();
 				break;
@@ -283,15 +284,24 @@ void md9_main(void) {
 
 		case STATE_REPROMPT:
 				md_last_dot = create_dialog(MP3_SKIP,
-					ENTER_CANCEL | LEFT_RIGHT);
+                                            ENTER_CANCEL | LEFT_RIGHT | DOT_1
+                                            | DOT_2 | DOT_3 | DOT_4
+                                            | DOT_5 | DOT_6);
 				switch (md_last_dot) {
 					
 					case NO_DOTS:
 						break;
 
-					// Playing answer
-					case RIGHT: case LEFT:
+					
+					case LEFT:
+                        md_next_state = STATE_PROMPT;
+                        io_init();
+						break;
+                    
+                    case RIGHT:
 						md9_play_answer();
+                        md_next_state = STATE_GENQUES;
+                        io_init();
 						break;
 
 					// Skipping question
@@ -301,8 +311,18 @@ void md9_main(void) {
 
 					// Try again
 					case CANCEL:
-						md_next_state = STATE_PROMPT;
-						break;
+                        play_mp3(SYS_FILESET,"HLPX");
+                        play_mp3(SYS_FILESET, "BACQ");
+                        md_next_state = STATE_INPUT;
+                        io_init();
+                        break;
+
+                        
+                    case '1': case '2': case '3': case '4': case '5': case '6':
+                        play_mp3(MODE_FILESET, MP3_SKIP);
+                        io_init();
+                        break;
+
 
 					default:
 						break;
