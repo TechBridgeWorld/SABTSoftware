@@ -8,6 +8,9 @@
 
 // TODO this file is terrible
 
+ // @todo standardize naming conventions. (MD1_foo vs MD14foo)
+ // @todo catalog mp3s for modes and eliminate reduplication
+
 #ifndef _MODES_H_
 #define _MODES_H_
 

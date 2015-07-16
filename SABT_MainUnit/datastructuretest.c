@@ -5,6 +5,7 @@
 #include "datastructures.h"
 #include "script_english.h"
 #include "script_hindi.h"
+#include "common.h"
 
 int main() {
 	time_t t;
@@ -184,6 +185,14 @@ int main() {
 	wordlist_t easy, med;
 	strings_to_wordlist(med_words, ARRAYLEN(med_words), &med);
 	print_words_in_list(&med);
+
+	word_t hi;
+	parse_string_into_eng_word("hi", &hi);
+	print_word(&hi);
+	free_word(&hi);
+	free_wordlist(&med);
+	parse_string_into_eng_word("hello", &hi);
+	print_word(&hi);
 
 	// test of random_between
 //   	printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));

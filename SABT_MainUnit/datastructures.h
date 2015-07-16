@@ -1,7 +1,7 @@
 /**
  * @file datastructures.h
- * @brief Structures for single glyphs and scripts
- * @author Vivek Nair (viveknair@cmu.edu)
+ * @brief Structures and declarations for all the data structures
+ * @author Marjorie Carlson (marjorie@cmu.edu)
  */
 
 #ifndef _DATASTRUCTURES_H_
@@ -9,6 +9,8 @@
 
 #include <stdbool.h>
 
+
+// @todo: reduce this to the six dots and | them.
 #define DOTS0      0b000000
 #define DOTS1      0b000001
 #define DOTS2      0b000010
@@ -94,6 +96,9 @@ struct glyph {
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
 
+// @todo: pack structs
+// @todo: work out which structs should be globals (e.g. current_word?)
+
 typedef struct cell {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 } cell_t;
@@ -156,6 +161,8 @@ typedef struct word_node {
 	struct word_node* next;	
 } word_node_t;
 
+// @todo Remove the ones that should only be helper functions
+
 // Cell functions
 void print_cell_pattern(cell_t* cell);
 bool cell_equals(cell_t* cell1, cell_t* cell2);
@@ -175,7 +182,7 @@ void increment_word_index(word_t* word);
 void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
 void print_word(word_t* word);
-
+void free_word(word_t* word);
 #ifdef DEBUGMODE
 #else
 void speak_word(word_t* word);
@@ -188,6 +195,7 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
 void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
 void print_words_in_list(wordlist_t* wl);
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
+void free_wordlist(wordlist_t* wl);
 
 int random_between(int i, int j);
 void shuffle(int len, int* int_array);

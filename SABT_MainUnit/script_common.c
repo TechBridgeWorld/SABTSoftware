@@ -132,7 +132,7 @@ word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph) {
 	}
 }
 
-word_node_t* free_word(word_node_t* this_word) {
+word_node_t* free_word_old(word_node_t* this_word) {
 	word_node_t* curr_node;
 	while (this_word!= NULL) {
 		curr_node = this_word;

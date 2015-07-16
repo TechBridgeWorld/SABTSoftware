@@ -1,9 +1,16 @@
 /*
  * @file MD15.c
  *
- * @brief Mode 15: spelling bee
+ * @brief Mode 15: two-player spelling bee
  * @author: Marjorie Carlson (marjorie@cmu.edu)
- */ 
+ * @BUG: Memory leak if the user exits & reenters the
+ * mode, because the memory allocated for the words &
+ * wordlist can't be freed when the mode is exited.
+ * In the worst case (if the user starts hard mode,
+ * quits to the menu, restarts the mode, starts hard mode
+ * again) only two games can be played before malloc
+ * fails entirely.
+ */
 
 // Standard libraries
 #include <stdbool.h>
@@ -64,17 +71,22 @@ static cell_t md15_curr_cell;
 
 void md15_stats(){
 	int words, mistakes;
+
 	if (player1_is_current) {
 		words = md15_p1_words_spelled;
+		if (words == 0)
+			return;
 		mistakes = md15_p1_total_mistakes;
 		play_mp3(MODE_FILESET, "PLR1");
 	}
 	else {
 		words = md15_p2_words_spelled;
+		if (words == 0)
+			return;
 		mistakes = md15_p2_total_mistakes;
 		play_mp3(MODE_FILESET, "PLR2");
-
 	}
+
 	play_mp3(MODE_FILESET, "STS1");      // "You have spelled"
 	play_number(words);                  // # of words
 	if (mistakes == 0) {
@@ -104,8 +116,10 @@ void md15_reset() {
 	next_state = MD15_STATE_INTRO;
 }
 
-void md15_correct_answer(){
+void md15_correct_answer() {
 	play_mp3(LANGUAGE, "CORR");
+	speak_letters_in_word(md15_chosen_word);
+	speak_word(md15_chosen_word);
 	play_mp3("SYS_", "TADA");
 	if (player1_is_current)
 		md15_p1_words_spelled++;
@@ -140,10 +154,8 @@ void md15_incorrect_answer() {
  * @return Void
  */
 void md15_main() {
-  switch(next_state)
-  {
+  switch(next_state) {
     case MD15_STATE_INTRO:
-    	PRINTF("In intro state\n\r");
     	play_mp3(MODE_FILESET, "WELC");
     	lang_fileset = "ENG_";
 		mode_fileset = "MD15";
@@ -152,37 +164,29 @@ void md15_main() {
 		break;
 
 	case MD15_STATE_LVLSEL:
-        md15_last_dot = create_dialog("LVLS", (DOT_1 | DOT_2));
+        md15_last_dot = create_dialog("LVL3", (DOT_1 | DOT_2 | DOT_3));
+        if (md15_last_dot == NO_DOTS)
+        	break;
         switch (md15_last_dot) {
-
-        	case NO_DOTS:
-        		break;
-
         	case '1':
-        		play_mp3(LANGUAGE, "EASY");
-        		strings_to_wordlist(easy, ARRAYLEN(easy), &md15_dict);
-				print_words_in_list(&md15_dict);
-        		play_mp3(MODE_FILESET, "INST");
-        		next_state = MD15_STATE_GENQUES;
-        		break;
-
+				play_mp3(LANGUAGE, "EASY");
+   				strings_to_wordlist(easy, ARRAYLEN(easy), &md15_dict);
+   				break;
         	case '2':
-        		play_mp3(LANGUAGE, "HARD");
-        		strings_to_wordlist(medium, ARRAYLEN(medium), &md15_dict);
-				print_words_in_list(&md15_dict);
-        		play_mp3(MODE_FILESET, "INST");
-        		next_state = MD15_STATE_GENQUES;
-        		break;
-
-        	default:
-        		play_mp3(LANGUAGE, "INVP");
-        		PRINTF("Invalid entry.");
-				break;
-		}
-		break;
+				play_mp3(LANGUAGE, "MED");
+  				strings_to_wordlist(medium, ARRAYLEN(medium), &md15_dict);
+  				break;
+        	case '3':
+				play_mp3(LANGUAGE, "HARD");
+    			strings_to_wordlist(hard, ARRAYLEN(hard), &md15_dict);
+    			break;
+        }
+		print_words_in_list(&md15_dict);
+    	play_mp3(MODE_FILESET, "INST");
+    	next_state = MD15_STATE_GENQUES;
+    	break;
 
 	case MD15_STATE_GENQUES:
-		PRINTF("In genques state\n\r");
 		md15_reset();
 		get_next_word_in_wordlist(&md15_dict, &md15_chosen_word);
 		sprintf(dbgstr, "[MD15] Next word: %s\n\r", md15_chosen_word->name);
@@ -191,7 +195,6 @@ void md15_main() {
 	  	break;
 
 	 case MD15_STATE_PROMPT:
-	 	PRINTF("In prompt state\n\r");
 	 		if (player1_is_current)
 	 			play_mp3(MODE_FILESET, "PLR1");
 	 		else
@@ -218,7 +221,7 @@ void md15_main() {
 			next_state = MD15_STATE_REPROMPT;
 			break;
 			case WITH_RIGHT:
-			md15_reset();
+			md15_stats();
 			next_state = MD15_STATE_GENQUES;
 			break;
 			case WITH_CANCEL:
@@ -228,11 +231,10 @@ void md15_main() {
 
 	case MD15_STATE_CHECK:
 		get_next_cell_in_word(md15_chosen_word, &md15_curr_cell);
-		sprintf(dbgstr, "In check state. Current cell: %x, user cell: %x.\n\r", md15_curr_cell.pattern, md15_user_cell.pattern);
+		sprintf(dbgstr, "Target cell: %x, inputted cell: %x.\n\r", md15_curr_cell.pattern, md15_user_cell.pattern);
 		PRINTF(dbgstr);
 
 		if (cell_equals(&md15_curr_cell, &md15_user_cell)) {
-			md15_curr_mistakes = 0;
 			if (md15_chosen_word->curr_letter == md15_chosen_word->num_letters - 1) { // done
 				md15_correct_answer();
 			  	next_state = MD15_STATE_SWITCH;
@@ -240,6 +242,7 @@ void md15_main() {
 			else {// correct but not done
 				play_mp3(LANGUAGE, "GOOD");
 				play_mp3(LANGUAGE, "NLET");
+				md15_curr_mistakes = 0;
 				next_state = MD15_STATE_INPUT;
 			}
 		}
@@ -258,7 +261,6 @@ void md15_main() {
 		break;
 
 	case MD15_STATE_REPROMPT:
-		PRINTF("In reprompt state\n\r");
 	 	speak_word(md15_chosen_word);
 	 	if (md15_chosen_word->curr_glyph > -1) { // not at beginning of word
 	 		play_mp3(MODE_FILESET, "SPLS");
@@ -268,7 +270,6 @@ void md15_main() {
 	 	break;
 
 	 case MD15_STATE_GAMEOVER:
-	 	PRINTF("Game over!\n\r");
 	 	// a player wins if (s)he spelled more words OR spelled same number of words with fewer mistakes
 	 	if (md15_p1_words_spelled > md15_p2_words_spelled
 	 		|| (md15_p1_words_spelled == md15_p2_words_spelled
@@ -287,6 +288,7 @@ void md15_main() {
 		 	play_mp3(MODE_FILESET, "WIN0");
 		 }
 
+		// output stats for both players
 	 	player1_is_current = true;
 	 	md15_stats();
 	 	player1_is_current = false;

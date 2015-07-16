@@ -134,8 +134,8 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
   incorrect_tries = 0;
   user_glyph = NULL;
   curr_glyph = NULL;
-  user_word = free_word(user_word);
-  curr_word = free_word(curr_word);
+  user_word = free_word_old(user_word);
+  curr_word = free_word_old(curr_word);
   cell = 0;
   cell_pattern = 0;
   cell_control = 0;
@@ -194,8 +194,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 	  sound_source = sound_source_list[choose_sound_source()];
 	  user_glyph = NULL;
 	  curr_glyph = NULL;
-      user_word = free_word(user_word);
-	  curr_word = free_word(curr_word);
+      user_word = free_word_old(user_word);
+	  curr_word = free_word_old(curr_word);
 	  next_state = STATE_PROMPT;
 	  break;
 	  
