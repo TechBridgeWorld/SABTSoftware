@@ -4,6 +4,7 @@
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 
+#include <stdbool.h>
 #include "io.h"
 #include "common.h"
 #include "globals.h"
@@ -12,7 +13,13 @@
 #include "letter_globals.h"
 #include "script_digits.h"
 
-#include <stdbool.h>
+#ifdef DEBUGMODE
+	#include <stdio.h>
+	#include <stdarg.h>
+#endif
+
+
+
 
 // **************************************
 // ********** Global variables **********
@@ -44,7 +51,7 @@ static int io_dialog_incorrect_tries = -1;
 // ********** Helper function declarations **********
 // **************************************************
 
-// Basic IO helper funcitons
+// Basic IO helper functions
 void io_line_next_cell(void);
 void io_line_prev_cell(void);
 void io_line_clear_cell(void);
@@ -59,6 +66,9 @@ void io_dialog_init(char control_mask);
 void io_dialog_reset(void);
 void io_dialog_error(void);
 
+
+#ifdef DEBUGMODE
+#else
 
 // ******************************
 // ********** Basic IO **********
@@ -122,9 +132,9 @@ char get_cell(void) {
 				case ENTER:
 					io_user_cancel = false;
 					io_user_abort = false;
-					sprintf(dbgstr, "[IO] Cell pattern: %x\n\r",
+					log_msg("[IO] Cell pattern: %x\n\r",
 						ret_val | WITH_ENTER);
-					PRINTF(dbgstr);
+					
 					return ret_val | WITH_ENTER;
 					break;
 				case LEFT:
@@ -151,8 +161,8 @@ char get_cell(void) {
 					break;
 				// Should not execute this code
 				default:
-					sprintf(dbgstr, "[IO] Invalid dot: %x\n\r", last_dot);
-					PRINTF(dbgstr);
+					log_msg("[IO] Invalid dot: %x\n\r", last_dot);
+					
 					quit_mode();
 					return NO_DOTS;
 					break;
@@ -161,8 +171,8 @@ char get_cell(void) {
 
 		// Should not execute this code
 		default:
-			sprintf(dbgstr, "[IO] Invalid dot: %x\n\r", last_dot);
-			PRINTF(dbgstr);
+			log_msg("[IO] Invalid dot: %x\n\r", last_dot);
+			
 			quit_mode();
 			return NO_DOTS;
 			break;
@@ -238,8 +248,8 @@ bool get_line(void) {
 
 		// Should not execute this code
 		default:
-			sprintf(dbgstr, "[IO] Invalid control: %x\n\r", control);
-			PRINTF(dbgstr);
+			log_msg("[IO] Invalid control: %x\n\r", control);
+			
 			quit_mode();
 			return false;
 			break;
@@ -291,21 +301,21 @@ bool get_first_glyph(glyph_t** res) {
 		return false;
 	}
 
-	PRINTF("[IO] Line accepted\n\r");
+	log_msg("[IO] Line accepted\n\r");
 
 	/*
 	If conversion is unsuccessful, return NULL, otherwise return first
 	character
 	*/
 	if (!io_convert_line()) {
-		PRINTF("[IO] Line conversion unsuccessful\n\r");
+		log_msg("[IO] Line conversion unsuccessful\n\r");
 		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
 		*res = NULL;
 		return true;
 	} else {
-        PRINTF("io_convert");
-        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
-        PRINTF(dbgstr);
+        log_msg("io_convert");
+        log_msg("[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        
 		*res = io_parsed[0];
 		
 		return true;
@@ -318,21 +328,21 @@ bool get_character(bool* valid, char* character){
         return false;
     }
     
-    PRINTF("[IO] Line accepted\n\r");
+    log_msg("[IO] Line accepted\n\r");
     
     /*
      If conversion is unsuccessful, return NULL, otherwise return first
      character
      */
     if (!io_convert_line()) {
-        PRINTF("[IO] Line conversion unsuccessful\n\r");
+        log_msg("[IO] Line conversion unsuccessful\n\r");
         play_mp3(lang_fileset, MP3_INVALID_PATTERN);
         *valid = false;
         return true;
     } else {
-        PRINTF("io_convert");
-        sprintf(dbgstr, "[IO] Returning character: %s\n\r", io_parsed[0]->sound);
-        PRINTF(dbgstr);
+        log_msg("io_convert");
+        log_msg("[IO] Returning character: %s\n\r", io_parsed[0]->sound);
+        
         *character = get_letter_from_bits(io_parsed[0]->pattern);
         if(character == '\0') *valid = false;
         else *valid = true;
@@ -355,8 +365,8 @@ char create_dialog(char* prompt, char control_mask) {
 
 	// Gets initialised on first call after a successful return or first run
 	if (io_dialog_initialised == false) {
-		sprintf(dbgstr, "[IO] Creating dialog: %s\n\r", prompt);
-		PRINTF(dbgstr);
+		log_msg("[IO] Creating dialog: %s\n\r", prompt);
+		
 		io_dialog_init(control_mask);
 	}
 
@@ -376,8 +386,8 @@ char create_dialog(char* prompt, char control_mask) {
 		// Returns dot if enabled, o/w registers error
 		case '1': case '2': case '3': case '4': case '5': case '6':
 			if (io_dialog_dots_enabled[CHARTOINT(last_dot) - 1] == true) {
-				sprintf(dbgstr, "[IO] Returning dot %c\n\r", last_dot);
-				PRINTF(dbgstr);
+				log_msg("[IO] Returning dot %c\n\r", last_dot);
+				
 				io_dialog_reset();
 				return last_dot;
 			} else {
@@ -411,8 +421,8 @@ char create_dialog(char* prompt, char control_mask) {
 
 		// Should not get here
 		default:
-			sprintf(dbgstr, "[IO] Invalid dot: %x\n\r", last_dot);
-			PRINTF(dbgstr);
+			log_msg("[IO] Invalid dot: %x\n\r", last_dot);
+			
 			quit_mode();
 			return NO_DOTS;
 			break;
@@ -502,9 +512,9 @@ bool io_convert_line(void) {
 		if (curr_glyph == NULL) {
 			return false;
 		} else {
-			//sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s pattern:%x\n\r", parse_index, curr_glyph->sound, curr_glyph->pattern);
-            sprintf(dbgstr, "[IO] Parsed glyph[%d]: %s(0x%x)\n\r", parse_index, curr_glyph->sound,curr_glyph->pattern);
-			PRINTF(dbgstr);
+			//log_msg("[IO] Parsed glyph[%d]: %s pattern:%x\n\r", parse_index, curr_glyph->sound, curr_glyph->pattern);
+            log_msg("[IO] Parsed glyph[%d]: %s(0x%x)\n\r", parse_index, curr_glyph->sound,curr_glyph->pattern);
+			
 			io_parsed[parse_index] = curr_glyph;
 		}
 	}
@@ -513,8 +523,8 @@ bool io_convert_line(void) {
 	// raw cells, add a NULL terminator and return true
 	io_parsed[line_index] = NULL;
     io_init();
-    sprintf(dbgstr, "[IO] line index[%d]: \n\r", line_index);
-    PRINTF(dbgstr);
+    log_msg("[IO] line index[%d]: \n\r", line_index);
+    
 	return true;
 }
 
@@ -564,7 +574,7 @@ bool io_parse_number(int* res) {
 */
 void io_dialog_init(char control_mask) {
 	char last_dot = get_dot();
-	PRINTF(dbgstr);
+	
 	for (int i = 0; i < 6; i++) {
 		if ((control_mask & (1 << i)) != 0) {
 			io_dialog_dots_enabled[i] = true;
@@ -608,4 +618,18 @@ void io_dialog_error(void) {
 	if (io_dialog_incorrect_tries >= MAX_INCORRECT_TRIES) {
 		io_dialog_incorrect_tries = -1;
 	}
+}
+
+#endif
+
+void log_msg(const char* format, ...) {
+    va_list args;
+    va_start( args, format );
+    #ifdef DEBUGMODE
+        vprintf(format, args );
+    #else
+        vsprintf(dbgstr, format, args);
+        usart_transmit_string_to_pc((unsigned char*)dbgstr);
+    va_end( args );
+    #endif
 }

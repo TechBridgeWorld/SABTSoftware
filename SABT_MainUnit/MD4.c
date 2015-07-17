@@ -96,7 +96,7 @@ bool place_letter()
             return true;
         }
     }
-    PRINTF("no match\r\n");
+    log_msg("no match\r\n");
     return false;
 }
 
@@ -179,7 +179,7 @@ void md4_play_mistake(){
 
 
 void md4_reset(void) {
-    PRINTF("*** MD4 - one player hangman ***\n\r");
+    log_msg("*** MD4 - one player hangman ***\n\r");
     
     // Global variables
     set_mode_globals(&script_english, LANG_FILESET, MODE_FILESET);
@@ -203,9 +203,7 @@ void md4_main(void) {
             
         case STATE_GENQUES:
             choose_next_word();
-            char buf[10];
-            sprintf(buf, "word:%s\r\n", chosen_word);
-            PRINTF(buf);
+            log_msg("word:%s\r\n", chosen_word);
 			md_next_state = STATE_LVLSEL;
             
             break;
@@ -247,19 +245,19 @@ void md4_main(void) {
             
         case STATE_INPUT:
             if (io_user_abort == true) {
-                PRINTF("[MD4] User aborted input\n\r");
+                log_msg("[MD4] User aborted input\n\r");
                 md_next_state = STATE_REPROMPT;
                 io_init();
                 break;
             }
             if (get_character(&md_input_valid, &entered_letter)) {
                 if (md_input_valid) {
-                    sprintf(dbgstr, "[MD4] User answer: %c\n\r", entered_letter);
-                    PRINTF(dbgstr);
+                    log_msg("[MD4] User answer: %c\n\r", entered_letter);
+                    
                     play_string(&entered_letter,1);
                     md_next_state = STATE_CHECKANS;
                 } else {
-                    PRINTF("[MD4] IO error\n\r");
+                    log_msg("[MD4] IO error\n\r");
                 }
             }
             break;
@@ -294,7 +292,7 @@ void md4_main(void) {
 					{
 						mistake_pool[num_mistakes] = entered_letter;
 						num_mistakes++;
-                        PRINTF("[mode]not past mis\r\n");
+                        log_msg("[mode]not past mis\r\n");
 					} else 
 					{
 						play_mp3(MODE_FILESET, MP3_PAST_MISTAKE);		
@@ -341,7 +339,7 @@ void md4_main(void) {
             break;
             
         default:
-            PRINTF("[MD9] Error: next_state: ");
+            log_msg("[MD9] Error: next_state: ");
             SENDBYTE(md_next_state);
             NEWLINE;
             quit_mode();

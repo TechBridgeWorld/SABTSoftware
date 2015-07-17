@@ -88,9 +88,8 @@ int choose_sound_source()
   num *= PRIME;
   num = (abs(num) % MAX_INDEX);
 
-  char buf[10];
-  sprintf(buf, "num=%i\r\n", num);
-  PRINTF(buf);
+  log_msg("num = %i", num);
+  NEWLINE;
 
   while(sound_sources_used_list[num])
   {
@@ -103,24 +102,20 @@ int choose_sound_source()
 
   for(i = 0; i < MAX_INDEX; i ++)
   {
-    sprintf(buf, "arr=%i, ",sound_sources_used_list[i] );
-    PRINTF(buf);
+    log_msg("arr = %i, ",sound_sources_used_list[i] );
   }
 
   TX_NEWLINE_PC;
-  sprintf(buf, "cnt=%i", sound_sources_used +1);
-  PRINTF(buf);
+  log_msg("cnt = %i", sound_sources_used +1);
   TX_NEWLINE_PC;
 
   // increment sound_sources_used until we've used all MAX_INDEX sound_sources then reset everything
   sound_sources_used++;
-  if (sound_sources_used == MAX_INDEX)
-  {
+  if (sound_sources_used == MAX_INDEX) {
     sound_sources_used = 0;
     for (i = 0; i < MAX_INDEX; i++)
       sound_sources_used_list[i] = 0;
   }
-
   return num;
 }
 
@@ -140,7 +135,7 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
   cell_pattern = 0;
   cell_control = 0;
   scrolled = false;
-  PRINTF("[MD3] Mode reset");
+  log_msg("[MD3] Mode reset");
   play_mp3(MODE_FILESET, "INT");
   play_mp3(MODE_FILESET, "MSEL");
 }
@@ -155,7 +150,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
   {
     case STATE_MENU:
 	  if (io_user_abort == true) {
-		  PRINTF("[MD3] Quitting to main menu\n\r");
+		  log_msg("[MD3] Quitting to main menu");
+		  NEWLINE;
 		  quit_mode();
 		  io_init();
 	  }
@@ -220,7 +216,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 	
 	case STATE_INPUT:
 	if (io_user_abort == true) {
-		PRINTF("[MD3] User aborted input\n\r");
+		log_msg("[MD3] User aborted input");
+		NEWLINE;
 		next_state = STATE_REPROMPT;
 		io_init();
 	}
@@ -234,7 +231,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 		case WITH_ENTER:
 		user_glyph = search_script(this_script, cell_pattern);
 		next_state = STATE_CHECK;
-		PRINTF("[MD3] Checking answer\n\r");
+		log_msg("[MD3] Checking answer");
+		NEWLINE;
 		break;
 		case WITH_LEFT:
 		next_state = STATE_PROMPT;
@@ -276,7 +274,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 		} else {
 			play_glyph(user_glyph);
 			incorrect_tries++;
-			PRINTF("[MD3] User answered incorrectly\n\r");
+			log_msg("[MD3] User answered incorrectly");
+			NEWLINE
 			play_mp3(lang_fileset, "NO");
 			play_mp3(lang_fileset, MP3_TRY_AGAIN);
 			play_word(user_word);
@@ -301,13 +300,13 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 		break;
 
 		case CANCEL:
-		PRINTF("[MD3] Reissuing prompt");
+		log_msg("[MD3] Reissuing prompt");
 		next_state = STATE_PROMPT;
 		scrolled = false;
 		break;
 
 		case ENTER:
-		PRINTF("[MD3] Skipping sound_source");
+		log_msg("[MD3] Skipping sound_source");
 		if (scrolled)
 		next_state = STATE_PROMPT;
 		else
@@ -316,7 +315,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 		break;
 
 		case RIGHT: case LEFT:
-			PRINTF("[MD3] Next sound_source");
+			log_msg("[MD3] Next sound_source");
 			length_entered_word = 0;
 			current_word_index = 0;
 			sound_source = sound_source_list[choose_sound_source()];

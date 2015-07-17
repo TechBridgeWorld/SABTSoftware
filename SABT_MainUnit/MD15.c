@@ -189,8 +189,8 @@ void md15_main() {
 	case MD15_STATE_GENQUES:
 		md15_reset();
 		get_next_word_in_wordlist(&md15_dict, &md15_chosen_word);
-		sprintf(dbgstr, "[MD15] Next word: %s\n\r", md15_chosen_word->name);
-		PRINTF(dbgstr);
+		log_msg("[MD15] Next word: %s\n\r", md15_chosen_word->name);
+		
 		next_state = MD15_STATE_PROMPT;
 	  	break;
 
@@ -215,7 +215,7 @@ void md15_main() {
 			case WITH_ENTER:
 			md15_user_cell.pattern = md15_cell_pattern;
 			next_state = MD15_STATE_CHECK;
-			PRINTF("[MD15] Checking answer\n\r");
+			log_msg("[MD15] Checking answer\n\r");
 			break;
 			case WITH_LEFT:
 			next_state = MD15_STATE_REPROMPT;
@@ -231,8 +231,8 @@ void md15_main() {
 
 	case MD15_STATE_CHECK:
 		get_next_cell_in_word(md15_chosen_word, &md15_curr_cell);
-		sprintf(dbgstr, "Target cell: %x, inputted cell: %x.\n\r", md15_curr_cell.pattern, md15_user_cell.pattern);
-		PRINTF(dbgstr);
+		log_msg("Target cell: %x, inputted cell: %x.\n\r", md15_curr_cell.pattern, md15_user_cell.pattern);
+		
 
 		if (cell_equals(&md15_curr_cell, &md15_user_cell)) {
 			if (md15_chosen_word->curr_letter == md15_chosen_word->num_letters - 1) { // done
@@ -274,17 +274,17 @@ void md15_main() {
 	 	if (md15_p1_words_spelled > md15_p2_words_spelled
 	 		|| (md15_p1_words_spelled == md15_p2_words_spelled
 	 			&& md15_p1_total_mistakes < md15_p2_total_mistakes)) {
-		 	PRINTF("Winner is player 1!\n\r");
+		 	log_msg("Winner is player 1!\n\r");
 		 	play_mp3(MODE_FILESET, "WIN1");
 		 }
 		 else if (md15_p1_words_spelled < md15_p2_words_spelled
 		 	|| (md15_p1_words_spelled == md15_p2_words_spelled
 	 			&& md15_p1_total_mistakes > md15_p2_total_mistakes)) {
-		 	PRINTF("Winner is player 2!\n\r");
+		 	log_msg("Winner is player 2!\n\r");
 		 	play_mp3(MODE_FILESET, "WIN2");
 		 }
 		 else {// tie
-		 	PRINTF("Tie!\n\r");
+		 	log_msg("Tie!\n\r");
 		 	play_mp3(MODE_FILESET, "WIN0");
 		 }
 

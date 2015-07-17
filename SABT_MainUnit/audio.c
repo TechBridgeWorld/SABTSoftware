@@ -54,13 +54,13 @@ char* mode_fileset = NULL;
 bool play_mp3(char* fileset, char* mp3) {
 
 	if (mp3 == NULL) {
-		PRINTF("[Audio] Error: Cannot play NULL MP3\n\r");
+		log_msg("[Audio] Error: Cannot play NULL MP3\n\r");
 		return false;
 	}
 
 	//Return false if playlist is full
 	if (playlist_size == MAX_PLAYLIST_SIZE) {
-		PRINTF("[Audio] Playlist full\n\r");
+		log_msg("[Audio] Playlist full\n\r");
 		return false;
 	}
 	
@@ -130,12 +130,12 @@ void play_next_mp3(void) {
 	
 	//Only called when the playlist is not empty
 	if (playlist_empty == true) {
-		PRINTF("[Audio] Error: Playlist empty\n\r");
+		log_msg("[Audio] Error: Playlist empty\n\r");
 		return;
 	}
 
-	PRINTF("[Audio] Playing: ");
-	PRINTF(playlist[playlist_index]);
+	log_msg("[Audio] Playing: ");
+	log_msg(playlist[playlist_index]);
 	NEWLINE;
 	
 	play_mp3_file((unsigned char*)playlist[playlist_index]);
@@ -162,8 +162,8 @@ void play_dot(char dot) {
 		case CANCEL: dot = 'C'; break;
 		case LEFT: case RIGHT: case NO_DOTS: return;
 		default:
-			sprintf(dbgstr, "[Audio] Invalid dot: %c\n\r", dot);
-			PRINTF(dbgstr);
+			log_msg("[Audio] Invalid dot: %c\n\r", dot);
+			
 			break;
 	}
 	sprintf(mp3, "DOT%c", dot);
@@ -227,7 +227,7 @@ void play_dot_sequence(glyph_t *this_glyph) {
 		// for multi-cell letters
 		if (this_glyph->next != NULL) {
 			// Plays all the next glyphs in the linked list
-			sprintf(dbgstr, "[Audio] Playing next pattern: %s\n\r",
+			log_msg("[Audio] Playing next pattern: %s\n\r",
 				this_glyph->next->sound);
 			// play "ENTER" so user knows to press enter btwn multiple-cell letters
 			play_mp3(lang_fileset, "SETR");
@@ -268,14 +268,12 @@ void play_number(long number) {
 	// Count number of digits
 	digits = get_num_of_digits(number);
     
-//    sprintf(dbgbuf, "[Play_number]number:#%ld digits:%d\r\n", number, digits);
-//    PRINTF(dbgbuf);
+//    log_msg("[Play_number]number:#%ld digits:%d\r\n", number, digits);
     
 	while (number != 0) {
 		// Extract current digit and adjust number
 		curr_digit = number / ten_to_the(digits - 1);
-		//sprintf(dbgbuf, "[Play_number]curr digit:%d\r\n", curr_digit);
-		//PRINTF(dbgbuf);
+		//log_msg("[Play_number]curr digit:%d\r\n", curr_digit);
 		if (curr_digit != 0) {
 			sprintf(mp3, "#%d", curr_digit);
 			played_and = false;
@@ -301,15 +299,13 @@ void play_number(long number) {
 				case PLACE_HUNDREDS:
 					play_mp3(lang_fileset, mp3);
 					play_mp3(lang_fileset, "#HUN");
-                    //sprintf(dbgbuf, "[Play_number]%d hundred played\r\n", curr_digit);
-                    //PRINTF(dbgbuf);
+                    //log_msg("[Play_number]%d hundred played\r\n", curr_digit);
 					break;
                 
                 case PLACE_THOUSANDS:
                     play_mp3(lang_fileset,mp3);
                     play_mp3(lang_fileset, "#THO");
-                    //sprintf(dbgbuf, "[Play_number]%d thousand played\r\n", curr_digit);
-                    //PRINTF(dbgbuf);
+                    //log_msg("[Play_number]%d thousand played\r\n", curr_digit);
                     break;
                     
                 case PLACE_TEN_THOUSANDS:
@@ -334,7 +330,7 @@ void play_number(long number) {
                     break;
                     
 				default:
-					PRINTF("[Audio] Error: Number greater than 5 digits\n\r");
+					log_msg("[Audio] Error: Number greater than 5 digits\n\r");
 					quit_mode();
 			}
         } else {
@@ -370,7 +366,7 @@ void play_string(char* word, int word_len){
         if (word[i] != '\0') {
             char buf[10];
             sprintf(buf, "%c", word[i]);
-			//PRINTF(buf);
+			//log_msg(buf);
             play_mp3("ENG_",buf);
         } else{
             play_mp3("ENG_","BLNK");

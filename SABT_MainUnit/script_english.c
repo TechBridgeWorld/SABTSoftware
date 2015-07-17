@@ -49,33 +49,33 @@ script_t script_english = {
 
 // NEW STUFF
 
-cell_t a = {DOTS1};
-cell_t b = {DOTS12};
-cell_t c = {DOTS14};
-cell_t d = {DOTS145};
-cell_t e = {DOTS15};
-cell_t f = {DOTS124};
-cell_t g = {DOTS1245};
-cell_t h = {DOTS125};
-cell_t i = {DOTS24};
-cell_t j = {DOTS245};
-cell_t k = {DOTS13};
-cell_t l = {DOTS123};
-cell_t m = {DOTS134};
-cell_t n = {DOTS1345};
-cell_t o = {DOTS135};
-cell_t p = {DOTS1234};
-cell_t q = {DOTS12345};
-cell_t r = {DOTS1235};
-cell_t s = {DOTS234};
-cell_t t = {DOTS2345};
-cell_t u = {DOTS136};
-cell_t v = {DOTS1236};
-cell_t w = {DOTS2456};
-cell_t x = {DOTS1346};
-cell_t y = {DOTS13456};
-cell_t z = {DOTS1356};
-cell_t capital = {DOTS6};
+cell_t a = {DOT1};
+cell_t b = {DOT1 | DOT2};
+cell_t c = {DOT1 | DOT4};
+cell_t d = {DOT1 | DOT4 | DOT5};
+cell_t e = {DOT1 | DOT5};
+cell_t f = {DOT1 | DOT2 | DOT4};
+cell_t g = {DOT1 | DOT2 | DOT4 | DOT5};
+cell_t h = {DOT1 | DOT2 | DOT5};
+cell_t i = {DOT2 | DOT4};
+cell_t j = {DOT2 | DOT4 | DOT5};
+cell_t k = {DOT1 | DOT3};
+cell_t l = {DOT1 | DOT2 | DOT3};
+cell_t m = {DOT1 | DOT3 | DOT4};
+cell_t n = {DOT1 | DOT3 | DOT4 | DOT5};
+cell_t o = {DOT1 | DOT3 | DOT5};
+cell_t p = {DOT1 | DOT2 | DOT3 | DOT4};
+cell_t q = {DOT1 | DOT2 | DOT3 | DOT4 | DOT5};
+cell_t r = {DOT1 | DOT2 | DOT3 | DOT5};
+cell_t s = {DOT2 | DOT3 | DOT4};
+cell_t t = {DOT2 | DOT3 | DOT4 | DOT5};
+cell_t u = {DOT1 | DOT3 | DOT6};
+cell_t v = {DOT1 | DOT2 | DOT3 | DOT6};
+cell_t w = {DOT2 | DOT4 | DOT5 | DOT6};
+cell_t x = {DOT1 | DOT3 | DOT4 | DOT6};
+cell_t y = {DOT1 | DOT3 | DOT4 | DOT5 | DOT6};
+cell_t z = {DOT1 | DOT3 | DOT5 | DOT6};
+cell_t capital = {DOT6};
 
 #define ENG_LETTER_A {"a", ENGLISH, &a, 1}
 #define ENG_LETTER_B {"b", ENGLISH, &b, 1}

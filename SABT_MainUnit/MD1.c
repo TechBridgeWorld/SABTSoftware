@@ -87,7 +87,7 @@ void md1_main(void)
   switch(current_state)
   {
     case STATE_INITIAL:
-      PRINTF("[MD1] Entering MD1\n\r");
+      log_msg("[MD1] Entering MD1\n\r");
       used_num_cnt = 0;
       // Play the introductory message for Mode 1
       play_mp3(MODE_FILESET,MP3_INTRODUCTION);

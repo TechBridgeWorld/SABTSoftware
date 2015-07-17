@@ -53,18 +53,21 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 	char curr_pattern = patterns[*index];
 	glyph_t* curr_glyph;
     
-	//sprintf(dbgstr, "[IO] Searching current pattern: 0x%x in %s\n\r", curr_pattern, script->fileset);
-    //sprintf(dbgstr, "[IO] Searching current pattern: 0x%x\n\r", curr_pattern);
-	//PRINTF(dbgstr);
+	//log_msg("[IO] Searching current pattern: 0x%x in %s", curr_pattern, script->fileset);
+    //log_msg("[IO] Searching current pattern: 0x%x", curr_pattern);
+    //NEWLINE;
+	//
 	
 	// Return if EOT
 	if (curr_pattern == END_OF_TEXT) {
-		PRINTF("[IO] Current pattern is EOT; returning NULL\n\r");
+		log_msg("[IO] Current pattern is EOT; returning NULL");
+		NEWLINE;
 		return NULL;
 	}
 
 	if (curr_pattern == 0x00) {
-		PRINTF("[IO] Blank cell\n\r");
+		log_msg("[IO] Blank cell");
+		NEWLINE;
 		return &blank_cell;
 	}
 
@@ -73,11 +76,13 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
 	if (curr_glyph == NULL) {
 		curr_glyph = search_script(&script_digits, curr_pattern);
 		if (curr_glyph == NULL) {
-			PRINTF("[IO] Matching glyph not found; returning NULL\n\r");
+			log_msg("[IO] Matching glyph not found; returning NULL");
+			NEWLINE;
 			return NULL;
 		}
 	}
-    //PRINTF("[IO] No subscript; returning glyph\n\r");
+    //log_msg("[IO] No subscript; returning glyph");
+    //NEWLINE;
     return curr_glyph;
 }
 
@@ -97,15 +102,16 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 	for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
 		curr_glyph = &(curr_script->glyphs[glyph_index]);
 		if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
-            sprintf(dbgstr,"Search%s: %s (0x%x)\r\n",curr_script->fileset, curr_glyph->sound, curr_glyph->pattern);
-            PRINTF(dbgstr);
+            log_msg("Search%s: %s (0x%x)",curr_script->fileset, curr_glyph->sound, curr_glyph->pattern);
+            NEWLINE;            
 			return curr_glyph;
 		}
 	}
 
 	// If nothing matches, return NULL
-	sprintf(dbgstr, "[Script] Glyph match not found: 0x%x\n\r", pattern);
-	PRINTF(dbgstr);
+	log_msg("[Script] Glyph match not found: 0x%x", pattern);
+	NEWLINE;
+	
 	return NULL;
 }
 
