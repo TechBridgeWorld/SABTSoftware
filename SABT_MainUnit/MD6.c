@@ -39,7 +39,7 @@ void md6_reset(void) {
 	cell_control = 0;
 	play_mp3(mode_fileset, "INT");
 	next_state = MD6_STATE_INPUT;
-	PRINTF("[MD6] Mode reset\n\r");
+	log_msg("[MD6] Mode reset\n\r");
 }
 
 void md6_main(void) {

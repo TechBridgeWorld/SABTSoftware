@@ -51,7 +51,7 @@ volatile char temp_cnt;
 volatile bool playing_mp3;
 
 #define MAX_FILENAME_SIZE 13 //8 + 1 + 3 + 1
-
+ 
 #define CHARTOINT(c)     ((c) - '0')
 
 #endif /* _GLOBALS_H_ */

@@ -20,6 +20,7 @@
 #define MAX_MODE_FILE_LENGTH 128
 #define MAX_MODE_NUMBER_DIGITS 2
 
+// @todo shouldn't this be in globals?
 static unsigned char incorrect_tries = 0;
 
 /**
@@ -44,7 +45,6 @@ void ui_check_modes(void)
   char mode_number[MAX_MODE_NUMBER_DIGITS + 1] = "";
   short mode_number_index = 0;
   int parsed_mode_number = 0;
-  char debug[64] = "";
 
   //Global variable being initialised
   number_of_modes = 0;
@@ -56,15 +56,15 @@ void ui_check_modes(void)
   /* Populate file contents;
   if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0)
   {
-    PRINTF("Mode file could not be read\n\r");
+    log_msg("Mode file could not be read\n\r");
     while (1) { }
   }*/
 
   /** ACTIVATED MODES ON SABT **/
   strcpy(file_content, "1,2,7,12,6,3,11,4,5,8,9,13,14,15,;");
   // Print file contents to debug stream
-  PRINTF("Mode file contents\n\r");
-  PRINTF(file_content);
+  log_msg("Mode file contents\n\r");
+  log_msg(file_content);
   NEWLINE;
 
   for (i = 0;
@@ -100,7 +100,7 @@ void ui_check_modes(void)
         break;
 
       default:
-        PRINTF("Invalid character in mode file: ");
+        log_msg("Invalid character in mode file: ");
         SENDBYTE(file_content[i]);
         NEWLINE;
         break;
@@ -108,15 +108,12 @@ void ui_check_modes(void)
   }
 
   // Print the number of modes found to a string
-  sprintf(debug, "%d modes detected\n\r", number_of_modes);
-  PRINTF(debug);
+  log_msg("%d modes detected\n\r", number_of_modes);
 
   //Send the actual modes to debug stream
-  PRINTF("Modes enabled: ");
-  for(i = 0; i < number_of_modes; i++)
-  {
-    sprintf(debug, "%d, ", ui_modes[i]);
-    PRINTF(debug);
+  log_msg("Modes enabled: ");
+  for (i = 0; i < number_of_modes; i++) {
+    log_msg("%d, ", ui_modes[i]);
   }
   NEWLINE;
 
@@ -136,15 +133,13 @@ uint16_t ui_calculate_crc(unsigned char* message)
   uint16_t chksum = 0;
 
   message += 3;
-  while(msglen > 1)
-  {
+  while (msglen > 1) {
     chksum += (*(message) << 8) | *(message + 1);
     chksum = chksum & 0xffff;
     msglen -= 2;
     message += 2;
   }
-  if(msglen > 0) //If the packet size is odd numbered
-  {
+  if (msglen > 0) {//If the packet size is odd numbered
     chksum = chksum ^ (int)*(message++);
   }
   return chksum;
@@ -198,10 +193,10 @@ bool ui_parse_message(bool mp3_is_playing)
         ui_input_cell_to_current_mode(usart_ui_received_packet[5]);
         break;
       case 'C':                             // Error message
-        PRINTF("[ui_parse_message] An error occurred in the UI.");
+        log_msg("[ui_parse_message] An error occurred in the UI.");
         break;
       case 'D':                             // Control button
-        //PRINTF("CONTROL BUTTON PRESSED");
+        //log_msg("CONTROL BUTTON PRESSED");
         ui_control_key_pressed();
         break;
       case 'E':                             // Acknowledgement
@@ -227,7 +222,7 @@ bool ui_parse_message(bool mp3_is_playing)
   } 
   else // Checksum not valid
   {
-    PRINTF("[IO] CRC failed\n\r");
+    log_msg("[IO] CRC failed\n\r");
     usart_ui_message_ready = false;
     return false;
   }
@@ -281,7 +276,8 @@ void ui_control_key_pressed(void)
 
       if(usart_ui_received_packet[6] == 69) 
       {
-        PRINTF("[UI] Long CANCEL detected, going to main menu\n\r");
+        log_msg("[UI] Long CANCEL detected, going to main menu\n\r");
+        // @todo free memory here
         io_init();
         quit_mode();
         return;
@@ -290,7 +286,7 @@ void ui_control_key_pressed(void)
       if(ui_is_mode_selected) 
       {
         //Then this a "NO" answer, call the mode function for this
-        PRINTF("[UI] Short CANCEL detected, calling mode NO function\n\r");
+        log_msg("[UI] Short CANCEL detected, calling mode NO function\n\r");
         ui_call_mode_no_answer();
       }
       //This has no effect when no mode is selected
@@ -325,12 +321,12 @@ void ui_control_key_pressed(void)
 
     case UI_CMD_VOLU: // Volume Up
       //only increase sound if you are not playing a sound
-      PRINTF("[UI] Volume up\n\r");
+      log_msg("[UI] Volume up\n\r");
       vs1053_increase_vol();
       break;
     case UI_CMD_VOLD: // Volume down
       //only increase sound if you are not playing a sound
-      PRINTF("[UI] Volume down\n\r");
+      log_msg("[UI] Volume down\n\r");
       vs1053_decrease_vol();
       break;
     default:

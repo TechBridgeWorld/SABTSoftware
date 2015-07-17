@@ -7,6 +7,7 @@
  */
 
 #include "Globals.h"
+#include "io.h"
 
 bool usart_pc_header_received, usart_pc_length_received;
 int usart_received_payload_len;
@@ -17,8 +18,7 @@ unsigned char usart_pc_receive_msgcnt;
  * @brief Initializes the buad communication over USART.
  * @return Void
  */
-void init_usart_pc(void)
-{
+void init_usart_pc(void) {
   UCSR0B = 0x00; //disable while setting baud rate
   UCSR0A = 0x00;
   UCSR0C = 0x06;
@@ -47,7 +47,7 @@ unsigned char usart_pc_receive_action(void)
     if(!valid_message)
     {
       valid_message = true;
-      PRINTF((unsigned char *)"SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
+      log_msg("SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
     }
   }
 

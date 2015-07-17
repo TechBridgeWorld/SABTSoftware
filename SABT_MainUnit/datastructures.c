@@ -7,29 +7,19 @@
 * They still need to be tested on multi-cell letters (Hindi, Kannada).
 */
 
+//@todo are these all necessary?
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include "io.h"
 #include "datastructures.h"
-#include "globals.h"
+#include "Globals.h"
 #include "common.h"
 #include "script_english.h"
 #include "audio.h"
-
-void LOG_MSG(const char* format, ...) {
-    va_list args;
-    va_start( args, format );
-    #ifdef DEBUGMODE
-        vprintf(format, args );
-    #else
-        vsprintf(dbgstr, format, args);
-        usart_transmit_string_to_pc((unsigned char*)dbgstr);
-    va_end( args );
-    #endif
-}
 
 /*******************
 *  CELL FUNCTIONS  *
@@ -50,10 +40,10 @@ void print_cell_pattern(cell_t* cell){
             counter++;
         }
         binary[6] = '\0';
-        LOG_MSG("0b%s\n\r", binary);
+        log_msg("0b%s\n\r", binary);
     }
     else
-        LOG_MSG("Blank cell\n");
+        log_msg("Blank cell\n");
 }
 
 /**
@@ -64,13 +54,13 @@ void print_cell_pattern(cell_t* cell){
 */
 bool cell_equals(cell_t* cell1, cell_t* cell2) {
     if (cell1 == NULL || cell2 == NULL) {
-        LOG_MSG("Null cell pointer!\n");
+        log_msg("Null cell pointer!\n");
         return false;
     }
 
-    LOG_MSG("Cell 1: ");
+    log_msg("Cell 1: ");
     print_cell_pattern(cell1);
-    LOG_MSG("Cell 2: ");
+    log_msg("Cell 2: ");
     print_cell_pattern(cell2);
     return (cell1->pattern == cell2->pattern);
 }
@@ -82,7 +72,7 @@ bool cell_equals(cell_t* cell1, cell_t* cell2) {
 * @warning Will be deprecated?
 */
 bool glyph_equals(glyph_t* g1, glyph_t* g2) {
-    LOG_MSG("Glyph 1: %s, Glyph 2: %s\n\r", g1->sound, g2->sound);
+    log_msg("Glyph 1: %s, Glyph 2: %s\n\r", g1->sound, g2->sound);
 
     if (g1 == NULL || g2 == NULL)
         return false;
@@ -103,7 +93,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2) {
 * @remark Tested in English & lightly in Hindi.
 */
 bool letter_equals(letter_t* letter1, letter_t* letter2) {
-    LOG_MSG("Letter 1: %s, Letter 2: %s\n\r", letter1->name, letter2->name);
+    log_msg("Letter 1: %s, Letter 2: %s\n\r", letter1->name, letter2->name);
 
     // not equal if one doesn't exist; if of different langs; if of different lengths
     if ((letter1 == NULL || letter2 == NULL)
@@ -135,13 +125,13 @@ letter_t* get_eng_letter_by_char(char c){
     for (int i = 0; i < english_alphabet.num_letters; i++){
         this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
         if (this_char < 'a' || this_char > 'z') {
-            LOG_MSG("GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
+            log_msg("GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
             return NULL;
         }
         else if (this_char == english_alphabet.letters[i].name[0])
             return &english_alphabet.letters[i];
     }
-    LOG_MSG("GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
+    log_msg("GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
     return NULL;
 }
 
@@ -152,7 +142,7 @@ letter_t* get_eng_letter_by_char(char c){
 * remark Tested in English and Hindi.
 */
 void print_letter(letter_t* letter){
-    LOG_MSG("%s", letter->name);
+    log_msg("%s", letter->name);
 }
 
 /*******************
@@ -195,7 +185,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
 
     // if the word is too long, return failure
     if (num_cells > MAX_WORD_LENGTH) {
-        LOG_MSG("PARSE_STRING FAILED: '%s' IS TOO LONG\n\r", string);
+        log_msg("PARSE_STRING FAILED: '%s' IS TOO LONG\n\r", string);
         return 0;
     }
 
@@ -220,7 +210,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
     for (int string_index = 0; string_index < strlen(string); string_index++) {
             letter_t* this_letter = get_eng_letter_by_char(string[string_index]);
             if (this_letter == NULL) { // if failed to get a letter, return failure
-                LOG_MSG("PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n\r", string);
+                log_msg("PARSE_STRING_INTO_ENG_WORD FAILED; FAILED TO PARSE '%s'\n\r", string);
                 return 0;
             }
             letters_in_word[letter_index] = *this_letter;
@@ -228,7 +218,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
         }
 
     if (num_cells == 0) {
-        LOG_MSG("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n\r");
+        log_msg("PARSE_STRING_INTO_ENG_WORD FAILED: NO LETTERS WERE FOUND.\n\r");
         return 0;
     }
 
@@ -313,16 +303,16 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
 */
 void print_word(word_t* word) {
     if (word->letters == NULL) {
-        LOG_MSG("PRINT_WORD FAILED: '%s' CONTAINS NO LETTERS\n", word->name);
+        log_msg("PRINT_WORD FAILED: '%s' CONTAINS NO LETTERS\n", word->name);
         return;
     }
-    LOG_MSG("%s (spelled: ", word->name);
+    log_msg("%s (spelled: ", word->name);
     for (int i = 0; i < word->num_letters; i++) {
         print_letter(&word->letters[i]);
         if (i < (word->num_letters - 1))
-            LOG_MSG("-");
+            log_msg("-");
     }
-    LOG_MSG(") [%d]\n\r", word->num_letters);
+    log_msg(") [%d]\n\r", word->num_letters);
 }
 
 /**
@@ -395,6 +385,7 @@ void speak_letters_so_far(word_t* word){
     for (int i = 0; i <= word->curr_letter; i++)
         play_mp3(lang, word->letters[i].name);
 }
+
 #endif
 
 /**
@@ -427,7 +418,7 @@ void free_word(word_t* word) {
 */
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
     if (num_words == 0) {
-        LOG_MSG("No words. Wordlist uninitialized.\n\r");
+        log_msg("No words. Wordlist uninitialized.\n\r");
         return;
     }
     list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
@@ -444,7 +435,7 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
         }
     }
     shuffle(num_words, list->order);
-    LOG_MSG("Wordlist initialized. Num_words = %d.\n\r", num_words);
+    log_msg("Wordlist initialized. Num_words = %d.\n\r", num_words);
 }
 
 /**
@@ -470,12 +461,12 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
         words = (word_t*) malloc(sizeof(word_t) * num_strings);
         if (words == 0) {
             // @todo: record message for this indicating the device needs to be rebooted?
-            LOG_MSG("MALLOC FAILED!!!\n\r");
+            log_msg("MALLOC FAILED!!!\n\r");
             exit(0);
         }
         // iterate through strings; parse into words; increment index into word array only when parsing succeeds
         for (str_index = 0; str_index < num_strings; str_index++) {
-            LOG_MSG("word_index: %d, str_index: %d, string %s\n\r", word_index, str_index, strings[str_index]);
+            log_msg("word_index: %d, str_index: %d, string %s\n\r", word_index, str_index, strings[str_index]);
             if (parse_string_into_eng_word(strings[str_index], &(words[word_index])))
                 word_index++;
         }
@@ -486,7 +477,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
         words = (word_t*) malloc(sizeof(word_t) * MAX_WORDLIST_LENGTH);
         if (words == 0) {
             // @todo: record message for this indicating the device needs to be rebooted?
-            LOG_MSG("MALLOC FAILED!!!\n\r");
+            log_msg("MALLOC FAILED!!!\n\r");
             exit(0);
         }
         int indices[num_strings];
@@ -500,9 +491,9 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
         // but decrement word_index if parsing fails so it'll increment back to same place
         // in the next loop
         for (word_index = 0; word_index < MAX_WORDLIST_LENGTH; word_index++) {
-            LOG_MSG("word_index: %d, str_index: %d, indices: %d, string %s\n\r", word_index, str_index, indices[str_index], strings[indices[str_index]]);
+            log_msg("word_index: %d, str_index: %d, indices: %d, string %s\n\r", word_index, str_index, indices[str_index], strings[indices[str_index]]);
             if (str_index == MAX_WORDLIST_LENGTH) {// stop if we're out of strings -- could happen if
-                LOG_MSG("Out of strings!\n\r");
+                log_msg("Out of strings!\n\r");
                 break;                            // lots of strings are unparseable
             }
 

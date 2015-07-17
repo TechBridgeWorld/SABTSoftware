@@ -9,6 +9,8 @@
 
 #include "datastructures.h"
 
+
+
 // General constants
 #define MAX_INCORRECT_TRIES 3
 #define MAX_BUF_SIZE 				256
@@ -16,20 +18,20 @@
 #define GET_CELL_PATTERN(c) (c & 0b00111111)
 
 // Button and control flow mappings
-#define NO_DOTS 						0b00000000
-#define ENTER								0b01000001
-#define CANCEL 							0b01000010
-#define LEFT								0b01000100
-#define RIGHT								0b01001000
+#define NO_DOTS 					0b00000000
+#define ENTER						0b01000001
+#define CANCEL 						0b01000010
+#define LEFT						0b01000100
+#define RIGHT						0b01001000
 #define END_OF_TEXT					0b11111111
 
 // Cell return control masks
 #define WITH_ENTER					0b11000000
-#define WITH_LEFT						0b10000000
+#define WITH_LEFT					0b10000000
 #define WITH_RIGHT					0b01000000
 #define WITH_CANCEL 				0b00000000	// Becuase we don't care about the cell
- 																				// pattern in this case - also, I ran
- 																				// out of bits for control buttons...
+ 												// pattern in this case - also, I ran
+ 												// out of bits for control buttons...
 
 // Dialog control enable masks
 #define ENTER_CANCEL				0b10000000
@@ -66,5 +68,6 @@ bool parse_string(void);
 
 // Advanced IO functions
 char create_dialog(char* prompt, char control_mask);
+void log_msg(const char* format, ...);
 
 #endif /* _IO_H_ */

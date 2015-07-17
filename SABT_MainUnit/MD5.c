@@ -137,9 +137,9 @@ void md5_main(void) {
 
   switch(md5_next_state) {
     case MD5_STATE_INTRO:   // load dictionary, welcome players
-    PRINTF("Entering intro state.\n\r");
+    log_msg("Entering intro state.\n\r");
       if (!done_rd_dict) {
-        PRINTF("Reading dictionary file...\n\r");
+        log_msg("Reading dictionary file...\n\r");
         play_mp3(MODE_FILESET, MP3_WAIT);
         init_read_dict((unsigned char *)"wordsEn.txt");
         while(!done_rd_dict)
@@ -160,7 +160,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_PROCESS_SOLUTION:
-      PRINTF("Entering process solution state.\n\r");
+      log_msg("Entering process solution state.\n\r");
       // Enter was pressed, but nothing was entered so we check to see if it was a valid word
       if (last_cell == 0) {
         chosen_word[input_word_index] = '\0';
@@ -185,7 +185,7 @@ void md5_main(void) {
         sprintf(buff, "%c", entered_letter);
         printf("letter %d\n\r", entered_letter);
         printf(buff);
-        PRINTF("\n\r");
+        log_msg("\n\r");
         play_mp3(LANG_FILESET,buff);
 
         // reset because too many letters were input
@@ -208,7 +208,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_SWITCH_USERS:
-      PRINTF("Entering switch users state.\n\r");
+      log_msg("Entering switch users state.\n\r");
       if(got_input) {
         got_input = false;
         play_mp3(MODE_FILESET, MP3_YOUR_WORD); // @ TODO "your word is"
@@ -217,11 +217,11 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_PROMPT:
-      PRINTF("Entering prompt state.\n\r");
+      log_msg("Entering prompt state.\n\r");
       sprintf(huff, "%s\r\n", chosen_word);
-      PRINTF(chosen_word);
-      PRINTF(huff);
-      PRINTF("\n\r");
+      log_msg(chosen_word);
+      log_msg(huff);
+      log_msg("\n\r");
       // read the currently inputted word aloud, with blanks for nonguessed
       if (input_word_index == strlen(chosen_word)) { // on last letter
         input_word_index = 0;
@@ -246,16 +246,16 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_SAY_MISTAKES:
-      PRINTF("Entering say mistakes state.\n\r");
+      log_msg("Entering say mistakes state.\n\r");
       sprintf(bufff, "#%d", md5_incorrect_tries);
-      PRINTF("\n\r");
+      log_msg("\n\r");
       play_mp3(LANG_FILESET,bufff);
       play_mp3(MODE_FILESET,MP3_MISTAKES);
       md5_next_state = MD5_STATE_ASK_FOR_GUESS;
       break;
 
     case MD5_STATE_ASK_FOR_GUESS:
-      PRINTF("Entering ask for guess state.\n\r");
+      log_msg("Entering ask for guess state.\n\r");
       play_mp3(MODE_FILESET, MP3_GUESS);
       md5_next_state = MD5_STATE_INPUT_GUESS;
       break;
@@ -268,7 +268,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_CHECKANS:
-      PRINTF("Entering checkans state.\n\r");
+      log_msg("Entering checkans state.\n\r");
       if (last_cell == 0) {// nothing entered: repeat word
         md5_next_state = MD5_STATE_EVALUATE_GAME;
       }
@@ -286,7 +286,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_CHECK_MATCH:
-      PRINTF("Entering check match state.\n\r");
+      log_msg("Entering check match state.\n\r");
       if (md5_place_letter()) {// letters is in word; fn places it
         play_mp3("","yes");
       }
@@ -298,7 +298,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_EVALUATE_GAME:
-      PRINTF("Entering evaluate game state.\n\r");
+      log_msg("Entering evaluate game state.\n\r");
       if (!strncmp(input_word, chosen_word, strlen(chosen_word))) {
         play_mp3(MODE_FILESET, MP3_YOU_WIN);  // "you have guessed the word!"
       }
@@ -313,7 +313,7 @@ void md5_main(void) {
       break;
 
     case MD5_STATE_READ_WORD:
-      PRINTF("Entering read word state.\n\r");
+      log_msg("Entering read word state.\n\r");
       if (input_word_index == strlen(chosen_word)) {
         play_mp3(MODE_FILESET, MP3_NEW_GAME);
         md5_reset();

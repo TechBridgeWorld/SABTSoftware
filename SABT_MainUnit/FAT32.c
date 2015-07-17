@@ -485,17 +485,17 @@ unsigned char play_mp3_file(unsigned char *file_name)
         // After playing a 32 bytes of data, check the user inputs
         if(usart_keypad_data_ready)
         {
-          PRINTF("[IO] Keypad interrupt received\n\r");
+          log_msg("[IO] Keypad interrupt received\n\r");
           usart_keypad_receive_action();
         }
         if(usart_pc_data_ready)
         {
-          PRINTF("[IO] PC interrupt received\n\r");
+          log_msg("[IO] PC interrupt received\n\r");
           usart_pc_receive_action();
         }    
         if(usart_ui_message_ready) //If a message ready from the user interface, process it
         {
-          PRINTF("[IO] Processing keypad interrupt\n\r");
+          log_msg("[IO] Processing keypad interrupt\n\r");
           ui_parse_message(playing_sound);
         }
         */
@@ -529,7 +529,7 @@ unsigned char play_mp3_file(unsigned char *file_name)
                 break;
             }
           } else {
-            PRINTF("[IO] CRC failed on interrupt\n\r");
+            log_msg("[IO] CRC failed on interrupt\n\r");
             usart_ui_message_ready = false;
           }
         }
@@ -683,7 +683,7 @@ unsigned char read_dict_file()
       if(end_of_file)
       {
         done_rd_dict = true;
-        PRINTF("read in dictionary");
+        log_msg("read in dictionary");
         TX_NEWLINE_PC;
         return 0;
       }
@@ -780,12 +780,12 @@ bool bin_srch_dict(unsigned char *word)
   if(found == false){
     if(find_word_in_cluster(word, lo))
       return true;
-    PRINTF("DONE WIHT FIRST\r\n");        
+    log_msg("DONE WIHT FIRST\r\n");        
 
     if(find_word_in_cluster(word, hi))
       return true;
 
-    PRINTF("DONE WIHT second\r\n"); 
+    log_msg("DONE WIHT second\r\n"); 
     //if you get here, that means that you did not have find the word in any part of the cluster
     //it should be in
     return false;
@@ -820,7 +820,7 @@ bool find_word_in_cluster(unsigned char *word, unsigned long arr_cluster_index)
   char overlap = preceeding_word[arr_cluster_index];
 
   /*char buf[15];
-    PRINTF(word);
+    log_msg(word);
     TX_NEWLINE_PC;*/
 
   // Read in the first sector to 'buffer'
@@ -923,7 +923,7 @@ bool find_word_in_cluster(unsigned char *word, unsigned long arr_cluster_index)
 int check_first_full_word(unsigned char *word, char overlap)
 {
   int i;
-  //PRINTF("enter!");
+  //log_msg("enter!");
   //      TX_NEWLINE_PC;
   unsigned char *first_word;
   if(overlap == 1){
@@ -999,8 +999,7 @@ unsigned char convert_file_name (unsigned char *file_name)
 
   // 1 = BAD_EXTENSION
   if(j > 8) {
-    PRINTF("Invalid file name: ");
-    PRINTF(file_name);
+    log_msg("Invalid file name: $s", file_name);
     NEWLINE; 
     return 1;
   }

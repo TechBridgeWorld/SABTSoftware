@@ -71,7 +71,7 @@ static bool md_incorrect_tries = 0;
 
 
 void md9_reset(void) {
-	PRINTF("*** MD9 - Arithmetic practice ***\n\r");
+	log_msg("*** MD9 - Arithmetic practice ***\n\r");
 
 	// Global variables
 	set_mode_globals(&script_digits, LANG_FILESET, MODE_FILESET);
@@ -100,11 +100,11 @@ void md9_generate_question(void) {
 
 	do {
 		md_op_1 = timer_rand() % bound;
-		sprintf(dbgstr, "[MD9] Operand 1: %d\n\r", md_op_1);
-		PRINTF(dbgstr);
+		log_msg("[MD9] Operand 1: %d\n\r", md_op_1);
+		
 		md_op_2 = timer_rand() % bound;
-		sprintf(dbgstr, "[MD9] Operand 2: %d\n\r", md_op_2);
-		PRINTF(dbgstr);
+		log_msg("[MD9] Operand 2: %d\n\r", md_op_2);
+		
 		
 		switch (md_submode) {
 			case SUBMODE_ADD:
@@ -117,15 +117,15 @@ void md9_generate_question(void) {
 				md_res = md_op_1 * md_op_2;
 				break;
 			default:
-				sprintf(dbgstr, "[MD9] Error: md_submode: %c\n\r",
+				log_msg("[MD9] Error: md_submode: %c\n\r",
 					md_submode);
-				PRINTF(dbgstr);
+				
 				quit_mode();
 				break;
 		}
 	} while (!(md_res > 0 && md_res < bound));
-	sprintf(dbgstr, "[MD9] Result: %d\n\r", md_res);
-	PRINTF(dbgstr);	
+	log_msg("[MD9] Result: %d\n\r", md_res);
+		
 }
 
 void md9_play_question() {
@@ -142,9 +142,9 @@ void md9_play_question() {
 			play_mp3(MODE_FILESET, MP3_TIMES);
 			break;
 		default:
-			sprintf(dbgstr, "[MD9] Error: md_submode: %c\n\r",
+			log_msg("[MD9] Error: md_submode: %c\n\r",
 				md_submode);
-			PRINTF(dbgstr);
+			
 			quit_mode();
 			break;
 	}
@@ -168,25 +168,25 @@ void md9_main(void) {
 					break;
 
 				case '1':
-					PRINTF("[MD9] Submode: Addition\n\r");
+					log_msg("[MD9] Submode: Addition\n\r");
 					md_submode = SUBMODE_ADD;
 					md_next_state = STATE_LVLSEL;
 					break;
 
 				case '2':
-					PRINTF("[MD9] Submode: Subtraction\n\r");
+					log_msg("[MD9] Submode: Subtraction\n\r");
 					md_submode = SUBMODE_SUB;
 					md_next_state = STATE_LVLSEL;
 					break;
 
 				case '3':
-					PRINTF("[MD9] Submode: Multiplication\n\r");
+					log_msg("[MD9] Submode: Multiplication\n\r");
 					md_submode = SUBMODE_MUL;
 					md_next_state = STATE_LVLSEL;
 					break;
 
 				default:
-					PRINTF("[MD9] Error: Invalid dot: ");
+					log_msg("[MD9] Error: Invalid dot: ");
 					SENDBYTE(md_last_dot);
 					NEWLINE;
 					quit_mode();
@@ -203,28 +203,28 @@ void md9_main(void) {
 					break;
 
 				case '1':
-					PRINTF("[MD9] Level: 1\n\r");
+					log_msg("[MD9] Level: 1\n\r");
 					md_level = LEVEL_1;
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '2':
-					PRINTF("[MD9] Level: 2\n\r");
+					log_msg("[MD9] Level: 2\n\r");
 					md_level = LEVEL_2;
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '3':
-					PRINTF("[MD9] Level: 3\n\r");
+					log_msg("[MD9] Level: 3\n\r");
 					md_level = LEVEL_3;
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				default:
-					PRINTF("[MD9] Error: md_last_dot: ");
+					log_msg("[MD9] Error: md_last_dot: ");
 					SENDBYTE(md_last_dot);
 					NEWLINE;
 					quit_mode();
@@ -244,7 +244,7 @@ void md9_main(void) {
 
 		case STATE_INPUT:
 			if (io_user_abort == true) {
-				PRINTF("[MD12] User aborted input\n\r");
+				log_msg("[MD12] User aborted input\n\r");
                 play_mp3(SYS_FILESET,"HLPM");
 				md_next_state = STATE_REPROMPT;
 				io_init();
@@ -252,13 +252,13 @@ void md9_main(void) {
 			}
 			if (get_number(&md_input_valid, &md_usr_res)) {
 				if (md_input_valid) {
-					sprintf(dbgstr, "[MD9] User answer: %d\n\r", md_usr_res);
-					PRINTF(dbgstr);
+					log_msg("[MD9] User answer: %d\n\r", md_usr_res);
+					
 					play_mp3(MODE_FILESET, MP3_YOU_ANSWERED);
 					play_number(md_usr_res);
 					md_next_state = STATE_CHECKANS;
 				} else {
-					PRINTF("[MD9] IO error\n\r");
+					log_msg("[MD9] IO error\n\r");
 				}
 			}
 			break;
@@ -330,7 +330,7 @@ void md9_main(void) {
 			break;
 
 		default:
-			PRINTF("[MD9] Error: next_state: ");
+			log_msg("[MD9] Error: next_state: ");
 			SENDBYTE(md_next_state);
 			NEWLINE;
 			quit_mode();

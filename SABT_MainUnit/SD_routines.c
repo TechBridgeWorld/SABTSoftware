@@ -68,7 +68,7 @@ unsigned char sd_init(void)
     // CMD55, must be sent before sending any ACMD command
     response = sd_send_command(APP_CMD,0); 
     response = sd_send_command(SD_SEND_OP_COND,0x40000000); // ACMD41
-    PRINTF(dbgstr);
+    
     retry++;
     if(retry > 0xfe)
     {

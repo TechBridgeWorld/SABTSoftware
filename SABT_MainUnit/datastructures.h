@@ -4,7 +4,6 @@
  * @author Marjorie Carlson (marjorie@cmu.edu)
  */
 
-
 #ifndef _DATASTRUCTURES_H_
 #define _DATASTRUCTURES_H_
 
@@ -23,6 +22,12 @@
  *   ON & OFF HERE!!! *
 *********************/
 
+//@todo move some of these to global?
+#define MAX_WORD_LENGTH     15
+#define MAX_WORDLIST_LENGTH 10
+#define MAX_FILESET_LENGTH	  5
+#define MAX_MP3_NAME_LENGTH  5
+
 
 #define DOT0     0b000000
 #define DOT1     0b000001
@@ -32,24 +37,14 @@
 #define DOT5     0b010000
 #define DOT6     0b100000
 
-// @todo make this an enum
-#define UNIVERSAL 0
-#define ENGLISH   1
-#define HINDI     2
-#define KANNADA   3
-
- // @todo move these to global struct?
- #define MAX_WORD_LENGTH     15
- #define MAX_WORDLIST_LENGTH 10
- #define MAX_MP3_NAME_LENGTH  5
- #define MAX_FILESET_LENGTH	  5
+typedef enum {UNIVERSAL, ENGLISH, HINDI, KANNADA} lang_type;
 
 typedef struct glyph glyph_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
-	char sound[MAX_MP3_NAME_LENGTH];			/* BBBB in AAA_BBBB.mp3 soundfile */
+	char sound[MAX_MP3_NAME_LENGTH];	/* BBBB in AAA_BBBB.mp3 soundfile */
 	glyph_t* prev;			/* Pointer to previous glyph in linked list */
 	glyph_t* next;			/* Pointer to next glyph in linked list */
 };
@@ -132,7 +127,6 @@ letter_t* get_eng_letter_by_char(char c);
 void print_letter(letter_t* letter);
 
 // Word functions
-void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word);
 int parse_string_into_eng_word(char* string, word_t* word);
 void word_to_cell_array(word_t* word, cell_t* arr);
 void decrement_word_index(word_t* word);
@@ -141,12 +135,9 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_lang(word_t* word);
 void print_word(word_t* word);
 void free_word(word_t* word);
-#ifdef DEBUGMODE
-#else
 void speak_word(word_t* word);
 void speak_letters_in_word(word_t* word);
 void speak_letters_so_far(word_t* word);
-#endif
 
 // Wordlist functions
 void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);

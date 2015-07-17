@@ -4,13 +4,13 @@
  * @author Vivek Nair (viveknair@cmu.edu)
  */
 
+#include <stdbool.h>
 #include "globals.h"
 #include "audio.h"
 #include "common.h"
 #include "script_common.h"
 #include "datastructures.h"
 
-#include <stdbool.h>
 
 /**
 * @brief Sets script globals for a new language
