@@ -30,6 +30,8 @@ int main() {
 	print_cell_pattern(&null_cell);
 	printf("Compare above to test print_cell_pattern.\n\n");
 
+	printf("%s\n", get_eng_letter_name_by_cell(&a_cell));
+
 	// test of cell_equals
 	bool same1 = cell_equals(&a_cell, &a_cell);
 	bool diff1 = !cell_equals(&a_cell, &b_cell);
