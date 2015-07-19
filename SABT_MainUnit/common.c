@@ -10,6 +10,7 @@
 #include "common.h"
 #include "script_common.h"
 #include "datastructures.h"
+#include "MD15.h"
 
 
 /**
@@ -50,8 +51,14 @@ char add_dot(char bits, char dot) {
  * @return void
  */
 void quit_mode(void) {
+	// @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. FIX THIS. 
+	if (ui_current_mode_index == 15) {
+		log_msg("Freeing dictionary.");
+		NEWLINE;
+		free_wordlist(&md15_dict);
+	}
 	ui_is_mode_selected = false;
-  ui_current_mode_index = -1;
+	ui_current_mode_index = -1;
   play_mp3("SYS_","MM");
 }
 

@@ -134,8 +134,11 @@ void md15_incorrect_answer() {
 	else
 		md15_p2_total_mistakes++;
 
-	play_mp3(LANGUAGE, "NO");
-	play_mp3(LANGUAGE, MP3_TRY_AGAIN);
+	cell_t this_cell = {md15_cell_pattern};
+	if (get_eng_letter_name_by_cell(&this_cell) != NULL) { //INVP may already have said "try again"
+		play_mp3(LANGUAGE, "NO");
+		play_mp3(LANGUAGE, MP3_TRY_AGAIN);
+	}
 	decrement_word_index(md15_chosen_word);
 	next_state = MD15_STATE_REPROMPT;
 }
@@ -156,11 +159,11 @@ void md15_speak_inputted_cell() {
 void md15_main() {
   switch(next_state) {
     case MD15_STATE_INTRO:
+        lang_fileset = "ENG_";
+		mode_fileset = "MD15";
     	play_mp3(MODE_FILESET, "WELC");
     	play_number(GAMELENGTH);
     	play_mp3(MODE_FILESET, "WRDS");
-    	lang_fileset = "ENG_";
-		mode_fileset = "MD15";
 		next_state = MD15_STATE_LVLSEL;
 		srand(timer_rand());
 		break;
@@ -236,7 +239,6 @@ void md15_main() {
 		get_next_cell_in_word(md15_chosen_word, &md15_curr_cell);
 		log_msg("Target cell: %x, inputted cell: %x.\n\r", md15_curr_cell.pattern, md15_user_cell.pattern);
 		
-
 		if (cell_equals(&md15_curr_cell, &md15_user_cell)) {
 			if (md15_chosen_word->curr_letter == md15_chosen_word->num_letters - 1) { // done
 				md15_correct_answer();
