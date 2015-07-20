@@ -136,9 +136,9 @@ letter_t* get_eng_letter_by_char(char c){
 }
 
 char* get_eng_letter_name_by_cell(cell_t* cell) {
-    for (int i = 0; i < english_plus_capital.letters.num_letters; i++){
-        if (cell_equals(cell, &english_plus_capital.letters[i].cells[0]))
-            return english_plus_capital.letters.letters[i].name;
+    for (int i = 0; i < english_plus_cap.num_letters; i++){
+        if (cell_equals(cell, &english_plus_cap.letters[i].cells[0]))
+            return english_plus_cap.letters[i].name;
     }
     log_msg("GET_ENG_LETTER_BY_CELL FAILED: '%x' DID NOT MATCH ANY LETTERS.\n", cell->pattern);
     return "INVP";

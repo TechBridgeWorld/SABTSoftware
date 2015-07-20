@@ -152,4 +152,4 @@ letter_t all_letters_plus_cap[27] = {ENG_LETTER_A, ENG_LETTER_B,
 
 
 alphabet_t english_alphabet = {all_letters, 26};
-alphabet_t english_plus_capital = {all_letters_plus_cap, 27};
+alphabet_t english_plus_cap = {all_letters_plus_cap, 27};

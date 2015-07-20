@@ -75,7 +75,7 @@ extern letter_t eng_capital;
 
 extern script_t script_english;
 extern alphabet_t english_alphabet;
-extern alphabet_t english_plus_capital;
+extern alphabet_t english_plus_cap;
 
 #endif /* _SCRIPT_ENGLISH_H_ */
 
