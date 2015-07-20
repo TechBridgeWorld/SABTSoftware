@@ -122,17 +122,26 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 */
 letter_t* get_eng_letter_by_char(char c){
     char this_char;
+    this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
+    if (this_char < 'a' || this_char > 'z') {
+        log_msg("GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
+        return NULL;
+    }
     for (int i = 0; i < english_alphabet.num_letters; i++){
-        this_char = (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
-        if (this_char < 'a' || this_char > 'z') {
-            log_msg("GET_ENG_LETTER_BY_CHAR FAILED: '%c' IS NOT A LETTER.\n", c);
-            return NULL;
-        }
-        else if (this_char == english_alphabet.letters[i].name[0])
+        if (this_char == english_alphabet.letters[i].name[0])
             return &english_alphabet.letters[i];
     }
     log_msg("GET_ENG_LETTER_BY_CHAR FAILED: '%c' DID NOT MATCH ANY LETTERS.\n", c);
     return NULL;
+}
+
+char* get_eng_letter_name_by_cell(cell_t* cell) {
+    for (int i = 0; i < english_plus_cap.num_letters; i++){
+        if (cell_equals(cell, &english_plus_cap.letters[i].cells[0]))
+            return english_plus_cap.letters[i].name;
+    }
+    log_msg("GET_ENG_LETTER_BY_CELL FAILED: '%x' DID NOT MATCH ANY LETTERS.\n", cell->pattern);
+    return "INVP";
 }
 
 /**
@@ -150,11 +159,10 @@ void print_letter(letter_t* letter){
 *******************/
 
 /**
-* Create a new word in English. (To be deprecated once create-from-string works.)
+* Create a new word in English. Helper function for parse_string_into_eng_word.)
 * @param The word as a string and letter array, number of letters, and the word
 * struct to initialize.
 * @return void
-* @todo What to do if string is too long? Need to rename mp3.
 * remark Tested in English
 */
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word) {
@@ -292,7 +300,12 @@ void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
     increment_word_index(word);
     letter_t this_letter = word->letters[word->curr_letter];
     *next_cell = this_letter.cells[word->curr_glyph];
-    }
+}
+
+char* get_next_letter_name(word_t* word) {
+    int next_letter = 1 + word->curr_letter;
+    return (word->letters[next_letter]).name;
+}
 
 /**
 * Print a word, not by printing its name but by printing the name

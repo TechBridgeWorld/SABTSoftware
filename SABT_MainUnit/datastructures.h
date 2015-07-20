@@ -9,19 +9,6 @@
 
 #include <stdbool.h>
 
-   /*********************
-  *  SWITCH DEBUG MODE *
- *   ON & OFF HERE!!! *
-*********************/
-
-//this allows you to run datastructures & datastructurestest on a PC
-//#define DEBUGMODE
-
-   /*^^^^^^^^^^^^^^^^^^^*
-  *  SWITCH DEBUG MODE *
- *   ON & OFF HERE!!! *
-*********************/
-
 //@todo move some of these to global?
 #define MAX_WORD_LENGTH     15
 #define MAX_WORDLIST_LENGTH 10
@@ -52,6 +39,7 @@ struct glyph {
 // @todo: pack structs
 // @todo: work out which structs should be globals (e.g. current_word?)
 
+//@todo: typedef pattern as cell instead of making a struct
 typedef struct cell {
 	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
 } cell_t;
@@ -124,6 +112,7 @@ bool glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
 // Letter functions
 bool letter_equals(letter_t* letter1, letter_t* letter2);
 letter_t* get_eng_letter_by_char(char c);
+char* get_eng_letter_name_by_cell(cell_t* cell);
 void print_letter(letter_t* letter);
 
 // Word functions
@@ -132,6 +121,7 @@ void word_to_cell_array(word_t* word, cell_t* arr);
 void decrement_word_index(word_t* word);
 void increment_word_index(word_t* word);
 void get_next_cell_in_word(word_t* word, cell_t* next_cell);
+char* get_next_letter_name(word_t* word);
 char* get_lang(word_t* word);
 void print_word(word_t* word);
 void free_word(word_t* word);
