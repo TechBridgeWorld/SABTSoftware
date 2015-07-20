@@ -103,7 +103,7 @@ cell_t capital = {DOT6};
 #define ENG_LETTER_X {"x", ENGLISH, &x, 1}
 #define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
 #define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
-#define ENG_CAPITAL  {"[cap]", ENGLISH, &capital, 1}
+#define ENG_CAPITAL  {"cap", ENGLISH, &capital, 1}
 
 letter_t eng_a = ENG_LETTER_A;
 letter_t eng_b = ENG_LETTER_B;
@@ -141,4 +141,15 @@ letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 	ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
 	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z };
 
+letter_t all_letters_plus_cap[27] = {ENG_LETTER_A, ENG_LETTER_B,
+	ENG_LETTER_C, ENG_LETTER_D, ENG_LETTER_E, ENG_LETTER_F,
+	ENG_LETTER_G, ENG_LETTER_H, ENG_LETTER_I, ENG_LETTER_J,
+	ENG_LETTER_K, ENG_LETTER_L, ENG_LETTER_M, ENG_LETTER_N,
+	ENG_LETTER_O, ENG_LETTER_P, ENG_LETTER_Q, ENG_LETTER_R,
+	ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
+	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z,
+	ENG_CAPITAL };
+
+
 alphabet_t english_alphabet = {all_letters, 26};
+alphabet_t english_plus_capital = {all_letters_plus_cap, 27};
