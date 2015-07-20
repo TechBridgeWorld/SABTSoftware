@@ -38,7 +38,7 @@ void md10_main(void) {
 	  play_mp3("MD10","MSEL"); // Prompt for submode selection
 	  game_mode = 0;
 	  lang_fileset = script_eng_contraction.fileset;
-	  PRINTF(lang_fileset);
+	  log_msg(lang_fileset);
       md10_current_state = MD10_STATE_SELECT_MODE; 
       got_input = false;
       break;
@@ -80,9 +80,9 @@ void md10_main(void) {
 	  switch(game_mode){
 	  	case 0:		    
 		    // to write <word><set>_<num> please press
-			sprintf(buf,"CON%d_W%d",set,word_num_inset-1);
+			log_msg(buf,"CON%d_W%d", set, word_num_inset-1);
 			sprintf(fname,"%s.mp3",buf);
-			PRINTF(buf);			
+			log_msg(buf);			
 			
 			bool e = convert_file_name ((unsigned char*)fname); //convert file_name into FAT format
   			if(e) return;
@@ -123,7 +123,7 @@ void md10_main(void) {
 	  if (strlen(buf) == 8){
 	  	sym = 10*CHARTOINT(buf[6])+CHARTOINT(buf[7]);
 		char test[10];
-		sprintf(test,"num%d",sym);
+		sprintf(test,"num%d",sym); // @todo what does this do?
 	  }
 	  else {
 	  	sym = CHARTOINT(buf[6]);						// Stores the alphabet/symbol glyph
@@ -147,21 +147,21 @@ void md10_main(void) {
 	  cell_control = GET_CELL_CONTROL(cell);
 	  switch (cell_control) {
 	    case WITH_ENTER:
-		  PRINTF("ENTER");
+		  log_msg("ENTER");
 		  md10_current_state = MD10_STATE_CHECK;		  
 		  break;
 		case WITH_LEFT:
-		  PRINTF("LEFT");
+		  log_msg("LEFT");
 		  play_mp3("MD10","_NXT");
 		  md10_current_state = MD10_STATE_CELL2;
 		  break;
 		case WITH_RIGHT:
-		  PRINTF("RIGHT");		  
+		  log_msg("RIGHT");		  
 		  play_mp3(LANG_FILESET,"BLNK");
 		  cell1_pattern = NO_DOTS;		  
 		  break;
 		case WITH_CANCEL:
-		  PRINTF("User pressed CANCEL");
+		  log_msg("User pressed CANCEL");
 		  break;
 	  }
 	  break;
@@ -176,14 +176,14 @@ void md10_main(void) {
 	  cell_control = GET_CELL_CONTROL(cell);
 	  switch (cell_control) {
 	    case WITH_ENTER:
-		  PRINTF("ENTER");
+		  log_msg("ENTER");
 		  md10_current_state = MD10_STATE_CHECK;		  
 		  break;
 		case WITH_LEFT:
-		  PRINTF("LEFT");
+		  log_msg("LEFT");
 		  break;
 		case WITH_RIGHT:
-		  PRINTF("RIGHT");
+		  log_msg("RIGHT");
 		  if (cell2_pattern && g1){		  
 		  	play_mp3("MD10","_CL1");
 		  	play_pattern((unsigned char)cell1_pattern);
@@ -197,7 +197,7 @@ void md10_main(void) {
 		  }		  
 		  break;
 		case WITH_CANCEL:
-		  PRINTF("User pressed CANCEL");
+		  log_msg("User pressed CANCEL");
 		  break;
 	  }
 	  break;

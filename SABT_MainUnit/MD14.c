@@ -49,7 +49,7 @@ int md14_curr_mistakes = 0;
 int md14_total_mistakes = 0;
 char md14_cell = 0;
 char md14_cell_pattern = 0;
-char md14_cell_control = 0;
+int md14_cell_control = 0;
 static char md14_last_dot = 0;
 
 wordlist_t md14_dict;
@@ -109,6 +109,11 @@ void md14_incorrect_answer() {
 	md14_total_mistakes++;
 }
 
+void md14_speak_inputted_cell() {
+	cell_t this_cell = {md14_cell};
+	char* letter_name = get_eng_letter_name_by_cell(&this_cell);
+	play_mp3(LANGUAGE,letter_name);
+}
 
 /**
  * @brief  Step through the main stages in the code.
@@ -117,9 +122,9 @@ void md14_incorrect_answer() {
 void md14_main() {
   switch(md14_next_state) {
     case MD14_STATE_INTRO:
+    	lang_fileset = LANG_FILESET;
+		mode_fileset = MODE_FILESET;
     	play_mp3(MODE_FILESET, "WELC");
-    	lang_fileset = "ENG_";
-		mode_fileset = "MD14";
 		md14_next_state = MD14_STATE_LVLSEL;
 		srand(timer_rand());
 		break;
@@ -150,8 +155,8 @@ void md14_main() {
 	case MD14_STATE_GENQUES:
 		md14_reset();
 		get_next_word_in_wordlist(&md14_dict, &md14_chosen_word);
-		sprintf(dbgstr, "[MD14] Next word: %s\n\r", md14_chosen_word->name);
-		PRINTF(dbgstr);
+		log_msg("[MD14] Next word: %s\n\r", md14_chosen_word->name);
+		
 		md14_next_state = MD14_STATE_PROMPT;
 	  	break;
 
@@ -172,7 +177,7 @@ void md14_main() {
 			case WITH_ENTER:
 			md14_user_cell.pattern = md14_cell_pattern;
 			md14_next_state = MD14_STATE_CHECK;
-			PRINTF("[MD14] Checking answer\n\r");
+			log_msg("[MD14] Checking answer\n\r");
 			break;
 			case WITH_LEFT:
 			md14_next_state = MD14_STATE_REPROMPT;
@@ -186,9 +191,10 @@ void md14_main() {
 		break;
 
 	case MD14_STATE_CHECK:
+		md14_speak_inputted_cell();
 		get_next_cell_in_word(md14_chosen_word, &md14_curr_cell);
-		sprintf(dbgstr, "Target cell: %x, inputted cell: %x.\n\r", md14_curr_cell.pattern, md14_user_cell.pattern);
-		PRINTF(dbgstr);
+		log_msg("Target cell: %x, inputted cell: %x.\n\r", md14_curr_cell.pattern, md14_user_cell.pattern);
+		
 
 		if (cell_equals(&md14_curr_cell, &md14_user_cell)) {
 			if (md14_chosen_word->curr_letter == md14_chosen_word->num_letters - 1) { // done
@@ -211,7 +217,10 @@ void md14_main() {
 	case MD14_STATE_REPROMPT:
 		if (md14_curr_mistakes >= MAX_INCORRECT_GUESS) {
 			play_mp3(LANGUAGE, "PRSS");
-			play_pattern(md14_curr_cell.pattern);
+			char* letter_name = get_eng_letter_name_by_cell(&md14_curr_cell);
+			play_mp3(LANGUAGE, letter_name);
+			if (md14_curr_mistakes >= MAX_INCORRECT_GUESS + 1)
+				play_pattern(md14_curr_cell.pattern);
 		}
 		else {
 			play_mp3(LANGUAGE, "SPEL");
@@ -219,6 +228,7 @@ void md14_main() {
 	 		if (md14_chosen_word->curr_glyph > -1) {// not at beginning of word
 	 			play_mp3(MODE_FILESET, "SPLS");
 	 			speak_letters_so_far(md14_chosen_word);
+	 			play_mp3(LANGUAGE, "NLET");
 	 		}
 	 	}
 	 	md14_next_state = MD14_STATE_INPUT;

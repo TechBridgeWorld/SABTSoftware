@@ -49,33 +49,33 @@ script_t script_english = {
 
 // NEW STUFF
 
-cell_t a = {DOTS1};
-cell_t b = {DOTS12};
-cell_t c = {DOTS14};
-cell_t d = {DOTS145};
-cell_t e = {DOTS15};
-cell_t f = {DOTS124};
-cell_t g = {DOTS1245};
-cell_t h = {DOTS125};
-cell_t i = {DOTS24};
-cell_t j = {DOTS245};
-cell_t k = {DOTS13};
-cell_t l = {DOTS123};
-cell_t m = {DOTS134};
-cell_t n = {DOTS1345};
-cell_t o = {DOTS135};
-cell_t p = {DOTS1234};
-cell_t q = {DOTS12345};
-cell_t r = {DOTS1235};
-cell_t s = {DOTS234};
-cell_t t = {DOTS2345};
-cell_t u = {DOTS136};
-cell_t v = {DOTS1236};
-cell_t w = {DOTS2456};
-cell_t x = {DOTS1346};
-cell_t y = {DOTS13456};
-cell_t z = {DOTS1356};
-cell_t capital = {DOTS6};
+cell_t a = {DOT1};
+cell_t b = {DOT1 | DOT2};
+cell_t c = {DOT1 | DOT4};
+cell_t d = {DOT1 | DOT4 | DOT5};
+cell_t e = {DOT1 | DOT5};
+cell_t f = {DOT1 | DOT2 | DOT4};
+cell_t g = {DOT1 | DOT2 | DOT4 | DOT5};
+cell_t h = {DOT1 | DOT2 | DOT5};
+cell_t i = {DOT2 | DOT4};
+cell_t j = {DOT2 | DOT4 | DOT5};
+cell_t k = {DOT1 | DOT3};
+cell_t l = {DOT1 | DOT2 | DOT3};
+cell_t m = {DOT1 | DOT3 | DOT4};
+cell_t n = {DOT1 | DOT3 | DOT4 | DOT5};
+cell_t o = {DOT1 | DOT3 | DOT5};
+cell_t p = {DOT1 | DOT2 | DOT3 | DOT4};
+cell_t q = {DOT1 | DOT2 | DOT3 | DOT4 | DOT5};
+cell_t r = {DOT1 | DOT2 | DOT3 | DOT5};
+cell_t s = {DOT2 | DOT3 | DOT4};
+cell_t t = {DOT2 | DOT3 | DOT4 | DOT5};
+cell_t u = {DOT1 | DOT3 | DOT6};
+cell_t v = {DOT1 | DOT2 | DOT3 | DOT6};
+cell_t w = {DOT2 | DOT4 | DOT5 | DOT6};
+cell_t x = {DOT1 | DOT3 | DOT4 | DOT6};
+cell_t y = {DOT1 | DOT3 | DOT4 | DOT5 | DOT6};
+cell_t z = {DOT1 | DOT3 | DOT5 | DOT6};
+cell_t capital = {DOT6};
 
 #define ENG_LETTER_A {"a", ENGLISH, &a, 1}
 #define ENG_LETTER_B {"b", ENGLISH, &b, 1}
@@ -103,7 +103,7 @@ cell_t capital = {DOTS6};
 #define ENG_LETTER_X {"x", ENGLISH, &x, 1}
 #define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
 #define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
-#define ENG_CAPITAL  {"[cap]", ENGLISH, &capital, 1}
+#define ENG_CAPITAL  {"cap", ENGLISH, &capital, 1}
 
 letter_t eng_a = ENG_LETTER_A;
 letter_t eng_b = ENG_LETTER_B;
@@ -141,4 +141,15 @@ letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
 	ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
 	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z };
 
+letter_t all_letters_plus_cap[27] = {ENG_LETTER_A, ENG_LETTER_B,
+	ENG_LETTER_C, ENG_LETTER_D, ENG_LETTER_E, ENG_LETTER_F,
+	ENG_LETTER_G, ENG_LETTER_H, ENG_LETTER_I, ENG_LETTER_J,
+	ENG_LETTER_K, ENG_LETTER_L, ENG_LETTER_M, ENG_LETTER_N,
+	ENG_LETTER_O, ENG_LETTER_P, ENG_LETTER_Q, ENG_LETTER_R,
+	ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
+	ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z,
+	ENG_CAPITAL };
+
+
 alphabet_t english_alphabet = {all_letters, 26};
+alphabet_t english_plus_cap = {all_letters_plus_cap, 27};

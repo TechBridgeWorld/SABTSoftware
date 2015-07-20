@@ -130,8 +130,7 @@ bool vs1053_increase_vol(void)
     if(retry++ > 10) return false;
   }
 
-  sprintf(debug, "[Audio] Volume: %x\n\r", stereo_volume);
-  PRINTF(debug);
+  log_msg("[Audio] Volume: %x\n\r", stereo_volume);
   if (!playing_sound) {
     play_mp3("SYS_","VOL");
   }
@@ -171,7 +170,7 @@ bool vs1053_decrease_vol(void)
   }
 
   sprintf(debug, "[Audio] Volume: %x\n\r", stereo_volume);
-  PRINTF(debug);
+  log_msg(debug);
   if (!playing_sound) {
     play_mp3("SYS_","VOL");
   }

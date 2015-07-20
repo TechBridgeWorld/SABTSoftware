@@ -74,8 +74,8 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	cell_pattern = 0;
 	cell_control = 0;
 	incorrect_tries = 0;
-	sprintf(dbgstr, "[%s] Mode reset\n\r", mode_name);
-	PRINTF(dbgstr);
+	log_msg("[%s] Mode reset", mode_name);
+	NEWLINE;
 }
 
 void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
@@ -86,8 +86,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					break;
 
 				case '1':
-					sprintf(dbgstr, "[%s] Submode: Learn\n\r", mode_name);
-					PRINTF(dbgstr);			
+					log_msg("[%s] Submode: Learn", mode_name);
+					NEWLINE;
+								
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_LEARN;
 					unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
@@ -95,8 +96,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					break;
 
 				case '2':
-					sprintf(dbgstr, "[%s] Submode: Play\n\r", mode_name);
-					PRINTF(dbgstr);
+					log_msg("[%s] Submode: Play", mode_name);
+					NEWLINE;
+					
 					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
 					submode = SUBMODE_PLAY;
 					shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
@@ -105,14 +107,16 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					break;
 
 				case CANCEL:
-					sprintf(dbgstr, "[%s] Quitting to main menu \n\r", mode_name);
-					PRINTF(dbgstr);
+					log_msg("[%s] Quitting to main menu", mode_name);
+					NEWLINE;
+					
 					quit_mode();
 					break;
 
 				case ENTER:
-					sprintf(dbgstr, "[%s] Re-issuing main menu prompt\n\r", mode_name);
-					PRINTF(dbgstr);
+					log_msg("[%s] Re-issuing main menu prompt", mode_name);
+					NEWLINE;
+					
 					next_state = STATE_MENU;
 					break;
 
@@ -123,15 +127,16 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 
 		case STATE_GENQUES:
 			curr_glyph = get_next_letter(SCRIPT_ADDRESS, should_shuffle);
-			sprintf(dbgstr, "[%s] State: GENQUES. Next glyph: %s\n\r",mode_name, curr_glyph->sound);
-			PRINTF(dbgstr);
+			log_msg("[%s] State: GENQUES. Next glyph: %s", mode_name, curr_glyph->sound);
+			NEWLINE;
+			
 			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
 			next_state = STATE_PROMPT;
 			break;
 
 		case STATE_PROMPT:
-			sprintf(dbgstr, "[%s] State: PROMPT.",mode_name);
-			PRINTF(dbgstr);
+			log_msg("[%s] State: PROMPT.",mode_name);
+			
 			switch(submode) {
 				case SUBMODE_LEARN:
 					play_glyph(curr_glyph);
@@ -152,8 +157,8 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 
 		case STATE_INPUT:
 			if (io_user_abort == true) {
-				sprintf(dbgstr, "[%s] User aborted input\n\r", mode_name);
-				PRINTF(dbgstr);
+				log_msg("[%s] User aborted input\n\r", mode_name);
+				
 				next_state = STATE_PROMPT;
 				io_init();
 			}
@@ -162,15 +167,15 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				break;
 			cell_pattern = GET_CELL_PATTERN(cell);
 			cell_control = GET_CELL_CONTROL(cell);
-			sprintf(dbgstr, "Pattern %d, control %d.\n\r", cell_pattern, cell_control);
-			PRINTF(dbgstr);
+			log_msg("Pattern %d, control %d.\n\r", cell_pattern, cell_control);
+			
 						
 			switch (cell_control) {
 				case WITH_ENTER:
 					user_glyph = search_script(SCRIPT_ADDRESS, cell_pattern);
 					next_state = STATE_CHECK;
-					sprintf(dbgstr, "[%s] Checking answer \n\r", mode_name);
-					PRINTF(dbgstr);
+					log_msg("[%s] Checking answer \n\r", mode_name);
+					
 					break;
 				case WITH_CANCEL: // for easy debugging access to multiglyph letters
 /*					SCRIPT_ADDRESS->index = 47;
@@ -185,13 +190,13 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			break;
 
 		case STATE_CHECK:
-			sprintf(dbgstr, "[%s} State: CHECK.\n\r", mode_name);
-			PRINTF(dbgstr);
+			log_msg("[%s} State: CHECK.\n\r", mode_name);
+			
 			if (glyph_equals(curr_glyph, user_glyph)) {
 				if (curr_glyph -> next == NULL) {
 					incorrect_tries = 0;
-					sprintf(dbgstr, "[%s] User answered correctly\n\r", mode_name);
-					PRINTF(dbgstr);
+					log_msg("[%s] User answered correctly\n\r", mode_name);
+					
 					play_mp3(LANG_FILESET, MP3_CORRECT);
 					play_mp3(SYS_FILESET, MP3_TADA);
 					next_state = STATE_GENQUES;
@@ -209,8 +214,8 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			}
 			else {
 				incorrect_tries++;
-				sprintf(dbgstr, "[%s] User answered incorrectly\n\r", mode_name);;
-				PRINTF(dbgstr);			
+				log_msg("[%s] User answered incorrectly\n\r", mode_name);;
+							
 				play_mp3(LANG_FILESET, MP3_INCORRECT);
 				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
 				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	

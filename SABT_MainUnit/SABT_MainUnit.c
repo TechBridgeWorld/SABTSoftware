@@ -222,41 +222,41 @@ void initialize_system(void)
   TIMSK1 |= (1<<OCIE1A);  // Enable interrupt
 
   init_usart_pc();
-  PRINTF("SABT initialising...\n\r");
-  PRINTF("Setting flags...OK\n\r");
-  PRINTF("PC USART...OK\n\r");
+  log_msg("SABT initialising...\n\r");
+  log_msg("Setting flags...OK\n\r");
+  log_msg("PC USART...OK\n\r");
 
-  PRINTF("Keypad USART...");
+  log_msg("Keypad USART...");
   init_usart_keypad();
-  PRINTF("OK\n\r");
+  log_msg("OK\n\r");
 
-  PRINTF("SPI...");
+  log_msg("SPI...");
   spi_initialize();
-  PRINTF("OK\n\r");
+  log_msg("OK\n\r");
 
-  PRINTF("Interrupt flag...");
+  log_msg("Interrupt flag...");
   sei();  // sets the interrupt flag (enables interrupts)
-  PRINTF("OK\n\r");
+  log_msg("OK\n\r");
 
   init_sd_card(true);
-  PRINTF("SD card...OK\n\r");
+  log_msg("SD card...OK\n\r");
 
   play_mp3_file((unsigned char*)"SYS_WELC.mp3");
 
   ui_check_modes();
-  PRINTF("Parsing modes...OK\n\r");
+  log_msg("Parsing modes...OK\n\r");
 
-  PRINTF("Type info\n\r");
-  sprintf(dbgstr, "char: %d bytes\n\r", sizeof(char));
-  PRINTF(dbgstr);
-  sprintf(dbgstr, "int: %d bytes\n\r", sizeof(int));
-  PRINTF(dbgstr);
-  sprintf(dbgstr, "short: %d bytes\n\r", sizeof(short));
-  PRINTF(dbgstr);
-  sprintf(dbgstr, "long: %d bytes\n\r", sizeof(long));
-  PRINTF(dbgstr);
-  sprintf(dbgstr, "void*: %d bytes\n\r", sizeof(void*));
-  PRINTF(dbgstr);
+  log_msg("Type info\n\r");
+  log_msg("char: %d bytes\n\r", sizeof(char));
+  
+  log_msg("int: %d bytes\n\r", sizeof(int));
+  
+  log_msg("short: %d bytes\n\r", sizeof(short));
+  
+  log_msg("long: %d bytes\n\r", sizeof(long));
+  
+  log_msg("void*: %d bytes\n\r", sizeof(void*));
+  
 
   play_mp3("SYS_","MENU");
 }

@@ -8,6 +8,8 @@
 #ifndef MD15_MODE_H_
 #define MD15_MODE_H_
 
+extern wordlist_t md15_dict;
+
 void md15_main();
 void md15_reset();
 

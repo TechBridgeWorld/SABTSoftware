@@ -38,7 +38,7 @@ void pc_parse_message()
       break;
       // Incorrect message type
     default:
-      PRINTF("SABT-INCORRECT MESSAGE TYPE! MUST BE 'M' OR 'x'.\r\n");
+      log_msg("SABT-INCORRECT MESSAGE TYPE! MUST BE 'M' OR 'x'.\r\n");
       break;
   }
 }
