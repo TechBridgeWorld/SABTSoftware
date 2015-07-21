@@ -77,14 +77,14 @@ void md15_stats(){
 		if (words == 0)
 			return;
 		mistakes = md15_p1_total_mistakes;
-		play_mp3(MODE_FILESET, "PLR1");
+		play_mp3(LANG_FILESET, "PLR1");
 	}
 	else {
 		words = md15_p2_words_spelled;
 		if (words == 0)
 			return;
 		mistakes = md15_p2_total_mistakes;
-		play_mp3(MODE_FILESET, "PLR2");
+		play_mp3(LANG_FILESET, "PLR2");
 	}
 
 	play_mp3(MODE_FILESET, "STS1");      // "You have spelled"
@@ -201,9 +201,9 @@ void md15_main() {
 
 	 case MD15_STATE_PROMPT:
 	 		if (player1_is_current)
-	 			play_mp3(MODE_FILESET, "PLR1");
+	 			play_mp3(LANG_FILESET, "PLR1");
 	 		else
-	 			play_mp3(MODE_FILESET, "PLR2");
+	 			play_mp3(LANG_FILESET, "PLR2");
 	 	play_mp3(LANGUAGE, "SPEL");
 	 	speak_word(md15_chosen_word);
 	 	next_state = MD15_STATE_INPUT;

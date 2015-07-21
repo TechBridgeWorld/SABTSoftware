@@ -359,9 +359,6 @@ void ui_call_mode_yes_answer(void)
     case 4:
       md4_call_mode_yes_answer();
       break;
-    case 5:
-      md5_call_mode_yes_answer();
-      break;
     case 9:
       md9_call_mode_yes_answer();
       break;
@@ -390,9 +387,6 @@ void ui_call_mode_no_answer(void)
       break;
     case 4:
       md4_call_mode_no_answer();
-      break;
-    case 5:
-      md5_call_mode_no_answer();
       break;
     case 9:
       md9_call_mode_no_answer();
