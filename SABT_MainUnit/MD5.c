@@ -21,19 +21,6 @@
 #define MD5_STATE_CHECK_MATCH       9         // Valid input was entered
 #define MD5_STATE_EVALUATE_GAME     10         // Check for win or lose
 
-#define MP3_INTRO "INT"
-#define MP3_WAIT "WAIT"
-#define MP3_FOUND_WORD "FWRD"
-#define MP3_NOT_FOUND "NFND"
-#define MP3_BLANK "BLNK"
-#define MP3_GUESS "GAL"
-#define MP3_INVALID "INV"
-#define MP3_INVALID_PATTERN "INVP"
-#define MP3_YOU_LOSE "YOLO"
-#define MP3_YOU_WIN "YOWI"
-#define MP3_SO_FAR "SOFA"
-#define MP3_NEW_GAME "NGAM"
-
 #define MAX_LEN              10
 #define MAX_INCORRECT_GUESS   8 // if change this, rerecord YOLO.
 
@@ -155,7 +142,7 @@ void md5_main(void) {
                     read_dict_file();
             } */
 
-            play_mp3(MODE_FILESET,MP3_INTRO);
+            play_mp3(MODE_FILESET, "INT");
             md5_next_state = MD5_STATE_INPUT_GOAL;
             break;
 
@@ -214,7 +201,7 @@ void md5_main(void) {
                 md5_next_state = MD5_STATE_INPUT_GOAL;
             }
             else { // invalid letter
-                play_mp3(MODE_FILESET, MP3_INVALID);
+                play_mp3(MODE_FILESET, "INV");
                 md5_next_state = MD5_STATE_INPUT_GOAL;
             }
             break;
@@ -265,7 +252,7 @@ void md5_main(void) {
                 md5_next_state = MD5_STATE_CHECK_MATCH;
             }
             else  {
-                play_mp3(LANG_FILESET, MP3_INVALID_PATTERN); // invalid
+                play_mp3(LANG_FILESET, "INVP"); // invalid
                 md5_incorrect_tries++;
                 md5_next_state = MD5_STATE_EVALUATE_GAME;
             }
