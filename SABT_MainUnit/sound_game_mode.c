@@ -135,44 +135,36 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
  */
 void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
     switch(next_state) {
+
         case STATE_MENU:
-            if (io_user_abort == true) {
-              log_msg("[MD3] Quitting to main menu");
-              NEWLINE;
-              quit_mode();
-              io_init();
-            }
-            cell = get_cell();
-            if (cell == NO_DOTS)
+        if (io_user_abort == true) {
+            log_msg("[MD3] Quitting to main menu");
+            NEWLINE;
+            quit_mode();
+            io_init();
+        }
+        switch(create_dialog("", DOT_1 | DOT_2 | ENTER_CANCEL)) {
+
+            case '1':
+                log_msg("[%s] Submode: Learn", MODE_FILESET);
+                NEWLINE;
+                submode = SUBMODE_LEARN;
+                next_state = STATE_GENQUES;
                 break;
-            cell_pattern = GET_CELL_PATTERN(cell);
-            cell_control = GET_CELL_CONTROL(cell);
-            switch (cell_control) {
-                /*If user input is A, enter SUBMODE_PLAY; if input is B, enter SUBMODE_LEARN; 
-                else go back to menu*/
-                case WITH_ENTER:
-                    user_glyph = search_script(this_script, cell_pattern);
-                    if (cell_pattern == ENG_A) {
-                        play_glyph(user_glyph);
-                        submode = SUBMODE_PLAY;
-                        next_state = STATE_GENQUES;
-                    }
-                    else if (cell_pattern == ENG_B) {
-                        play_glyph(user_glyph);
-                        submode = SUBMODE_LEARN;
-                        next_state = STATE_GENQUES;
-                    }
-                    else {
-                        play_mp3(lang_fileset, MP3_INVALID_PATTERN);
-                        next_state = STATE_MENU;
-                    }
-                    break;
-                case WITH_LEFT:
-                case WITH_RIGHT:
-                case WITH_CANCEL:
-                    break;
-            }
-            break;
+
+            case '2':
+                submode = SUBMODE_LEARN;
+                next_state = STATE_GENQUES;
+
+
+            case WITH_LEFT:
+            case WITH_RIGHT:
+            case WITH_CANCEL:
+            default:
+                break;
+        }
+        break;
+
 
 
         
