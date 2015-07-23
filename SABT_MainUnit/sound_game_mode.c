@@ -153,7 +153,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 break;
 
             case '2':
-                submode = SUBMODE_LEARN;
+                log_msg("[%s] Submode: Play", MODE_FILESET);
+                submode = SUBMODE_PLAY;
                 next_state = STATE_GENQUES;
 
 
