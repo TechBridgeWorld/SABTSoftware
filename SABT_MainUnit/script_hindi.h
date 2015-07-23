@@ -73,7 +73,7 @@
 #define HIN_HA				0b010011
 
 #define HIN_KSHA			0b011111
-#define HIN_TRA_1			0b010000
+#define HIN_TRA_1			0b001000
 #define HIN_TRA_2			0b011110
 #define HIN_TRA_3			0b010111
 #define HIN_JNA				0b110001
