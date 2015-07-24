@@ -13,11 +13,12 @@
 #include "script_common.h"
 #include "script_english.h"
 #include "sound_game_mode.h"
+ #include "mp3s.h"
 
 #define SCRIPT_ADDRESS &script_english
 #define SCRIPT_LENGTH SCRIPT_ENGLISH_LENGTH
 #define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD11"
+#define MODE_FILESET "M11_"
 
 
 const char *noise_list[MAX_INDEX + 1] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",

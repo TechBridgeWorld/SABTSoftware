@@ -26,6 +26,7 @@
 #include "script_english.h" 
 #include "dictionary.h"
 #include "vocab.h"
+#include "mp3s.h"
 
 
 #define MD15_STATE_NULL 0x00
@@ -47,7 +48,7 @@
  // Used to set global fileset variables
 #define LANGUAGE "ENG_"
 #define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD15"
+#define MODE_FILESET "M15_"
 
 char next_state = MD15_STATE_NULL;
 
@@ -77,34 +78,34 @@ void md15_stats(){
 		if (words == 0)
 			return;
 		mistakes = md15_p1_total_mistakes;
-		play_mp3(LANG_FILESET, "PLR1");
+		play_direction(MP3_PLAYER_1);
 	}
 	else {
 		words = md15_p2_words_spelled;
 		if (words == 0)
 			return;
 		mistakes = md15_p2_total_mistakes;
-		play_mp3(LANG_FILESET, "PLR2");
+		play_direction(MP3_PLAYER_2);
 	}
 
-	play_mp3(MODE_FILESET, "STS1");      // "You have spelled"
+	play_feedback(MP3_YOU_HAVE_SPELLED);
 	play_number(words);                  // # of words
 	if (mistakes == 0) {
 		if (words == 1)
-			play_mp3(MODE_FILESET,"WORD");  // word.
+			play_feedback(MP3_WORD);
 		else
-			play_mp3(MODE_FILESET,"WRDS");  // words.
+			play_feedback(MP3_WORDS);
 	}
 	else {
 		if (words == 1)
-			play_mp3(MODE_FILESET, "STS2"); // "word, and have made"
+			play_feedback(MP3_WORD_AND_HAVE_MADE);
 		else
-			play_mp3(MODE_FILESET, "STS3");  // "words, and have made"
+			play_feedback(MP3_WORDS_AND_HAVE_MADE);
 		play_number(mistakes);               // # of md15_curr_mistakes		
 		if (mistakes == 1)
-			play_mp3(MODE_FILESET, "STS4");  // "mistake"
+			play_feedback(MP3_MISTAKE);
 		else
-			play_mp3(MODE_FILESET, "STS5");  // "mistakes"
+			play_feedback(MP3_MISTAKES);
 	}
 }
 
@@ -117,10 +118,10 @@ void md15_reset() {
 }
 
 void md15_correct_answer() {
-	play_mp3(LANGUAGE, "CORR");
+	play_feedback(MP3_CORRECT);
 	speak_letters_in_word(md15_chosen_word);
 	speak_word(md15_chosen_word);
-	play_mp3("SYS_", "TADA");
+	play_tada();
 	if (player1_is_current)
 		md15_p1_words_spelled++;
 	else
@@ -136,8 +137,8 @@ void md15_incorrect_answer() {
 
 	cell_t this_cell = {md15_cell_pattern};
 	if (get_eng_letter_name_by_cell(&this_cell) != NULL) { //INVP may already have said "try again"
-		play_mp3(LANGUAGE, "NO");
-		play_mp3(LANGUAGE, MP3_TRY_AGAIN);
+		play_feedback(MP3_NO);
+		play_feedback(MP3_TRY_AGAIN);
 	}
 	decrement_word_index(md15_chosen_word);
 	next_state = MD15_STATE_REPROMPT;
@@ -147,7 +148,7 @@ void md15_speak_inputted_cell() {
 	cell_t this_cell = {md15_cell_pattern};
 	char* letter_name = get_eng_letter_name_by_cell(&this_cell);
 	if (letter_name == NULL)
-		play_mp3(LANGUAGE,"INVP");
+		play_feedback(MP3_INVALID_PATTERN);
 	else
 		play_mp3(LANGUAGE,letter_name);
 }
@@ -159,11 +160,11 @@ void md15_speak_inputted_cell() {
 void md15_main() {
   switch(next_state) {
     case MD15_STATE_INTRO:
-        lang_fileset = "ENG_";
-		mode_fileset = "MD15";
-    	play_mp3(MODE_FILESET, "WELC");
+        lang_fileset = "e_";
+		mode_fileset = "m15_";
+		play_welcome();
     	play_number(GAMELENGTH);
-    	play_mp3(MODE_FILESET, "WRDS");
+    	play_feedback(MP3_WORDS);
 		next_state = MD15_STATE_LVLSEL;
 		srand(timer_rand());
 		break;
@@ -174,20 +175,20 @@ void md15_main() {
         	break;
         switch (md15_last_dot) {
         	case '1':
-				play_mp3(LANGUAGE, "EASY");
+        		play_direction(MP3_EASY_MODE);
    				strings_to_wordlist(easy, ARRAYLEN(easy), &md15_dict);
    				break;
         	case '2':
-				play_mp3(LANGUAGE, "MED");
+        		play_direction(MP3_MEDIUM_MODE);
   				strings_to_wordlist(medium, ARRAYLEN(medium), &md15_dict);
   				break;
         	case '3':
-				play_mp3(LANGUAGE, "HARD");
+        		play_direction(MP3_HARD_MODE);
     			strings_to_wordlist(hard, ARRAYLEN(hard), &md15_dict);
     			break;
         }
 		print_words_in_list(&md15_dict);
-    	play_mp3(MODE_FILESET, "INST");
+		play_instructions();
     	next_state = MD15_STATE_GENQUES;
     	break;
 
@@ -201,10 +202,11 @@ void md15_main() {
 
 	 case MD15_STATE_PROMPT:
 	 		if (player1_is_current)
-	 			play_mp3(LANG_FILESET, "PLR1");
+	 			play_direction(MP3_PLAYER_1);
+
 	 		else
-	 			play_mp3(LANG_FILESET, "PLR2");
-	 	play_mp3(LANGUAGE, "SPEL");
+	 			play_direction(MP3_PLAYER_2);
+	 	play_direction(MP3_SPELL_WORD);
 	 	speak_word(md15_chosen_word);
 	 	next_state = MD15_STATE_INPUT;
 	 	break;
@@ -245,8 +247,8 @@ void md15_main() {
 			  	next_state = MD15_STATE_SWITCH;
 			}
 			else {// correct but not done
-				play_mp3(LANGUAGE, "GOOD");
-				play_mp3(LANGUAGE, "NLET");
+				play_feedback(MP3_GOOD);
+				play_mp3(LANGUAGE, MP3_NEXT_LETTER);
 				md15_curr_mistakes = 0;
 				next_state = MD15_STATE_INPUT;
 			}
@@ -268,7 +270,7 @@ void md15_main() {
 	case MD15_STATE_REPROMPT:
 	 	speak_word(md15_chosen_word);
 	 	if (md15_curr_mistakes >= MAX_INCORRECT_GUESS) {
-	 		play_mp3(LANGUAGE, "PRSS");
+	 		play_direction(MP3_PLEASE_PRESS);
 			char* letter_name = get_eng_letter_name_by_cell(&md15_curr_cell);
 			play_mp3(LANGUAGE, letter_name);
 			if (md15_curr_mistakes >= MAX_INCORRECT_GUESS + 1)
@@ -276,7 +278,7 @@ void md15_main() {
 		}
 
 	 	else if (md15_chosen_word->curr_glyph > -1) { // not at beginning of word
-	 		play_mp3(MODE_FILESET, "SPLS");
+	 		play_feedback(MP3_SPELLING_SO_FAR);
 	 		speak_letters_so_far(md15_chosen_word);
 	 	}
 	 	next_state = MD15_STATE_INPUT;
@@ -288,17 +290,17 @@ void md15_main() {
 	 		|| (md15_p1_words_spelled == md15_p2_words_spelled
 	 			&& md15_p1_total_mistakes < md15_p2_total_mistakes)) {
 		 	log_msg("Winner is player 1!\n\r");
-		 	play_mp3(MODE_FILESET, "WIN1");
+		 	play_feedback(MP3_GAME_OVER_WINNER_1);
 		 }
 		 else if (md15_p1_words_spelled < md15_p2_words_spelled
 		 	|| (md15_p1_words_spelled == md15_p2_words_spelled
 	 			&& md15_p1_total_mistakes > md15_p2_total_mistakes)) {
 		 	log_msg("Winner is player 2!\n\r");
-		 	play_mp3(MODE_FILESET, "WIN2");
+		 	play_feedback(MP3_GAME_OVER_WINNER_2);
 		 }
 		 else {// tie
 		 	log_msg("The game is a draw.\n\r");
-		 	play_mp3(MODE_FILESET, "WIN0");
+		 	play_feedback(MP3_GAME_OVER_DRAW);
 		 }
 
 		// output stats for both players

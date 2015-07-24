@@ -9,6 +9,7 @@
 #include "audio.h"
 #include "common.h"
 #include "script_eng_contraction.h"
+ #include "mp3s.h"
 
 #define LANG_FILESET "ENG_"
 
@@ -31,11 +32,10 @@ static char cell_control;
 
 void md10_main(void) {
 
- switch(md10_current_state)
-  {
-     case MD10_STATE_INITIAL:	  
-      play_mp3("MD10","_INT"); // Welcomes and asks to choose a mode (*Practice Contractions *Practice abbrevations *Dictation Mode)
-	  play_mp3("MD10","MSEL"); // Prompt for submode selection
+ switch(md10_current_state) {
+     case MD10_STATE_INITIAL:
+     	play_instructions();
+     	play_submode_choice();
 	  game_mode = 0;
 	  lang_fileset = script_eng_contraction.fileset;
 	  log_msg(lang_fileset);
@@ -99,7 +99,7 @@ void md10_main(void) {
 				return;
 			}			
 			play_mp3(NULL,buf);
-			play_mp3(LANG_FILESET,"PRSS");
+			play_direction(MP3_PLEASE_PRESS);
 					
 			md10_current_state = MD10_STATE_SPELL_PATTERN;
 			break;
@@ -205,12 +205,12 @@ void md10_main(void) {
 	case MD10_STATE_CHECK:
 	  if(g1==NULL || cell1_pattern == g1->pattern){
 	      if(cell2_pattern == g2->pattern){
-			play_mp3(LANG_FILESET,"GOOD");
+	      	play_feedback(MP3_GOOD);
 			md10_current_state = MD10_STATE_REQUEST_WRITE;
 		  }
 	      else{
-			play_mp3(LANG_FILESET,"NO");
-			play_mp3("MD10","_TRY");
+	      	play_feedback(MP3_NO);
+	      	play_feedback(MP3_TRY_AGAIN);
 			cell1_pattern = NO_DOTS;
 			cell2_pattern = NO_DOTS;
 			md10_current_state = MD10_STATE_REQUEST_INPUT;

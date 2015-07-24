@@ -6,12 +6,6 @@
  * @author Kory Stiger (kstiger)
  */
 
-// MP3 prompts
-#define MODE_FILESET "MD1_"
-#define LANG_FILESET "ENG_"
-#define MP3_INTRODUCTION "INT"
-#define MP3_FIND_DOT "FNDT"
-
 #include "Globals.h"
 #include "MD1.h"
 #include "audio.h"
@@ -28,8 +22,7 @@ char used_number[6] = {0, 0, 0, 0, 0, 0};
  *        return the charachter of that number;
  * @return char - charachter representation of a number from 1 - 6
  */
-char random_number_as_char()
-{
+char random_number_as_char() {
   int num = TCNT1;
   int i;
 
@@ -87,17 +80,18 @@ void md1_main(void)
   switch(current_state)
   {
     case STATE_INITIAL:
-      log_msg("[MD1] Entering MD1\n\r");
       used_num_cnt = 0;
       // Play the introductory message for Mode 1
-      play_mp3(MODE_FILESET,MP3_INTRODUCTION);
+      play_welcome();
       current_state = STATE_REQUEST_INPUT1;
       break;
+
     case STATE_REQUEST_INPUT1:
-      play_mp3(MODE_FILESET,MP3_FIND_DOT);
+      play_direction(MP3_FIND_DOT);
       expected_dot = random_number_as_char();
       current_state = STATE_REQUEST_INPUT2;
       break;
+
     case STATE_REQUEST_INPUT2:
       // Generate a random char from '1' to '6'
       play_dot(expected_dot);
@@ -110,16 +104,15 @@ void md1_main(void)
     case STATE_PROC_INPUT:
       if(last_dot != expected_dot)
       {
-        play_mp3(LANG_FILESET,MP3_INCORRECT);
-        play_mp3(MODE_FILESET, MP3_FIND_DOT);
+        play_feedback(MP3_INCORRECT);
         play_dot(expected_dot);
         last_dot = 0;
         current_state = STATE_WAIT_INPUT;
       }
       else
       {
-        play_mp3(LANG_FILESET,MP3_CORRECT);
-        play_mp3(SYS_FILESET, MP3_TADA);
+        play_feedback(MP3_CORRECT);
+        play_tada();
         last_dot = 0;
         current_state = STATE_REQUEST_INPUT1;
       }
@@ -135,7 +128,7 @@ void md1_main(void)
  */
 void md1_call_mode_yes_answer(void)
 {
-  play_mp3(MODE_FILESET,MP3_FIND_DOT);
+  play_direction(MP3_FIND_DOT);
   current_state = STATE_REQUEST_INPUT2;
 }
 

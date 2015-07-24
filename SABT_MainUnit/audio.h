@@ -8,12 +8,13 @@
 #define _AUDIO_H_
 
 #include <stdbool.h>
-
 #include "datastructures.h"
+#include "mp3s.h"
 
 extern bool playlist_empty;
 extern char* lang_fileset;
 extern char* mode_fileset;
+
 
 bool play_mp3(char* fileset, char* mp3);
 void play_next_mp3(void);
@@ -27,5 +28,14 @@ void play_number(long number);
 void play_line(glyph_t** line);
 void play_word(word_node_t *this_word);
 void play_string(char* word, int word_len);
+
+void play_welcome();
+void play_instructions();
+void play_submode_choice();
+void play_direction(char* dir);
+void play_feedback(char* dir);
+void play_mode_audio(char* dir);
+void play_tada();
+
 
 #endif /* _AUDIO_H_ */

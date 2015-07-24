@@ -491,7 +491,9 @@ void ui_input_cell_to_current_mode(char this_cell)
  */
 void ui_run_main_of_current_mode(void)
 {
+
   if(ui_is_mode_selected){
+    
     switch(ui_current_mode_number)
     {
       case 1:

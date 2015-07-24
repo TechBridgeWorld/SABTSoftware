@@ -249,7 +249,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                     switch (submode){
                         case SUBMODE_LEARN:
                             play_sound(MODE_FILESET, sound_source, true);
-                            play_mp3(MODE_FILESET, "SAYS");
+                            play_mp3(lang_fileset, "SAYS");
                             play_sound(MODE_FILESET, sound_source, false);
                             break;
                         

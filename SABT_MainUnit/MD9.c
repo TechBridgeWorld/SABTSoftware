@@ -9,6 +9,7 @@
 #include "audio.h"
 #include "script_common.h"
 #include "script_digits.h"
+ #include "mp3s.h"
 
 #define STATE_NULL 0x00
 #define STATE_MENU 0x01
@@ -32,25 +33,22 @@
 #define LEVEL_3			0x0003
 
 // Used to set global fileset variables
-#define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD9_"
-
+#define LANG_FILESET "e_"
+#define MODE_FILESET "m9_"
+#define SYS_FILESET "SYS_"
+/*
 // Prompt files
 // Submode menu prompt
 #define MP3_MENU	"MENU" //Menu
 // Level select prompt
 #define MP3_LVLSEL "LVLS" //Level select
-#define MP3_INSTRUCTIONS "INST"
+#define MP3_INSTRUCTIONS "INST" */
 // Pre-question prompt
-#define MP3_PREQUES "WHIS" //What is
-// In-question operators
-#define MP3_PLUS	"PLUS"
-#define MP3_MINUS	"MINS"
-#define MP3_TIMES	"TIMS"
-#define MP3_YOU_ANSWERED "UANS"
+//#define MP3_PREQUES "WHIS" //What is
+//#define MP3_YOU_ANSWERED "UANS"
 // Skip prompt
-#define MP3_SKIP "SKIP"
-#define MP3_THE_ANSWER_IS "TAIS"
+//#define MP3_SKIP "SKIP"
+//#define MP3_THE_ANSWER_IS "TAIS"
 
 // Limits
 #define MAX_DIGITS 3
@@ -129,17 +127,17 @@ void md9_generate_question(void) {
 }
 
 void md9_play_question() {
-	play_mp3(MODE_FILESET, MP3_PREQUES);
+	play_mp3(MODE_FILESET, MP3_WHAT_IS);
 	play_number(md_op_1);
 	switch (md_submode) {
 		case SUBMODE_ADD:
-			play_mp3(MODE_FILESET, MP3_PLUS);
+			play_direction(MP3_PLUS);
 			break;
 		case SUBMODE_SUB:
-			play_mp3(MODE_FILESET, MP3_MINUS);
+			play_direction(MP3_MINUS);
 			break;
 		case SUBMODE_MUL:
-			play_mp3(MODE_FILESET, MP3_TIMES);
+			play_direction(MP3_TIMES);
 			break;
 		default:
 			log_msg("[MD9] Error: md_submode: %c\n\r",
@@ -152,7 +150,7 @@ void md9_play_question() {
 }
 
 void md9_play_answer(void) {
-	play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
+	play_feedback(MP3_THE_ANSWER_IS);
 	play_number(md_res);
 }
 
@@ -160,7 +158,7 @@ void md9_main(void) {
 	switch (md_next_state) {
 		
 		case STATE_MENU:
-			md_last_dot = create_dialog(MP3_MENU,
+			md_last_dot = create_dialog(MP3_CHOOSE_LEVELS_3,
 				(DOT_1 | DOT_2 | DOT_3));
 			switch (md_last_dot) {
 				
@@ -195,7 +193,7 @@ void md9_main(void) {
 			break;
 
 		case STATE_LVLSEL:
-			md_last_dot = create_dialog(MP3_LVLSEL,
+			md_last_dot = create_dialog(MP3_CHOOSE_LEVELS_3,
 				(DOT_1 | DOT_2 | DOT_3));
 			switch (md_last_dot) {
 				
@@ -205,21 +203,21 @@ void md9_main(void) {
 				case '1':
 					log_msg("[MD9] Level: 1\n\r");
 					md_level = LEVEL_1;
-					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
+					play_instructions();
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '2':
 					log_msg("[MD9] Level: 2\n\r");
 					md_level = LEVEL_2;
-					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
+					play_instructions();
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '3':
 					log_msg("[MD9] Level: 3\n\r");
 					md_level = LEVEL_3;
-					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
+					play_instructions();
 					md_next_state = STATE_GENQUES;
 					break;
 
@@ -253,8 +251,7 @@ void md9_main(void) {
 			if (get_number(&md_input_valid, &md_usr_res)) {
 				if (md_input_valid) {
 					log_msg("[MD9] User answer: %d\n\r", md_usr_res);
-					
-					play_mp3(MODE_FILESET, MP3_YOU_ANSWERED);
+					play_feedback(MP3_YOU_ANSWERED);
 					play_number(md_usr_res);
 					md_next_state = STATE_CHECKANS;
 				} else {
@@ -267,17 +264,17 @@ void md9_main(void) {
 			if (md_usr_res == md_res) {
 				// Correct answer
 				md_incorrect_tries = 0;
-				play_mp3(LANG_FILESET, MP3_CORRECT);
-				play_mp3(SYS_FILESET, MP3_TADA);
+				play_feedback(MP3_CORRECT);
+				play_tada();
 				md_next_state = STATE_GENQUES;
 			} else {
 				// Wrong answer
 				md_incorrect_tries++;
-				play_mp3(LANG_FILESET, MP3_INCORRECT);
+				play_feedback(MP3_CORRECT);
 				if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
 					md9_play_answer();
 				}
-				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+				play_feedback(MP3_TRY_AGAIN);
 				md_next_state = STATE_PROMPT;
 			}
 			break;

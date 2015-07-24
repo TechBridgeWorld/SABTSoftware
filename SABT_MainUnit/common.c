@@ -12,6 +12,19 @@
 #include "datastructures.h"
 #include "MD15.h"
 
+ int current_mode(){
+ 	return ui_current_mode_index;
+ }
+
+ char* current_language(){
+ 	if (ui_current_mode_index == 7)
+ 		return "h_";
+ 	if (ui_current_mode_index == 12)
+ 		return "k_";
+ 	else
+ 		return "e_";
+ }
+
 
 /**
 * @brief Sets script globals for a new language

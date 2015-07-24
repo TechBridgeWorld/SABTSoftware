@@ -9,6 +9,7 @@
 #include "common.h"
 #include "script_common.h"
 #include "MD6.h"
+ #include "mp3s.h"
 
 /* Change this script header for new script */
 #include "script_english.h"
@@ -37,7 +38,7 @@ void md6_reset(void) {
 	cell = 0;
 	cell_pattern = 0;
 	cell_control = 0;
-	play_mp3(mode_fileset, "INT");
+	play_welcome();
 	next_state = MD6_STATE_INPUT;
 	log_msg("[MD6] Mode reset\n\r");
 }

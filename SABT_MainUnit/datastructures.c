@@ -337,16 +337,16 @@ void print_word(word_t* word) {
 char* get_lang(word_t* word){
     switch (word->lang_enum) {
         case ENGLISH:
-            return "ENG_";
+            return "e_";
             break;
         case HINDI:
-            return "HIN_";
+            return "h_";
             break;
         case KANNADA:
-            return "KAN_";
+            return "k_";
             break;
         default:
-            return "SYS_";
+            return "s_";
             break;
     }
 }

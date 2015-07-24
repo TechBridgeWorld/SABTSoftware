@@ -17,11 +17,12 @@
 #include "script_english.h" 
 #include "MD3.h"
 #include "sound_game_mode.h"
+ #include "mp3s.h"
 
 #define SCRIPT_ADDRESS &script_english
 #define SCRIPT_LENGTH SCRIPT_ENGLISH_LENGTH
 #define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD3_"
+#define MODE_FILESET "m3_"
 
 
 const char *animal_list[MAX_INDEX + 1] = {"bee", "camel", "cat", "cow", "dog", "horse",

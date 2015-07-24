@@ -33,12 +33,6 @@
 #define SUBMODE_LEARN 0x01
 #define SUBMODE_PLAY 0x02
 
-// Mode MP3 constants
-#define MP3_MENU "MENU"
-#define MP3_FOR_X_PRESS_DOTS "FXPD"
-#define MP3_REPROMPT "SKIP"
-#define MP3_INSTRUCTIONS "INST"
-
 #define MAX_INCORRECT_TRIES 3
 
 void learn_letter_reset (script_t* new_script, char* new_lang_fileset, char* new_mode_fileset);

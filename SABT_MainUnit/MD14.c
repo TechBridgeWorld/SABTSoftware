@@ -22,6 +22,7 @@
 #include "script_english.h" 
 #include "dictionary.h"
 #include "vocab.h"
+#include "mp3s.h"
 
 
 #define MD14_STATE_NULL 0x00
@@ -38,9 +39,9 @@
 #define MAX_WORD_LEN 20
 
  // Used to set global fileset variables
-#define LANGUAGE "ENG_"
+#define LANGUAGE "ENG_"   //@todo fix this stuff
 #define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD14"
+#define MODE_FILESET "M14_"
 
 char md14_next_state = MD14_STATE_NULL;
 
@@ -62,24 +63,24 @@ static cell_t md14_curr_cell;
 void md14_stats(){
 	if (md14_words_spelled == 0)
 		return;
-	play_mp3(MODE_FILESET, "STS1");         // "You have spelled"
+	play_feedback(MP3_YOU_HAVE_SPELLED);
 	play_number(md14_words_spelled);        // # of words
 	if (md14_total_mistakes == 0) {
 		if (md14_words_spelled == 1)
-			play_mp3(MODE_FILESET,"WORD");  // word.   [if 1 word, 0 mistakes]
+			play_feedback(MP3_WORD);
 		else
-			play_mp3(MODE_FILESET,"WRDS");  // words.  [if !1 word, 0 mistakes] 
+			play_feedback(MP3_WORDS);
 	}
 	else {
 		if (md14_words_spelled == 1)
-			play_mp3(MODE_FILESET, "STS2"); // "word, and have made" [if 1 word, >0 mistakes]
+			play_feedback(MP3_WORD_AND_HAVE_MADE);
 		else
-			play_mp3(MODE_FILESET, "STS3");  // "words, and have made" [if >1 word, >0 mistakes]
+			play_feedback(MP3_WORDS_AND_HAVE_MADE);
 		play_number(md14_total_mistakes);    // # of md14_curr_mistakes		
 		if (md14_total_mistakes == 1)
-			play_mp3(MODE_FILESET, "STS4");  // "mistake" [if 1 mistake]
+			play_feedback(MP3_MISTAKE);
 		else
-			play_mp3(MODE_FILESET, "STS5");  // "mistakes" [if >1 mistakes]
+			play_feedback(MP3_MISTAKES);
 	}
 }
 
@@ -92,18 +93,19 @@ void md14_reset() {
 }
 
 void md14_correct_answer() {
-	play_mp3(LANGUAGE, "CORR");
+	play_feedback(MP3_CORRECT);
 	speak_letters_in_word(md14_chosen_word);
 	speak_word(md14_chosen_word);
-	play_mp3("SYS_", "TADA");
+	play_tada();
 	md14_words_spelled++;
 	md14_stats();
 	md14_reset();
 }
 
 void md14_incorrect_answer() {
-	play_mp3(LANGUAGE, "NO");
-	play_mp3(LANGUAGE, MP3_TRY_AGAIN);
+	play_feedback(MP3_NO);
+	play_feedback(MP3_TRY_AGAIN);
+
 	decrement_word_index(md14_chosen_word);
 	md14_curr_mistakes++;
 	md14_total_mistakes++;
@@ -124,31 +126,31 @@ void md14_main() {
     case MD14_STATE_INTRO:
     	lang_fileset = LANG_FILESET;
 		mode_fileset = MODE_FILESET;
-    	play_mp3(MODE_FILESET, "WELC");
+		play_welcome();
 		md14_next_state = MD14_STATE_LVLSEL;
 		srand(timer_rand());
 		break;
 
 	case MD14_STATE_LVLSEL:
-        md14_last_dot = create_dialog("LVL3", (DOT_1 | DOT_2 | DOT_3));
+        md14_last_dot = create_dialog(MP3_CHOOSE_LEVELS_3, (DOT_1 | DOT_2 | DOT_3));
         if (md14_last_dot == NO_DOTS)
         	break;
         switch (md14_last_dot) {
         	case '1':
-				play_mp3(LANGUAGE, "EASY");
+        		play_direction(MP3_EASY_MODE);
    				strings_to_wordlist(easy, ARRAYLEN(easy), &md14_dict);
    				break;
         	case '2':
-				play_mp3(LANGUAGE, "MED");
+        	    play_direction(MP3_MEDIUM_MODE);
   				strings_to_wordlist(medium, ARRAYLEN(medium), &md14_dict);
   				break;
         	case '3':
-				play_mp3(LANGUAGE, "HARD");
+				play_direction(MP3_HARD_MODE);
     			strings_to_wordlist(hard, ARRAYLEN(hard), &md14_dict);
     			break;
         }
 		print_words_in_list(&md14_dict);
-    	play_mp3(MODE_FILESET, "INST");
+		play_instructions();
     	md14_next_state = MD14_STATE_GENQUES;
     	break;
 
@@ -161,7 +163,7 @@ void md14_main() {
 	  	break;
 
 	 case MD14_STATE_PROMPT:
-	 	play_mp3(LANGUAGE, "SPEL");
+	 	play_direction(MP3_SPELL_WORD);
 	 	speak_word(md14_chosen_word);
 	 	md14_next_state = MD14_STATE_INPUT;
 	 	break;
@@ -202,8 +204,8 @@ void md14_main() {
 			  	md14_next_state = MD14_STATE_GENQUES;
 			}
 			else {// correct but not done
-				play_mp3(LANGUAGE, "GOOD");
-				play_mp3(LANGUAGE, "NLET");
+				play_feedback(MP3_GOOD);
+				play_mp3(LANGUAGE, MP3_NEXT_LETTER); //@todo fix this!
 				md14_curr_mistakes = 0;
 				md14_next_state = MD14_STATE_INPUT;
 			}
@@ -216,19 +218,19 @@ void md14_main() {
 
 	case MD14_STATE_REPROMPT:
 		if (md14_curr_mistakes >= MAX_INCORRECT_GUESS) {
-			play_mp3(LANGUAGE, "PRSS");
+			play_direction(MP3_PLEASE_PRESS);
 			char* letter_name = get_eng_letter_name_by_cell(&md14_curr_cell);
 			play_mp3(LANGUAGE, letter_name);
 			if (md14_curr_mistakes >= MAX_INCORRECT_GUESS + 1)
 				play_pattern(md14_curr_cell.pattern);
 		}
 		else {
-			play_mp3(LANGUAGE, "SPEL");
+			play_direction(MP3_SPELL_WORD);
 	 		speak_word(md14_chosen_word);
 	 		if (md14_chosen_word->curr_glyph > -1) {// not at beginning of word
-	 			play_mp3(MODE_FILESET, "SPLS");
+	 			play_feedback(MP3_SPELLING_SO_FAR);
 	 			speak_letters_so_far(md14_chosen_word);
-	 			play_mp3(LANGUAGE, "NLET");
+	 			play_mp3(LANGUAGE, MP3_NEXT_LETTER);
 	 		}
 	 	}
 	 	md14_next_state = MD14_STATE_INPUT;

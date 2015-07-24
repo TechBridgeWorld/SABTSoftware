@@ -45,6 +45,7 @@
 #include "debug.h"
 #include "script_common.h"
 #include "learn_letter_mode.h"
+#include "mp3s.h"
 
 // State variables
 static char mode_name[5];
@@ -81,15 +82,16 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
 	switch (next_state) {
 		case STATE_MENU:
-			switch(create_dialog(MP3_MENU, DOT_1 | DOT_2 | ENTER_CANCEL)) {	
+			play_welcome();
+			play_submode_choice();
+			switch(create_dialog(NULL, DOT_1 | DOT_2 | ENTER_CANCEL)) {	
 				case NO_DOTS:
 					break;
 
 				case '1':
 					log_msg("[%s] Submode: Learn", mode_name);
 					NEWLINE;
-								
-					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
+					play_instructions();  //@TODO: FIGURE OUT WHICH INSTRUCTIONS GO WHERE!
 					submode = SUBMODE_LEARN;
 					unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					next_state = STATE_GENQUES;
@@ -98,9 +100,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				case '2':
 					log_msg("[%s] Submode: Play", mode_name);
 					NEWLINE;
-					
-					play_mp3(MODE_FILESET, MP3_INSTRUCTIONS);
-					submode = SUBMODE_PLAY;
+					play_instructions();
 					shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					should_shuffle = true;
 					next_state = STATE_GENQUES;
@@ -140,7 +140,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			switch(submode) {
 				case SUBMODE_LEARN:
 					play_glyph(curr_glyph);
-					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
+					play_direction(MP3_PRESS_DOTS);
 					play_dot_sequence(curr_glyph);
 					break;
 
@@ -197,8 +197,8 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 					incorrect_tries = 0;
 					log_msg("[%s] User answered correctly\n\r", mode_name);
 					
-					play_mp3(LANG_FILESET, MP3_CORRECT);
-					play_mp3(SYS_FILESET, MP3_TADA);
+					play_feedback(MP3_CORRECT);
+					play_tada();
 					next_state = STATE_GENQUES;
 				}
 				else {
@@ -216,13 +216,13 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				incorrect_tries++;
 				log_msg("[%s] User answered incorrectly\n\r", mode_name);;
 							
-				play_mp3(LANG_FILESET, MP3_INCORRECT);
-				play_mp3(LANG_FILESET, MP3_TRY_AGAIN);
+				play_feedback(MP3_INCORRECT);
+				play_feedback(MP3_TRY_AGAIN);
 				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	
 				next_state = STATE_PROMPT;
 				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
 					play_glyph(curr_glyph);
-					play_mp3(MODE_FILESET, MP3_FOR_X_PRESS_DOTS);
+					play_direction(MP3_PRESS_DOTS);
 					play_dot_sequence(curr_glyph);
 					next_state = STATE_INPUT;
 				}

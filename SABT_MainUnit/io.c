@@ -274,7 +274,7 @@ bool get_number(bool* valid, int* res) {
 
 	// If cell sequence has invalid patterns, return false
 	if (!io_convert_line()) {
-		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+		play_feedback(MP3_INVALID_PATTERN);
 		*valid = false;
 		return true;
 	}
@@ -309,7 +309,7 @@ bool get_first_glyph(glyph_t** res) {
 	*/
 	if (!io_convert_line()) {
 		log_msg("[IO] Line conversion unsuccessful\n\r");
-		play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+		play_feedback(MP3_INVALID_PATTERN);
 		*res = NULL;
 		return true;
 	} else {
@@ -336,7 +336,7 @@ bool get_character(bool* valid, char* character){
      */
     if (!io_convert_line()) {
         log_msg("[IO] Line conversion unsuccessful\n\r");
-        play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+        play_feedback(MP3_INVALID_PATTERN);
         *valid = false;
         return true;
     } else {
@@ -377,7 +377,8 @@ char create_dialog(char* prompt, char control_mask) {
 		// number of incorrect tries
 		case NO_DOTS:
 			if (io_dialog_incorrect_tries == -1) {
-				play_mp3(mode_fileset, prompt);
+				if (prompt)
+					play_direction(prompt); //@todo test this
 				io_dialog_incorrect_tries++;
 			}
 			return NO_DOTS;
@@ -540,18 +541,18 @@ bool io_parse_number(int* res) {
 	*res = 0;
     curr_glyph = io_parsed[0];
     if (curr_glyph->pattern != NUMSIGN) {
-        play_mp3(lang_fileset, MP3_NUMSIGN_MISSED);
+        play_feedback(MP3_NO_NUMBER_SIGN);
         return false;
     }
     if (io_parsed[1] == NULL || is_blank(io_parsed[1])){
-        play_mp3(lang_fileset, MP3_NO_NUMBER);
+        play_feedback(MP3_NO_NUMBER);
         return false;
     }
 	for (i = 1; io_parsed[i] != NULL && is_blank(io_parsed[i]) == false; i++) {
 		curr_glyph = io_parsed[i];
 		curr_digit = get_digit(curr_glyph);
 		if (curr_digit < 0) {
-            play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+			play_feedback(MP3_INVALID_PATTERN);
 			return false;
         } else {
         *res *= 10;
@@ -614,7 +615,7 @@ void io_dialog_reset(void) {
 */
 void io_dialog_error(void) {
 	io_dialog_incorrect_tries++;
-	play_mp3(lang_fileset, MP3_INVALID_PATTERN);
+	play_feedback(MP3_INVALID_PATTERN);
 	if (io_dialog_incorrect_tries >= MAX_INCORRECT_TRIES) {
 		io_dialog_incorrect_tries = -1;
 	}

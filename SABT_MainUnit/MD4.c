@@ -11,6 +11,7 @@
 #include "letter_globals.h"
 #include "script_english.h"
 #include "dictionary.h"
+#include "mp3s.h"
 
 #define STATE_NULL 0x00
 #define STATE_INTRO 0x01
@@ -22,38 +23,15 @@
 #define STATE_REPROMPT 0x07
 #define STATE_SUMMARY 0x08
 
-// Prompts
-#define MP3_SKIP "SKIP"
-#define MP3_INTRO "INT"
-#define MP3_AND_MISTAKES "AMSK"
-#define MP3_BLANK "BLNK"
-#define MP3_INVALID "INVP"
-#define MP3_MISTAKES "MSTK"
-#define MP3_GUESS "GAL"
-#define MP3_YES "YES"
-#define MP3_NO "NO"
-#define MP3_YOU_LOSE "YOLO"
-#define MP3_YOU_WIN "YOWI"
-#define MP3_SO_FAR "SOFA"
-#define MP3_NEW_WORD "NWOR"
-#define MP3_LEVEL "LVLS"
-#define MP3_THE_ANSWER_IS "TAIS"
-#define MP3_PAST_MISTAKE "PMIS"
-#define MP3_ONE_MISTAKE "MONE"
-#define MP3_MULT_MISTAKES "MLFT"
-#define MP3_YOU_HAVE "MPRE"
-#define MP3_ONE_MISTAKE "MONE"
-#define MP3_MULT_MISTAKES "MLFT"
-#define MP3_YOU_HAVE "MPRE"
-
 
 //bounds
 #define MAX_INCORRECT_GUESS 8
 #define MAX_WORD_LEN 20
 
 // Used to set global fileset variables
-#define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD4_"
+#define LANG_FILESET "e_"
+#define MODE_FILESET "m4_"
+ #define SYS_FILESET "s_"
 
 // State variables
 static char md_next_state = STATE_NULL;
@@ -167,12 +145,12 @@ bool is_past_mistake(char entered_letter){
 }
 
 void md4_play_mistake(){
-    play_mp3(MODE_FILESET, MP3_YOU_HAVE);
+    play_feedback(MP3_YOU_HAVE);
     play_number(MAX_INCORRECT_GUESS - num_mistakes);
     if (MAX_INCORRECT_GUESS - num_mistakes == 1){
-        play_mp3(MODE_FILESET, MP3_ONE_MISTAKE);
+        play_feedback(MP3_MISTAKE_REMAINING);
     }else{
-        play_mp3(MODE_FILESET, MP3_MULT_MISTAKES);
+        play_feedback(MP3_MISTAKES_REMAINING);
     }
 }
 
@@ -197,7 +175,7 @@ void md4_main(void) {
         case STATE_INTRO:
 			shuffle(dict.num_words, dict.index_array);
 			dict.index = 0;
-            play_mp3(MODE_FILESET, MP3_INTRO);
+            play_welcome();
             md_next_state = STATE_GENQUES;
             break;
             
@@ -212,7 +190,7 @@ void md4_main(void) {
 			num_mistakes = 0;
             init_char_arr(mistake_pool, MAX_INCORRECT_GUESS);
             init_char_arr(input_word, MAX_WORD_LEN);
-            md_last_dot = create_dialog(MP3_LEVEL,
+            md_last_dot = create_dialog(MP3_CHOOSE_NUM_OF_HINTS,
                                         DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL);
             switch (md_last_dot) {
 					case NO_DOTS:
@@ -237,9 +215,9 @@ void md4_main(void) {
             break;
         
         case STATE_PROMPT:
-            play_mp3(MODE_FILESET, MP3_SO_FAR);
+            play_feedback(MP3_SPELLING_SO_FAR);
             play_string(input_word, strlen(chosen_word));
-            play_mp3(MODE_FILESET, MP3_GUESS);
+            play_direction(MP3_GUESS_A_LETTER);
             md_next_state = STATE_INPUT;
             break;
             
@@ -264,39 +242,32 @@ void md4_main(void) {
             
         case STATE_CHECKANS:
 			if (place_letter() ||
-                (!strncmp(input_word, chosen_word, strlen(chosen_word)))
-                ) 
-				{
-				 play_mp3(LANG_FILESET, MP3_YES);
+                (!strncmp(input_word, chosen_word, strlen(chosen_word)))) {
+                play_feedback(MP3_YES);
 				
-				 if (!strncmp(input_word, chosen_word, strlen(chosen_word)))
-				 {
-					 play_mp3(MODE_FILESET,MP3_YOU_WIN);  // "you have guessed the word!"
-					 play_string(chosen_word, strlen(chosen_word));
-					 play_mp3(SYS_FILESET, MP3_TADA);
-					 md_next_state = STATE_GENQUES;
+				 if (!strncmp(input_word, chosen_word, strlen(chosen_word))) {
+                    play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
+					play_string(chosen_word, strlen(chosen_word));
+                    play_tada();
+					md_next_state = STATE_GENQUES;
 				 } else md_next_state = STATE_PROMPT;
 			}
 			else {
-				play_mp3(LANG_FILESET,MP3_NO);
-				if (num_mistakes == MAX_INCORRECT_GUESS)
-				{
-					play_mp3(MODE_FILESET,MP3_YOU_LOSE); // "you have made max mistakes the word you missed was"
+                play_feedback(MP3_NO);
+				if (num_mistakes == MAX_INCORRECT_GUESS) {
+                    play_feedback(MP3_7_MISTAKES_YOU_MISSED);
 					play_string(chosen_word, strlen(chosen_word));
-					play_mp3(MODE_FILESET, MP3_NEW_WORD);
+                    play_direction(MP3_NEW_WORD);
 					md_next_state = STATE_GENQUES;
 				}
 				else
 				{
-					if (!is_past_mistake(entered_letter))
-					{
+					if (!is_past_mistake(entered_letter)) {
 						mistake_pool[num_mistakes] = entered_letter;
 						num_mistakes++;
-                        log_msg("[mode]not past mis\r\n");
-					} else 
-					{
-						play_mp3(MODE_FILESET, MP3_PAST_MISTAKE);		
 					}
+                    else
+                        play_feedback(MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE);
                     md4_play_mistake();
 					md_next_state = STATE_PROMPT;
 				}
@@ -312,7 +283,7 @@ void md4_main(void) {
                     
                     // Playing answer
                 case RIGHT:
-                    play_mp3(MODE_FILESET, MP3_THE_ANSWER_IS);
+                    play_feedback(MP3_THE_ANSWER_IS);
                     play_string(chosen_word, strlen(chosen_word));
 					md_next_state = STATE_GENQUES;
                     io_init();

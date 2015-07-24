@@ -15,6 +15,9 @@
 #define PLUS_ONE_MOD(X, BOUND) ((X + 1 > BOUND - 1) ? (0) : (X + 1))	
 #define MINUS_ONE_MOD(X, BOUND) ((X - 1 < 0) ? (BOUND - 1) : (X - 1))
 
+
+int current_mode();
+char* current_language();
 void log_msg(const char* format, ...);
 void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset);
 int timer_rand(void);

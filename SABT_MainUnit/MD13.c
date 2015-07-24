@@ -9,12 +9,14 @@
 #include "audio.h"
 #include "script_common.h"
 #include "script_digits.h"
+#include "mp3s.h"
 
 /**
  *  Used to set global fileset variables
  */
 #define LANG_FILESET "ENG_"
-#define MODE_FILESET "MD13"
+#define MODE_FILESET "M13_"
+#define SYS_FILESET "SYS_"
 
 /**
  *  States
@@ -53,13 +55,12 @@
 /**
  *  prompts
  */
-#define MP3_LVLSEL "DIFF"  //level select
 
-#define MP3_YOU_ANSWERED "UANS"
+/*#define MP3_YOU_ANSWERED "UANS"
 // Skip prompt
 #define MP3_SKIP "SKIP"
 #define MP3_THE_ANSWER_IS "TAIS"
-#define MP3_INTRO "WELC"
+#define MP3_WELCOME "WELC"
 #define MP3_AND "AND"
 #define MP3_SUBMIT "SUMT"
 #define MP3_BETWEEN "ERNM"
@@ -79,7 +80,7 @@
 #define MP3_SCORE "SCOR"
 #define MP3_NO_CORR "NOCO"
 #define MP3_TRY "TRY"
-#define MP3_BACK_QUES "BACQ"
+#define MP3_BACK_QUES "BACQ" */
 
 /**
  *  Limits
@@ -377,11 +378,11 @@ void play_mistake(){
 void md13_main(void) {
     switch (md_next_state) {
 		case STATE_INTRO:
-            play_mp3(MODE_FILESET, MP3_INTRO);
+            play_mp3(MODE_FILESET, MP3_WELCOME);
             md_next_state = STATE_LVLSEL;
             break;
         case STATE_LVLSEL:
-            md_last_dot = create_dialog(MP3_LVLSEL,
+            md_last_dot = create_dialog(MP3_CHOOSE_LEVELS_2,
                                         ( DOT_1 | DOT_2 ));
             switch (md_last_dot) {
                     
@@ -391,7 +392,7 @@ void md13_main(void) {
                 case '1':
                     log_msg("[MD13] Level: 1\n\r");
                     md_level = LEVEL_1;
-                    play_mp3(MODE_FILESET, MP3_SUBMIT);
+                    play_instructions();
                     md_max_q = EASY_QUES;
                     init_index(md_max_q);
                     shuffle(md_max_q, md_ques_index);
@@ -401,7 +402,7 @@ void md13_main(void) {
                 case '2':
                     log_msg("[MD13] Level: 2\n\r");
                     md_level = LEVEL_2;
-                    play_mp3(MODE_FILESET, MP3_SUBMIT);
+                    play_instructions();
                     md_max_q = QUES_TYPES;
                     init_index(md_max_q);
                     shuffle(md_max_q, md_ques_index);
