@@ -10,17 +10,12 @@
 #include "learn_letter_mode.h"
 #include "mp3s.h"
 
-// Script and fileset parameters
 #include "script_kannada.h"
-#define SCRIPT_ADDRESS &script_kannada
-#define SCRIPT_LENGTH SCRIPT_KANNADA_LENGTH
-#define LANG_FILESET "KAN_"
-#define MODE_FILESET "M12_"
 
 void md12_reset(void) {
-	learn_letter_reset(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+	learn_letter_reset(&script_kannada, NULL, NULL);
 }
 
 void md12_main(void) {
-	learn_letter_main(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+	learn_letter_main(&script_kannada, NULL, NULL);
 }

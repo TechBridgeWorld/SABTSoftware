@@ -19,12 +19,6 @@
 #include "sound_game_mode.h"
  #include "mp3s.h"
 
-#define SCRIPT_ADDRESS &script_english
-#define SCRIPT_LENGTH SCRIPT_ENGLISH_LENGTH
-#define LANG_FILESET "ENG_"
-#define MODE_FILESET "m3_"
-
-
 const char *animal_list[MAX_INDEX + 1] = {"bee", "camel", "cat", "cow", "dog", "horse",
     "hyena", "pig", "rooster", "sheep", "zebra", NULL};
 	
@@ -32,9 +26,9 @@ const char* animal_sounds[MAX_INDEX + 1] = {"BEE","CAM","CAT","COW","DOG","HOR",
     "HYE","PIG","ROO","SHE","ZEB", NULL};
 
 void md3_reset(void) {
-	sound_game_reset(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET, animal_list, animal_sounds);
+	sound_game_reset(&script_english, NULL, NULL, animal_list, animal_sounds);
 }
 
 void md3_main(void) {
-	sound_game_main(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+	sound_game_main(&script_english, NULL, NULL);
 }

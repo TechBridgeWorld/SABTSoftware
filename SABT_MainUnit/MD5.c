@@ -26,7 +26,6 @@
 #define MAX_INCORRECT_GUESS   8 // if change this, rerecord YOLO.
 
 #define LANG_FILESET "e_"
-#define MODE_FILESET "m5_"
 
 // State variables
 static char md5_next_state;

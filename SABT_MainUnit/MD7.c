@@ -10,18 +10,13 @@
 #include "learn_letter_mode.h"
 #include "mp3s.h"
 
-// Script and fileset parameters
 #include "script_hindi.h"
-#define SCRIPT_ADDRESS &script_hindi
-#define SCRIPT_LENGTH SCRIPT_HINDI_LENGTH
-#define LANG_FILESET "HIN_"
-#define MODE_FILESET "MD7_"
 
 
 void md7_reset(void) {
-	learn_letter_reset(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+	learn_letter_reset(&script_hindi, NULL, NULL);
 }
 
 void md7_main(void) {
-	learn_letter_main(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+	learn_letter_main(&script_hindi, NULL, NULL);
 }

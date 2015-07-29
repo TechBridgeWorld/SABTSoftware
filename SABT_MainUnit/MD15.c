@@ -45,11 +45,6 @@
 #define MAX_WORD_LEN 20
 #define GAMELENGTH 12
 
- // Used to set global fileset variables
-#define LANGUAGE "ENG_"
-#define LANG_FILESET "ENG_"
-#define MODE_FILESET "M15_"
-
 char next_state = MD15_STATE_NULL;
 
 bool player1_is_current = true; // keep track of whether player 1 or 2 is the current player
@@ -63,6 +58,7 @@ char md15_cell = 0;
 char md15_cell_pattern = 0;
 int md15_cell_control = 0;
 static char md15_last_dot = 0;
+char* lang_fileset;
 
 wordlist_t md15_dict;
 word_t* md15_chosen_word;
@@ -150,7 +146,7 @@ void md15_speak_inputted_cell() {
 	if (letter_name == NULL)
 		play_feedback(MP3_INVALID_PATTERN);
 	else
-		play_mp3(LANGUAGE,letter_name);
+		play_mp3(lang_fileset,letter_name);
 }
 
 /**
@@ -160,8 +156,7 @@ void md15_speak_inputted_cell() {
 void md15_main() {
   switch(next_state) {
     case MD15_STATE_INTRO:
-        lang_fileset = "e_";
-		mode_fileset = "m15_";
+		lang_fileset = get_lang_prefix();
 		play_welcome();
     	play_number(GAMELENGTH);
     	play_feedback(MP3_WORDS);
@@ -170,7 +165,7 @@ void md15_main() {
 		break;
 
 	case MD15_STATE_LVLSEL:
-        md15_last_dot = create_dialog("LVL3", (DOT_1 | DOT_2 | DOT_3));
+        md15_last_dot = create_dialog(MP3_CHOOSE_LEVELS_3, (DOT_1 | DOT_2 | DOT_3));
         if (md15_last_dot == NO_DOTS)
         	break;
         switch (md15_last_dot) {
@@ -248,7 +243,7 @@ void md15_main() {
 			}
 			else {// correct but not done
 				play_feedback(MP3_GOOD);
-				play_mp3(LANGUAGE, MP3_NEXT_LETTER);
+				play_direction(MP3_NEXT_LETTER);
 				md15_curr_mistakes = 0;
 				next_state = MD15_STATE_INPUT;
 			}
@@ -272,7 +267,7 @@ void md15_main() {
 	 	if (md15_curr_mistakes >= MAX_INCORRECT_GUESS) {
 	 		play_direction(MP3_PLEASE_PRESS);
 			char* letter_name = get_eng_letter_name_by_cell(&md15_curr_cell);
-			play_mp3(LANGUAGE, letter_name);
+			play_mp3(lang_fileset, letter_name);
 			if (md15_curr_mistakes >= MAX_INCORRECT_GUESS + 1)
 				play_pattern(md15_curr_cell.pattern);
 		}

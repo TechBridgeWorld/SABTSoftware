@@ -11,7 +11,6 @@
 #include "script_eng_contraction.h"
  #include "mp3s.h"
 
-#define LANG_FILESET "ENG_"
 
 int md10_current_state, md10_prev_state = 0;
 char md10_last_dot, last_cell, expected_dot;

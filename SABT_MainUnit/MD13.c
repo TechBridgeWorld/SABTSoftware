@@ -45,37 +45,7 @@
 #define NOT_ENTERED 0x00
 #define ENTERED 0x01
 
-/**
- *  prompts
- */
-
-/*#define MP3_YOU_ANSWERED "UANS"
-// Skip prompt
-#define MP3_SKIP "SKIP"
-#define MP3_THE_ANSWER_IS "TAIS"
-#define MP3_WELCOME "WELC"
-#define MP3_AND "AND"
-#define MP3_SUBMIT "SUMT"
-#define MP3_BETWEEN "ERNM"
-#define MP3_BETWEEN_S "ERNS"
-#define MP3_NEXT "NXTN"
-#define MP3_ODD "ODDN"
-#define MP3_EVEN "EVEN"
-#define MP3_TEN "TENN"
-#define MP3_HUND "HUNN"
-#define MP3_TENR "TENR"
-#define MP3_HUNR "HUNR"
-#define MP3_ONE_MISTAKE "MONE"
-#define MP3_MULT_MISTAKES "MLFT"
-#define MP3_YOU_HAVE "MPRE"
-#define MP3_NUM_MISSED "MISS"
-#define MP3_GOOD_NEXT "GONX"
-#define MP3_SCORE "SCOR"
-#define MP3_NO_CORR "NOCO"
-#define MP3_TRY "TRY"
-#define MP3_BACK_QUES "BACQ" */
-
-/**
+/*
  *  Limits
  */
 #define MAX_DIGITS 4

@@ -22,7 +22,7 @@ char used_number[6] = {0, 0, 0, 0, 0, 0};
  *        return the charachter of that number;
  * @return char - charachter representation of a number from 1 - 6
  */
-char random_number_as_char() {
+char random_number_as_char() {  // @todo use library for this
   int num = TCNT1;
   int i;
 
@@ -63,9 +63,7 @@ char random_number_as_char() {
  *        Should be useful for error handling
  * @return Void
  */
-void md1_reset(void)
-{
-  set_mode_globals(&script_english, "ENG_", "MD1_");
+void md1_reset(void) {
   current_state = STATE_INITIAL;
 }
 
