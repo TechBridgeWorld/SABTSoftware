@@ -69,5 +69,6 @@ bool parse_string(void);
 // Advanced IO functions
 char create_dialog(char* prompt, char control_mask);
 void log_msg(const char* format, ...);
+void log_msg_no_newline(const char* format, ...);
 
 #endif /* _IO_H_ */

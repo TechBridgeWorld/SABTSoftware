@@ -38,7 +38,4 @@
 void learn_letter_reset (script_t* new_script, char* new_lang_fileset, char* new_mode_fileset);
 void learn_letter_main  (script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET);
 
-
-
-
 #endif 

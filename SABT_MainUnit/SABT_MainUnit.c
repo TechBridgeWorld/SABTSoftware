@@ -20,21 +20,19 @@ void initialize_system(void);
  * @ref AtATmega1284P(Preferred).pdf
  * @return Void
  */
-void timer_routine(void)
-{
-  if(!LED_STAT){
-    PORTD &= ~_BV(5);
-    PORTD &= ~_BV(6);
-    PORTD &= ~_BV(7);
-    LED_STAT=true;
-  }
-  else
-  {
-    PORTD |= _BV(5);
-    PORTD |= _BV(6);
-    PORTD |= _BV(7);
-    LED_STAT=false;
-  }
+void timer_routine(void) {
+    if (!LED_STAT){
+        PORTD &= ~_BV(5);
+        PORTD &= ~_BV(6);
+        PORTD &= ~_BV(7);
+        LED_STAT=true;
+    }
+    else {
+        PORTD |= _BV(5);
+        PORTD |= _BV(6);
+        PORTD |= _BV(7);
+        LED_STAT=false;
+    }
 }
 
 /**
@@ -98,60 +96,47 @@ void timer_routine(void)
  * 7. If there's a queued mp3, play it.
  * Note: during this function, interrupt handlers 
  */
-  
-int main(void)
-{
-  initialize_system();
+    
+int main(void) {
+    initialize_system();
 
-  while(1)
-  {
-    // read in the dict file till done
-    // check to see if we've received data from UI board
-    // if true, process the single byte
-    if(usart_keypad_data_ready)
-    {
-      /* one of two types:
-       * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
-       * [M][C][msglen][msg_number][msg_type][payload][CRC1][CRC2]
-       * msg_type:
-       *  A: contains braille dot at this location in the UI
-       *  B: contains braille character at this location in the UI
-       *  C: payload contains an error message
-       *  D: payload contains a control button input from UI
-       *  E: miscellaneous */
-      usart_keypad_receive_action();
+    while(1)     {
+        // read in the dict file till done
+        // check to see if we've received data from UI board
+        // if true, process the single byte
+        if(usart_keypad_data_ready) {
+            /* one of two types:
+             * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
+             * [M][C][msglen][msg_number][msg_type][payload][CRC1][CRC2]
+             * msg_type:
+             *  A: contains braille dot at this location in the UI
+             *  B: contains braille character at this location in the UI
+             *  C: payload contains an error message
+             *  D: payload contains a control button input from UI
+             *  E: miscellaneous */
+            usart_keypad_receive_action();
+        }
+
+        // check to see if we've received data from a connected PC 
+        // if true, process the single byte
+        if(usart_pc_data_ready)
+            usart_pc_receive_action();
+
+        if(timer_interrupt)  // THIS DOES NOTHING!
+            timer_interrupt = false;
+
+        if(usart_pc_message_ready) //If a message ready from the PC, process it
+            pc_parse_message();
+
+        if(usart_ui_message_ready) //If a message ready from the user interface, process it
+            ui_parse_message(playing_sound);
+
+        ui_run_main_of_current_mode();
+
+        if (playlist_empty == false)
+            play_next_mp3();
     }
-
-    // check to see if we've received data from a connected PC 
-    // if true, process the single byte
-    if(usart_pc_data_ready)
-    {
-      usart_pc_receive_action();
-    }
-
-    if(timer_interrupt)
-    {
-      timer_interrupt = false;
-      //  timer_routine();
-    }
-
-    if(usart_pc_message_ready) //If a message ready from the PC, process it
-    {
-      pc_parse_message();
-    }
-
-    if(usart_ui_message_ready) //If a message ready from the user interface, process it
-    {
-      ui_parse_message(playing_sound);
-    }
-
-    ui_run_main_of_current_mode();
-
-    if (playlist_empty == false) {
-      play_next_mp3();
-    }
-  }
-  return 1;
+    return 1;
 }
 
 
@@ -163,9 +148,8 @@ int main(void)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(TIMER1_COMPA_vect)
-{
-  timer_interrupt = true;
+ISR(TIMER1_COMPA_vect) {
+    timer_interrupt = true;
 }
 
 
@@ -177,10 +161,9 @@ ISR(TIMER1_COMPA_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART1_RX_vect)
-{
-  usart_keypad_received_data = UDR1;
-  usart_keypad_data_ready = true;
+ISR(USART1_RX_vect) {
+    usart_keypad_received_data = UDR1;
+    usart_keypad_data_ready = true;
 };
 
 /**
@@ -191,72 +174,65 @@ ISR(USART1_RX_vect)
  * @ref   http://www.nongnu.org/avr-libc/
  * @return  Void
  */
-ISR(USART0_RX_vect)
-{
-  // Temporarily disabled the PC communications since we are simulating the UI with PC
-  usart_pc_received_data = UDR0;
-  usart_pc_data_ready = true;
-  usart_transmit_byte_to_pc(usart_pc_received_data);
+ISR(USART0_RX_vect) {
+    // Temporarily disabled the PC communications since we are simulating the UI with PC
+    usart_pc_received_data = UDR0;
+    usart_pc_data_ready = true;
+    usart_transmit_byte_to_pc(usart_pc_received_data);
 };
 
 /**
  * @brief Initialize the system and interrupts
  * @return Void
  */
-void initialize_system(void)
-{
-  timer_interrupt = false;      // Clear the timer interrupt flag
-  playing_sound = false;
-  message_count = 0;
-  valid_message = true;
+void initialize_system(void) {
+    timer_interrupt = false;      // Clear the timer interrupt flag
+    playing_sound = false;
+    message_count = 0;
+    valid_message = true;
 
-  PORTA = 0x00;
-  DDRA = 0xFF;
-  PORTA = 0x00;
-  // Set the data direction register values
-  DDRD |= _BV(5) | _BV(6) | _BV(7);
+    PORTA = 0x00;
+    DDRA = 0xFF;
+    PORTA = 0x00;
+    // Set the data direction register values
+    DDRD |= _BV(5) | _BV(6) | _BV(7);
 
-  TCCR1A = 0x00;
-  TCCR1B = 0x0D;
-  OCR1A = 390;            // 1s interval
-  TIMSK1 |= (1<<OCIE1A);  // Enable interrupt
+    TCCR1A = 0x00;
+    TCCR1B = 0x0D;
+    OCR1A = 390;            // 1s interval
+    TIMSK1 |= (1<<OCIE1A);  // Enable interrupt
 
-  init_usart_pc();
-  log_msg("SABT initialising...\n\r");
-  log_msg("Setting flags...OK\n\r");
-  log_msg("PC USART...OK\n\r");
+    init_usart_pc();
+    log_msg("SABT initialising...");
+    log_msg("Setting flags...OK");
+    log_msg("PC USART...OK");
 
-  log_msg("Keypad USART...");
-  init_usart_keypad();
-  log_msg("OK\n\r");
+    log_msg_no_newline("Keypad USART...");
+    init_usart_keypad();
+    log_msg("OK");
 
-  log_msg("SPI...");
-  spi_initialize();
-  log_msg("OK\n\r");
+    log_msg_no_newline("SPI...");
+    spi_initialize();
+    log_msg("OK");
 
-  log_msg("Interrupt flag...");
-  sei();  // sets the interrupt flag (enables interrupts)
-  log_msg("OK\n\r");
+    log_msg_no_newline("Interrupt flag...");
+    sei();  // sets the interrupt flag (enables interrupts)
+    log_msg("OK");
 
-  init_sd_card(true);
-  log_msg("SD card...OK\n\r");
+    init_sd_card(true);
+    log_msg("SD card...OK");
 
-  play_mp3_file((unsigned char*)"SYS_WELC.mp3");
+    play_system_audio(MP3_WELC);
 
-  ui_check_modes();
-  log_msg("Parsing modes...OK\n\r");
+    ui_check_modes();
+    log_msg("Parsing modes...OK");
 
-  log_msg("Type info\n\r");
-  log_msg("char: %d bytes\n\r", sizeof(char));
-  
-  log_msg("int: %d bytes\n\r", sizeof(int));
-  
-  log_msg("short: %d bytes\n\r", sizeof(short));
-  
-  log_msg("long: %d bytes\n\r", sizeof(long));
-  
-  log_msg("void*: %d bytes\n\r", sizeof(void*));
-  
-
-  play_mp3("SYS_","MENU");
+    log_msg("Type info");
+    log_msg("char: %d bytes", sizeof(char));
+    log_msg("int: %d bytes", sizeof(int));
+    log_msg("short: %d bytes", sizeof(short));
+    log_msg("long: %d bytes", sizeof(long));
+    log_msg("void*: %d bytes", sizeof(void*));
+    
+    play_system_audio(MP3_MENU);
 }

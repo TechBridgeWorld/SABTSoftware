@@ -12,7 +12,7 @@
 //@todo move some of these to global?
 #define MAX_WORD_LENGTH     15
 #define MAX_WORDLIST_LENGTH 10
-#define MAX_FILESET_LENGTH	  5
+#define MAX_FILESET_LENGTH    5
 #define MAX_MP3_NAME_LENGTH  5
 
 
@@ -30,10 +30,10 @@ typedef struct glyph glyph_t;
 
 // Stores information about single glyph; used to build scripts
 struct glyph {
-	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
-	char sound[MAX_MP3_NAME_LENGTH];	/* BBBB in AAA_BBBB.mp3 soundfile */
-	glyph_t* prev;			/* Pointer to previous glyph in linked list */
-	glyph_t* next;			/* Pointer to next glyph in linked list */
+    char pattern;           /* 0bxxxxxx 6-bit pattern Braille representation */
+    char sound[MAX_MP3_NAME_LENGTH];    /* BBBB in AAA_BBBB.mp3 soundfile */
+    glyph_t* prev;          /* Pointer to previous glyph in linked list */
+    glyph_t* next;          /* Pointer to next glyph in linked list */
 };
 
 // @todo: pack structs
@@ -41,46 +41,46 @@ struct glyph {
 
 //@todo: typedef pattern as cell instead of making a struct
 typedef struct cell {
-	char pattern;			/* 0bxxxxxx 6-bit pattern Braille representation */
+    char pattern;           /* 0bxxxxxx 6-bit pattern Braille representation */
 } cell_t;
 
 typedef struct letter {
-	char name[MAX_MP3_NAME_LENGTH];
-	char lang_enum;
-	cell_t* cells;
-	int num_cells;
+    char name[MAX_MP3_NAME_LENGTH];
+    char lang_enum;
+    cell_t* cells;
+    int num_cells;
 } letter_t;
 
 typedef struct word {
-	char name[MAX_WORD_LENGTH];
-	int length_name;
-	letter_t* letters;
-	int num_letters;
-	char lang_enum;
-	int curr_letter;
-	int curr_glyph;
+    char name[MAX_WORD_LENGTH];
+    int length_name;
+    letter_t* letters;
+    int num_letters;
+    char lang_enum;
+    int curr_letter;
+    int curr_glyph;
 } word_t; 
 
 typedef struct alphabet {
-	letter_t* letters;
-	int num_letters;
-	char lang_enum;
-	// other info can eventually go in here
+    letter_t* letters;
+    int num_letters;
+    char lang_enum;
+    // other info can eventually go in here
 } alphabet_t;
 
 typedef struct wordlist {
-	word_t* words;
-	int* order;
-	int num_words;
-	int index;
+    word_t* words;
+    int* order;
+    int num_words;
+    int index;
 } wordlist_t;
 
 // Structure representing a script (alphabet) - deprecated
 typedef struct script_old {
-	int length;				/* Length of first cell glyph array */
-	int index;				/* Current index */
-	char fileset[MAX_FILESET_LENGTH];		/* Fileset on SD card; 4 characters long */
-	glyph_t* glyphs; 		/* Pointer to array of first cell glyphs */
+    int length;             /* Length of first cell glyph array */
+    int index;              /* Current index */
+    char fileset[MAX_FILESET_LENGTH];       /* Fileset on SD card; 4 characters long */
+    glyph_t* glyphs;        /* Pointer to array of first cell glyphs */
 } script_old_t;
 
 // Structure representing a script/alphabet.
@@ -88,18 +88,18 @@ typedef struct script_old {
 // one glyph each.
 
 typedef struct script {
-	int length;				          /* Length of glyph array */
-	int num_letters;			      /* Number of actual letters (<length) */
-	int index;			         	  /* Current index */
-	char fileset[MAX_FILESET_LENGTH]; /* Fileset on SD card; 4 characters long */
-	glyph_t* glyphs; 		          /* Pointer to array of glyphs */
-	int* letters;		              /* Pointer to array of valid indices into glyphs */
+    int length;                       /* Length of glyph array */
+    int num_letters;                  /* Number of actual letters (<length) */
+    int index;                        /* Current index */
+    char fileset[MAX_FILESET_LENGTH]; /* Fileset on SD card; 4 characters long */
+    glyph_t* glyphs;                  /* Pointer to array of glyphs */
+    int* letters;                     /* Pointer to array of valid indices into glyphs */
 } script_t;
 
 
 typedef struct word_node {
-	glyph_t* data;
-	struct word_node* next;	
+    glyph_t* data;
+    struct word_node* next; 
 } word_node_t;
 
 // @todo Remove the ones that should only be helper functions

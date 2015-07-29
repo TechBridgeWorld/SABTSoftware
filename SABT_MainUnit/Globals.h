@@ -11,10 +11,10 @@
 
 #ifdef DEBUGMODE
 #else
-	#include <avr/io.h>
-	#include <avr/pgmspace.h>
-	#include <avr/interrupt.h>
-	#include <util/delay.h>
+    #include <avr/io.h>
+    #include <avr/pgmspace.h>
+    #include <avr/interrupt.h>
+    #include <util/delay.h>
 #endif
  
 #include <stdint.h>
@@ -34,10 +34,7 @@
  #include "datastructures.h"
 
 #define F_CPU 8000000UL
-#define MAX_NUMBER_OF_MODES	20
-
-
-
+#define MAX_NUMBER_OF_MODES 20
 
 unsigned short number_of_modes;
 unsigned short ui_modes[MAX_NUMBER_OF_MODES];
