@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -15,7 +15,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <avrtool/>
+    <avrtool />
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -102,6 +102,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MD15.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mp3s.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="script_digits.c">

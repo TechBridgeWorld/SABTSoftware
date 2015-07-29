@@ -32,24 +32,6 @@
 #define LEVEL_2			0x0002
 #define LEVEL_3			0x0003
 
-// Used to set global fileset variables
-#define LANG_FILESET "e_"
-#define MODE_FILESET "m9_"
-#define SYS_FILESET "SYS_"
-/*
-// Prompt files
-// Submode menu prompt
-#define MP3_MENU	"MENU" //Menu
-// Level select prompt
-#define MP3_LVLSEL "LVLS" //Level select
-#define MP3_INSTRUCTIONS "INST" */
-// Pre-question prompt
-//#define MP3_PREQUES "WHIS" //What is
-//#define MP3_YOU_ANSWERED "UANS"
-// Skip prompt
-//#define MP3_SKIP "SKIP"
-//#define MP3_THE_ANSWER_IS "TAIS"
-
 // Limits
 #define MAX_DIGITS 3
 #define MAX_INCORRECT_TRIES 3
@@ -72,7 +54,7 @@ void md9_reset(void) {
 	log_msg("*** MD9 - Arithmetic practice ***\n\r");
 
 	// Global variables
-	set_mode_globals(&script_digits, LANG_FILESET, MODE_FILESET);
+	set_mode_globals(&script_digits, NULL, NULL);
 
 	// State variables
 	md_next_state = STATE_MENU;
@@ -127,7 +109,7 @@ void md9_generate_question(void) {
 }
 
 void md9_play_question() {
-	play_mp3(MODE_FILESET, MP3_WHAT_IS);
+	play_direction(MP3_WRITE_NUMBER_);
 	play_number(md_op_1);
 	switch (md_submode) {
 		case SUBMODE_ADD:
@@ -203,21 +185,21 @@ void md9_main(void) {
 				case '1':
 					log_msg("[MD9] Level: 1\n\r");
 					md_level = LEVEL_1;
-					play_instructions();
+					play_direction(MP3_INSTRUCTIONS_MATH);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '2':
 					log_msg("[MD9] Level: 2\n\r");
 					md_level = LEVEL_2;
-					play_instructions();
+					play_direction(MP3_INSTRUCTIONS_MATH);
 					md_next_state = STATE_GENQUES;
 					break;
 
 				case '3':
 					log_msg("[MD9] Level: 3\n\r");
 					md_level = LEVEL_3;
-					play_instructions();
+					play_direction(MP3_INSTRUCTIONS_MATH);
 					md_next_state = STATE_GENQUES;
 					break;
 
@@ -243,7 +225,7 @@ void md9_main(void) {
 		case STATE_INPUT:
 			if (io_user_abort == true) {
 				log_msg("[MD12] User aborted input\n\r");
-                play_mp3(SYS_FILESET,"HLPM");
+                play_feedback(MP3_HELP_MENU);
 				md_next_state = STATE_REPROMPT;
 				io_init();
 				break;
@@ -280,7 +262,7 @@ void md9_main(void) {
 			break;
 
 		case STATE_REPROMPT:
-				md_last_dot = create_dialog(MP3_SKIP,
+				md_last_dot = create_dialog(MP3_WORD_COMMANDS,
                                             ENTER_CANCEL | LEFT_RIGHT | DOT_1
                                             | DOT_2 | DOT_3 | DOT_4
                                             | DOT_5 | DOT_6);
@@ -308,15 +290,15 @@ void md9_main(void) {
 
 					// Try again
 					case CANCEL:
-                        play_mp3(SYS_FILESET,"HLPX");
-                        play_mp3(SYS_FILESET, "BACQ");
+						play_feedback(MP3_EXIT_HELP_MENU);
+						play_feedback(MP3_RET_TO_QUESTION);
                         md_next_state = STATE_INPUT;
                         io_init();
                         break;
 
                         
                     case '1': case '2': case '3': case '4': case '5': case '6':
-                        play_mp3(MODE_FILESET, MP3_SKIP);
+                    	play_feedback(MP3_WORD_COMMANDS);
                         io_init();
                         break;
 

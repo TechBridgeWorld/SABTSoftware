@@ -188,7 +188,7 @@ void md15_main() {
     			break;
         }
 		print_words_in_list(&md15_dict);
-		play_instructions();
+		play_direction(MP3_INSTRUCTIONS_WORD);
     	next_state = MD15_STATE_GENQUES;
     	break;
 

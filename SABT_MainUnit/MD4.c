@@ -28,11 +28,8 @@
 #define MAX_INCORRECT_GUESS 8
 #define MAX_WORD_LEN 20
 
-// Used to set global fileset variables
-#define LANG_FILESET "e_"
-#define MODE_FILESET "m4_"
- #define SYS_FILESET "s_"
 
+// Used to set global fileset variables
 // State variables
 static char md_next_state = STATE_NULL;
 static char md_last_dot = NO_DOTS;
@@ -160,7 +157,7 @@ void md4_reset(void) {
     log_msg("*** MD4 - one player hangman ***\n\r");
     
     // Global variables
-    set_mode_globals(&script_english, LANG_FILESET, MODE_FILESET);
+    set_mode_globals(&script_english, NULL, NULL);
     
     // State variables
     md_next_state = STATE_INTRO;
@@ -190,7 +187,9 @@ void md4_main(void) {
 			num_mistakes = 0;
             init_char_arr(mistake_pool, MAX_INCORRECT_GUESS);
             init_char_arr(input_word, MAX_WORD_LEN);
-            md_last_dot = create_dialog(MP3_CHOOSE_NUM_OF_HINTS,
+            play_direction(MP3_CHOOSE_NUM_OF_HINTS);
+            play_mode_audio(MP3_SUBMODE);
+            md_last_dot = create_dialog(NULL,
                                         DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL);
             switch (md_last_dot) {
 					case NO_DOTS:
@@ -275,7 +274,7 @@ void md4_main(void) {
             break;
 			
         case STATE_REPROMPT:
-            md_last_dot = create_dialog(MP3_SKIP,
+            md_last_dot = create_dialog(MP3_WORD_COMMANDS,
                                         ENTER_CANCEL | LEFT_RIGHT);
             switch (md_last_dot) {
                 case NO_DOTS:

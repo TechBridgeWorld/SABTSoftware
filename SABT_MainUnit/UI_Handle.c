@@ -252,6 +252,7 @@ void ui_control_key_pressed(void)
         {
           ui_is_mode_selected = true;
           io_init();
+          set_language();
           ui_reset_the_current_mode();
         }
       }
@@ -341,7 +342,7 @@ void ui_control_key_pressed(void)
 void ui_play_intro_current_mode(void)
 {
   char filename[5];
-  sprintf(filename, "MD%d", ui_current_mode_number);
+  sprintf(filename, "md%d", ui_current_mode_number);
   play_mp3("",filename);
 }
 

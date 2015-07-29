@@ -13,8 +13,6 @@
 #define MD6_STATE_INPUT     0b00000001  // Waits for dot input from user
 #define MD6_STATE_CHECK     0b00000010  // Verifies input, gives feedback, returns to input wait loop
 
-// Mode MP3 constants
-#define MP3_MENU "MENU"
 
 void md6_main(void);
 void md6_reset(void);

@@ -13,18 +13,38 @@
 #include "MD15.h"
 
  int current_mode(){
- 	return ui_current_mode_index;
+ 	return ui_current_mode_index;  // why isn't this mode NUMBER?
  }
 
- char* current_language(){
- 	if (ui_current_mode_index == 7)
- 		return "h_";
- 	if (ui_current_mode_index == 12)
- 		return "k_";
- 	else
- 		return "e_";
- }
+ lang_type set_language() {
+  if (ui_current_mode_number == 7) {
+    log_msg("Language: Hindi\n\r");
+    ui_current_language = HINDI;
+  }
+  else if (ui_current_mode_number == 12) {
+    log_msg("Language: Kannada\n\r");
+    ui_current_language = KANNADA;
+  }
+  else {
+    log_msg("Language: English\n\r");
+    ui_current_language = ENGLISH;
+  }
+  return ui_current_language;
+}
 
+ char* get_lang_prefix(){
+ 	switch (ui_current_language) {
+ 		case HINDI:
+ 			return "h_";
+ 		case KANNADA:
+ 			return "k_";
+ 		case ENGLISH:
+ 			return "e_";
+ 		default:
+ 			log_msg("No language currently set.\n\r");
+ 			return NULL;
+ 	}
+ }
 
 /**
 * @brief Sets script globals for a new language

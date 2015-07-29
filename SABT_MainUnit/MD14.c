@@ -150,7 +150,7 @@ void md14_main() {
     			break;
         }
 		print_words_in_list(&md14_dict);
-		play_instructions();
+		play_direction(MP3_INSTRUCTIONS_WORD);
     	md14_next_state = MD14_STATE_GENQUES;
     	break;
 

@@ -60,6 +60,7 @@ static char cell = 0;
 static char cell_pattern = 0;
 static char cell_control = 0;
 static int incorrect_tries = 0;
+static lang_type language;
 
 void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
 	set_mode_globals(new_script, new_lang_fileset, new_mode_fileset);
@@ -75,8 +76,56 @@ void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_
 	cell_pattern = 0;
 	cell_control = 0;
 	incorrect_tries = 0;
+	language = set_language();
 	log_msg("[%s] Mode reset", mode_name);
 	NEWLINE;
+}
+
+void play_letter_instructions() {
+	if (language == KANNADA)
+		play_direction(MP3_INSTRUCTIONS_KANNADA);
+	else
+		play_direction(MP3_INSTRUCTIONS_LETTER);
+}
+
+void play_next_letter_prompt() {
+	if (language == KANNADA)
+		play_direction(MP3_NEXT_LETTER_K);
+	else
+		play_direction(MP3_NEXT_LETTER);
+}
+
+void play_dot_prompt() {
+	if (language == KANNADA)
+		play_direction(MP3_PRESS_DOTS_K);
+	else
+		play_direction(MP3_PRESS_DOTS);
+}
+
+void play_next_cell_prompt() {
+	if (language == KANNADA)
+		play_direction(MP3_NEXT_CELL_K);
+	else
+		play_direction(MP3_NEXT_CELL);
+}
+
+void play_right() {
+	if (language == KANNADA)
+		play_direction(MP3_CORRECT_K);
+	else
+		play_direction(MP3_CORRECT);
+	play_tada();
+}
+
+void play_wrong() {
+	if (language == KANNADA) {
+		play_feedback(MP3_INCORRECT_K);
+		play_feedback(MP3_TRY_AGAIN_K);
+	}
+	else {
+		play_feedback(MP3_INCORRECT);
+		play_feedback(MP3_TRY_AGAIN);
+	}
 }
 
 void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
@@ -91,7 +140,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				case '1':
 					log_msg("[%s] Submode: Learn", mode_name);
 					NEWLINE;
-					play_instructions();  //@TODO: FIGURE OUT WHICH INSTRUCTIONS GO WHERE!
+					play_letter_instructions();
 					submode = SUBMODE_LEARN;
 					unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					next_state = STATE_GENQUES;
@@ -100,7 +149,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				case '2':
 					log_msg("[%s] Submode: Play", mode_name);
 					NEWLINE;
-					play_instructions();
+					play_direction(MP3_INSTRUCTIONS_LETTER);
 					shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
 					should_shuffle = true;
 					next_state = STATE_GENQUES;
@@ -129,8 +178,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			curr_glyph = get_next_letter(SCRIPT_ADDRESS, should_shuffle);
 			log_msg("[%s] State: GENQUES. Next glyph: %s", mode_name, curr_glyph->sound);
 			NEWLINE;
-			
-			play_mp3(LANG_FILESET, MP3_NEXT_LETTER);
+			play_next_letter_prompt();
 			next_state = STATE_PROMPT;
 			break;
 
@@ -140,7 +188,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			switch(submode) {
 				case SUBMODE_LEARN:
 					play_glyph(curr_glyph);
-					play_direction(MP3_PRESS_DOTS);
+					play_dot_prompt();
 					play_dot_sequence(curr_glyph);
 					break;
 
@@ -196,15 +244,12 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 				if (curr_glyph -> next == NULL) {
 					incorrect_tries = 0;
 					log_msg("[%s] User answered correctly\n\r", mode_name);
-					
-					play_feedback(MP3_CORRECT);
-					play_tada();
+					play_right();
 					next_state = STATE_GENQUES;
 				}
 				else {
 					curr_glyph = curr_glyph->next;
-					play_mp3(LANG_FILESET, MP3_NEXT_CELL);
-					
+					play_next_cell_prompt();					
 					if (submode == SUBMODE_LEARN)
 						play_dot_sequence(curr_glyph);
 					else
@@ -215,14 +260,12 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 			else {
 				incorrect_tries++;
 				log_msg("[%s] User answered incorrectly\n\r", mode_name);;
-							
-				play_feedback(MP3_INCORRECT);
-				play_feedback(MP3_TRY_AGAIN);
+				play_wrong();
 				curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);	
 				next_state = STATE_PROMPT;
 				if (incorrect_tries >= MAX_INCORRECT_TRIES) {
 					play_glyph(curr_glyph);
-					play_direction(MP3_PRESS_DOTS);
+					play_dot_prompt();
 					play_dot_sequence(curr_glyph);
 					next_state = STATE_INPUT;
 				}

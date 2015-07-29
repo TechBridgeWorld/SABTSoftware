@@ -17,7 +17,8 @@
 
 
 int current_mode();
-char* current_language();
+lang_type set_language();
+char* get_lang_prefix();
 void log_msg(const char* format, ...);
 void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset);
 int timer_rand(void);

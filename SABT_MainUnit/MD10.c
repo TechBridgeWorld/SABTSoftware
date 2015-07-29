@@ -21,7 +21,6 @@ static int word_num_inset = 20;
 static int set = 0;
 struct dir_Structure *location;
 static char cell;
-static char buf[8];
 static char fname[12];
 static glyph_t* g1;
 static glyph_t* g2;
@@ -34,7 +33,7 @@ void md10_main(void) {
 
  switch(md10_current_state) {
      case MD10_STATE_INITIAL:
-     	play_instructions();
+     	play_welcome();
      	play_submode_choice();
 	  game_mode = 0;
 	  lang_fileset = script_eng_contraction.fileset;
@@ -49,40 +48,36 @@ void md10_main(void) {
  	case MD10_STATE_SUBMODE_INIT:
 	  switch(game_mode){
 		case 0:
-			play_mp3("MD10","WEL1");
-			// Welcomes the user to the submode 1
 			break;
 		case 1:
-			play_mp3("MD10","WEL2");
 			// Welcomes the user to the submode 2
+			play_direction(MP3_UNDER_DEVEL);
 			break;
 		case 2:
-			play_mp3("MD10","WEL3");
 			// Welcomes the user to the submode 1
+			play_direction(MP3_UNDER_DEVEL);
 			break;
 		}
 		md10_current_state = MD10_STATE_REQUEST_WRITE;
 		break;
 
 	case MD10_STATE_REQUEST_WRITE:
-		play_mp3("MD10","_WRT");
+		play_direction(MP3_PLEASE_WRITE);
 		md10_current_state = MD10_STATE_REQUEST_INPUT;
 		if (word_num_inset == 36){
-					set = set + 1;
-					word_num_inset = 0;
+			set = set + 1;
+			word_num_inset = 0;
 		}
-	    else {
-					word_num_inset = word_num_inset + 1;
-		}
+	    else
+			word_num_inset = word_num_inset + 1;
 		break;
 
     case MD10_STATE_REQUEST_INPUT:
 	  switch(game_mode){
-	  	case 0:		    
+	  	case 0:
 		    // to write <word><set>_<num> please press
-			log_msg(buf,"CON%d_W%d", set, word_num_inset-1);
-			sprintf(fname,"%s.mp3",buf);
-			log_msg(buf);			
+	  		sprintf(fname, "c_%d_w_%d.mp3", set, word_num_inset-1);
+			log_msg("%s\n\r", fname);
 			
 			bool e = convert_file_name ((unsigned char*)fname); //convert file_name into FAT format
   			if(e) return;
@@ -97,37 +92,31 @@ void md10_main(void) {
 					word_num_inset = word_num_inset + 1;
 				}
 				return;
-			}			
-			play_mp3(NULL,buf);
-			play_direction(MP3_PLEASE_PRESS);
+			}
+			play_mp3(NULL, fname);
+			play_direction(MP3_PRESS_DOTS);
 					
 			md10_current_state = MD10_STATE_SPELL_PATTERN;
 			break;
 		case 1:
-			play_mp3("MD10","_PL2");
 			break;
 		case 2:
-			play_mp3("MD10","_PL3");
 			break;
 	  }
 	  break;
 
 	case MD10_STATE_SPELL_PATTERN:
-	  if(buf[3] != '0'){
-	    g1 = &contraction_pattern[CHARTOINT(buf[3])];   // Stores the preceding pattern for the cell
+	  if(fname[1] != '0'){
+	    g1 = &contraction_pattern[CHARTOINT(fname[0])];   // Stores the preceding pattern for the cell
 		play_dot_sequence(g1);
-		play_mp3("MD10","_NXT");
+		play_direction(MP3_NEXT_CELL);
 		}
 	  else g1 = NULL;
 	  int sym;
-	  if (strlen(buf) == 8){
-	  	sym = 10*CHARTOINT(buf[6])+CHARTOINT(buf[7]);
-		char test[10];
-		sprintf(test,"num%d",sym); // @todo what does this do?
-	  }
-	  else {
-	  	sym = CHARTOINT(buf[6]);						// Stores the alphabet/symbol glyph
-	  }
+	  if (strlen(fname) == 6)
+	  	sym = 10*CHARTOINT(fname[4]) + CHARTOINT(fname[5]);
+	  else
+	  	sym = CHARTOINT(fname[4]);			// Stores the alphabet/symbol glyph
 	  g2 = &contraction_glyphs[sym-1];
    	  play_dot_sequence(g2);
 	  md10_current_state = MD10_STATE_CELL1;
@@ -140,11 +129,10 @@ void md10_main(void) {
 		break;
       }
 	  cell = get_cell();
-	  if ((cell & 0b00111111) == NO_DOTS) {
-		  break;
-	  }
 	  cell1_pattern = GET_CELL_PATTERN(cell);
 	  cell_control = GET_CELL_CONTROL(cell);
+	  if (cell1_pattern == NO_DOTS)
+	  	break;
 	  switch (cell_control) {
 	    case WITH_ENTER:
 		  log_msg("ENTER");
@@ -152,16 +140,16 @@ void md10_main(void) {
 		  break;
 		case WITH_LEFT:
 		  log_msg("LEFT");
-		  play_mp3("MD10","_NXT");
+		  play_direction(MP3_NEXT_CELL);
 		  md10_current_state = MD10_STATE_CELL2;
 		  break;
 		case WITH_RIGHT:
-		  log_msg("RIGHT");		  
-		  play_mp3(LANG_FILESET,"BLNK");
+		  log_msg("RIGHT");
+		  play_mp3(MP3_ENGLISH, MP3_BLANK);
 		  cell1_pattern = NO_DOTS;		  
 		  break;
 		case WITH_CANCEL:
-		  log_msg("User pressed CANCEL");
+		  log_msg("User pressed CANCEL\n\r");
 		  break;
 	  }
 	  break;
@@ -169,11 +157,12 @@ void md10_main(void) {
 	
 	case MD10_STATE_CELL2:		
 	  cell = get_cell();
-	  if ((cell & 0b00111111) == NO_DOTS) {
-		  break;
-	  }
 	  cell2_pattern = GET_CELL_PATTERN(cell);
 	  cell_control = GET_CELL_CONTROL(cell);
+
+	  if (cell2_pattern == NO_DOTS)
+		  break;
+
 	  switch (cell_control) {
 	    case WITH_ENTER:
 		  log_msg("ENTER");
@@ -184,13 +173,13 @@ void md10_main(void) {
 		  break;
 		case WITH_RIGHT:
 		  log_msg("RIGHT");
-		  if (cell2_pattern && g1){		  
-		  	play_mp3("MD10","_CL1");
+		  if (cell2_pattern && g1){		
+		  	play_mode_audio(MP3_CELL_1); 
 		  	play_pattern((unsigned char)cell1_pattern);
-			play_mp3("MD10","_CL2");
+		  	play_mode_audio(MP3_CELL_2); 
 		  	cell2_pattern = NO_DOTS;
 		  } else {
-			play_mp3(LANG_FILESET,"BLNK");
+		  play_mp3(MP3_ENGLISH, MP3_BLANK);
 			cell1_pattern = NO_DOTS;
 			cell2_pattern = NO_DOTS;
 			md10_current_state = MD10_STATE_CELL1;
@@ -234,9 +223,7 @@ void md10_reset(void)
 
 void md10_call_mode_yes_answer(void) {
 	if (md10_current_state == MD10_STATE_SELECT_MODE)
-	{
 		md10_current_state = MD10_STATE_SUBMODE_INIT;
-	}
 }
 
 void md10_call_mode_no_answer(void) {	
@@ -249,16 +236,14 @@ void md10_input_dot(char this_dot) {
 }
 
 void md10_input_cell(char this_cell) {
-  if(md10_last_dot != 0)
-  {
+  if(md10_last_dot != 0) {
     last_cell = this_cell;
     got_input = true;
   }
 }
 
 void md10_call_mode_left() {
-	if (md10_current_state == MD10_STATE_SELECT_MODE)
-	{
+	if (md10_current_state == MD10_STATE_SELECT_MODE) {
 		game_mode += 1;
 		if (game_mode > NUM_SUB_MODES-1) game_mode = 0;
 		play_mp3("MD10",sub_mode[game_mode]);
@@ -266,8 +251,7 @@ void md10_call_mode_left() {
 }
 
 void md10_call_mode_right() {
-	if (md10_current_state == MD10_STATE_SELECT_MODE)
-	{
+	if (md10_current_state == MD10_STATE_SELECT_MODE) {
 		game_mode -= 1;
 		if (game_mode < 0) game_mode = NUM_SUB_MODES-1;
 		play_mp3("MD10",sub_mode[game_mode]);

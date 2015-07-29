@@ -30,7 +30,6 @@ void play_word(word_node_t *this_word);
 void play_string(char* word, int word_len);
 
 void play_welcome();
-void play_instructions();
 void play_submode_choice();
 void play_direction(char* dir);
 void play_feedback(char* dir);

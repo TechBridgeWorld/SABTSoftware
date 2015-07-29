@@ -63,9 +63,9 @@ void play_sound(char* MODE_FILESET, char* sound_source, bool name) {
         if (strcmp(sound_source, sound_source_list[i]) == 0) {
             // Match found
             if (name)
-                sprintf(filename, "N%s", sound_list[i]);
+                sprintf(filename, "n_%s", sound_list[i]);
             else
-                sprintf(filename, "S%s", sound_list[i]);
+                sprintf(filename, "s_%s", sound_list[i]);
             play_mp3(MODE_FILESET, filename);
         }
     }
@@ -125,8 +125,8 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
     cell_control = 0;
     scrolled = false;
     log_msg("[MD3] Mode reset");
-    play_mp3(MODE_FILESET, "INT");
-    play_mp3(MODE_FILESET, "MSEL");
+    play_welcome();
+    play_submode_choice();
 }
 
 /**
@@ -137,34 +137,34 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
     switch(next_state) {
 
         case STATE_MENU:
-        if (io_user_abort == true) {
-            log_msg("[MD3] Quitting to main menu");
-            NEWLINE;
-            quit_mode();
-            io_init();
-        }
-        switch(create_dialog("", DOT_1 | DOT_2 | ENTER_CANCEL)) {
-
-            case '1':
-                log_msg("[%s] Submode: Learn", MODE_FILESET);
+            if (io_user_abort == true) {
+                log_msg("[MD3] Quitting to main menu");
                 NEWLINE;
-                submode = SUBMODE_LEARN;
-                next_state = STATE_GENQUES;
-                break;
+                quit_mode();
+                io_init();
+            }
+            switch(create_dialog("", DOT_1 | DOT_2 | ENTER_CANCEL)) {
 
-            case '2':
-                log_msg("[%s] Submode: Play", MODE_FILESET);
-                submode = SUBMODE_PLAY;
-                next_state = STATE_GENQUES;
+                case '1':
+                    log_msg("[%s] Submode: Learn", MODE_FILESET);
+                    NEWLINE;
+                    submode = SUBMODE_LEARN;
+                    next_state = STATE_GENQUES;
+                    break;
+
+                case '2':
+                    log_msg("[%s] Submode: Play", MODE_FILESET);
+                    submode = SUBMODE_PLAY;
+                    next_state = STATE_GENQUES;
 
 
-            case WITH_LEFT:
-            case WITH_RIGHT:
-            case WITH_CANCEL:
-            default:
-                break;
-        }
-        break;
+                case WITH_LEFT:
+                case WITH_RIGHT:
+                case WITH_CANCEL:
+                default:
+                    break;
+            }
+            break;
 
 
 
@@ -240,16 +240,16 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 length_entered_word++;
                 user_word = add_glyph_to_word(user_word, user_glyph);
                 if(length_entered_word != strlen(sound_source)) { // not done with word
-                    play_mp3(lang_fileset, "GOOD");
+                    play_feedback(MP3_GOOD);
                     next_state = STATE_INPUT;
                 }
                 else { // finished word
-                    play_mp3(lang_fileset,  "GOOD");
-                    play_mp3(lang_fileset, "NCWK");
+                    play_feedback(MP3_GOOD);
+                    play_feedback(MP3_NICE_WORK);
                     switch (submode){
                         case SUBMODE_LEARN:
                             play_sound(MODE_FILESET, sound_source, true);
-                            play_mp3(lang_fileset, "SAYS");
+                            play_direction(MP3_SAYS);
                             play_sound(MODE_FILESET, sound_source, false);
                             break;
                         
@@ -265,17 +265,17 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 incorrect_tries++;
                 log_msg("[MD3] User answered incorrectly");
                 NEWLINE
-                play_mp3(lang_fileset, "NO");
-                play_mp3(lang_fileset, MP3_TRY_AGAIN);
+                play_feedback(MP3_NO);
+                play_feedback(MP3_TRY_AGAIN);
                 play_word(user_word);
                 if (incorrect_tries == MAX_INCORRECT_TRIES_1) { // half done with attempts
-                    play_mp3(MODE_FILESET, "PLWR");
+                    play_direction(MP3_PLEASE_WRITE);
                     play_sound(MODE_FILESET, sound_source, true);
                     curr_word = word_to_glyph_word(this_script, sound_source);
                     play_word(curr_word);
                 } else if (incorrect_tries >= MAX_INCORRECT_TRIES_2) { // done with attempts
                     play_glyph(curr_glyph);
-                    play_mp3(MODE_FILESET, "PRSS");
+                    play_direction(MP3_PLEASE_PRESS);
                     play_dot_sequence(curr_glyph);
                 }
                 next_state = STATE_INPUT;
