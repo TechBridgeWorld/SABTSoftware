@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include "VS1053.h"
 #include "datastructures.h"
-#include "Globals.h"
+#include "globals.h"
 #include "common.h"
 #include "io.h"
 #include "script_common.h"
@@ -186,7 +186,7 @@ void play_glyph(glyph_t *this_glyph) {
  * @return void
  */
 void play_word(word_node_t *this_word) {
-    while(this_word != NULL) {
+    while (this_word != NULL) {
         play_glyph(this_word->data);
         this_word = this_word->next;
     }

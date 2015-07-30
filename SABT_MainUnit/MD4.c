@@ -45,7 +45,7 @@ static int num_mistakes;
 
 static char *dictionary[11] = {"rock", "tree", "sky", "apple", "car", "dog",
     "cat", "water", "floor", "leaf", "road"};
-	
+    
 static int index_arr[11] = {0,1,2,3,4,5,6,7,8,9,10};
 static dictionary_t dict = {
     dictionary,
@@ -59,30 +59,25 @@ static dictionary_t dict = {
  * @return bool - True on success (finds a match and places letter),
  *                false failure (doesn't find a match)
  */
-bool place_letter()
-{
-    int i;
-    
-    for (i = 0; i < strlen(chosen_word); i++)
-    {
-        if (entered_letter == chosen_word[i])
-        {
+bool place_letter() {
+    for (int i = 0; i < strlen(chosen_word); i++) {
+        if (entered_letter == chosen_word[i]) {
             input_word[i] = entered_letter;
             return true;
         }
     }
-    log_msg("no match\r\n");
+    log_msg("No letter match.");
     return false;
 }
 
-void choose_next_word(){
-	int num_words = dict.num_words;
-	if (dict.index >= num_words - 1){
-		shuffle(num_words, dict.index_array);
-		dict.index = 0;
-	}
-	chosen_word = dict.words[dict.index_array[dict.index]];
-	dict.index++;
+void choose_next_word() {
+    int num_words = dict.num_words;
+    if (dict.index >= num_words - 1) {
+        shuffle(num_words, dict.index_array);
+        dict.index = 0;
+    }
+    chosen_word = dict.words[dict.index_array[dict.index]];
+    dict.index++;
 }
 
 /**
@@ -101,7 +96,7 @@ void place_hint(int num_hint){
     int hint_i;
     init_index_arr(index_arr, chosen_word_len);
     shuffle(chosen_word_len, index_arr);
-    for(int i = 0; i < num_hint; i++){
+    for (int i = 0; i < num_hint; i++){
         hint_i = index_arr[i];
         input_word[hint_i] = chosen_word[hint_i];
     }
@@ -117,8 +112,7 @@ void place_hint(int num_hint){
 bool is_letter_valid(char button_bits)
 {
     char letter_from_bits = get_letter_from_bits(button_bits);
-    if((letter_from_bits >= 'a') && (letter_from_bits <= 'z'))
-    {
+    if ((letter_from_bits >= 'a') && (letter_from_bits <= 'z')) {
         entered_letter = letter_from_bits;
         return true;
     }
@@ -132,29 +126,27 @@ bool is_letter_valid(char button_bits)
  *
  *  @return whether it's past mistake
  */
-bool is_past_mistake(char entered_letter){
-    int i = 0;
-    while (mistake_pool[i] != '\0'){
-        if (mistake_pool[i] == entered_letter) return true;
-        i++;
+bool is_past_mistake(char entered_letter) {
+    for (int i = 0; mistake_pool[i] != '\0'; i++){
+        if (mistake_pool[i] == entered_letter)
+            return true;
     }
     return false;
 }
 
-void md4_play_mistake(){
+void md4_play_mistake() {
     play_feedback(MP3_YOU_HAVE);
     play_number(MAX_INCORRECT_GUESS - num_mistakes);
-    if (MAX_INCORRECT_GUESS - num_mistakes == 1){
+    if (MAX_INCORRECT_GUESS - num_mistakes == 1)
         play_feedback(MP3_MISTAKE_REMAINING);
-    }else{
+    else
         play_feedback(MP3_MISTAKES_REMAINING);
-    }
 }
 
 
 
 void md4_reset(void) {
-    log_msg("*** MD4 - one player hangman ***\n\r");
+    log_msg("*** MD4 - one player hangman ***");
     
     // Global variables
     set_mode_globals(&script_english, NULL, NULL);
@@ -167,24 +159,23 @@ void md4_reset(void) {
     md_incorrect_tries = 0;
 }
 
-void md4_main(void) {	
+void md4_main(void) {   
     switch (md_next_state) {
         case STATE_INTRO:
-			shuffle(dict.num_words, dict.index_array);
-			dict.index = 0;
+            shuffle(dict.num_words, dict.index_array);
+            dict.index = 0;
             play_welcome();
             md_next_state = STATE_GENQUES;
             break;
             
         case STATE_GENQUES:
             choose_next_word();
-            log_msg("word:%s\r\n", chosen_word);
-			md_next_state = STATE_LVLSEL;
-            
+            log_msg("word:%s", chosen_word);
+            md_next_state = STATE_LVLSEL;
             break;
             
         case STATE_LVLSEL:
-			num_mistakes = 0;
+            num_mistakes = 0;
             init_char_arr(mistake_pool, MAX_INCORRECT_GUESS);
             init_char_arr(input_word, MAX_WORD_LEN);
             play_direction(MP3_CHOOSE_NUM_OF_HINTS);
@@ -192,23 +183,23 @@ void md4_main(void) {
             md_last_dot = create_dialog(NULL,
                                         DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL);
             switch (md_last_dot) {
-					case NO_DOTS:
-						break;
+                    case NO_DOTS:
+                        break;
                     case '1':
                         place_hint(1);
-						md_next_state = STATE_PROMPT;
+                        md_next_state = STATE_PROMPT;
                         break;
                     case '2':
                         place_hint(2);
-						md_next_state = STATE_PROMPT;
+                        md_next_state = STATE_PROMPT;
                         break;
                     case '3':
                         place_hint(3);
-						md_next_state = STATE_PROMPT;
+                        md_next_state = STATE_PROMPT;
                         break;
-					case ENTER:
-						md_next_state = STATE_PROMPT;
-						break;
+                    case ENTER:
+                        md_next_state = STATE_PROMPT;
+                        break;
             }
             
             break;
@@ -222,57 +213,56 @@ void md4_main(void) {
             
         case STATE_INPUT:
             if (io_user_abort == true) {
-                log_msg("[MD4] User aborted input\n\r");
+                log_msg("[MD4] User aborted input");
                 md_next_state = STATE_REPROMPT;
                 io_init();
                 break;
             }
             if (get_character(&md_input_valid, &entered_letter)) {
                 if (md_input_valid) {
-                    log_msg("[MD4] User answer: %c\n\r", entered_letter);
-                    
+                    log_msg("[MD4] User answer: %c", entered_letter);
                     play_string(&entered_letter,1);
                     md_next_state = STATE_CHECKANS;
-                } else {
-                    log_msg("[MD4] IO error\n\r");
                 }
+                else
+                    log_msg("[MD4] IO error");
             }
             break;
             
         case STATE_CHECKANS:
-			if (place_letter() ||
+            if (place_letter() ||
                 (!strncmp(input_word, chosen_word, strlen(chosen_word)))) {
                 play_feedback(MP3_YES);
-				
-				 if (!strncmp(input_word, chosen_word, strlen(chosen_word))) {
+                
+                 if (!strncmp(input_word, chosen_word, strlen(chosen_word))) {
                     play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
-					play_string(chosen_word, strlen(chosen_word));
+                    play_string(chosen_word, strlen(chosen_word));
                     play_tada();
-					md_next_state = STATE_GENQUES;
-				 } else md_next_state = STATE_PROMPT;
-			}
-			else {
+                    md_next_state = STATE_GENQUES;
+                 }
+                 else md_next_state = STATE_PROMPT;
+            }
+            else {
                 play_feedback(MP3_NO);
-				if (num_mistakes == MAX_INCORRECT_GUESS) {
+                if (num_mistakes == MAX_INCORRECT_GUESS) {
                     play_feedback(MP3_7_MISTAKES_YOU_MISSED);
-					play_string(chosen_word, strlen(chosen_word));
+                    play_string(chosen_word, strlen(chosen_word));
                     play_direction(MP3_NEW_WORD);
-					md_next_state = STATE_GENQUES;
-				}
-				else
-				{
-					if (!is_past_mistake(entered_letter)) {
-						mistake_pool[num_mistakes] = entered_letter;
-						num_mistakes++;
-					}
-                    else
+                    md_next_state = STATE_GENQUES;
+                }
+                else {
+                    if (is_past_mistake(entered_letter)) 
                         play_feedback(MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE);
+                    else {
+                        mistake_pool[num_mistakes] = entered_letter;
+                        num_mistakes++;
+                    }
                     md4_play_mistake();
-					md_next_state = STATE_PROMPT;
-				}
-			} 
+                    md_next_state = STATE_PROMPT;
+                }
+            } 
             break;
-			
+            
         case STATE_REPROMPT:
             md_last_dot = create_dialog(MP3_WORD_COMMANDS,
                                         ENTER_CANCEL | LEFT_RIGHT);
@@ -280,25 +270,24 @@ void md4_main(void) {
                 case NO_DOTS:
                     break;
                     
-                    // Playing answer
-                case RIGHT:
+                case RIGHT:     // play answer
                     play_feedback(MP3_THE_ANSWER_IS);
                     play_string(chosen_word, strlen(chosen_word));
-					md_next_state = STATE_GENQUES;
+                    md_next_state = STATE_GENQUES;
                     io_init();
                     break;
+
                 case LEFT:
                     md_next_state = STATE_PROMPT;
                     io_init();
                     break;
                     
-                    // Skipping question
-                case ENTER:
+                case ENTER:     // skip question
                     md_next_state = STATE_GENQUES;
                     break;
                     
                     // Try again
-                case CANCEL:
+                case CANCEL:    // try again
                     md_next_state = STATE_PROMPT;
                     io_init();
                     break;
@@ -309,36 +298,10 @@ void md4_main(void) {
             break;
             
         default:
-            log_msg("[MD9] Error: next_state: ");
-            SENDBYTE(md_next_state);
-            NEWLINE;
+            log_msg("[MD9] Error: next_state: %d", md_next_state);
             quit_mode();
             break;
             
             
     }
-}
-
-void md4_call_mode_yes_answer(void) {
-    
-}
-
-void md4_call_mode_no_answer(void) {
-    
-}
-
-void md4_call_mode_left(void) {
-    
-}
-
-void md4_call_mode_right(void) {
-    
-}
-
-void md4_input_dot(char this_dot) {
-    
-}
-
-void md4_input_cell(char this_cell) {
-    
 }

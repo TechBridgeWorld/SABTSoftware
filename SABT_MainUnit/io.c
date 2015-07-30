@@ -329,7 +329,7 @@ bool get_character(bool* valid, char* character){
         log_msg("[IO] Returning character: %s", io_parsed[0]->sound);
         
         *character = get_letter_from_bits(io_parsed[0]->pattern);
-        if(character == '\0') *valid = false;
+        if (character == '\0') *valid = false;
         else *valid = true;
         return true;
     }

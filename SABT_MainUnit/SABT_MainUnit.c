@@ -6,7 +6,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "audio.h"
 
 volatile bool timer_interrupt;
@@ -100,11 +100,11 @@ void timer_routine(void) {
 int main(void) {
     initialize_system();
 
-    while(1)     {
+    while (1)     {
         // read in the dict file till done
         // check to see if we've received data from UI board
         // if true, process the single byte
-        if(usart_keypad_data_ready) {
+        if (usart_keypad_data_ready) {
             /* one of two types:
              * [U][I][msglen][msg_number][msg_type][payload][CRC1][CRC2]
              * [M][C][msglen][msg_number][msg_type][payload][CRC1][CRC2]
@@ -119,16 +119,16 @@ int main(void) {
 
         // check to see if we've received data from a connected PC 
         // if true, process the single byte
-        if(usart_pc_data_ready)
+        if (usart_pc_data_ready)
             usart_pc_receive_action();
 
-        if(timer_interrupt)  // THIS DOES NOTHING!
+        if (timer_interrupt)  // THIS DOES NOTHING!
             timer_interrupt = false;
 
-        if(usart_pc_message_ready) //If a message ready from the PC, process it
+        if (usart_pc_message_ready) //If a message ready from the PC, process it
             pc_parse_message();
 
-        if(usart_ui_message_ready) //If a message ready from the user interface, process it
+        if (usart_ui_message_ready) //If a message ready from the user interface, process it
             ui_parse_message(playing_sound);
 
         ui_run_main_of_current_mode();

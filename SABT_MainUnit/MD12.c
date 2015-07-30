@@ -13,9 +13,9 @@
 #include "script_kannada.h"
 
 void md12_reset(void) {
-	learn_letter_reset(&script_kannada, NULL, NULL);
+    learn_letter_reset(&script_kannada, NULL, NULL);
 }
 
 void md12_main(void) {
-	learn_letter_main(&script_kannada, NULL, NULL);
+    learn_letter_main(&script_kannada, NULL, NULL);
 }

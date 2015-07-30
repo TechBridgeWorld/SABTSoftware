@@ -8,7 +8,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "Modes.h"
 #include "audio.h"
 #include "common.h"
@@ -19,9 +19,6 @@
 
 #define MAX_MODE_FILE_LENGTH 128
 #define MAX_MODE_NUMBER_DIGITS 2
-
-// @todo shouldn't this be in globals?
-static unsigned char incorrect_tries = 0;
 
 /**
  * @brief  reads modes from MODES.DAT file and tells computer how many modes and 
@@ -53,7 +50,7 @@ void ui_check_modes(void) {
         file_content[i] = 0;
 
     /* Populate file contents;
-    if(read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0) {
+    if (read_and_retrieve_file_contents((unsigned char*)modes_file, &file_content[0]) > 0) {
         log_msg("Mode file could not be read\n\r");
         while (1);
     }*/
@@ -163,8 +160,8 @@ bool ui_parse_message(bool mp3_is_playing) {
         message_type = usart_ui_received_packet[4];
 
         // Process the message
-        if(mp3_is_playing) { //If a MP3 file is being played, only the commands are processed
-            if(message_type == 'D') {              // Control key pressed
+        if (mp3_is_playing) { //If a MP3 file is being played, only the commands are processed
+            if (message_type == 'D') {              // Control key pressed
                 ui_control_key_pressed();
                 usart_ui_message_ready = false;      // Once control handled, exit
                 return true;
@@ -288,7 +285,7 @@ void ui_control_key_pressed(void) {
         
         case UI_CMD_MREV: // Move backwards in list of modes
             io_dot = LEFT;
-            if(ui_is_mode_selected)
+            if (ui_is_mode_selected)
                 ui_call_mode_left();
             else {
                 ui_current_mode_index = ui_current_mode_index - 1 < 0 ? number_of_modes - 1 : ui_current_mode_index - 1;
@@ -333,19 +330,9 @@ void ui_call_mode_yes_answer(void) {
         case 1:
             md1_call_mode_yes_answer();
             break;
-        case 4:
-            md4_call_mode_yes_answer();
-            break;
-        case 9:
-            md9_call_mode_yes_answer();
-            break;
         case 10:
             md10_call_mode_yes_answer();
             break;
-        case 13:
-            md13_call_mode_yes_answer();
-            break;
-
         default:
             break;
     }
@@ -360,19 +347,9 @@ void ui_call_mode_no_answer(void) {
         case 1:
             md1_call_mode_no_answer();
             break;
-        case 4:
-            md4_call_mode_no_answer();
-            break;
-        case 9:
-            md9_call_mode_no_answer();
-            break;
         case 10:
             md10_call_mode_no_answer();
             break;
-        case 13:
-            md13_call_mode_no_answer();
-            break;
-
         default:
             break;
     }
@@ -388,20 +365,11 @@ void ui_input_dot_to_current_mode(char this_dot) {
             case 1:
                 md1_input_dot(this_dot);
                 break;
-            case 4:
-                md4_input_dot(this_dot);
-                break;
             case 5:
                 md5_input_dot(this_dot);
                 break;
-            case 9:
-                md9_input_dot(this_dot);
-                break;
             case 10:
                 md10_input_dot(this_dot);
-                break;
-            case 13:
-                md13_input_dot(this_dot);
                 break;
             default:
                 break;
@@ -422,20 +390,11 @@ void ui_input_cell_to_current_mode(char this_cell)
             case 1:
                 md1_input_cell(this_cell);
                 break;
-            case 4:
-                md4_input_cell(this_cell);
-                break;
             case 5:
                 md5_input_cell(this_cell);
                 break;
-            case 9:
-                md9_input_cell(this_cell);
-                break;
             case 10:
                 md10_input_cell(this_cell);
-                break;
-            case 13:
-                md13_input_cell(this_cell);
                 break;
             default:
                 break;
@@ -449,10 +408,9 @@ void ui_input_cell_to_current_mode(char this_cell)
  * @brief   Decides which of the three UI modes to go into based on ui_current_mode_number
  * @return  Void
  */
-void ui_run_main_of_current_mode(void)
-{
+void ui_run_main_of_current_mode(void) {
 
-    if(ui_is_mode_selected){
+    if (ui_is_mode_selected){
         switch(ui_current_mode_number) {
             case 1:
                 md1_main();
@@ -510,9 +468,8 @@ void ui_run_main_of_current_mode(void)
  * @brief input the reset command to the current mode
  * @return Void
  */
-void ui_reset_the_current_mode(void)
-{
-    if(ui_is_mode_selected) {
+void ui_reset_the_current_mode(void) {
+    if (ui_is_mode_selected) {
         switch(ui_current_mode_number) {
             case 1:
                 md1_reset();
@@ -574,14 +531,8 @@ void ui_reset_the_current_mode(void)
  */
 void ui_call_mode_left(void) {
     switch (ui_current_mode_number) {
-        case 9:
-            md9_call_mode_left();
-            break;
         case 10:
             md10_call_mode_left();
-            break;
-        case 13:
-            md13_call_mode_left();
             break;
         default:
             break;
@@ -595,15 +546,9 @@ void ui_call_mode_left(void) {
  */
 void ui_call_mode_right(void) {
     switch (ui_current_mode_number) {
-        case 9:
-            md9_call_mode_right();
-            break;    
         case 10:
             md10_call_mode_right();
             break;  
-        case 13:
-            md13_call_mode_right();
-            break;
         default:
             break;
     }

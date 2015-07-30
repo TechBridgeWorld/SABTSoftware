@@ -16,7 +16,7 @@
 #include <string.h>
 #include "io.h"
 #include "datastructures.h"
-#include "Globals.h"
+#include "globals.h"
 #include "common.h"
 #include "script_english.h"
 #include "audio.h"

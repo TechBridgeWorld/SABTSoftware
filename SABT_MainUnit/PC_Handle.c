@@ -52,7 +52,7 @@ void pc_requests_to_modify_modes_file(void) {
 
     // Clear the buffer
     for (t = 0; t < 20; t++)
-        writing_file_content[t]=0x00;
+        writing_file_content[t] = 0x00;
 
     init_sd_card(false);
 

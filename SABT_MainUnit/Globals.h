@@ -1,5 +1,5 @@
 /**
- * @file Globals.h
+ * @file globals.h
  * @brief global definitions for the MCU
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)

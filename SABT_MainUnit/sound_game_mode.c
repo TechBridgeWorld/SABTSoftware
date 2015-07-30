@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 // Custom libraries
-#include "Globals.h"
+#include "globals.h"
 #include "Modes.h"
 #include "audio.h"
 #include "datastructures.h"
@@ -80,7 +80,7 @@ int choose_sound_source() {
     int num = timer_rand() % MAX_INDEX;
     int i;
 
-    while(sound_sources_used_list[num])
+    while (sound_sources_used_list[num])
         num = timer_rand() % MAX_INDEX;
 
     sound_sources_used_list[num] = 1;

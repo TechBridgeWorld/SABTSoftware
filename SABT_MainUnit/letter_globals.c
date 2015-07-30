@@ -64,7 +64,7 @@ char get_letter_from_bits(char bits) {
  *                on error - not found bits, return -1
  */
 char get_bits_from_letter(char letter) {
-    for(int i = 0; i < GLYPH_LEN; i++) {
+    for (int i = 0; i < GLYPH_LEN; i++) {
         if (letter_arr[i] == letter)
             return letter_bits_arr[i];
     }

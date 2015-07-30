@@ -10,7 +10,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "ui_handle.h"
 
 /**
@@ -30,17 +30,17 @@ unsigned char get_boot_sector_data (void) {
     sd_read_single_block(0);
     bpb = (struct BS_Structure *)buffer;
 
-    if (bpb->jump_boot[0]!=0xE9 && bpb->jump_boot[0]!=0xEB) {   //check if it is boot sector
+    if (bpb->jump_boot[0]!= 0xE9 && bpb->jump_boot[0]!= 0xEB) {   //check if it is boot sector
         mbr = (struct MBRinfo_Structure *) buffer;              //if it is not boot sector, it must be MBR
 
-        if(mbr->signature != 0xaa55) return 1;                  //if it is not even MBR then it's not FAT32
+        if (mbr->signature != 0xaa55) return 1;                  //if it is not even MBR then it's not FAT32
 
         partition = (struct partitionInfo_Structure *)(mbr->partition_data);  //first partition
         unused_sectors = partition->first_sector;                             //the unused sectors, hidden to the FAT
 
         sd_read_single_block(partition->first_sector);          //read the bpb sector
         bpb = (struct BS_Structure *)buffer;
-        if(bpb->jump_boot[0]!=0xE9 && bpb->jump_boot[0]!=0xEB) return 1; 
+        if (bpb->jump_boot[0]!= 0xE9 && bpb->jump_boot[0]!= 0xEB) return 1; 
     }
 
     bytes_per_sector = bpb->bytes_per_sector;
@@ -56,7 +56,7 @@ unsigned char get_boot_sector_data (void) {
     total_clusters = data_sectors / sector_per_cluster;
 
     // Check if FSinfo free clusters count is valid
-    if((get_set_free_cluster (TOTAL_FREE, GET, 0)) > total_clusters)  
+    if ((get_set_free_cluster (TOTAL_FREE, GET, 0)) > total_clusters)  
         free_cluster_count_updated = 0;
     else
         free_cluster_count_updated = 1;
@@ -97,15 +97,15 @@ unsigned long get_set_next_cluster (unsigned long cluster_number,
     fat_entry_offset = (unsigned int) ((cluster_number * 4) % bytes_per_sector);
 
     // Read the sector into a buffer
-    while(retry < 10) {
-        if(!sd_read_single_block(fat_entry_sector)) break; 
+    while (retry < 10) {
+        if (!sd_read_single_block(fat_entry_sector)) break; 
         retry++;
     }
 
     // Get the cluster address from the buffer
     fat_entry_value = (unsigned long *) &buffer[fat_entry_offset];
 
-    if(get_set == GET) return ((*fat_entry_value) & 0x0fffffff);
+    if (get_set == GET) return ((*fat_entry_value) & 0x0fffffff);
 
     // For setting new value in cluster entry in FAT
     *fat_entry_value = cluster_entry;
@@ -134,10 +134,10 @@ unsigned long get_set_free_cluster(unsigned char tot_or_next,
     sd_read_single_block(unused_sectors + 1);
 
     if ((FS->lead_signature != 0x41615252) || (FS->structure_signature != 0x61417272) 
-        || (FS->trail_signature !=0xaa550000))
+        || (FS->trail_signature != 0xaa550000))
         return 0xffffffff;
 
-    if(get_set == GET) {
+    if (get_set == GET) {
         if (tot_or_next == TOTAL_FREE)
             return (FS->free_cluster_count);
         else
@@ -170,13 +170,13 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
 
     cluster = root_cluster; //root cluster
 
-    while(1) {
+    while (1) {
         first_sector = get_first_sector (cluster);
 
         for (sector = 0; sector < sector_per_cluster; sector++) {
             sd_read_single_block(first_sector + sector);
 
-            for(i = 0; i < bytes_per_sector; i += 32) {
+            for (i = 0; i < bytes_per_sector; i += 32) {
                 dir = (struct dir_Structure *) &buffer[i];
                 if (dir->name[0] == EMPTY) { //indicates end of the file list of the directory
                     if ((flag == GET_FILE) || (flag == DELETE))
@@ -189,8 +189,8 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                         for (j = 0; j < 11; j++)
                             if (dir->name[j] != file_name[j])
                                 break;
-                            if(j == 11) {
-                            if(flag == GET_FILE) {
+                            if (j == 11) {
+                            if (flag == GET_FILE) {
                                 append_file_sector = first_sector + sector;
                                 append_file_location = i;
                                 append_start_cluster = (((unsigned long) dir->first_cluster_hi) << 16) 
@@ -217,10 +217,10 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                                     get_set_free_cluster (NEXT_FREE, SET, first_cluster);
 
                                 //mark all the clusters allocated to the file as 'free'
-                                while(1) {
+                                while (1) {
                                     next_cluster = get_set_next_cluster (first_cluster, GET, 0);
                                     get_set_next_cluster (first_cluster, SET, 0);
-                                    if(next_cluster > 0x0ffffff6) 
+                                    if (next_cluster > 0x0ffffff6) 
                                     {usart_transmit_string_to_pc_from_flash(PSTR("File deleted!"));return 0;}
                                     first_cluster = next_cluster;
                                 } 
@@ -235,7 +235,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                             usart_transmit_byte_to_pc (dir->name[j]);
                         }
                         usart_transmit_string_to_pc_from_flash (PSTR("   "));
-                        if((dir->attrib != 0x10) && (dir->attrib != 0x08)) {
+                        if ((dir->attrib != 0x10) && (dir->attrib != 0x08)) {
                             usart_transmit_string_to_pc_from_flash (PSTR("FILE" ));
                             usart_transmit_string_to_pc_from_flash (PSTR("   "));
                             display_memory (LOW, dir->file_size);
@@ -295,16 +295,16 @@ unsigned char read_file (unsigned char flag, unsigned char *file_name) {
 
     file_size = dir->file_size;
 
-    while(1) {
+    while (1) {
         first_sector = get_first_sector (cluster);
 
         for (j = 0; j < sector_per_cluster; j++) {
             sd_read_single_block(first_sector + j);
 
-            for(k = 0; k < 512; k++)
+            for (k = 0; k < 512; k++)
                 if ((byteCounter++) >= file_size ) end_of_file = true;
 
-            if(end_of_file)
+            if (end_of_file)
                 return 0;
         }
 
@@ -336,7 +336,7 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
     bool end_of_file = false;
 
     error = convert_file_name (file_name);    //convert file_name into FAT format
-    if(error) {
+    if (error) {
         TX_NEWLINE_PC;
         return 1;
     }
@@ -351,20 +351,20 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
 
     file_size = dir->file_size;
 
-    while(1) {
+    while (1) {
         first_sector = get_first_sector (cluster);
 
         for (j = 0; j < sector_per_cluster; j++) {
             sd_read_single_block(first_sector + j);
 
 
-            for(k = 0; k < 512; k++)
+            for (k = 0; k < 512; k++)
                 if ((byteCounter++) >= file_size ) end_of_file=true;
-            while(num_bytes_read < k) {
+            while (num_bytes_read < k) {
                 *data_string++ = buffer[num_bytes_read];
-                if(num_bytes_read++ == k)return 0;  
+                if (num_bytes_read++ == k)return 0;  
             }
-            if(end_of_file)
+            if (end_of_file)
                 return 0;
         }
         cluster = get_set_next_cluster (cluster, GET, 0);
@@ -413,10 +413,10 @@ unsigned char play_mp3_file(unsigned char *file_name){
 
     file_size = dir->file_size;
     vs1053_skip_play=false;
-    while(1) {
+    while (1) {
         first_sector = get_first_sector (cluster);
 
-        for(j = 0; j < sector_per_cluster; j++) {
+        for (j = 0; j < sector_per_cluster; j++) {
             sd_read_single_block(first_sector + j);
 
             //for all sectors in this cluster, read in their data (512 bytes)
@@ -425,7 +425,7 @@ unsigned char play_mp3_file(unsigned char *file_name){
 
             //After reading each sector in the file --> send them to MP3 decoder in 32 byte segments
             iAudioByteCnt = 0;
-            while(iAudioByteCnt<k) {
+            while (iAudioByteCnt<k) {
                 if (vs1053_skip_play) {
                     vs1053_skip_play = false;
                     vs1053_software_reset();
@@ -436,24 +436,24 @@ unsigned char play_mp3_file(unsigned char *file_name){
                     for (iCntForSingleAudioWrite = 0; iCntForSingleAudioWrite < 32;
                         iCntForSingleAudioWrite++) {
                         vs1053_write_data(buffer[iAudioByteCnt]);
-                        if(iAudioByteCnt++==k)return 0;    
+                        if (iAudioByteCnt++==k)return 0;    
                     }  
                 }
 
                 /*
                 // KORY CHANGED
                 // After playing a 32 bytes of data, check the user inputs
-                if(usart_keypad_data_ready)
+                if (usart_keypad_data_ready)
                 {
                     log_msg("[IO] Keypad interrupt received\n\r");
                     usart_keypad_receive_action();
                 }
-                if(usart_pc_data_ready)
+                if (usart_pc_data_ready)
                 {
                     log_msg("[IO] PC interrupt received\n\r");
                     usart_pc_receive_action();
                 }    
-                if(usart_ui_message_ready) //If a message ready from the user interface, process it
+                if (usart_ui_message_ready) //If a message ready from the user interface, process it
                 {
                     log_msg("[IO] Processing keypad interrupt\n\r");
                     ui_parse_message(playing_sound);
@@ -495,7 +495,7 @@ unsigned char play_mp3_file(unsigned char *file_name){
                 }
             }
 
-            if(end_of_file) { 
+            if (end_of_file) { 
                 playing_sound = false;
                 return 0;
             }
@@ -542,7 +542,7 @@ unsigned char play_beep(){
 
     playing_sound = true;
 
-    while(1) {
+    while (1) {
  
         for (iAudioByteCnt = 0 ; iAudioByteCnt < 216 ; iAudioByteCnt ++ ){
             vs1053_write_data(StringOfData[iAudioByteCnt]);    
@@ -626,8 +626,8 @@ unsigned char read_dict_file()
         //PUT ++++ at end of file to make sure we were at the end.  
         for (j = 0; j < sector_per_cluster; j++) {
             sd_read_single_dict_block(first_sector + j);
-            for(i = 0; i < BUFFER_SIZE; i ++) { //512
-                if(dict_buffer[i] =='+')
+            for (i = 0; i < BUFFER_SIZE; i ++) { //512
+                if (dict_buffer[i] =='+')
                     end_of_file = true;
             }
 
@@ -636,7 +636,7 @@ unsigned char read_dict_file()
             //number of bytes read at each sector
             byte_counter += BUFFER_SIZE;
 
-            if(end_of_file) {
+            if (end_of_file) {
                 done_rd_dict = true;
                 log_msg("read in dictionary");
                 TX_NEWLINE_PC;
@@ -693,7 +693,7 @@ bool bin_srch_dict(unsigned char *word) {
 
 
     //search for the cluster that contains the word
-    while((hi - lo) > 1) {
+    while ((hi - lo) > 1) {
 
         mid = (hi + lo) / 2;
         curr_cluster = dict_clusters[mid];
@@ -706,7 +706,7 @@ bool bin_srch_dict(unsigned char *word) {
         //2nd argument tells whether or last word in cluster crosses into this cluster
         cmp_wrd = check_first_full_word(word, preceeding_word[mid]);
 
-        if(cmp_wrd == 0) {
+        if (cmp_wrd == 0) {
             found = true;
             break;
         }
@@ -730,7 +730,7 @@ bool bin_srch_dict(unsigned char *word) {
             return true;
         log_msg("Done with first.");        
 
-        if(find_word_in_cluster(word, hi))
+        if (find_word_in_cluster(word, hi))
             return true;
 
         log_msg("Done with second."); 
@@ -799,7 +799,7 @@ bool find_word_in_cluster(unsigned char *word, unsigned long arr_cluster_index) 
             // Otherwise, the word is not a possible match. Advance until we can try again.
             else {
                 word_index = 0;
-                while(sector_pointer[sector_index] != '\n' && sector_index < BUFFER_SIZE)
+                while (sector_pointer[sector_index] != '\n' && sector_index < BUFFER_SIZE)
                     sector_index++;
                 sector_index++; // skip the '\n' before a new word
             }
@@ -858,7 +858,7 @@ int check_first_full_word(unsigned char *word, char overlap) {
         int i = 0;
         //find the start of the first word
         while (i < BUFFER_SIZE){
-            if(dict_buffer[i] == '\n') {
+            if (dict_buffer[i] == '\n') {
                 first_word = (unsigned char *)&dict_buffer[i+1];
                 break;
             }
@@ -870,7 +870,7 @@ int check_first_full_word(unsigned char *word, char overlap) {
         first_word = (unsigned char *)&dict_buffer[0];
 
     i = 0;
-    while(1) {
+    while (1) {
         //if word is greater then first word
         if (word[i] > first_word[i])
             return 2;
@@ -915,7 +915,7 @@ unsigned char convert_file_name (unsigned char *file_name)
     unsigned char file_name_fat[FILE_NAME_LEN];
     unsigned char j, k;
 
-    for(j = 0; j < FILE_NAME_LEN; j++) {
+    for (j = 0; j < FILE_NAME_LEN; j++) {
         if (file_name[j] == '.') 
             break;
     }
@@ -930,16 +930,16 @@ unsigned char convert_file_name (unsigned char *file_name)
         return 1;
     }
 
-    for(k = 0; k < j; k++) //setting file name
+    for (k = 0; k < j; k++) //setting file name
         file_name_fat[k] = file_name[k];
 
-    for(; k <= 7; k++) //filling file name trail with blanks
+    for (; k <= 7; k++) //filling file name trail with blanks
         file_name_fat[k] = ' ';
 
     j++;
 
-    for(k = 8; k < FILE_NAME_LEN; k++) { //setting file extention
-        if(file_name[j] != 0)
+    for (k = 8; k < FILE_NAME_LEN; k++) { //setting file extention
+        if (file_name[j] != 0)
             file_name_fat[k] = file_name[j++];
         else { //end filename
             file_name_fat[k] = 0;
@@ -948,7 +948,7 @@ unsigned char convert_file_name (unsigned char *file_name)
     }
 
     for (j = 0; j < FILE_NAME_LEN; j++) { //converting small letters to caps
-        if((file_name_fat[j] >= 0x61) && (file_name_fat[j] <= 0x7a))
+        if ((file_name_fat[j] >= 0x61) && (file_name_fat[j] <= 0x7a))
             file_name_fat[j] -= 0x20;
     }
 
@@ -979,7 +979,7 @@ unsigned char convert_dict_file_name (unsigned char *file_name) {
     unsigned char j, k;
 
     for (j = 0; j < FILE_NAME_LEN; j++) {
-        if(file_name[j] == '.')
+        if (file_name[j] == '.')
             break;
     }
 
@@ -994,15 +994,15 @@ unsigned char convert_dict_file_name (unsigned char *file_name) {
         return 1;
     }
 
-    for(k = 0; k < j; k++) //setting file name
+    for (k = 0; k < j; k++) //setting file name
         file_name_dict_fat[k] = file_name[k];
 
-    for(k = j; k <= 7; k++) //filling file name trail with blanks
+    for (k = j; k <= 7; k++) //filling file name trail with blanks
         file_name_dict_fat[k] = ' ';
 
     j++;
 
-    for(k = 8; k < FILE_NAME_LEN; k++) { //setting file extention
+    for (k = 8; k < FILE_NAME_LEN; k++) { //setting file extention
         if (file_name[j] != 0)
             file_name_dict_fat[k] = file_name[j++];
         else { //filling extension trail with blanks
@@ -1011,8 +1011,8 @@ unsigned char convert_dict_file_name (unsigned char *file_name) {
         }
     }
 
-    for(j = 0; j < FILE_NAME_LEN; j++) { //converting small letters to caps
-        if((file_name_dict_fat[j] >= 0x61) && (file_name_dict_fat[j] <= 0x7a))
+    for (j = 0; j < FILE_NAME_LEN; j++) { //converting small letters to caps
+        if ((file_name_dict_fat[j] >= 0x61) && (file_name_dict_fat[j] <= 0x7a))
             file_name_dict_fat[j] -= 0x20;
     }
 
@@ -1038,16 +1038,16 @@ int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned c
     struct dir_Structure *dir;
     unsigned long cluster, first_sector;
 
-    if(read_file (VERIFY, file_name) == 1) {
+    if (read_file (VERIFY, file_name) == 1) {
         cluster = append_start_cluster;
         first_sector = get_first_sector (cluster);
         start_block = get_first_sector (cluster);
         i = 0;
         j = 0;
         while (*file_content != '$') {      
-            buffer[i++]=*file_content;
+            buffer[i++] = *file_content;
             file_content++;
-            if(i >= 512) {        
+            if (i >= 512) {        
                 i = 0;
                 j++;
                 if (j == sector_per_cluster) {
@@ -1095,7 +1095,7 @@ void write_file (unsigned char *file_name) {
     if (j == 1) {
         append_file = 1;
         cluster = append_start_cluster;
-        cluster_count=0;
+        cluster_count= 0;
         while (1) {
             next_cluster = get_set_next_cluster (cluster, GET, 0);
             if (next_cluster == FAT32_EOF)
@@ -1190,7 +1190,7 @@ void write_file (unsigned char *file_name) {
             file_size--;  //to remove the last entered '~' character
             i--;
             for (; i < 512; i++)  //fill the rest of the buffer with 0x00
-                buffer[i]= 0x00;
+                buffer[i] = 0x00;
             break;
         }
 
@@ -1209,7 +1209,7 @@ void write_file (unsigned char *file_name) {
 
     get_set_free_cluster (NEXT_FREE, SET, cluster); //update FSinfo next free cluster entry
 
-    if(append_file) { //executes this loop if file is to be appended
+    if (append_file) { //executes this loop if file is to be appended
         sd_read_single_block (append_file_sector);    
         dir = (struct dir_Structure *) &buffer[append_file_location];
         extraMemory = file_size - dir->file_size;
@@ -1223,22 +1223,22 @@ void write_file (unsigned char *file_name) {
 
     prev_cluster = root_cluster; // root cluster
 
-    while(1) {
+    while (1) {
         first_sector = get_first_sector (prev_cluster);
 
         for (sector = 0; sector < sector_per_cluster; sector++) {
             sd_read_single_block (first_sector + sector);
 
-            for(i = 0; i < bytes_per_sector; i += 32) {
+            for (i = 0; i < bytes_per_sector; i += 32) {
                 dir = (struct dir_Structure *) &buffer[i];
-                if(file_created_flag){   //to mark last directory entry with 0x00 (empty) mark
+                if (file_created_flag){   //to mark last directory entry with 0x00 (empty) mark
                                         //indicating end of the directory file list
                     dir->name[0] = 0x00;
                     return;
                 }
 
                 // Looking for an empty slot to enter file info
-                if((dir->name[0] == EMPTY) || (dir->name[0] == DELETED)) {
+                if ((dir->name[0] == EMPTY) || (dir->name[0] == DELETED)) {
                     for (j = 0; j < 11; j++)
                         dir->name[j] = file_name[j];
                     dir->attrib = ATTR_ARCHIVE;       //settting file attribute as 'archive'
@@ -1264,10 +1264,10 @@ void write_file (unsigned char *file_name) {
 
         cluster = get_set_next_cluster (prev_cluster, GET, 0);
 
-        if(cluster > 0x0ffffff6) {
+        if (cluster > 0x0ffffff6) {
             // This situation will occur when total files in root is a multiple of 
             // (32 * sector_per_cluster)
-            if(cluster == FAT32_EOF) {  
+            if (cluster == FAT32_EOF) {  
                 // Find next cluster for root directory entries
                 cluster = search_next_free_cluster(prev_cluster);
                 // Link the new cluster of root to the previous cluster
@@ -1301,7 +1301,7 @@ unsigned long search_next_free_cluster (unsigned long start_cluster) {
         sd_read_single_block(sector);
         for (i = 0; i < 128; i++)  {
             value = (unsigned long *) &buffer[i * 4];
-            if(((*value) & 0x0fffffff) == 0)
+            if (((*value) & 0x0fffffff) == 0)
                 return(cluster + i);
         }
     } 
@@ -1340,16 +1340,16 @@ void memory_statistics (void) {
         total_cluster_count = 0;
         cluster = root_cluster;    
 
-        while(1) {
+        while (1) {
             sector = unused_sectors + reserved_sector_count 
                 + ((cluster * 4) / bytes_per_sector) ;
             sd_read_single_block(sector);
 
             for (i = 0; i < 128; i++) {
                 value = (unsigned long *) &buffer[i*4];
-                if(((*value) & 0x0fffffff) == 0) free_clusters++;
+                if (((*value) & 0x0fffffff) == 0) free_clusters++;
                 total_cluster_count++;
-                if(total_cluster_count == (total_clusters + 2)) break;
+                if (total_cluster_count == (total_clusters + 2)) break;
             }  
 
             if (i < 128)
@@ -1385,7 +1385,7 @@ void display_memory (unsigned char flag, unsigned long memory) {
     unsigned char i;
 
     for (i = 12; i > 0; i--) { //converting free_memory into ASCII string
-        if(i == 5 || i == 9) {
+        if (i == 5 || i == 9) {
             memory_string[i - 1] = ',';  
             i--;
         }
@@ -1430,12 +1430,12 @@ void delete_file (unsigned char *file_name)
 void free_memory_update (unsigned char flag, unsigned long size) {
     unsigned long free_clusters;
     //convert file size into number of clusters occupied
-    if((size % 512) == 0) size = size / 512;
+    if ((size % 512) == 0) size = size / 512;
     else size = (size / 512) +1;
-    if((size % 8) == 0) size = size / 8;
+    if ((size % 8) == 0) size = size / 8;
     else size = (size / 8) +1;
 
-    if(free_cluster_count_updated) {
+    if (free_cluster_count_updated) {
         free_clusters = get_set_free_cluster (TOTAL_FREE, GET, 0);
         if (flag == ADD)
             free_clusters = free_clusters + size;
@@ -1459,7 +1459,7 @@ void init_sd_card(bool verbose) {
     card_type = 0;
     error = sd_init(); // try to initialize sd card
 
-    if(verbose) {
+    if (verbose) {
         init = vs1053_initialize();
 
         if (init == 0) {
@@ -1482,7 +1482,7 @@ void init_sd_card(bool verbose) {
             if (error == 2) 
                 usart_transmit_string_to_pc_from_flash(PSTR("Card Initialization failed.."));
 
-            while(1);  //wait here forever if error in SD init   
+            while (1);  //wait here forever if error in SD init   
         }
 
         switch (card_type) {
@@ -1523,7 +1523,7 @@ void init_sd_card(bool verbose) {
     }
     else {
         if (error)
-            while(1);  //wait here forever if error in SD init   
+            while (1);  //wait here forever if error in SD init   
         _delay_ms(1);   //some delay
 
         //read boot sector and keep necessary data in global variables

@@ -4,7 +4,7 @@
  * @author Poornima Kaniarasu (pkaniara)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "Modes.h"
 #include "audio.h"
 #include "datastructures.h"
@@ -25,9 +25,9 @@ const char* noise_sounds[MAX_INDEX + 1] = {"AER", "RAI", "BEL", "DOO", "HOR", "A
     "TRU", "TRA", "SIR", "PHO", "CLO", NULL};
 
 void md11_reset(void) {
-	sound_game_reset(SCRIPT_ADDRESS, NULL, NULL, noise_list, noise_sounds);
+    sound_game_reset(SCRIPT_ADDRESS, NULL, NULL, noise_list, noise_sounds);
 }
 
 void md11_main(void) {
-	sound_game_main(SCRIPT_ADDRESS, NULL, NULL);
+    sound_game_main(SCRIPT_ADDRESS, NULL, NULL);
 }

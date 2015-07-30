@@ -10,7 +10,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 
 /**
  * @brief Initilizes variables for SPI
@@ -20,7 +20,7 @@ void spi_initialize(void) {
     DDRB |= _BV(SD_SELECT) | _BV(MP3_DATA) | _BV(MP3_CMD) | _BV(MP3_RESET);
     DDRB &= ~_BV(MP3_DREQ);
     DDRB = 0xB7;
-    SPCR = 0x50; //SPE=1, MSTR=1, SPR1=0, SPR0=0 (Fosc/4)
+    SPCR = 0x50; //SPE =1, MSTR =1, SPR1 = 0, SPR0 = 0 (Fosc/4)
     spi_1x();
 }
 
@@ -87,7 +87,7 @@ unsigned char spi_transmit(unsigned char data) {
     SPDR = data;
 
     // Wait for transmission complete
-    while(!(SPSR & (1 << SPIF)));
+    while (!(SPSR & (1 << SPIF)));
     data = SPDR;
     return data;
 }
@@ -101,7 +101,7 @@ unsigned char spi_receive(void) {
 
     // Wait for reception complete
     SPDR = 0xff;
-    while(!(SPSR & (1 << SPIF)));
+    while (!(SPSR & (1 << SPIF)));
     data = SPDR;
 
     // Return data register

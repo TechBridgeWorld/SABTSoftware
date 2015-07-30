@@ -7,7 +7,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 
 //******************************************************************
 //Function  : to initialize the SD/SDHC card in SPI mode
@@ -55,7 +55,7 @@ unsigned char sd_init(void) {
             break;
         }
     }
-    while(response != 0x01);
+    while (response != 0x01);
 
     retry = 0;
 
@@ -65,10 +65,10 @@ unsigned char sd_init(void) {
         response = sd_send_command(SD_SEND_OP_COND,0x40000000); // ACMD41
         
         retry++;
-        if(retry > 0xfe)
+        if (retry > 0xfe)
             return 2;  //time out, card initialization failed
     }
-    while(response != 0x00);
+    while (response != 0x00);
 
 
     retry = 0;
@@ -109,7 +109,7 @@ unsigned char sd_send_command(unsigned char cmd, unsigned long arg) {
     // multipying it with 512. which is equivalent to shifting it left 9 times
     // following 'if' loop does that
 
-    if(sdhc_flag == 0)    
+    if (sdhc_flag == 0)    
         if (cmd == READ_SINGLE_BLOCK     ||
             cmd == READ_MULTIPLE_BLOCKS  ||
             cmd == WRITE_SINGLE_BLOCK    ||
@@ -127,7 +127,7 @@ unsigned char sd_send_command(unsigned char cmd, unsigned long arg) {
     spi_transmit(arg >> 8);
     spi_transmit(arg);
 
-    // It is compulsory to send correct CRC for CMD8 (CRC=0x87) & CMD0 (CRC=0x95)
+    // It is compulsory to send correct CRC for CMD8 (CRC = 0x87) & CMD0 (CRC = 0x95)
     if (cmd == SEND_IF_COND)
         spi_transmit(0x87);    // for remaining commands, CRC is ignored in SPI mode
     else 
@@ -199,7 +199,7 @@ unsigned char sd_read_single_block(unsigned long start_block) {
 
     retry = 0;
     while (spi_receive() != 0xfe) //wait for start block token 0xfe (0x11111110)
-        if(retry++ > 0xfffe) {
+        if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
         } //return if time-out
@@ -236,12 +236,12 @@ unsigned char sd_read_single_dict_block(unsigned long start_block) {
 
     retry = 0;
     while (spi_receive() != 0xfe) //wait for start block token 0xfe (0x11111110)
-        if(retry++ > 0xfffe) {
+        if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
         } //return if time-out
 
-    for(i = 0; i < 512; i++) //read 512 bytes
+    for (i = 0; i < 512; i++) //read 512 bytes
         dict_buffer[i] = spi_receive();
 
     spi_receive(); //receive incoming CRC (16-bit), CRC is ignored here
@@ -286,7 +286,7 @@ unsigned char sd_write_single_block(unsigned long start_block) {
         return response;                //AAA='110'-data rejected due to write error
     }
 
-    while(!spi_receive()) {  //wait for SD card to complete writing and get idle
+    while (!spi_receive()) {  //wait for SD card to complete writing and get idle
         if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
@@ -297,7 +297,7 @@ unsigned char sd_write_single_block(unsigned long start_block) {
     spi_transmit(0xff);   // just spend 8 clock cycle delay before reasserting the CS line
     SD_CS_ASSERT;         // re-asserting the CS line to verify if card is still busy
 
-    while(!spi_receive()) { // wait for SD card to complete writing and get idle
+    while (!spi_receive()) { // wait for SD card to complete writing and get idle
         if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
@@ -329,7 +329,7 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
 
     SD_CS_ASSERT;
 
-    while(total_blocks) {
+    while (total_blocks) {
         retry = 0;
         while (spi_receive() != 0xfe) //wait for start block token 0xfe (0x11111110)
             if (retry++ > 0xfffe) {
@@ -346,7 +346,7 @@ unsigned char sd_read_multiple_blocks (unsigned long start_block,
         spi_receive(); //extra 8 cycles
 
         for (i = 0; i < 512; i++) { //send the block to UART
-            if(buffer[i] == '~') break;
+            if (buffer[i] == '~') break;
             transmit_byte(buffer[i]);
         }
 
@@ -377,12 +377,12 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
 
     SD_CS_ASSERT;
 
-    while(block_counter < total_blocks) {
+    while (block_counter < total_blocks) {
         i = 0;
         do {
             data = receive_byte();
             if (data == 0x08) { //'Back Space' key pressed
-                if(i != 0) {
+                if (i != 0) {
                     transmit_byte(data);
                     transmit_byte(' '); 
                     transmit_byte(data); 
@@ -416,8 +416,8 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
             return response;                // AAA='110'-data rejected due to write error
         }
 
-        while(!spi_receive())     //wait for SD card to complete writing and get idle
-            if(retry++ > 0xfffe) {
+        while (!spi_receive())     //wait for SD card to complete writing and get idle
+            if (retry++ > 0xfffe) {
                 SD_CS_DEASSERT; 
                 return 1;
             }
@@ -429,8 +429,8 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
     spi_transmit(0xfd); //send 'stop transmission token'
     retry = 0;
 
-    while(!spi_receive()) //wait for SD card to complete writing and get idle
-        if(retry++ > 0xfffe) {
+    while (!spi_receive()) //wait for SD card to complete writing and get idle
+        if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
         }
@@ -441,8 +441,8 @@ unsigned char sd_write_multiple_blocks(unsigned long start_block,
     // re assertion of the CS signal is required to verify if card is still busy
     SD_CS_ASSERT; 
 
-    while(!spi_receive()) //wait for SD card to complete writing and get idle
-        if(retry++ > 0xfffe) {
+    while (!spi_receive()) //wait for SD card to complete writing and get idle
+        if (retry++ > 0xfffe) {
             SD_CS_DEASSERT; 
             return 1;
         }

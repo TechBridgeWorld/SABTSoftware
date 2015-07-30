@@ -6,7 +6,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "audio.h"
 
 // The volume is controlled by 2 bytes - the MSB controls the left
@@ -23,7 +23,6 @@
 
 static uint8_t mono_volume;
 static uint16_t stereo_volume;
-static char debug[32];
 
 // TODO find more descriptive variable names
 volatile unsigned int temp1 = 0;
@@ -53,7 +52,7 @@ unsigned char vs1053_initialize(void)
     _delay_ms(20);                  // Hold for 20ms
     retry = 0;
 
-    while(vs1053_read_command(0x03) != 0x9800) { //REDO if not written properly  
+    while (vs1053_read_command(0x03) != 0x9800) { //REDO if not written properly  
         // Set PLL register to 3.5 (preferred for normal operation)
         vs1053_write_command(0x03,0x9800);
 
@@ -76,14 +75,14 @@ unsigned char vs1053_initialize(void)
 
     mono_volume = VOL_INIT;
     stereo_volume = CHANGE_VOLUME(VOL_INIT);
-    while(vs1053_read_command(0x0b) != stereo_volume) { // REDO if not written properly
+    while (vs1053_read_command(0x0b) != stereo_volume) { // REDO if not written properly
         vs1053_write_command(0x0b, stereo_volume);       // Set volume to a midrange value
         if (retry++ > 10)
             return 3;               // try this for 10 times
     }
 
     retry = 0;
-    while(vs1053_read_command(0x00) != 0x0800) { // REDO if not written properly
+    while (vs1053_read_command(0x00) != 0x0800) { // REDO if not written properly
         vs1053_write_command(0x00, 0x0800);       // Set mode reg to SDINEW mode and MICIN
         if (retry++ > 10 )
             return 4;               // try this for 10 times
@@ -122,7 +121,7 @@ bool vs1053_increase_vol(void) {
     
     stereo_volume = CHANGE_VOLUME(mono_volume);
     // Actually increase the volume
-    while(vs1053_read_command(0x0B) != stereo_volume) {  // REDO if not written properly
+    while (vs1053_read_command(0x0B) != stereo_volume) {  // REDO if not written properly
         vs1053_write_command(0x0B, stereo_volume);        // Set the requested volume
         if (retry++ > 10)
             return false;
@@ -159,7 +158,7 @@ bool vs1053_decrease_vol(void) {
     stereo_volume = CHANGE_VOLUME(mono_volume);
     
     // Actually decrease the volume
-    while(vs1053_read_command(0x0B) != stereo_volume) {   // REDO if not written properly
+    while (vs1053_read_command(0x0B) != stereo_volume) {   // REDO if not written properly
         vs1053_write_command(0x0B, stereo_volume);        // Set the requested volume
         if (retry++ > 10)
             return false;

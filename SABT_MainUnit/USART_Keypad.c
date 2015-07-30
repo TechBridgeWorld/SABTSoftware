@@ -6,7 +6,7 @@
  * @author Nick LaGrow (nlagrow)
  */
 
-#include "Globals.h"
+#include "globals.h"
 
 bool usart_ui_header_received, usart_ui_length_received;
 unsigned char usart_ui_prefix[3];
@@ -45,12 +45,12 @@ void usart_keypad_receive_action(void) {
     usart_keypad_data_ready = false;
 
     // If no header has been found, build it
-    if(!usart_ui_header_received) {
+    if (!usart_ui_header_received) {
         usart_ui_prefix[2] = usart_keypad_received_data;
         usart_ui_prefix[0] = usart_ui_prefix[1];
         usart_ui_prefix[1] = usart_ui_prefix[2];
 
-        if((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I')) {
+        if ((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I')) {
             usart_ui_header_received = true;
             usart_ui_received_packet[0] = usart_ui_prefix[0];
             usart_ui_received_packet[1] = usart_ui_prefix[1];
@@ -59,8 +59,8 @@ void usart_keypad_receive_action(void) {
         }
     }
     // Get the length of the payload
-    else if(!usart_ui_length_received) {
-        if(usart_ui_receive_msgcnt == 2) {
+    else if (!usart_ui_length_received) {
+        if (usart_ui_receive_msgcnt == 2) {
             usart_ui_received_payload_len = usart_keypad_received_data;
             usart_ui_received_packet[2] = usart_keypad_received_data;
             usart_ui_length_received = true;
@@ -81,7 +81,7 @@ void usart_keypad_receive_action(void) {
         }
 
         // Full message has been received
-        if(usart_ui_receive_msgcnt == usart_ui_received_payload_len) {
+        if (usart_ui_receive_msgcnt == usart_ui_received_payload_len) {
             usart_ui_message_ready = true;
             usart_ui_header_received = false;
             usart_ui_length_received = false;

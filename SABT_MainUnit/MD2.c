@@ -15,9 +15,9 @@
 #define SCRIPT_ADDRESS &script_english
 
 void md2_reset(void) {
-	learn_letter_reset(&script_english, NULL, NULL);
+    learn_letter_reset(&script_english, NULL, NULL);
 }
 
 void md2_main(void) {
-	learn_letter_main(&script_english, NULL, NULL);
+    learn_letter_main(&script_english, NULL, NULL);
 }

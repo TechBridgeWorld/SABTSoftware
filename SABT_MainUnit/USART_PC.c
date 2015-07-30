@@ -6,7 +6,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "io.h"
 
 bool usart_pc_header_received, usart_pc_length_received;

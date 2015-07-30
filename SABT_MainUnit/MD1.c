@@ -6,14 +6,14 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "MD1.h"
 #include "audio.h"
 #include "script_common.h"
 #include "script_english.h"
 #include "common.h"
 
-static char last_dot;                   // char representing last big dot pressed
+static char last_dot;     // char representing last big dot pressed
 char used_number[6] = {0, 0, 0, 0, 0, 0};
 
 /**
@@ -23,39 +23,38 @@ char used_number[6] = {0, 0, 0, 0, 0, 0};
  * @return char - charachter representation of a number from 1 - 6
  */
 char random_number_as_char() {  // @todo use library for this
-  int num = TCNT1;
-  int i;
+    int num = TCNT1;
+    int i;
 
-  num *= PRIME;
-  num = (abs(num) % 6);
-
-  //while you are looking at a full section of the array
-  while(used_number[num])
-  {
-    num = TCNT1;
     num *= PRIME;
     num = (abs(num) % 6);
-  }
 
-  used_number[num] = 1;
-  used_num_cnt ++;
+    //while you are looking at a full section of the array
+    while (used_number[num]) {
+        num = TCNT1;
+        num *= PRIME;
+        num = (abs(num) % 6);
+    }
 
-  //if you find that you have used all of the letters, clear both the array and the count
-  if(used_num_cnt == NUM_DOTS)
-  {
-    for(i = 0; i < NUM_DOTS; i ++)
-      used_number[i] = 0;
-    used_num_cnt = 0;
-  }
+    used_number[num] = 1;
+    used_num_cnt ++;
 
-  //change from range 0-5 to 1-6
-  num += 1;
+    //if you find that you have used all of the letters, clear both the array and the count
+    if (used_num_cnt == NUM_DOTS) {
+        for (i = 0; i < NUM_DOTS; i ++)
+            used_number[i] = 0;
+        used_num_cnt = 0;
+    }
 
-  // Return the number as a character
-  if (num >= 1 && num <= 6) return '0' + num;
+    //change from range 0-5 to 1-6
+    num += 1;
 
-  // Default behavior, could not generate a valid char
-  return '0';
+    // Return the number as a character
+    if (num >= 1 && num <= 6)
+        return '0' + num;
+
+    // Default behavior, could not generate a valid char
+    return '0';
 }
 
 /**
@@ -64,7 +63,7 @@ char random_number_as_char() {  // @todo use library for this
  * @return Void
  */
 void md1_reset(void) {
-  current_state = STATE_INITIAL;
+    current_state = STATE_INITIAL;
 }
 
 /**
@@ -75,59 +74,54 @@ void md1_reset(void) {
  */
 void md1_main(void)
 {
-  switch(current_state)
-  {
-    case STATE_INITIAL:
-      used_num_cnt = 0;
-      // Play the introductory message for Mode 1
-      play_welcome();
-      current_state = STATE_REQUEST_INPUT1;
-      break;
+    switch(current_state) {
+        case STATE_INITIAL:
+            used_num_cnt = 0;
+            play_welcome();
+            current_state = STATE_REQUEST_INPUT1;
+            break;
 
-    case STATE_REQUEST_INPUT1:
-      play_direction(MP3_FIND_DOT);
-      expected_dot = random_number_as_char();
-      current_state = STATE_REQUEST_INPUT2;
-      break;
+        case STATE_REQUEST_INPUT1:
+            play_direction(MP3_FIND_DOT);
+            expected_dot = random_number_as_char();
+            current_state = STATE_REQUEST_INPUT2;
+            break;
 
-    case STATE_REQUEST_INPUT2:
-      // Generate a random char from '1' to '6'
-      play_dot(expected_dot);
-      current_state = STATE_WAIT_INPUT;
-      break;
-    case STATE_WAIT_INPUT:
-      if(last_dot != 0)
-        current_state = STATE_PROC_INPUT;
-      break;
-    case STATE_PROC_INPUT:
-      if(last_dot != expected_dot)
-      {
-        play_feedback(MP3_INCORRECT);
-        play_dot(expected_dot);
-        last_dot = 0;
-        current_state = STATE_WAIT_INPUT;
-      }
-      else
-      {
-        play_feedback(MP3_CORRECT);
-        play_tada();
-        last_dot = 0;
-        current_state = STATE_REQUEST_INPUT1;
-      }
-      break;
-    default:
-      break;
-  }
+        case STATE_REQUEST_INPUT2:
+            // Generate a random char from '1' to '6'
+            play_dot(expected_dot);
+            current_state = STATE_WAIT_INPUT;
+            break;
+        case STATE_WAIT_INPUT:
+            if (last_dot != 0)
+                current_state = STATE_PROC_INPUT;
+            break;
+        case STATE_PROC_INPUT:
+            if (last_dot != expected_dot) {
+                play_feedback(MP3_INCORRECT);
+                play_dot(expected_dot);
+                last_dot = 0;
+                current_state = STATE_WAIT_INPUT;
+            }
+            else {
+                play_feedback(MP3_CORRECT);
+                play_tada();
+                last_dot = 0;
+                current_state = STATE_REQUEST_INPUT1;
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 /**
  * @brief in mode 1, enter button just replays the current prompt
  * @return Void
  */
-void md1_call_mode_yes_answer(void)
-{
-  play_direction(MP3_FIND_DOT);
-  current_state = STATE_REQUEST_INPUT2;
+void md1_call_mode_yes_answer(void) {
+    play_direction(MP3_FIND_DOT);
+    current_state = STATE_REQUEST_INPUT2;
 }
 
 void md1_call_mode_no_answer(void) {}
@@ -138,10 +132,9 @@ void md1_call_mode_no_answer(void) {}
  * @param this_dot the dot being input
  * @return Void
  */
-void md1_input_dot(char this_dot)
-{
-  last_dot = this_dot;
-  current_state = STATE_PROC_INPUT;
+void md1_input_dot(char this_dot) {
+    last_dot = this_dot;
+    current_state = STATE_PROC_INPUT;
 }
 
 /**
