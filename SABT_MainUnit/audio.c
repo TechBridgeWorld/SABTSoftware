@@ -49,22 +49,21 @@ char* mode_fileset = NULL;
  */
 
 bool play_mp3(char* fileset, char* mp3) {
-
     if (mp3 == NULL) {
-        log_msg("[Audio] Error: Cannot play NULL MP3\n\r");
+        log_msg("[Audio] Error: Cannot play NULL MP3");
         return false;
     }
 
     //Return false if playlist is full
     if (playlist_size == MAX_PLAYLIST_SIZE) {
-        log_msg("[Audio] Playlist full\n\r");
+        log_msg("[Audio] Playlist full");
         return false;
     }
     
     playlist_size++;
 
     //Truncate to 8 chars if the string is longer than that
-    if (strlen(mp3)>8)
+    if (strlen(mp3) > 8)
         mp3[8] = '\0';
 
     // add file to playlist
@@ -122,7 +121,6 @@ void clear_playlist(void) {
  * @return void
  */
 void play_next_mp3(void) {
-    
     //Only called when the playlist is not empty
     if (playlist_empty == true) {
         log_msg("[Audio] Error: Playlist empty");
@@ -130,9 +128,7 @@ void play_next_mp3(void) {
     }
 
     log_msg("[Audio] Playing: %s", playlist[playlist_index]);
-
     play_mp3_file((unsigned char*)playlist[playlist_index]);
-
     playlist_index++;
 
     //If playlist is now empty, reset variables 
@@ -200,7 +196,7 @@ void play_word(word_node_t *this_word) {
  */
 void play_pattern(unsigned char pattern) {
     if (pattern == 0) {
-        play_mp3(get_lang_prefix(), MP3_BLANK);
+        play_mp3(get_lang_prefix(), MP3_BLANK); // won't work for Hindi?
         return;
     }
     char dot[2];
@@ -220,6 +216,7 @@ void play_dot_sequence(glyph_t *this_glyph) {
     if (this_glyph != NULL) {
         pattern = this_glyph->pattern;
         play_pattern(pattern);
+
         // for multi-cell letters
         if (this_glyph->next != NULL) {
             // Plays all the next glyphs in the linked list
@@ -240,12 +237,10 @@ void play_dot_sequence(glyph_t *this_glyph) {
     @return void
 */
 void play_number(long number) {
-    
     int curr_digit = -1;
     int digits = -1;
     char mp3[5] = "";
     bool played_and = false;
-    //char dbgbuf[20] = "";
 
 
     // If number is just 0, play #0 and return
@@ -262,16 +257,15 @@ void play_number(long number) {
 
     // Count number of digits
     digits = get_num_of_digits(number);
-    
-//    log_msg("[Play_number]number:#%ld digits:%d\r\n", number, digits);
-    
+        
     while (number != 0) {
         // Extract current digit and adjust number
         curr_digit = number / ten_to_the(digits - 1);
-        //log_msg("[Play_number]curr digit:%d\r\n", curr_digit);
+
         if (curr_digit != 0) {
             sprintf(mp3, "#%d", curr_digit);
             played_and = false;
+
             switch (digits) {
                 case PLACE_ONES:
                     play_mp3(get_lang_prefix(), mp3);
@@ -294,24 +288,22 @@ void play_number(long number) {
                 case PLACE_HUNDREDS:
                     play_mp3(get_lang_prefix(), mp3);
                     play_mp3(get_lang_prefix(), MP3_HUNDRED);
-                    //log_msg("[Play_number]%d hundred played\r\n", curr_digit);
                     break;
                 
                 case PLACE_THOUSANDS:
                     play_mp3(get_lang_prefix(),mp3);
                     play_mp3(get_lang_prefix(), MP3_THOUSAND);
-                    //log_msg("[Play_number]%d thousand played\r\n", curr_digit);
                     break;
                     
                 case PLACE_TEN_THOUSANDS:
-                    if (curr_digit == 1) {
-                        // Play teen and return immediately
+                    if (curr_digit == 1) {  // Play teen and return immediately
                         curr_digit = number / ten_to_the(digits - 2);
                         number -= curr_digit * ten_to_the(digits - 2);
                         digits -= 2;
                         sprintf(mp3, "#%d", curr_digit);
                         play_mp3(get_lang_prefix(), mp3);
-                    } else {
+                    }
+                    else {
                         // Is a multiple of ten
                         sprintf(mp3, "#%d0", curr_digit);
                         play_mp3(get_lang_prefix(), mp3);
@@ -328,7 +320,8 @@ void play_number(long number) {
                     log_msg("[Audio] Error: Number greater than 5 digits");
                     quit_mode();
             }
-        } else {
+        }
+        else {
             if (!played_and) {
                 play_mp3(MP3_WELCOME, MP3_AND);
                 played_and = true;
@@ -360,14 +353,19 @@ void play_string(char* word, int word_len){
         if (word[i] != '\0') {
             char buf[10];
             sprintf(buf, "%c", word[i]);
-            //log_msg(buf);
             play_mp3(MP3_ENGLISH, buf);
-        } else{
-            play_mp3(MP3_ENGLISH, MP3_BLANK);
         }
+        else
+            play_mp3(MP3_ENGLISH, MP3_BLANK);
     }
 }
 
+/*
+* @brief Higher-level functions for modes to call to
+* play different kinds of audio files to users.
+*/
+
+// Plays the mode's welcome mp3 (m#_welc.mp3)
 void play_welcome() {
     log_msg("Welcome to mode %d", ui_current_mode_number);
     char md[5];
@@ -375,6 +373,7 @@ void play_welcome() {
     play_mp3(md, MP3_WELCOME);
 }
 
+// Plays the mode's submode choice mp3 (m#_subm.mp3)
 void play_submode_choice() {
     log_msg("Playing submode choice.");
     char md[5];
@@ -382,25 +381,29 @@ void play_submode_choice() {
     play_mp3(md, MP3_SUBMODE);
 }
 
+// Plays the requested directions (d_<dir>.mp3)
 void play_direction(char* dir) {
     play_mp3(MP3_DIRECTIONS, dir);
 }
 
+// Plays the requested feedback (f_<dir>.mp3)
 void play_feedback(char* dir) {
     play_mp3(MP3_FEEDBACK, dir);
 }
 
-
+// Plays the tada noise (s_tada.mp3)
 void play_tada() {
     play_mp3(MP3_SYSTEM, MP3_TADA);
 }
 
+// Plays the requested system audio (s_<dir>.mp3)
 void play_system_audio(char* dir) {
     play_mp3(MP3_SYSTEM, dir);
 }
 
+// Plays mode-specific audio (m#_<dir>.mp3)
 void play_mode_audio(char* dir) {
     char md[5];
-    sprintf(md, "m%d_", ui_current_mode_number); // index or number??
+    sprintf(md, "m%d_", ui_current_mode_number);
     play_mp3(md, dir);
 }

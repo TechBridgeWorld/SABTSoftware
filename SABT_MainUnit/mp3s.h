@@ -6,7 +6,6 @@
 #define MP3_HINDI      "h_"
 #define MP3_KANNADA    "k_"
 
-
 // these exist in both e_ (used by English & Hindi modes) and k_ (used by Kannada)
 #define MP3_DOT_1 "dot_1"
 #define MP3_DOT_2 "dot_2"
@@ -129,7 +128,7 @@
 #define MP3_NEXT_PATTERN_K  "nextpt"    // Next pattern.
 
 // math instructions
-#define MP3_PLEASE_ENTER_NUM_BETWEEN    "BETW"    // Please enter a number between:
+#define MP3_PLEASE_ENTER_NUM_BETWEEN    "BETW"    // Please enter a number between: -- doesn't exist?
 #define MP3_ENTER_NUM_BETWEEN   "entnum"    // Enter the number between:
 #define MP3_ENTER_NUMS_BETWEEN  "entnms"    // Enter the numbers between:
 #define MP3_ENTER_EVENS_BTWN    "evens"    // Enter the even numbers between:
@@ -169,8 +168,8 @@
 #define MP3_NO              "no"        // No.
 #define MP3_TRY_AGAIN       "tryagn"    // Try again.
 #define MP3_TRY_AGAIN_K     "tryagk"    // Try again. [Kannada]
-#define MP3_INCORRECT       "incorrc"   // Incorrect answer.
-#define MP3_INCORRECT_K     "incorrK"   // Incorrect answer -- KANNADA
+#define MP3_INCORRECT       "incorr"   // Incorrect answer.
+#define MP3_INCORRECT_K     "incorK"   // Incorrect answer -- KANNADA
 #define MP3_WORD_YOU_MISSED "wrdmis"    // The word you missed was:
 #define MP3_YOU_MISSED      "umissd"    // You missed:
 
@@ -190,7 +189,7 @@
 // Housekeeping
 #define MP3_HELP_MENU       "helpm"     // Help menu.
 #define MP3_EXIT_HELP_MENU  "helpx"     // Exit help menu.
-#define MP3_RET_TO_QUESTION "retques"   // Returning to the question now.
+#define MP3_RET_TO_QUESTION "retque"   // Returning to the question now.
 
 
 // Update on your word and stats/mistakes so far
@@ -198,7 +197,7 @@
 #define MP3_YOUR_WORD_IS        "yorwrd"    // Your word is:
 #define MP3_YOUR_WORD_IS_NOW    "wrdnow"    // Your word is now:
 #define MP3_THE_ANSWER_IS       "answer"    // The answer is:
-#define MP3_YOU_HAVE_SPELLED    "uhvspll"   // You have spelled:
+#define MP3_YOU_HAVE_SPELLED    "uhvspl"   // You have spelled:
 #define MP3_WORD                "word"      // word.
 #define MP3_WORDS               "words"     // words.
 #define MP3_WORD_AND_HAVE_MADE  "wrdand"    // word and have made

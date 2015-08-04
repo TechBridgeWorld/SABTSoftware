@@ -33,9 +33,8 @@ void play_welcome();
 void play_submode_choice();
 void play_direction(char* dir);
 void play_feedback(char* dir);
-void play_mode_audio(char* dir);
 void play_tada();
 void play_system_audio(char* dir);
-
+void play_mode_audio(char* dir);
 
 #endif /* _AUDIO_H_ */

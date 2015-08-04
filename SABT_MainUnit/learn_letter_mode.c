@@ -63,9 +63,8 @@ static int incorrect_tries = 0;
 static lang_type language;
 
 void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
-    set_mode_globals(new_script, new_lang_fileset, new_mode_fileset);
-    strcpy(mode_name,new_mode_fileset);
-    strtok(mode_name, "_");
+    set_mode_globals(new_script, NULL, NULL);
+    strcpy(mode_name, new_mode_fileset);
     next_state = STATE_MENU;
     user_response = NO_DOTS;
     submode = SUBMODE_NULL; 

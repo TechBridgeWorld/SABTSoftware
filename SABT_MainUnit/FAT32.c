@@ -926,7 +926,7 @@ unsigned char convert_file_name (unsigned char *file_name)
 
     // 1 = BAD_EXTENSION
     if (j > 8) {
-        log_msg("Invalid file name: $s", file_name);
+        log_msg("Invalid file name: %s", file_name);
         return 1;
     }
 
