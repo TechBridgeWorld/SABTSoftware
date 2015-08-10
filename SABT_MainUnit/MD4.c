@@ -13,35 +13,16 @@
 #include "dictionary.h"
 #include "mp3s.h"
 
-#define STATE_NULL 0x00
-#define STATE_INTRO 0x01
-#define STATE_LVLSEL 0x02
-#define STATE_GENQUES 0x03
-#define STATE_PROMPT 0x04
-#define STATE_INPUT 0x05
-#define STATE_CHECKANS 0x06
-#define STATE_REPROMPT 0x07
-#define STATE_SUMMARY 0x08
-
-
-//bounds
-#define MAX_INCORRECT_GUESS 8
-#define MAX_WORD_LEN 20
-
 
 // Used to set global fileset variables
 // State variables
-static char md_next_state = STATE_NULL;
-static char md_last_dot = NO_DOTS;
 static bool md_input_ready = false;
 static bool md_input_valid = false;
-static bool md_incorrect_tries = 0;
 
 //Globals
 static char input_word[MAX_WORD_LEN];
 static char *chosen_word;
 static char mistake_pool[26] = "";
-static int num_mistakes;
 
 static char *dictionary[11] = {"rock", "tree", "sky", "apple", "car", "dog",
     "cat", "water", "floor", "leaf", "road"};
@@ -136,8 +117,8 @@ bool is_past_mistake(char entered_letter) {
 
 void md4_play_mistake() {
     play_feedback(MP3_YOU_HAVE);
-    play_number(MAX_INCORRECT_GUESS - num_mistakes);
-    if (MAX_INCORRECT_GUESS - num_mistakes == 1)
+    play_number(max_mistakes - mistakes);
+    if (max_mistakes - mistakes == 1)
         play_feedback(MP3_MISTAKE_REMAINING);
     else
         play_feedback(MP3_MISTAKES_REMAINING);
@@ -147,58 +128,60 @@ void md4_play_mistake() {
 
 void md4_reset(void) {
     log_msg("*** MD4 - one player hangman ***");
-    
-    // Global variables
     set_mode_globals(&script_english, NULL, NULL);
-    
-    // State variables
-    md_next_state = STATE_INTRO;
-    md_last_dot = NO_DOTS;
+    reset_globals();
+    reset_stats();
     md_input_ready = false;
     md_input_valid = false;
-    md_incorrect_tries = 0;
+    max_mistakes = 8;
+
 }
 
 void md4_main(void) {   
-    switch (md_next_state) {
-        case STATE_INTRO:
+    switch (next_state) {
+        case STATE_INITIAL:
             shuffle(dict.num_words, dict.index_array);
             dict.index = 0;
             play_welcome();
-            md_next_state = STATE_GENQUES;
+            next_state = STATE_GENERATE_QUESTION;
             break;
             
-        case STATE_GENQUES:
+        case STATE_GENERATE_QUESTION:
             choose_next_word();
-            log_msg("word:%s", chosen_word);
-            md_next_state = STATE_LVLSEL;
-            break;
-            
-        case STATE_LVLSEL:
-            num_mistakes = 0;
-            init_char_arr(mistake_pool, MAX_INCORRECT_GUESS);
+            log_msg("Next word: %s", chosen_word);
+            mistakes = 0;
+            init_char_arr(mistake_pool, max_mistakes);
             init_char_arr(input_word, MAX_WORD_LEN);
             play_direction(MP3_CHOOSE_NUM_OF_HINTS);
             play_mode_audio(MP3_SUBMODE);
-            md_last_dot = create_dialog(NULL,
+
+            next_state = STATE_CHOOSE_LEVEL;
+            break;
+            
+        case STATE_CHOOSE_LEVEL:
+            last_dot = create_dialog(NULL,
                                         DOT_1 | DOT_2 | DOT_3 | ENTER_CANCEL);
-            switch (md_last_dot) {
-                    case NO_DOTS:
-                        break;
+            switch (last_dot) {
                     case '1':
                         place_hint(1);
-                        md_next_state = STATE_PROMPT;
+                        next_state = STATE_PROMPT;
                         break;
                     case '2':
                         place_hint(2);
-                        md_next_state = STATE_PROMPT;
+                        next_state = STATE_PROMPT;
                         break;
                     case '3':
                         place_hint(3);
-                        md_next_state = STATE_PROMPT;
+                        next_state = STATE_PROMPT;
+                        break;
+                    case CANCEL:
+                        log_msg("Quitting to main menu.");                    
+                        quit_mode();
                         break;
                     case ENTER:
-                        md_next_state = STATE_PROMPT;
+                        next_state = STATE_PROMPT;
+                        break;
+                    default:
                         break;
             }
             
@@ -208,28 +191,28 @@ void md4_main(void) {
             play_feedback(MP3_SPELLING_SO_FAR);
             play_string(input_word, strlen(chosen_word));
             play_direction(MP3_GUESS_A_LETTER);
-            md_next_state = STATE_INPUT;
+            next_state = STATE_GET_INPUT;
             break;
             
-        case STATE_INPUT:
+        case STATE_GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[MD4] User aborted input");
-                md_next_state = STATE_REPROMPT;
+                next_state = STATE_REPROMPT;
                 io_init();
                 break;
             }
             if (get_character(&md_input_valid, &entered_letter)) {
                 if (md_input_valid) {
                     log_msg("[MD4] User answer: %c", entered_letter);
-                    play_string(&entered_letter,1);
-                    md_next_state = STATE_CHECKANS;
+                    play_string(&entered_letter, 1);
+                    next_state = STATE_CHECK_ANSWER;
                 }
                 else
                     log_msg("[MD4] IO error");
             }
             break;
             
-        case STATE_CHECKANS:
+        case STATE_CHECK_ANSWER:
             if (place_letter() ||
                 (!strncmp(input_word, chosen_word, strlen(chosen_word)))) {
                 play_feedback(MP3_YES);
@@ -238,67 +221,61 @@ void md4_main(void) {
                     play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
                     play_string(chosen_word, strlen(chosen_word));
                     play_tada();
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                  }
-                 else md_next_state = STATE_PROMPT;
+                 else next_state = STATE_PROMPT;
             }
             else {
                 play_feedback(MP3_NO);
-                if (num_mistakes == MAX_INCORRECT_GUESS) {
+                if (mistakes == max_mistakes) {
                     play_feedback(MP3_7_MISTAKES_YOU_MISSED);
                     play_string(chosen_word, strlen(chosen_word));
                     play_direction(MP3_NEW_WORD);
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                 }
                 else {
                     if (is_past_mistake(entered_letter)) 
                         play_feedback(MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE);
                     else {
-                        mistake_pool[num_mistakes] = entered_letter;
-                        num_mistakes++;
+                        mistake_pool[mistakes] = entered_letter;
+                        mistakes++;
                     }
                     md4_play_mistake();
-                    md_next_state = STATE_PROMPT;
+                    next_state = STATE_PROMPT;
                 }
             } 
             break;
             
         case STATE_REPROMPT:
-            md_last_dot = create_dialog(MP3_WORD_COMMANDS,
+            last_dot = create_dialog(MP3_WORD_COMMANDS,
                                         ENTER_CANCEL | LEFT_RIGHT);
-            switch (md_last_dot) {
-                case NO_DOTS:
-                    break;
-                    
+            switch (last_dot) {
                 case RIGHT:     // play answer
                     play_feedback(MP3_THE_ANSWER_IS);
                     play_string(chosen_word, strlen(chosen_word));
-                    md_next_state = STATE_GENQUES;
-                    io_init();
-                    break;
-
-                case LEFT:
-                    md_next_state = STATE_PROMPT;
+                    next_state = STATE_GENERATE_QUESTION;
                     io_init();
                     break;
                     
                 case ENTER:     // skip question
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
                     
                     // Try again
+                case LEFT:
                 case CANCEL:    // try again
-                    md_next_state = STATE_PROMPT;
+                    next_state = STATE_PROMPT;
                     io_init();
                     break;
-                    
+                
+                case NO_DOTS:
                 default:
                     break;
             }
             break;
             
         default:
-            log_msg("[MD9] Error: next_state: %d", md_next_state);
+            log_msg("[MD9] Error: next_state: %d", next_state);
             quit_mode();
             break;
             

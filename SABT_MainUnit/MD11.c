@@ -21,8 +21,8 @@
 const char *noise_list[MAX_INDEX + 1] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
     "truck", "train", "siren", "phone", "clock", NULL};
 
-const char* noise_sounds[MAX_INDEX + 1] = {"AER", "RAI", "BEL", "DOO", "HOR", "AUT",
-    "TRU", "TRA", "SIR", "PHO", "CLO", NULL};
+const char* noise_sounds[MAX_INDEX + 1] = {"aer", "rai", "bel", "doo", "hor", "aut",
+    "tru", "tra", "sir", "pho", "clo", NULL};
 
 void md11_reset(void) {
     sound_game_reset(SCRIPT_ADDRESS, NULL, NULL, noise_list, noise_sounds);

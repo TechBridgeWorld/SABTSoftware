@@ -42,6 +42,7 @@
 #include "audio.h"
 #include "io.h"
 #include "common.h"
+#include "globals.h"
 #include "debug.h"
 #include "script_common.h"
 #include "learn_letter_mode.h"
@@ -49,35 +50,21 @@
 
 // State variables
 static char mode_name[5];
-static char next_state = STATE_NULL;
 static char user_response = NO_DOTS;
-static char submode = SUBMODE_NULL;
 static bool should_shuffle = false;
-static int index = 0;
 static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
-static char cell = 0;
-static char cell_pattern = 0;
-static char cell_control = 0;
-static int incorrect_tries = 0;
 static lang_type language;
 
 void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
     set_mode_globals(new_script, NULL, NULL);
+    reset_globals();
+    reset_stats();
     strcpy(mode_name, new_mode_fileset);
-    next_state = STATE_MENU;
     user_response = NO_DOTS;
-    submode = SUBMODE_NULL; 
-    index = -1;
-    curr_glyph = NULL;
-    user_glyph = NULL;
-    cell = 0;
-    cell_pattern = 0;
-    cell_control = 0;
-    incorrect_tries = 0;
     language = set_language();
     log_msg("[%s] Mode reset", mode_name);
-    NEWLINE;
+    max_mistakes = 3;
 }
 
 void play_letter_instructions() {
@@ -110,9 +97,9 @@ void play_next_cell_prompt() {
 
 void play_right() {
     if (language == KANNADA)
-        play_direction(MP3_CORRECT_K);
+        play_feedback(MP3_CORRECT_K);
     else
-        play_direction(MP3_CORRECT);
+        play_feedback(MP3_CORRECT);
     play_tada();
 }
 
@@ -130,28 +117,29 @@ void play_wrong() {
 void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
     switch (next_state) {
 
-        case STATE_MENU:
+        case STATE_INITIAL:
             play_welcome();
             play_submode_choice();
+            next_state = STATE_CHOOSE_LEVEL;
+            break;
 
-            switch(create_dialog(NULL, DOT_1 | DOT_2 | ENTER_CANCEL)) { 
-                case NO_DOTS:
-                    break;
+        case STATE_CHOOSE_LEVEL:
 
+            switch(create_dialog(NULL, DOT_1 | DOT_2 | ENTER_CANCEL)) {
                 case '1':
                     log_msg("[%s] Submode: Learn", mode_name);
                     play_letter_instructions();
                     submode = SUBMODE_LEARN;
                     unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
-                    next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
 
                 case '2':
                     log_msg("[%s] Submode: Play", mode_name);
-                    play_direction(MP3_INSTRUCTIONS_LETTER);
+                    play_letter_instructions();
                     shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
                     should_shuffle = true;
-                    next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
 
                 case CANCEL:
@@ -161,7 +149,8 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
 
                 case ENTER:
                     log_msg("[%s] Re-issuing main menu prompt", mode_name);
-                    next_state = STATE_MENU;
+                    play_submode_choice();
+                    next_state = STATE_CHOOSE_LEVEL;
                     break;
 
                 default:
@@ -170,9 +159,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             break;
 
 
-        case STATE_GENQUES:
+        case STATE_GENERATE_QUESTION:
             curr_glyph = get_next_letter(SCRIPT_ADDRESS, should_shuffle);
-            log_msg("[%s] State: GENQUES. Next glyph: %s", mode_name, curr_glyph->sound);
+            log_msg("[%s] State: GENERATE_QUESTION. Next glyph: %s", mode_name, curr_glyph->sound);
             play_next_letter_prompt();
             next_state = STATE_PROMPT;
             break;
@@ -191,10 +180,10 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                 default:
                     break;
             }
-            next_state = STATE_INPUT;
+            next_state = STATE_GET_INPUT;
             break;
 
-        case STATE_INPUT:
+        case STATE_GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[%s] User aborted input", mode_name);
                 next_state = STATE_PROMPT;
@@ -211,14 +200,14 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             switch (cell_control) {
                 case WITH_ENTER:
                     user_glyph = search_script(SCRIPT_ADDRESS, cell_pattern);
-                    next_state = STATE_CHECK;
+                    next_state = STATE_CHECK_ANSWER;
                     log_msg("[%s] Checking answer.", mode_name);
                     break;
                 case WITH_LEFT:
                     next_state = STATE_PROMPT;
                     break;
                 case WITH_RIGHT:
-                    next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
                 case WITH_CANCEL:
                 default:
@@ -227,15 +216,15 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             }
             break;
 
-        case STATE_CHECK:
-            log_msg("[%s} State: CHECK.", mode_name);
+        case STATE_CHECK_ANSWER:
+            log_msg("[%s] State: CHECK_ANSWER", mode_name);
             
             if (glyph_equals(curr_glyph, user_glyph)) {
                 if (curr_glyph -> next == NULL) {
-                    incorrect_tries = 0;
+                    mistakes = 0;
                     log_msg("[%s] User answered correctly", mode_name);
                     play_right();
-                    next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                 }
                 else {
                     curr_glyph = curr_glyph->next;
@@ -244,20 +233,20 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                         play_dot_sequence(curr_glyph);
                     else
                         play_glyph(curr_glyph);
-                    next_state = STATE_INPUT;
+                    next_state = STATE_GET_INPUT;
                 }
             }
             else {
-                incorrect_tries++;
+                mistakes++;
                 log_msg("[%s] User answered incorrectly", mode_name);
                 play_wrong();
                 curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);  
                 next_state = STATE_PROMPT;
-                if (incorrect_tries >= MAX_INCORRECT_TRIES) {
+                if (mistakes >= max_mistakes) {
                     play_glyph(curr_glyph);
                     play_dot_prompt();
                     play_dot_sequence(curr_glyph);
-                    next_state = STATE_INPUT;
+                    next_state = STATE_GET_INPUT;
                 }
             }
         break;

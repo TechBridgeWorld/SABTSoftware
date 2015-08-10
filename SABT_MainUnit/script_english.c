@@ -49,33 +49,33 @@ script_t script_english = {
 
 // NEW STUFF
 
-cell_t a = {DOT1};
-cell_t b = {DOT1 | DOT2};
-cell_t c = {DOT1 | DOT4};
-cell_t d = {DOT1 | DOT4 | DOT5};
-cell_t e = {DOT1 | DOT5};
-cell_t f = {DOT1 | DOT2 | DOT4};
-cell_t g = {DOT1 | DOT2 | DOT4 | DOT5};
-cell_t h = {DOT1 | DOT2 | DOT5};
-cell_t i = {DOT2 | DOT4};
-cell_t j = {DOT2 | DOT4 | DOT5};
-cell_t k = {DOT1 | DOT3};
-cell_t l = {DOT1 | DOT2 | DOT3};
-cell_t m = {DOT1 | DOT3 | DOT4};
-cell_t n = {DOT1 | DOT3 | DOT4 | DOT5};
-cell_t o = {DOT1 | DOT3 | DOT5};
-cell_t p = {DOT1 | DOT2 | DOT3 | DOT4};
-cell_t q = {DOT1 | DOT2 | DOT3 | DOT4 | DOT5};
-cell_t r = {DOT1 | DOT2 | DOT3 | DOT5};
-cell_t s = {DOT2 | DOT3 | DOT4};
-cell_t t = {DOT2 | DOT3 | DOT4 | DOT5};
-cell_t u = {DOT1 | DOT3 | DOT6};
-cell_t v = {DOT1 | DOT2 | DOT3 | DOT6};
-cell_t w = {DOT2 | DOT4 | DOT5 | DOT6};
-cell_t x = {DOT1 | DOT3 | DOT4 | DOT6};
-cell_t y = {DOT1 | DOT3 | DOT4 | DOT5 | DOT6};
-cell_t z = {DOT1 | DOT3 | DOT5 | DOT6};
-cell_t capital = {DOT6};
+cell_t a = {DOT_1};
+cell_t b = {DOT_1 | DOT_2};
+cell_t c = {DOT_1 | DOT_4};
+cell_t d = {DOT_1 | DOT_4 | DOT_5};
+cell_t e = {DOT_1 | DOT_5};
+cell_t f = {DOT_1 | DOT_2 | DOT_4};
+cell_t g = {DOT_1 | DOT_2 | DOT_4 | DOT_5};
+cell_t h = {DOT_1 | DOT_2 | DOT_5};
+cell_t i = {DOT_2 | DOT_4};
+cell_t j = {DOT_2 | DOT_4 | DOT_5};
+cell_t k = {DOT_1 | DOT_3};
+cell_t l = {DOT_1 | DOT_2 | DOT_3};
+cell_t m = {DOT_1 | DOT_3 | DOT_4};
+cell_t n = {DOT_1 | DOT_3 | DOT_4 | DOT_5};
+cell_t o = {DOT_1 | DOT_3 | DOT_5};
+cell_t p = {DOT_1 | DOT_2 | DOT_3 | DOT_4};
+cell_t q = {DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5};
+cell_t r = {DOT_1 | DOT_2 | DOT_3 | DOT_5};
+cell_t s = {DOT_2 | DOT_3 | DOT_4};
+cell_t t = {DOT_2 | DOT_3 | DOT_4 | DOT_5};
+cell_t u = {DOT_1 | DOT_3 | DOT_6};
+cell_t v = {DOT_1 | DOT_2 | DOT_3 | DOT_6};
+cell_t w = {DOT_2 | DOT_4 | DOT_5 | DOT_6};
+cell_t x = {DOT_1 | DOT_3 | DOT_4 | DOT_6};
+cell_t y = {DOT_1 | DOT_3 | DOT_4 | DOT_5 | DOT_6};
+cell_t z = {DOT_1 | DOT_3 | DOT_5 | DOT_6};
+cell_t capital = {DOT_6};
 
 #define ENG_LETTER_A {"a", ENGLISH, &a, 1}
 #define ENG_LETTER_B {"b", ENGLISH, &b, 1}

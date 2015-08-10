@@ -18,6 +18,4 @@
 #define NEWLINE	\
   log_msg("\n\r");
 
-char dbgstr[64];
-
 #endif /* _DEBUG_H_ */

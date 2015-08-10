@@ -28,59 +28,36 @@
 #include "vocab.h"
 #include "mp3s.h"
 
-
-#define MD15_STATE_NULL 0x00
-#define MD15_STATE_INTRO 0x01
-#define MD15_STATE_LVLSEL 0x02
-#define MD15_STATE_GENQUES 0x03
-#define MD15_STATE_PROMPT 0x04
-#define MD15_STATE_INPUT 0x05
-#define MD15_STATE_CHECK 0x06
-#define MD15_STATE_SWITCH 0x07
-#define MD15_STATE_REPROMPT 0x08
-#define MD15_STATE_GAMEOVER 0x09
-
-//bounds
-#define MAX_INCORRECT_GUESS 3
-#define MAX_WORD_LEN 20
 #define GAMELENGTH 12
-
-char next_state = MD15_STATE_NULL;
 
 bool player1_is_current = true; // keep track of whether player 1 or 2 is the current player
 int num_turns = 0;
-int md15_p1_words_spelled = 0;
-int md15_p2_words_spelled = 0;
-int md15_p1_total_mistakes = 0;
-int md15_p2_total_mistakes = 0;
-int md15_curr_mistakes = 0;
-char md15_cell = 0;
-char md15_cell_pattern = 0;
-int md15_cell_control = 0;
-static char md15_last_dot = 0;
-char* lang_fileset;
+int p1_words_spelled = 0;
+int p2_words_spelled = 0;
+int p1_mistakes = 0;
+int p2_mistakes = 0;
 
 wordlist_t md15_dict;
-word_t* md15_chosen_word;
+word_t* chosen_word;
 
-static cell_t md15_user_cell;
-static cell_t md15_curr_cell;
+static cell_t user_cell;
+static cell_t curr_cell;
 
-void md15_stats(){
+void play_stats(){
     int words, mistakes;
 
     if (player1_is_current) {
-        words = md15_p1_words_spelled;
+        words = p1_words_spelled;
         if (words == 0)
             return;
-        mistakes = md15_p1_total_mistakes;
+        mistakes = p1_mistakes;
         play_direction(MP3_PLAYER_1);
     }
     else {
-        words = md15_p2_words_spelled;
+        words = p2_words_spelled;
         if (words == 0)
             return;
-        mistakes = md15_p2_total_mistakes;
+        mistakes = p2_mistakes;
         play_direction(MP3_PLAYER_2);
     }
 
@@ -105,48 +82,45 @@ void md15_stats(){
     }
 }
 
-void md15_reset() {
-    md15_curr_mistakes = 0;
-    md15_cell = 0;
-    md15_cell_pattern = 0;
-    md15_cell_control = 0;
-    next_state = MD15_STATE_INTRO;
-}
-
-void md15_correct_answer() {
+void correct_answer() {
     play_feedback(MP3_CORRECT);
-    speak_letters_in_word(md15_chosen_word);
-    speak_word(md15_chosen_word);
+    speak_letters_in_word(chosen_word);
+    speak_word(chosen_word);
     play_tada();
     if (player1_is_current)
-        md15_p1_words_spelled++;
+        p1_words_spelled++;
     else
-        md15_p2_words_spelled++;
+        p2_words_spelled++;
 }
 
-void md15_incorrect_answer() {
-    md15_curr_mistakes++;
+void incorrect_answer() {
+    curr_mistakes++;
     if (player1_is_current)
-        md15_p1_total_mistakes++;
+        p1_mistakes++;
     else
-        md15_p2_total_mistakes++;
+        p2_mistakes++;
 
-    cell_t this_cell = {md15_cell_pattern};
+    cell_t this_cell = {cell_pattern};
     if (get_eng_letter_name_by_cell(&this_cell) != NULL) { //INVP may already have said "try again"
         play_feedback(MP3_NO);
         play_feedback(MP3_TRY_AGAIN);
     }
-    decrement_word_index(md15_chosen_word);
-    next_state = MD15_STATE_REPROMPT;
+    decrement_word_index(chosen_word);
+    next_state = STATE_REPROMPT;
 }
 
-void md15_speak_inputted_cell() {
-    cell_t this_cell = {md15_cell_pattern};
+void speak_inputted_cell() {
+    cell_t this_cell = {cell_pattern};
     char* letter_name = get_eng_letter_name_by_cell(&this_cell);
     if (letter_name == NULL)
         play_feedback(MP3_INVALID_PATTERN);
     else
         play_mp3(lang_fileset,letter_name);
+}
+
+void md15_reset() {
+    reset_globals();
+    reset_stats();
 }
 
 /**
@@ -156,21 +130,21 @@ void md15_speak_inputted_cell() {
 void md15_main() {
   switch(next_state) {
 
-    case MD15_STATE_INTRO:
+    case STATE_INITIAL:
         lang_fileset = get_lang_prefix();
         play_welcome();
         play_number(GAMELENGTH);
         play_feedback(MP3_WORDS);
-        next_state = MD15_STATE_LVLSEL;
+        next_state = STATE_CHOOSE_LEVEL;
         srand(timer_rand());
         break;
 
-    case MD15_STATE_LVLSEL:
-        md15_last_dot = create_dialog(MP3_CHOOSE_LEVELS_3, (DOT_1 | DOT_2 | DOT_3));
-        if (md15_last_dot == NO_DOTS)
+    case STATE_CHOOSE_LEVEL:
+        last_dot = create_dialog(MP3_CHOOSE_LEVELS_3, (DOT_1 | DOT_2 | DOT_3));
+        if (last_dot == NO_DOTS)
             break;
 
-        switch (md15_last_dot) {
+        switch (last_dot) {
             case '1':
                 play_direction(MP3_EASY_MODE);
                 strings_to_wordlist(easy, ARRAYLEN(easy), &md15_dict);
@@ -185,51 +159,60 @@ void md15_main() {
                 play_direction(MP3_HARD_MODE);
                 strings_to_wordlist(hard, ARRAYLEN(hard), &md15_dict);
                 break;
+
+            case CANCEL:
+                log_msg("Quitting to main menu.");                    
+                quit_mode();
+                break;
+
+            default:
+                break;
         }
 
         print_words_in_list(&md15_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
-        next_state = MD15_STATE_GENQUES;
+        next_state = STATE_GENERATE_QUESTION;
         break;
 
-    case MD15_STATE_GENQUES:
-        md15_reset();
-        get_next_word_in_wordlist(&md15_dict, &md15_chosen_word);
-        log_msg("[MD15] Next word: %s", md15_chosen_word->name);
-        next_state = MD15_STATE_PROMPT;
+    case STATE_GENERATE_QUESTION:
+        reset_globals();
+        reset_stats();
+        get_next_word_in_wordlist(&md15_dict, &chosen_word);
+        log_msg("[MD15] Next word: %s", chosen_word->name);
+        next_state = STATE_PROMPT;
         break;
 
-     case MD15_STATE_PROMPT:
+     case STATE_PROMPT:
         if (player1_is_current)
             play_direction(MP3_PLAYER_1);
 
         else
             play_direction(MP3_PLAYER_2);
         play_direction(MP3_SPELL_WORD);
-        speak_word(md15_chosen_word);
-        next_state = MD15_STATE_INPUT;
+        speak_word(chosen_word);
+        next_state = STATE_GET_INPUT;
         break;
 
-    case MD15_STATE_INPUT:
-        md15_cell = get_cell();
-        if (md15_cell == NO_DOTS)
+    case STATE_GET_INPUT:
+        cell = get_cell();
+        if (cell == NO_DOTS)
             break;
-        md15_cell_pattern = GET_CELL_PATTERN(md15_cell);
-        md15_cell_control = GET_CELL_CONTROL(md15_cell);
-        switch (md15_cell_control) {
+        cell_pattern = GET_CELL_PATTERN(cell);
+        cell_control = GET_CELL_CONTROL(cell);
+        switch (cell_control) {
             case WITH_ENTER:
-            md15_user_cell.pattern = md15_cell_pattern;
-            next_state = MD15_STATE_CHECK;
+            user_cell.pattern = cell_pattern;
+            next_state = STATE_CHECK_ANSWER;
             log_msg("[MD15] Checking answer");
             break;
 
             case WITH_LEFT:
-            next_state = MD15_STATE_REPROMPT;
+            next_state = STATE_REPROMPT;
             break;
 
             case WITH_RIGHT:
-            md15_stats();
-            next_state = MD15_STATE_GENQUES;
+            play_stats();
+            next_state = STATE_GENERATE_QUESTION;
             break;
 
             case WITH_CANCEL:
@@ -237,65 +220,65 @@ void md15_main() {
         }
         break;
 
-    case MD15_STATE_CHECK:
-        md15_speak_inputted_cell();
-        get_next_cell_in_word(md15_chosen_word, &md15_curr_cell);
-        log_msg("Target cell: %x, inputted cell: %x.", md15_curr_cell.pattern, md15_user_cell.pattern);
+    case STATE_CHECK_ANSWER:
+        speak_inputted_cell();
+        get_next_cell_in_word(chosen_word, &curr_cell);
+        log_msg("Target cell: %x, inputted cell: %x.", curr_cell.pattern, user_cell.pattern);
         
-        if (cell_equals(&md15_curr_cell, &md15_user_cell)) {
-            if (md15_chosen_word->curr_letter == md15_chosen_word->num_letters - 1) { // done
-                md15_correct_answer();
-                next_state = MD15_STATE_SWITCH;
+        if (cell_equals(&curr_cell, &user_cell)) {
+            if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
+                correct_answer();
+                next_state = STATE_SWITCH_USERS;
             }
             else {  // correct but not done
                 play_feedback(MP3_GOOD);
                 play_direction(MP3_NEXT_LETTER);
-                md15_curr_mistakes = 0;
-                next_state = MD15_STATE_INPUT;
+                curr_mistakes = 0;
+                next_state = STATE_GET_INPUT;
             }
         }
         else
-            md15_incorrect_answer();
+            incorrect_answer();
         break;
 
-    case MD15_STATE_SWITCH:
-        md15_stats();
+    case STATE_SWITCH_USERS:
+        play_stats();
         player1_is_current = !player1_is_current; // switch players
         num_turns++;
         if (num_turns < GAMELENGTH * 2)
-            next_state = MD15_STATE_GENQUES;
+            next_state = STATE_GENERATE_QUESTION;
         else
-            next_state = MD15_STATE_GAMEOVER;
+            next_state = STATE_EVALUATE_GAME;
         break;
 
-    case MD15_STATE_REPROMPT:
-        speak_word(md15_chosen_word);
-        if (md15_curr_mistakes >= MAX_INCORRECT_GUESS) {
+    case STATE_REPROMPT:
+        speak_word(chosen_word);
+        if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
-            char* letter_name = get_eng_letter_name_by_cell(&md15_curr_cell);
+            char* letter_name = get_eng_letter_name_by_cell(&curr_cell);
             play_mp3(lang_fileset, letter_name);
-            if (md15_curr_mistakes >= MAX_INCORRECT_GUESS + 1)
-                play_pattern(md15_curr_cell.pattern);
+            if (curr_mistakes >= max_mistakes + 1)
+                play_pattern(curr_cell.pattern);
         }
 
-        else if (md15_chosen_word->curr_glyph > -1) { // not at beginning of word
+        else if (chosen_word->curr_glyph > -1) { // not at beginning of word
             play_feedback(MP3_SPELLING_SO_FAR);
-            speak_letters_so_far(md15_chosen_word);
+            speak_letters_so_far(chosen_word);
         }
-        next_state = MD15_STATE_INPUT;
+        next_state = STATE_GET_INPUT;
         break;
 
-     case MD15_STATE_GAMEOVER:
+     case STATE_EVALUATE_GAME:
         // a player wins if (s)he spelled more words OR spelled same number of words with fewer mistakes
-        if (md15_p1_words_spelled > md15_p2_words_spelled
-            || (md15_p1_words_spelled == md15_p2_words_spelled
-                && md15_p1_total_mistakes < md15_p2_total_mistakes)) {
+        if (p1_words_spelled > p2_words_spelled
+            || (p1_words_spelled == p2_words_spelled
+                && p1_mistakes < p2_mistakes)) {
             log_msg("Winner is player 1!");
             play_feedback(MP3_GAME_OVER_WINNER_1);
          }
-         else if (md15_p1_words_spelled < md15_p2_words_spelled
-            || (md15_p1_words_spelled == md15_p2_words_spelled
-                && md15_p1_total_mistakes > md15_p2_total_mistakes)) {
+         else if (p1_words_spelled < p2_words_spelled
+            || (p1_words_spelled == p2_words_spelled
+                && p1_mistakes > p2_mistakes)) {
             log_msg("Winner is player 2!");
             play_feedback(MP3_GAME_OVER_WINNER_2);
          }
@@ -306,10 +289,10 @@ void md15_main() {
 
         // output stats for both players
         player1_is_current = true;
-        md15_stats();
+        play_stats();
         player1_is_current = false;
-        md15_stats();
-        next_state = MD15_STATE_LVLSEL;
+        play_stats();
+        next_state = STATE_CHOOSE_LEVEL;
 
     default:
         break;

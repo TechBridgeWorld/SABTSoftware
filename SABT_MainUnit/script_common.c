@@ -50,7 +50,7 @@ void reset_script_queue(script_t* script, bool should_shuffle) {
 * @return glyph_t* - Pointer to glyph, NULL if not found
 */
 glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
-    char curr_pattern = patterns[*index];
+    int curr_pattern = patterns[*index];
     glyph_t* curr_glyph;
 
     // Return if EOT

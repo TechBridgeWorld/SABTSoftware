@@ -8,7 +8,10 @@
  */
 
 #include "globals.h"
-
+#ifdef DEBUGMODE
+    #include "stubs.h"
+#endif
+ 
 /**
  * @brief This fucntion reads the message in USART_PC_RecievedPacket. It determines
  *        its type and sends the appropriate message to PC

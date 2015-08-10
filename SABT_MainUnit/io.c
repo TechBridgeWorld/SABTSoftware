@@ -602,6 +602,7 @@ void log_msg(const char* format, ...) {
         vprintf(format, args );
         printf("\n");
     #else
+        char dbgstr[64];
         vsprintf(dbgstr, format, args);
         usart_transmit_string_to_pc((unsigned char*)dbgstr);
         usart_transmit_string_to_pc((unsigned char*)"\n\r");
@@ -616,6 +617,7 @@ void log_msg_no_newline(const char* format, ...) {
     #ifdef DEBUGMODE
         vprintf(format, args );
     #else
+        char dbgstr[64];
         vsprintf(dbgstr, format, args);
         usart_transmit_string_to_pc((unsigned char*)dbgstr);
     va_end( args );

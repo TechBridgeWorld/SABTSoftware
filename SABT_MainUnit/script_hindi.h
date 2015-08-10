@@ -8,6 +8,7 @@
 #define _SCRIPT_HINDI_H_
 
 #include "datastructures.h"
+ #include "globals.h"
 #include "script_common.h"
 
 #define SCRIPT_HINDI_FILESET "HIN_"

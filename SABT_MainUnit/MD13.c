@@ -12,69 +12,43 @@
 #include "mp3s.h"
 
 /**
- *  States
- */
-#define STATE_NULL 0x00
-#define STATE_LVLSEL 0x01
-#define STATE_GENQUES 0x02
-#define STATE_PROMPT 0x03
-#define STATE_INPUT 0x04
-#define STATE_CHECKANS 0x05
-#define STATE_REPROMPT 0x06
-#define STATE_INTRO 0x07
-#define STATE_FOLLOWUP 0x08
-
-/**
- *  Different levels
- */
-#define LEVEL_NULL      0x0000
-#define LEVEL_1			0x0001
-#define LEVEL_2			0x0002
-
-/**
  *  Question types
  */
-#define QEST_BETWEEN    0x001
-#define QEST_EVEN_NUM   0x002
-#define QEST_ODD_NUM    0x000
-#define QEST_TENS_NUM   0x004
-#define QEST_HUNDS_NUM  0x006
-#define QEST_ROUND_TEN  0x003
-#define QEST_ROUND_HUND 0x005
+#define QUES_TYPES 7
 
-#define NOT_ENTERED 0x00
-#define ENTERED 0x01
+#define QEST_BETWEEN    0
+#define QEST_EVEN_NUM   1
+#define QEST_ODD_NUM    2
+#define QEST_TENS_NUM   3
+#define QEST_HUNDS_NUM  4
+#define QEST_ROUND_TEN  5
+#define QEST_ROUND_HUND 6
+
+#define NOT_ENTERED 0
+#define ENTERED     1
 
 /*
  *  Limits
  */
 #define MAX_DIGITS 4
-#define MAX_INCORRECT_TRIES 3
 #define MAX_ANSWER_NUM 10
-#define QUES_TYPES 7
 #define EASY_QUES  5
-
 
 /**
  *  State variables
  */
-static char md_next_state = STATE_NULL;
-static char md_last_dot = NO_DOTS;
-static int md_level = 0;
-static long md_op_1 = -1;
-static long md_op_2 = -1;
-static int md_usr_res = -1;
-static bool md_input_ready = false;
-static bool md_input_valid = false;
-static int md_incorrect_tries = 0;
-static int md_question = QEST_BETWEEN;
-static int md_score = 0;
-static int md_answer[MAX_ANSWER_NUM];
-static int md_entered[MAX_ANSWER_NUM];
-static int md_num_answer = 0;
-static int md_ques_index[QUES_TYPES];
-static int md_ques_i;
-static int md_max_q;
+static long operand_1 = -1;
+static long operand_2 = -1;
+static int user_answer = -1;
+static bool input_ready = false;
+static bool input_valid = false;
+static int question = QEST_BETWEEN;
+static int answer[MAX_ANSWER_NUM];
+static int entered[MAX_ANSWER_NUM];
+static int num_answer = 0;
+static int ques_index[QUES_TYPES];
+static int ques_i;
+static int max_q;
 
 void init_array(int* array, int array_len){
     for (int i = 0; i < array_len; i++)
@@ -83,7 +57,7 @@ void init_array(int* array, int array_len){
 
 void init_index(int bound){
     for (int i = 0; i < bound; i++)
-        md_ques_index[i] = i;
+        ques_index[i] = i;
 }
 
 void md13_reset(void) {
@@ -91,63 +65,55 @@ void md13_reset(void) {
     
     // Global variables
     set_mode_globals(&script_digits, NULL, NULL);
-    
-    // State variables
-    md_next_state = STATE_INTRO;
-    md_last_dot = NO_DOTS;
-    md_level = LEVEL_NULL;
-    md_op_1 = -1;
-    md_op_2 = -1;
-    md_usr_res = -1;
-    md_input_ready = false;
-    md_input_valid = false;
-    md_incorrect_tries = 0;
-    md_question = QEST_BETWEEN;
-    md_score = 0;
-    init_array(md_answer, MAX_ANSWER_NUM);
-    init_array(md_entered, MAX_ANSWER_NUM);
-    md_num_answer = 0;
-    md_ques_i = 0;
-    md_max_q = 0;
+    reset_globals();
+    reset_stats();
+    operand_1 = operand_2 = user_answer = -1;
+    num_answer = ques_i = max_q = 0;
+    input_ready = input_valid = false;
+    question = QEST_BETWEEN;
+    init_array(answer, MAX_ANSWER_NUM);
+    init_array(entered, MAX_ANSWER_NUM);
+    max_mistakes = 3;
+
     
 }
 
 void md13_generate_op2(){
-    switch (md_question) {
+    switch (question) {
         case QEST_EVEN_NUM:
-            md_op_1 = (md_op_1 % 2 == 0) ? md_op_1 : md_op_1 + 1;
-            md_op_2 = (md_score > 3) ? (md_op_1 + 10) : (md_op_1 + md_score * 2 + 4);
+            operand_1 = (operand_1 % 2 == 0) ? operand_1 : operand_1 + 1;
+            operand_2 = (score > 3) ? (operand_1 + 10) : (operand_1 + score * 2 + 4);
             break;
 
         case QEST_ODD_NUM:
-            md_op_1 = (md_op_1 % 2 == 1) ? md_op_1 : md_op_1 + 1;
-            md_op_2 = (md_score > 3) ? (md_op_1 + 10) : (md_op_1 + md_score * 2 + 4);
+            operand_1 = (operand_1 % 2 == 1) ? operand_1 : operand_1 + 1;
+            operand_2 = (score > 3) ? (operand_1 + 10) : (operand_1 + score * 2 + 4);
             break;
 
         case QEST_ROUND_HUND: case QEST_HUNDS_NUM: case QEST_ROUND_TEN: case QEST_TENS_NUM:
-            md_op_2 = md_op_1 / 10 * 10 + random_between(1,9);
+            operand_2 = operand_1 / 10 * 10 + random_between(1,9); //@bug shouldn't this be 10?
             break;
 
         default:
-            md_op_2 = (md_score > 3) ? (md_op_1 + 5): (md_op_1 + md_score + 2);
+            operand_2 = (score > 3) ? (operand_1 + 5): (operand_1 + score + 2);
             break;
     }
-    log_msg("[MD13] Operand 1: %ld; Operand 2: %ld", md_op_1, md_op_2);
+    log_msg("[MD13] Operand 1: %ld; Operand 2: %ld", operand_1, operand_2);
     
 }
 
 void md13_generate_number(){
 	int base = 0;
-    switch (md_level) {
-        case LEVEL_1:
-            base = (md_score >= 3) ? (60) : (md_score * 20 + 1);
-            md_op_1 = random_between(base,base + 20);
+    switch (level) {
+        case LEVEL_EASY:
+            base = (score >= 3) ? (60) : (score * 20 + 1);
+            operand_1 = random_between(base,base + 20);
             md13_generate_op2();
             break;
 
-        case LEVEL_2:
-			base = (base < 9500) ? ((md_score + 1) * 500) : 9500;
-            md_op_1 = random_between(base, base + 30);
+        case LEVEL_HARD:
+			base = (base < 9500) ? ((score + 1) * 500) : 9500;
+            operand_1 = random_between(base, base + 30);
             md13_generate_op2();
             break;
 
@@ -158,49 +124,49 @@ void md13_generate_number(){
 }
 
 void md13_play_question(){
-    switch (md_question) {
+    switch (question) {
         case QEST_BETWEEN:
-			if (md_op_2 - md_op_1 == 2)
+			if (operand_2 - operand_1 == 2)
                 play_direction(MP3_ENTER_NUM_BETWEEN);
             else
 				play_direction(MP3_ENTER_NUMS_BETWEEN);
-            play_number(md_op_1);
+            play_number(operand_1);
             play_direction(MP3_AND);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         case QEST_EVEN_NUM:
             play_direction(MP3_ENTER_EVENS_BTWN);
-            play_number(md_op_1);
+            play_number(operand_1);
             play_direction(MP3_AND);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         case QEST_ODD_NUM:
             play_direction(MP3_ENTER_ODDS_BTWN);
-            play_number(md_op_1);
+            play_number(operand_1);
             play_direction(MP3_AND);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         case QEST_TENS_NUM:
             play_direction(MP3_HOW_MANY_TENS);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         case QEST_HUNDS_NUM:
             play_direction(MP3_HOW_MANY_HUNDREDS);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
         
         case QEST_ROUND_TEN:
             play_direction(MP3_ROUND_TO_TENS);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         case QEST_ROUND_HUND:
             play_direction(MP3_ROUND_TO_HUNDREDS);
-            play_number(md_op_2);
+            play_number(operand_2);
             break;
             
         default:
@@ -211,49 +177,49 @@ void md13_play_question(){
 
 void md13_generate_answer() {
     int i, step;
-    switch (md_question) {
+    switch (question) {
         case QEST_BETWEEN:
             step = 1;
-            for (i = 0; i < md_op_2 - md_op_1 - 1 ; i++) {
-                md_answer[i] = md_op_1 + i + 1;
+            for (i = 0; i < operand_2 - operand_1 - 1 ; i++) {
+                answer[i] = operand_1 + i + 1;
             }
-            md_num_answer = i;
+            num_answer = i;
             break;
             
         case QEST_EVEN_NUM:
             step = 2;
-            md_answer[0] = (md_op_1 % 2 == 0) ? (md_op_1 + 2) : (md_op_1 + 1);
-            for (i = 0; md_answer[i] + step < md_op_2; i++)
-                md_answer[i + 1] = md_answer[i] + step;
-            md_num_answer = i + 1;
+            answer[0] = (operand_1 % 2 == 0) ? (operand_1 + 2) : (operand_1 + 1);
+            for (i = 0; answer[i] + step < operand_2; i++)
+                answer[i + 1] = answer[i] + step;
+            num_answer = i + 1;
             break;
 
         case QEST_ODD_NUM:
             step = 2;
-            md_answer[0] = (md_op_1 % 2 == 1) ? (md_op_1 + 2) : md_op_1 + 1;
-            for (i = 0; md_answer[i] < md_op_2 - step; i++)
-                md_answer[i + 1] = md_answer[i] + step;
-            md_num_answer = i + 1;
+            answer[0] = (operand_1 % 2 == 1) ? (operand_1 + 2) : operand_1 + 1;
+            for (i = 0; answer[i] < operand_2 - step; i++)
+                answer[i + 1] = answer[i] + step;
+            num_answer = i + 1;
             break;
 
         case QEST_TENS_NUM:
-            md_answer[0] = md_op_2 / 10;
-            md_num_answer = 1;
+            answer[0] = operand_2 / 10;
+            num_answer = 1;
             break;
 
         case QEST_HUNDS_NUM:
-            md_answer[0] = md_op_2 / 100;
-            md_num_answer = 1;
+            answer[0] = operand_2 / 100;
+            num_answer = 1;
             break;
 
         case QEST_ROUND_TEN:
-            md_answer[0] = (md_op_2 % 10 < 5) ? (md_op_2 / 10 * 10) : (md_op_2 / 10 * 10 + 10);
-            md_num_answer = 1;
+            answer[0] = (operand_2 % 10 < 5) ? (operand_2 / 10 * 10) : (operand_2 / 10 * 10 + 10);
+            num_answer = 1;
 			break;
 
         case QEST_ROUND_HUND:
-            md_answer[0] = (md_op_2 % 100 < 50) ? (md_op_2 / 100 * 100) : (md_op_2 / 100 * 100 + 100);
-            md_num_answer = 1;
+            answer[0] = (operand_2 % 100 < 50) ? (operand_2 / 100 * 100) : (operand_2 / 100 * 100 + 100);
+            num_answer = 1;
 			break;
 
         default:
@@ -263,22 +229,22 @@ void md13_generate_answer() {
 
 void md13_play_answer(){
     play_feedback(MP3_THE_ANSWER_IS);
-    for (int i = 0; i < md_num_answer; i++){
-        play_number(md_answer[i]);
+    for (int i = 0; i < num_answer; i++){
+        play_number(answer[i]);
         play_silence(1000);
     }
 }
 
 void md13_play_input(int flag){
     bool have_played = false;
-    for (int i = 0; i < md_num_answer; i++) {
-        if (flag == ENTERED && md_entered[i] == 1) {
-            play_number(md_answer[i]);
+    for (int i = 0; i < num_answer; i++) {
+        if (flag == ENTERED && entered[i] == 1) {
+            play_number(answer[i]);
             play_silence(750);
             have_played = true;
         }
-        else if (flag == NOT_ENTERED && md_entered[i] == 0) {
-            play_number(md_answer[i]);
+        else if (flag == NOT_ENTERED && entered[i] == 0) {
+            play_number(answer[i]);
             play_silence(750);
         }
     }
@@ -286,179 +252,177 @@ void md13_play_input(int flag){
         play_feedback(MP3_NO_ANSWER_SO_FAR);
 }
 
-bool md13_place_number(int number){
-    for (int i = 0; i < md_num_answer; i++) {
-        log_msg("[Mode 13] Answer:%d Entered:%d", md_answer[i],number);
+bool place_number(int number){
+    for (int i = 0; i < num_answer; i++) {
+        log_msg("[Mode 13] Answer:%d Entered:%d", answer[i],number);
         
-        if (number == md_answer[i]) {
-            md_entered[i] = 1;
+        if (number == answer[i]) {
+            entered[i] = 1;
             return true;
         }
     }
     return false;
 }
 
-bool md13_all_entered() {
-    for (int i = 0; i < md_num_answer; i++)
-        if (md_entered[i] == 0) return false;
+bool all_entered() {
+    for (int i = 0; i < num_answer; i++)
+        if (entered[i] == 0) return false;
     return true;
 }
 
 void md13_choose_ques() {
-    if (md_ques_i == md_max_q) {
-        shuffle(md_max_q, md_ques_index);
-        md_ques_i = 0;
+    if (ques_i == max_q) {
+        shuffle(max_q, ques_index);
+        ques_i = 0;
     }
-    md_question = md_ques_index[md_ques_i];
-    md_ques_i++;
-   	log_msg("[Mode 13] q%d", md_question);
+    question = ques_index[ques_i];
+    ques_i++;
+   	log_msg("[Mode 13] q%d", question);
     return;
 }
 
 void play_mistake(){
     play_feedback(MP3_YOU_HAVE);
-    play_number(MAX_INCORRECT_TRIES - md_incorrect_tries);
-    if (MAX_INCORRECT_TRIES - md_incorrect_tries == 1)
+    play_number(max_mistakes - mistakes);
+    if (max_mistakes - mistakes == 1)
         play_feedback(MP3_MISTAKE_REMAINING);
     else
         play_feedback(MP3_MISTAKES_REMAINING);
 }
 
 void md13_main(void) {
-    switch (md_next_state) {
-		case STATE_INTRO:
+    switch (next_state) {
+		case STATE_INITIAL:
             play_welcome();
-            md_next_state = STATE_LVLSEL;
+            next_state = STATE_CHOOSE_LEVEL;
             break;
 
-        case STATE_LVLSEL:
-            md_last_dot = create_dialog(MP3_CHOOSE_LEVELS_2,
-                                        ( DOT_1 | DOT_2 ));
-            switch (md_last_dot) {
-                case NO_DOTS:
-                    break;
-                    
+        case STATE_CHOOSE_LEVEL:
+            last_dot = create_dialog(MP3_CHOOSE_LEVELS_2,
+                                        ( DOT_1 | DOT_2 | CANCEL));
+            switch (last_dot) {
                 case '1':
                     log_msg("[MD13] Level 1");
-                    md_level = LEVEL_1;
+                    level = LEVEL_EASY;
                     play_direction(MP3_INSTRUCTIONS_MATH);
-                    md_max_q = EASY_QUES;
-                    init_index(md_max_q);
-                    shuffle(md_max_q, md_ques_index);
-                    md_next_state = STATE_GENQUES;
+                    max_q = EASY_QUES;
+                    init_index(max_q);
+                    shuffle(max_q, ques_index);
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
                     
                 case '2':
                     log_msg("[MD13] Level 2");
-                    md_level = LEVEL_2;
+                    level = LEVEL_HARD;
                     play_direction(MP3_INSTRUCTIONS_MATH);
-                    md_max_q = QUES_TYPES;
-                    init_index(md_max_q);
-                    shuffle(md_max_q, md_ques_index);
-                    md_next_state = STATE_GENQUES;
+                    max_q = QUES_TYPES;
+                    init_index(max_q);
+                    shuffle(max_q, ques_index);
+                    next_state = STATE_GENERATE_QUESTION;
                     break;
                 
+                case CANCEL:
+                    log_msg("[MD13] Quitting to main menu.");                    
+                    quit_mode();
+                    break;
                     
                 default:
-                    log_msg("[MD13] Error: md_last_dot: %x", md_last_dot);
-                    quit_mode();
                     break;
             }
             break;
         
-        case STATE_GENQUES:
-            init_array(md_answer, MAX_ANSWER_NUM);
-            init_array(md_entered, MAX_ANSWER_NUM);
+        case STATE_GENERATE_QUESTION:
+            init_array(answer, MAX_ANSWER_NUM);
+            init_array(entered, MAX_ANSWER_NUM);
             md13_generate_number();
             md13_generate_answer();
-            md_incorrect_tries = 0;
-            log_msg("[Mode 13]num answer: %d answer: %d", md_num_answer, md_answer[0]);
-            
-            md_next_state = STATE_PROMPT;
+            mistakes = 0;
+            log_msg("[Mode 13] num answer: %d answer: %d", num_answer, answer[0]);
+            next_state = STATE_PROMPT;
             break;
             
         case STATE_PROMPT:
 			io_init();
             md13_play_question();
-            md_next_state = STATE_INPUT;
+            next_state = STATE_GET_INPUT;
             break;
             
-        case STATE_INPUT:
+        case STATE_GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[MD13] User aborted input");
-                md_next_state = STATE_REPROMPT;
+                next_state = STATE_REPROMPT;
                 play_feedback(MP3_HELP_MENU);
                 io_init();
                 break;
             }
 			set_mode_globals(&script_digits, NULL, NULL);
-             if (get_number(&md_input_valid, &md_usr_res)) {
-                if (md_input_valid) {
+             if (get_number(&input_valid, &user_answer)) {
+                if (input_valid) {
                     play_feedback(MP3_YOU_ANSWERED);
-                    play_number(md_usr_res);
-                    md_next_state = STATE_CHECKANS;
+                    play_number(user_answer);
+                    next_state = STATE_CHECK_ANSWER;
                 }
                 else
                     log_msg("[MD13] IO error");
             }
             break;
             
-        case STATE_CHECKANS:
-            if (md13_place_number(md_usr_res)){     // Correct answer
+        case STATE_CHECK_ANSWER:
+            if (place_number(user_answer)) {     // Correct answer
                 log_msg("[MD13] Correct answer");
-                if (!md13_all_entered()) {
+                if (!all_entered()) {
                     play_feedback(MP3_GOOD_NEXT);
-                    md_next_state = STATE_INPUT;
+                    next_state = STATE_GET_INPUT;
                 }
                 else {
-                    md_score++;
+                    score++;
                     play_feedback(MP3_GOOD);
                     play_feedback(MP3_YOUR_SCORE_IS);
-                    play_number(md_score);
+                    play_number(score);
                     play_tada();
 					md13_choose_ques();
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                 }
             }
             else {
                 // Wrong answer
-                md_incorrect_tries += 1;
+                mistakes += 1;
                 play_feedback(MP3_INCORRECT);
-                if (md_incorrect_tries >= MAX_INCORRECT_TRIES) {
+                if (mistakes >= max_mistakes) {
                     play_feedback(MP3_YOU_MISSED);
                     md13_play_input(NOT_ENTERED);
-					md_score = (md_score == 0) ? 0 : md_score - 1;
+					score = (score == 0) ? 0 : score - 1;
                     play_feedback(MP3_YOUR_SCORE_IS);
-					play_number(md_score);
+					play_number(score);
                     md13_choose_ques();
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                 }
                 else {
                     play_mistake();
-					md_next_state = STATE_PROMPT;
+					next_state = STATE_PROMPT;
 				}
             }
             break;
             
         case STATE_REPROMPT:
-            md_last_dot = create_dialog(MP3_HELP_MENU_13,
+            last_dot = create_dialog(MP3_HELP_MENU_13,
                                         ENTER_CANCEL | LEFT_RIGHT | DOT_1
                                         | DOT_2 | DOT_3 | DOT_4
                                         | DOT_5 | DOT_6);
-            switch (md_last_dot) {
+            switch (last_dot) {
                     
                 case NO_DOTS:
                     break;
            
                 case LEFT:  // play answer
-                    md_next_state = STATE_PROMPT;
+                    next_state = STATE_PROMPT;
                     io_init();
                     break;
 
                 case RIGHT:
                     md13_play_answer();
                     md13_choose_ques();
-                    md_next_state = STATE_GENQUES;
+                    next_state = STATE_GENERATE_QUESTION;
                     io_init();
                     break;
                     
@@ -466,7 +430,7 @@ void md13_main(void) {
                     play_feedback(MP3_YOU_ANSWERED);
                     md13_play_input(ENTERED);
                     play_feedback(MP3_TRY_AGAIN);
-                    md_next_state = STATE_INPUT;
+                    next_state = STATE_GET_INPUT;
                     io_init();
                     break;
 
@@ -474,7 +438,7 @@ void md13_main(void) {
                 case CANCEL:    // exit input
                     play_feedback(MP3_EXIT_HELP_MENU);
                     play_feedback(MP3_RET_TO_QUESTION);
-                    md_next_state = STATE_INPUT;
+                    next_state = STATE_GET_INPUT;
 					io_init();
                     break;
 					
@@ -489,7 +453,7 @@ void md13_main(void) {
             break;
             
         default:
-            log_msg("[MD13] Error: next_state: %d", md_next_state);
+            log_msg("[MD13] Error: next_state: %d", next_state);
             quit_mode();
             break;
     }

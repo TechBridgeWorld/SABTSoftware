@@ -9,17 +9,7 @@
 #ifndef _MD1_H_
 #define _MD1_H_
 
-// State definitions
-#define STATE_INITIAL        0   // Just started, plays welcome message
-#define STATE_REQUEST_INPUT1 1   // Request for input from user - part 1
-#define STATE_REQUEST_INPUT2 2   // Request for input from user - part 2
-#define STATE_WAIT_INPUT     3   // Waiting for user input
-#define STATE_PROC_INPUT     4   // Processed user input
-#define NUM_DOTS			 6   //number of dots for each braille cell
 
-#define PRIME                53
-
-int current_state;               // current state of the mode
 char expected_dot;               // The expected response from user 
 char used_num_cnt;
 

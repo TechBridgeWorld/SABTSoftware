@@ -22,8 +22,8 @@
 const char *animal_list[MAX_INDEX + 1] = {"bee", "camel", "cat", "cow", "dog", "horse",
     "hyena", "pig", "rooster", "sheep", "zebra", NULL};
     
-const char* animal_sounds[MAX_INDEX + 1] = {"BEE","CAM","CAT","COW","DOG","HOR",
-    "HYE","PIG","ROO","SHE","ZEB", NULL};
+const char* animal_sounds[MAX_INDEX + 1] = {"bee","cam","cat","cow","dog","hor",
+    "hye","pig","roo","she","zeb", NULL};
 
 void md3_reset(void) {
     sound_game_reset(&script_english, NULL, NULL, animal_list, animal_sounds);

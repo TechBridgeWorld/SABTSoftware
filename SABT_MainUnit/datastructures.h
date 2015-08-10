@@ -16,14 +16,6 @@
 #define MAX_MP3_NAME_LENGTH  5
 
 
-#define DOT0     0b000000
-#define DOT1     0b000001
-#define DOT2     0b000010
-#define DOT3     0b000100
-#define DOT4     0b001000
-#define DOT5     0b010000
-#define DOT6     0b100000
-
 typedef enum {UNIVERSAL, ENGLISH, HINDI, KANNADA} lang_type;
 
 typedef struct glyph glyph_t;
@@ -105,39 +97,39 @@ typedef struct word_node {
 // @todo Remove the ones that should only be helper functions
 
 // Cell functions
-void print_cell_pattern(cell_t* cell);
-bool cell_equals(cell_t* cell1, cell_t* cell2);
-bool glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
+void  print_cell_pattern(cell_t* cell);
+bool  cell_equals(cell_t* cell1, cell_t* cell2);
+bool  glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
 
 // Letter functions
-bool letter_equals(letter_t* letter1, letter_t* letter2);
+bool  letter_equals(letter_t* letter1, letter_t* letter2);
 letter_t* get_eng_letter_by_char(char c);
 char* get_eng_letter_name_by_cell(cell_t* cell);
-void print_letter(letter_t* letter);
+void  print_letter(letter_t* letter);
 
 // Word functions
-int parse_string_into_eng_word(char* string, word_t* word);
-void word_to_cell_array(word_t* word, cell_t* arr);
-void decrement_word_index(word_t* word);
-void increment_word_index(word_t* word);
-void get_next_cell_in_word(word_t* word, cell_t* next_cell);
+int   parse_string_into_eng_word(char* string, word_t* word);
+void  word_to_cell_array(word_t* word, cell_t* arr);
+void  decrement_word_index(word_t* word);
+void  increment_word_index(word_t* word);
+void  get_next_cell_in_word(word_t* word, cell_t* next_cell);
 char* get_next_letter_name(word_t* word);
 char* get_lang(word_t* word);
-void print_word(word_t* word);
-void free_word(word_t* word);
-void speak_word(word_t* word);
-void speak_letters_in_word(word_t* word);
-void speak_letters_so_far(word_t* word);
+void  print_word(word_t* word);
+void  free_word(word_t* word);
+void  speak_word(word_t* word);
+void  speak_letters_in_word(word_t* word);
+void  speak_letters_so_far(word_t* word);
 
 // Wordlist functions
-void initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
-void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
-void print_words_in_list(wordlist_t* wl);
-void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
-void free_wordlist(wordlist_t* wl);
+void  initialize_wordlist(word_t* words, int num_words, wordlist_t* list);
+void  strings_to_wordlist(char** strings, int num_strings, wordlist_t* list); // BUGGY
+void  print_words_in_list(wordlist_t* wl);
+void  get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
+void  free_wordlist(wordlist_t* wl);
 
-int random_between(int i, int j);
-void shuffle(int len, int* int_array);
-void unshuffle(int len, int* int_array);
+int   random_between(int i, int j);
+void  shuffle(int len, int* int_array);
+void  unshuffle(int len, int* int_array);
 
 #endif /* _DATASTRUCTURES_H_ */

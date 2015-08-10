@@ -13,6 +13,12 @@
 #include "globals.h"
 #include "ui_handle.h"
 
+#ifdef DEBUGMODE
+    #include <unistd.h>
+    #include "stubs.h"
+    #define _delay_ms usleep
+ #endif
+
 /**
  * @brief Reads in data data from boot sector and
  * checks to make sure that it is the FAT32 standard
@@ -180,7 +186,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                 dir = (struct dir_Structure *) &buffer[i];
                 if (dir->name[0] == EMPTY) { //indicates end of the file list of the directory
                     if ((flag == GET_FILE) || (flag == DELETE))
-                        usart_transmit_string_to_pc_from_flash(PSTR("[FAT32] File does not exist\n\r"));
+                        log_msg("[FAT32] File does not exist");
                     return 0;   
                 }
                 if ((dir->name[0] != DELETED) && (dir->attrib != ATTR_LONG_NAME)) {
@@ -199,6 +205,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                                 return (dir);
                             }  
                             else {   //when flag = DELETE
+                                log_msg("Deleting...");
                                 TX_NEWLINE_PC;
                                 usart_transmit_string_to_pc_from_flash(PSTR("Deleting.."));
                                 TX_NEWLINE_PC;
@@ -387,8 +394,9 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
  * @return unsigned char - return 0 on success
  *                         return 2 on error converting file_name
  */
-
 unsigned char play_mp3_file(unsigned char *file_name){
+    #ifdef DEBUGMODE
+    #else
     struct dir_Structure *dir;
     unsigned long cluster, byteCounter = 0, file_size, first_sector;
     unsigned int k,iCntForSingleAudioWrite;
@@ -511,6 +519,7 @@ unsigned char play_mp3_file(unsigned char *file_name){
     }
 
     playing_sound = false;
+    #endif
     return 0;
 }
 
@@ -1061,7 +1070,7 @@ int replace_the_contents_of_this_file_with (unsigned char *file_name, unsigned c
             buffer[i++] = '$';
             for (; i < 512; i++)  //fill the rest of the buffer with 0x00
                 buffer[i] = 0x00;
-            _delay_ms(100);
+                _delay_ms(100);
         }
         sd_read_single_block(first_sector);    
         _delay_ms(100);

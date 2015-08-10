@@ -2,7 +2,9 @@
 * @file MD12.c
 * @brief Code for mode 12 - Kannada Braille Practice
 * @author Vivek Nair (viveknair@cmu.edu)
+* @todo Record "Welcome to Kannada letter practice" as m12_welc.mp3.
 */
+
 
 // Standard libraries
 #include <stdbool.h>

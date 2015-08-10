@@ -18,8 +18,6 @@
 #define MD10_STATE_REQUEST_WRITE			7		   // Requests the user to write in the pattern
 #define MD10_STATE_SPELL_PATTERN			8		   // Spells out the pattern for the user
 
-#define PRIME                53
-#define NUM_SUB_MODES		 3
 
 char entered_letter;                       // Current letter being entered
 // Keeps track of how long the user entered word is

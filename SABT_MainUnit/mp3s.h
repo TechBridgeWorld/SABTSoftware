@@ -69,11 +69,6 @@
 #define MP3_HELP_MENU_NUMBER    "helpnm"
 // To skip this number, press enter. To try again, press cancel. To change the number, use the left and right buttons and then press enter.
 
-#define MP3_HELP_MENU_OBJECT    "helpob"
-// To skip this object, press enter. To continue, press cancel. 
-
-#define MP3_HELP_MENU_ANIMAL    "helpan"
-// To skip this animal, press enter. To continue playing, press cancel.
 
 #define MP3_HELP_MENU_13        "help13"
 // You are in the help menu. To hear the question again, press left. To hear the answer and skip the question, perss right. To hear the answer you have entered so far, press enter. To exit the help menu, press cancel. To exit the mode, long press cancel.
@@ -120,12 +115,12 @@
 #define MP3_NEXT_LETTER     "nextlt"    // Next letter:
 #define MP3_NEXT_PATTERN    "nextpt"    // Next pattern.
 
-#define MP3_FIRST_CELL_K    "frstck"    // First cell: [Kannada]
-#define MP3_PREV_CELL_K     "prevck"    // Previous cell. [Kannada]
-#define MP3_NEXT_CELL_K     "nextck"    // Next cell: [Kannada]
-#define MP3_LAST_CELL_K     "lastck"    // Last cell: [Kannada]
-#define MP3_NEXT_LETTER_K   "nextlt"    // Next letter:
-#define MP3_NEXT_PATTERN_K  "nextpt"    // Next pattern.
+#define MP3_FIRST_CELL_K    "frstcK"    // First cell: [Kannada]
+#define MP3_PREV_CELL_K     "prevcl"    // KANNADA VERSION DOENS'T EXIST
+#define MP3_NEXT_CELL_K     "nextcK"    // Next cell: [Kannada]
+#define MP3_LAST_CELL_K     "lastcK"    // Last cell: [Kannada]
+#define MP3_NEXT_LETTER_K   "nextlK"    // Next letter: [Kannada]
+#define MP3_NEXT_PATTERN_K  "nextpt"    // KANNADA VERSION DOENS'T EXIST
 
 // math instructions
 #define MP3_PLEASE_ENTER_NUM_BETWEEN    "BETW"    // Please enter a number between: -- doesn't exist?
@@ -167,7 +162,7 @@
 // Incorrect/invalid
 #define MP3_NO              "no"        // No.
 #define MP3_TRY_AGAIN       "tryagn"    // Try again.
-#define MP3_TRY_AGAIN_K     "tryagk"    // Try again. [Kannada]
+#define MP3_TRY_AGAIN_K     "tryagK"    // Try again. [Kannada]
 #define MP3_INCORRECT       "incorr"   // Incorrect answer.
 #define MP3_INCORRECT_K     "incorK"   // Incorrect answer -- KANNADA
 #define MP3_WORD_YOU_MISSED "wrdmis"    // The word you missed was:
@@ -243,17 +238,17 @@
 // mode specific
 
 
-#define MP3_PLSA PLSA
+#define MP3_SPELL_WORD_BY_SOUND        "bysd"
     // mode 3:  Please write the name of the animal that makes the sound:
     // mode 11: Please write the name of the object that makes the sound:
 
-#define MP3_PLSB PLSB
+#define MP3_SPELL_WORD_BY_NAME        "bynm"
     // mode 3:  Please write the spelling of this animal.
     // mode 11: Please write the spelling of this object:
 
-
-
-
+#define MP3_SKIP_THIS                   "skip"
+// Mode 3: To skip this animal, press enter. To continue playing, press cancel.
+// Mode 11: To skip this object, press enter. To continue, press cancel.
 
 
 #define MP3_ZERO        "#0"
@@ -324,11 +319,11 @@
     // Mode 6:  Welcome to free play. Press the pattern for any letter, and then press enter.
     // Mode 7:  Welcome to Hindi letter practice. To learn letters, press dot 1. To practice letters, press dot 2.
     // Mode 8:  Welcome to number practice. To learn numbers, press dot 1. To practice numbers, press dot 2.
-    // Mode 9: 
+    // Mode 9:  // @todo DOES NOT EXIST
     // Mode 10: Welcome to contraction practice.   (WEL1); Welcome. Please select a submode. (INT)
     // Mode 11: Welcome to the everyday noises game.
-    // Mode 12:
-    // Mode 13:
+    // Mode 12: // @todo DOES NOT EXIST
+    // Mode 13: Welcome to the number game.
     // Mode 14: Welcome to the spelling practice.
     // Mode 15: Welcome to the two-player spelling bee. Each of you will be asked to spell:
 

@@ -11,11 +11,11 @@ int main() {
     time_t t;
     srand((unsigned) time(&t));
     cell_t a_cell, b_cell, c_cell, hin_a_cell, all_cell, blank_cell, null_cell;
-    a_cell.pattern = DOT1;
-    b_cell.pattern = DOT1 | DOT2;
-    hin_a_cell.pattern = DOT1;
-    all_cell.pattern = DOT1 | DOT2 | DOT3 | DOT4 | DOT5 | DOT6;
-    blank_cell.pattern = DOT0;
+    a_cell.pattern = DOT_1;
+    b_cell.pattern = DOT_1 | DOT_2;
+    hin_a_cell.pattern = DOT_1;
+    all_cell.pattern = DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
+    blank_cell.pattern = NO_DOTS;
 
     // test of print_cell_pattern
     printf("0b000001 =? ");

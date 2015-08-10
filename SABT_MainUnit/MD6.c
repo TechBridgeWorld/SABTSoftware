@@ -13,35 +13,22 @@
 
 /* Change these for new script */
 #include "script_english.h"
+
 static script_t* this_script = &script_english;
-
-#define MAX_INCORRECT_TRIES 3  // @todo should this be global?
-
-// State variables
-static char next_state = MD6_STATE_INITIAL;
 static glyph_t *this_glyph = NULL;
-static char incorrect_tries = 0;
-static char cell = 0;
-static char cell_pattern = 0;
-static char cell_control = 0;
-
 
 void md6_reset(void) {
     set_mode_globals(this_script, NULL, NULL);
-    this_glyph = NULL;
-    incorrect_tries = 0;
-    cell = 0;
-    cell_pattern = 0;
-    cell_control = 0;
+    reset_globals();
     play_welcome();
-    next_state = MD6_STATE_INPUT;
+    next_state = STATE_GET_INPUT;
     log_msg("[MD6] Mode reset");
 }
 
 void md6_main(void) {
     switch (next_state) {
 
-        case MD6_STATE_INPUT:
+        case STATE_GET_INPUT:
             cell = get_cell();
             if (cell == NO_DOTS)
                 break;
@@ -52,7 +39,7 @@ void md6_main(void) {
             switch (cell_control) {
                 case WITH_ENTER:    // checks validity of letter when enter is pressed
                     this_glyph = search_script(this_script, cell_pattern);
-                    next_state = MD6_STATE_CHECK;
+                    next_state = STATE_CHECK_ANSWER;
                     break;
 
                 case WITH_LEFT:
@@ -63,12 +50,12 @@ void md6_main(void) {
             break;
 
 
-        case MD6_STATE_CHECK:
+        case STATE_CHECK_ANSWER:
             if (this_glyph == NULL)
                 play_feedback(MP3_INVALID_PATTERN);
             else
                 play_glyph(this_glyph);
-            next_state = MD6_STATE_INPUT;
+            next_state = STATE_GET_INPUT;
             break;
     }
 }

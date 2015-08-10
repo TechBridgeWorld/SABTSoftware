@@ -8,26 +8,7 @@
 
 #ifndef _MD3_H_
 #define _MD3_H_
-
-// State machine constants
-#define STATE_NULL 0x00
-#define STATE_MENU 0x01
-#define STATE_GENQUES 0x02
-#define STATE_PROMPT 0x03
-#define STATE_INPUT 0x04
-#define STATE_CHECK 0x05
-#define STATE_REPROMPT 0x06
-
-#define PRIME                	53
-
-// Submode constants
-#define SUBMODE_NULL 0x00
-#define SUBMODE_PLAY 0x01
-#define SUBMODE_LEARN 0x02
-
-#define MAX_INCORRECT_TRIES_1 3
-#define MAX_INCORRECT_TRIES_2 6
-
+ 
 //static char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.
 int animals_used_list[11];                 

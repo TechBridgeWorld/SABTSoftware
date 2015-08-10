@@ -12,7 +12,7 @@
 #include "datastructures.h"
 #include "MD15.h"
 
- int current_mode(){
+ int get_current_mode(){
     return ui_current_mode_number;
  }
 
@@ -46,6 +46,28 @@
     }
  }
 
+ char* get_mode_prefix(){
+    static char mode_prefix[4];
+    mode_prefix[0] = 'M';
+    mode_prefix[1] = get_current_mode();
+    mode_prefix[2] = '_';
+    mode_prefix[3] = '\n';
+    return mode_prefix;
+ }
+
+ void reset_globals(){
+    ui_current_language = set_language();
+    lang_fileset = get_lang_prefix();
+    last_dot = NO_DOTS;
+    submode = level = 0;
+    cell = cell_pattern = cell_control = 0;
+    next_state = STATE_INITIAL;
+}
+
+void reset_stats(){
+    score = mistakes = curr_mistakes = 0;
+}
+
 /**
 * @brief Sets script globals for a new language
 * @param script_t* - Pointer to new script
@@ -65,7 +87,11 @@ void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mo
  * @return int - Pseudo-random value
  */
 int timer_rand(void) {
-    return TCNT1 * 53;
+    #ifdef DEBUGMODE
+        return rand();
+    #else
+        return TCNT1 * 53;
+    #endif
 }
 
 /**
@@ -129,7 +155,7 @@ int get_num_of_digits(long number) {
 }
 
 /**
- * @brief  Given a char, in last_cell, play the corresponding number
+ * @brief  Given a char, in cell, play the corresponding number
  *         sound file
  *          NOTE: Deprecated
  * @return Void

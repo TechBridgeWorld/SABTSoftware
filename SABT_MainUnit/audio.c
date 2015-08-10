@@ -169,11 +169,8 @@ void play_dot(char dot) {
  * @return void
  */
 void play_glyph(glyph_t *this_glyph) {
-    char glyphname[5];
-    if (this_glyph != NULL) {
-        sprintf(glyphname, this_glyph->sound);
-        play_mp3(get_lang_prefix(), glyphname);
-    }
+    if (this_glyph != NULL)
+        play_mp3(get_lang_prefix(), this_glyph->sound);
 }
 
 /**
@@ -189,6 +186,7 @@ void play_word(word_node_t *this_word) {
 }
 
 
+
 /**
  * @brief Plays the dot sequence for a given bit pattern
  * @param char pattern - Bit pattern to play
@@ -201,8 +199,14 @@ void play_pattern(unsigned char pattern) {
     }
     char dot[2];
     for (int i = 0; pattern != 0; i++, pattern = pattern >> 1) {
-        if (pattern & 0x01)
-            play_dot((itoa((i+1), dot, 10))[0]);
+        if (pattern & 0x01) {
+            #ifdef DEBUGMODE
+                sprintf(dot, "%d", i+1);
+                play_dot(dot[0]);
+            #else
+                play_dot(itoa((i+1), dot, 10)[0]);
+            #endif
+        }
     }
 }
 

@@ -192,15 +192,19 @@ bool ui_parse_message(bool mp3_is_playing) {
                 adc_message[0] = usart_ui_received_packet[5];
                 adc_message[1] = usart_ui_received_packet[6];
                 adc_message[2] = usart_ui_received_packet[7];
-                usart_transmit_string_to_pc_from_flash(PSTR("Analog Input channel,MSB,LSB :"));
-                sprintf((char*)adc_message,
+                #ifdef DEBUGMODE
+                    log_msg("Analog Input channel stuff.");
+                #else
+                    usart_transmit_string_to_pc_from_flash(PSTR("Analog Input channel,MSB,LSB :"));
+                    sprintf((char*)adc_message,
                         "%d,%d,%d",
                         usart_ui_received_packet[5],
                         usart_ui_received_packet[6],
                         usart_ui_received_packet[7]);
-                usart_transmit_string_to_pc((unsigned char*)&adc_message);
-                TX_NEWLINE_PC;
-                TX_NEWLINE_PC;
+                    usart_transmit_string_to_pc((unsigned char*)&adc_message);
+                    TX_NEWLINE_PC;
+                    TX_NEWLINE_PC;
+                #endif
                 break;
 
             default:

@@ -8,6 +8,7 @@
 #define _SCRIPT_ENGLISH_H_
 
 #include "datastructures.h"
+#include "globals.h"
 #include "script_common.h"
 #include "string.h"
 
