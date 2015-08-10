@@ -92,13 +92,13 @@ void md14_reset() {
 void md14_main() {
   switch(next_state) {
 
-    case STATE_INITIAL:
+    case INITIAL:
         srand(timer_rand());
         play_welcome();
-        next_state = STATE_CHOOSE_LEVEL;
+        next_state = CHOOSE_LEVEL;
         break;
 
-    case STATE_CHOOSE_LEVEL:
+    case CHOOSE_LEVEL:
         last_dot = create_dialog(MP3_CHOOSE_LEVELS_3, (DOT_1 | DOT_2 | DOT_3 | CANCEL));
         switch (last_dot) {
             case '1':
@@ -127,24 +127,24 @@ void md14_main() {
 
         print_words_in_list(&md14_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
-        next_state = STATE_GENERATE_QUESTION;
+        next_state = GENERATE_QUESTION;
         break;
 
-    case STATE_GENERATE_QUESTION:
+    case GENERATE_QUESTION:
         reset_globals();
         curr_mistakes = 0;
         get_next_word_in_wordlist(&md14_dict, &md14_chosen_word);
         log_msg("[MD14] Next word: %s", md14_chosen_word->name);
-        next_state = STATE_PROMPT;
+        next_state = PROMPT;
         break;
 
-     case STATE_PROMPT:
+     case PROMPT:
         play_direction(MP3_SPELL_WORD);
         speak_word(md14_chosen_word);
-        next_state = STATE_GET_INPUT;
+        next_state = GET_INPUT;
         break;
 
-    case STATE_GET_INPUT:
+    case GET_INPUT:
         cell = get_cell();
         if (cell == NO_DOTS)
             break;
@@ -153,15 +153,15 @@ void md14_main() {
         switch (cell_control) {
             case WITH_ENTER:
             md14_user_cell.pattern = cell_pattern;
-            next_state = STATE_CHECK_ANSWER;
+            next_state = CHECK_ANSWER;
             break;
 
             case WITH_LEFT:
-            next_state = STATE_REPROMPT;
+            next_state = REPROMPT;
             break;
 
             case WITH_RIGHT:
-            next_state = STATE_GENERATE_QUESTION;
+            next_state = GENERATE_QUESTION;
             break;
 
             case WITH_CANCEL:
@@ -169,7 +169,7 @@ void md14_main() {
         }
         break;
 
-    case STATE_CHECK_ANSWER:
+    case CHECK_ANSWER:
         md14_speak_inputted_cell();
         get_next_cell_in_word(md14_chosen_word, &md14_curr_cell);
         log_msg("Target cell: %x, inputted cell: %x.", md14_curr_cell.pattern, md14_user_cell.pattern);
@@ -178,22 +178,22 @@ void md14_main() {
         if (cell_equals(&md14_curr_cell, &md14_user_cell)) {
             if (md14_chosen_word->curr_letter == md14_chosen_word->num_letters - 1) { // done
                 md14_correct_answer();
-                next_state = STATE_GENERATE_QUESTION;
+                next_state = GENERATE_QUESTION;
             }
             else {  // correct but not done
                 play_feedback(MP3_GOOD);
                 play_direction(MP3_NEXT_LETTER);
                 curr_mistakes = 0;
-                next_state = STATE_GET_INPUT;
+                next_state = GET_INPUT;
             }
         }
         else {
             md14_incorrect_answer();
-            next_state = STATE_REPROMPT;
+            next_state = REPROMPT;
         }
         break;
 
-    case STATE_REPROMPT:
+    case REPROMPT:
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
             char* letter_name = get_eng_letter_name_by_cell(&md14_curr_cell);
@@ -210,10 +210,12 @@ void md14_main() {
                 play_direction(MP3_NEXT_LETTER);
             }
         }
-        next_state = STATE_GET_INPUT;
+        next_state = GET_INPUT;
         break;
 
     default:
+        log_msg("Invalid state_t %d", next_state);
+        quit_mode();
         break;
   }
 }

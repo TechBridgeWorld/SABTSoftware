@@ -96,7 +96,7 @@ void md5_reset(void) {
 void md5_main(void) {
     switch(next_state) {
 
-        case STATE_INITIAL:
+        case INITIAL:
 /*            if (!done_rd_dict) {
                 log_msg("Reading dictionary file...");
                 play_direction(MP3_PLEASE_WAIT)
@@ -105,21 +105,21 @@ void md5_main(void) {
                     read_dict_file();
             } */
             play_welcome();
-            next_state = STATE_REQUEST_QUESTION;
+            next_state = REQUEST_QUESTION;
             break;
 
 
 
-        case STATE_REQUEST_QUESTION:
+        case REQUEST_QUESTION:
         if (got_input) {
             got_input = false;
-            next_state = STATE_GENERATE_QUESTION;
+            next_state = GENERATE_QUESTION;
         }
         break;
 
 
 
-        case STATE_GENERATE_QUESTION:
+        case GENERATE_QUESTION:
             if (cell == 0) { // if return was entered twice
                 md5_chosen_word[input_word_index] = '\0';
 
@@ -131,13 +131,13 @@ void md5_main(void) {
                     play_feedback(MP3_YOUR_WORD_IS);
                     play_string(md5_chosen_word, strlen(md5_chosen_word));
                     play_mode_audio(MP3_PASS_DEVICE_PRESS_ENTER);
-                    next_state = STATE_SWITCH_USERS;
+                    next_state = SWITCH_USERS;
 
    /*             }
                 else { // invalid word; clear variables and try again
                     play_feedback(MP3_WORD_NOT_FOUND);
                     md5_reset();
-                    next_state = STATE_REQUEST_QUESTION;
+                    next_state = REQUEST_QUESTION;
                 } */
             }
             
@@ -151,67 +151,67 @@ void md5_main(void) {
                     log_msg("Too many letters inputted!");
                     play_feedback(MP3_TOO_LONG);
                     md5_reset();
-                    next_state = STATE_REQUEST_QUESTION;
+                    next_state = REQUEST_QUESTION;
                     break;
                 }
 
                 md5_chosen_word[input_word_index] = entered_letter;  // add letter to chosen_word
                 input_word_index++;
-                next_state = STATE_REQUEST_QUESTION;
+                next_state = REQUEST_QUESTION;
             }
             else { // invalid letter
                 play_feedback(MP3_INVALID_PATTERN);
-                next_state = STATE_REQUEST_QUESTION;
+                next_state = REQUEST_QUESTION;
             }
             break;
 
 
 
-        case STATE_SWITCH_USERS:
+        case SWITCH_USERS:
             if (got_input) {
                 got_input = false;
-                next_state = STATE_PROMPT;
+                next_state = PROMPT;
             }
             break;
 
 
-        case STATE_PROMPT:
+        case PROMPT:
             log_msg("Entering ask for guess state.");
             play_direction(MP3_PLAYER_2);
             play_direction(MP3_YOUR_WORD_IS_NOW);
             play_string(input_word, strlen(md5_chosen_word));
             play_direction(MP3_GUESS_A_LETTER);
-            next_state = STATE_GET_INPUT;
+            next_state = GET_INPUT;
             break;
 
 
 
 
-        case STATE_GET_INPUT:
+        case GET_INPUT:
             if (got_input) {
                 got_input = false;
-                next_state = STATE_PROCESS_ANSWER;
+                next_state = PROCESS_ANSWER;
             }
             break;
 
 
 
 
-        case STATE_PROCESS_ANSWER:
+        case PROCESS_ANSWER:
             log_msg("Entering checkans state.");
             if (cell == 0) // nothing entered: repeat word
-                next_state = STATE_EVALUATE_GAME;
+                next_state = EVALUATE_GAME;
 
             else if (md5_valid_letter(cell)) { // valid letter: read aloud
                 char buff[7];
                 sprintf(buff, "%c", entered_letter);
                 play_mp3(lang_fileset, buff);  //@todo fix this
-                next_state = STATE_CHECK_ANSWER;
+                next_state = CHECK_ANSWER;
             }
             else {
                 play_feedback(MP3_INVALID_PATTERN);
                 mistakes++;
-                next_state = STATE_EVALUATE_GAME;
+                next_state = EVALUATE_GAME;
             }
             break;
 
@@ -219,7 +219,7 @@ void md5_main(void) {
 
 
 
-        case STATE_CHECK_ANSWER:
+        case CHECK_ANSWER:
             log_msg("Entering check match state.");
             if (md5_place_letter()) // letters is in word; fn places it
                 play_feedback(MP3_YES);
@@ -232,24 +232,24 @@ void md5_main(void) {
                 else
                     play_feedback(MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE);
             }
-            next_state = STATE_EVALUATE_GAME;
+            next_state = EVALUATE_GAME;
             break;
 
 
 
 
 
-        case STATE_EVALUATE_GAME:
+        case EVALUATE_GAME:
             log_msg("Entering evaluate game state.");
             if (!strncmp(input_word, md5_chosen_word, strlen(md5_chosen_word))) {
                 play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
                 play_tada();
-                next_state = STATE_INITIAL;
+                next_state = INITIAL;
             }
             else if (mistakes == max_mistakes) {
                 play_feedback(MP3_7_MISTAKES_YOU_MISSED);
                 play_string(md5_chosen_word, strlen(md5_chosen_word));
-                next_state = STATE_INITIAL;
+                next_state = INITIAL;
             }
             else {
                 if (mistakes > 0) {
@@ -260,8 +260,13 @@ void md5_main(void) {
                     else
                         play_feedback(MP3_MISTAKES_REMAINING);
                 }
-                next_state = STATE_PROMPT;
+                next_state = PROMPT;
             }
+            break;
+
+        default:
+            log_msg("Invalid state_t %d", next_state);
+            quit_mode();
             break;
 
     }

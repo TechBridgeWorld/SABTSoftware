@@ -104,7 +104,7 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
     user_glyph = curr_glyph = NULL;
     sound_list = (char**) SOUND_LIST;
     sound_source_list = (char**) SOUND_SOURCE_LIST;
-    next_state = STATE_CHOOSE_LEVEL;
+    next_state = CHOOSE_LEVEL;
     user_word = free_word_old(user_word);
     curr_word = free_word_old(curr_word);
     scrolled = false;
@@ -120,7 +120,7 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
 void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
     switch(next_state) {
 
-        case STATE_CHOOSE_LEVEL:
+        case CHOOSE_LEVEL:
             if (io_user_abort == true) {
                 log_msg("[%s] Quitting to main menu", mode_prefix);
                 quit_mode();
@@ -130,14 +130,14 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 
                 case '1':
                     log_msg("[%s] Submode: Learn", mode_prefix);
-                    submode = SUBMODE_LEARN;
-                    next_state = STATE_GENERATE_QUESTION;
+                    submode = LEARN;
+                    next_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
                     log_msg("[%s] Submode: Play", mode_prefix);
-                    submode = SUBMODE_PLAY;
-                    next_state = STATE_GENERATE_QUESTION;
+                    submode = PLAY;
+                    next_state = GENERATE_QUESTION;
                 case CANCEL:
                     log_msg("[%s] Quitting to main menu.", mode_prefix);                
                     quit_mode();
@@ -151,7 +151,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 
 
         
-        case STATE_GENERATE_QUESTION:
+        case GENERATE_QUESTION:
             length_entered_word = 0;
             current_word_index = 0;
             sound_source = sound_source_list[choose_sound_source()];
@@ -159,19 +159,19 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
             curr_glyph = NULL;
             user_word = free_word_old(user_word);
             curr_word = free_word_old(curr_word);
-            next_state = STATE_PROMPT;
+            next_state = PROMPT;
             break;
             
 
 
-        case STATE_PROMPT:
+        case PROMPT:
             switch(submode) {
-                case SUBMODE_LEARN:
+                case LEARN:
                     play_mp3(mode_prefix, MP3_SPELL_WORD_BY_NAME);
                     play_sound(mode_prefix, sound_source, true);
                     break;
                 
-                case SUBMODE_PLAY:
+                case PLAY:
                     play_mp3(mode_prefix, MP3_SPELL_WORD_BY_SOUND);
                     play_sound(mode_prefix, sound_source, false);
                     break;
@@ -179,16 +179,16 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 default:
                 break;  
             }
-            next_state = STATE_GET_INPUT;
+            next_state = GET_INPUT;
             break;
         
 
 
-        case STATE_GET_INPUT:
+        case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[%s] User aborted input", mode_prefix);
                 play_mp3(mode_prefix, MP3_SKIP_THIS);
-                next_state = STATE_REPROMPT;
+                next_state = REPROMPT;
                 io_init();
             }
             cell = get_cell();
@@ -199,15 +199,15 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
             switch (cell_control) {
                 case WITH_ENTER:
                     user_glyph = search_script(this_script, cell_pattern);
-                    next_state = STATE_CHECK_ANSWER;
+                    next_state = CHECK_ANSWER;
                     log_msg("[%s] Checking answer", mode_prefix);
                     break;
                 case WITH_LEFT:
-                    next_state = STATE_PROMPT;
+                    next_state = PROMPT;
                     break;
                 case WITH_RIGHT:
                     play_mp3(mode_prefix, MP3_SKIP_THIS);
-                    next_state = STATE_REPROMPT;
+                    next_state = REPROMPT;
                     break;
                 case WITH_CANCEL:
                     break;
@@ -217,7 +217,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 
             
 
-        case STATE_CHECK_ANSWER:
+        case CHECK_ANSWER:
             curr_glyph = search_script(this_script, get_bits_from_letter(sound_source[length_entered_word]));
             if (glyph_equals(curr_glyph, user_glyph)) { // correct input
                 play_glyph(curr_glyph);
@@ -226,23 +226,28 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 user_word = add_glyph_to_word(user_word, user_glyph);
                 if (length_entered_word != strlen(sound_source)) { // not done with word
                     play_feedback(MP3_GOOD);
-                    next_state = STATE_GET_INPUT;
+                    next_state = GET_INPUT;
                 }
                 else { // finished word
                     play_feedback(MP3_GOOD);
                     play_feedback(MP3_NICE_WORK);
                     switch (submode){
-                        case SUBMODE_LEARN:
+                        case LEARN:
                             play_sound(mode_prefix, sound_source, true);
                             play_direction(MP3_SAYS);
                             play_sound(mode_prefix, sound_source, false);
                             break;
                         
-                        case SUBMODE_PLAY:
+                        case PLAY:
                             play_word(user_word);
                             play_sound(mode_prefix, sound_source, true);
+
+                        default:
+                            log_msg("Invalid submode_t %d", submode);
+                            quit_mode();
+
                     }
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                 }
             }
             else { // incorrect input
@@ -260,30 +265,30 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                         play_dot_sequence(curr_glyph);
                     }
                 }
-                next_state = STATE_GET_INPUT;
+                next_state = GET_INPUT;
             }
             break;
         
 
 
 
-        case STATE_REPROMPT:
+        case REPROMPT:
             switch(create_dialog(NULL, ENTER_CANCEL | LEFT_RIGHT)) {
                 case NO_DOTS:
                     break;
 
                 case CANCEL:
                     log_msg("[%s] Reissuing prompt", mode_prefix);
-                    next_state = STATE_PROMPT;
+                    next_state = PROMPT;
                     scrolled = false;
                     break;
 
                 case ENTER:
                     log_msg("[%s] Skipping sound_source", mode_prefix);
                     if (scrolled)
-                        next_state = STATE_PROMPT;
+                        next_state = PROMPT;
                     else
-                        next_state = STATE_GENERATE_QUESTION;
+                        next_state = GENERATE_QUESTION;
                     scrolled = false;
                     break;
 
@@ -294,11 +299,11 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                     sound_source = sound_source_list[choose_sound_source()];
                     user_word = NULL;
                     switch(submode) {
-                        case SUBMODE_LEARN:
+                        case LEARN:
                             play_sound(mode_prefix, sound_source, true);
                             break;
 
-                        case SUBMODE_PLAY:
+                        case PLAY:
                             play_sound(mode_prefix, sound_source, false);
                             break;
                         
@@ -316,6 +321,8 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
             break;
 
         default:
+            log_msg("Invalid state_t %d", next_state);
+            quit_mode();
             break;
     }
 }

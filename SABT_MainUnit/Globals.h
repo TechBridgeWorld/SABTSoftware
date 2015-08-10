@@ -59,6 +59,57 @@ char ui_current_mode_number;
 int  ui_current_mode_index;
 
 
+// USED IN MODES
+
+
+typedef enum {  // these are the all states that a mode can be in.
+				// (No mode uses ALL possible states.)
+	INITIAL,
+	CHOOSE_LEVEL,
+	REQUEST_QUESTION,
+	GENERATE_QUESTION,
+	PROMPT,
+	GET_INPUT,
+	PROCESS_ANSWER,
+	CHECK_ANSWER,
+	REPROMPT,
+	EVALUATE_GAME,
+	SWITCH_USERS
+} state_t;
+
+typedef enum {
+	LEARN,
+	PLAY,
+	ADDITION,
+	SUBTRACTION,
+	MULTIPLICATION
+} submode_t;
+
+typedef enum {
+	EASY,
+	MEDIUM,
+	HARD
+} difficulty_t;
+
+
+lang_type ui_current_language;
+char* lang_fileset;
+
+unsigned char last_dot;
+unsigned char cell;
+unsigned char cell_pattern;
+unsigned char cell_control;
+
+state_t 	 next_state;
+submode_t 	 submode;
+difficulty_t level;
+
+unsigned char max_mistakes;
+unsigned char score;
+unsigned char mistakes;
+unsigned char curr_mistakes;
+
+
 
 
 // USED FOR ACCESSING AUDIO FILES
@@ -74,59 +125,5 @@ unsigned char dict_file_name[FILE_NAME_LEN];
 
 
 
-
-
-// USED IN MODES
-
-lang_type ui_current_language;
-char* lang_fileset;
-
-unsigned char last_dot;
-unsigned char cell;
-unsigned char cell_pattern;
-unsigned char cell_control;
-
-unsigned char next_state;
-unsigned char submode;
-unsigned char level;
-
-unsigned char max_mistakes;
-unsigned char score;
-unsigned char mistakes;
-unsigned char curr_mistakes;
-
-
-#define STATE_INITIAL			0
-#define STATE_CHOOSE_LEVEL		1
-#define STATE_REQUEST_QUESTION	2
-#define STATE_GENERATE_QUESTION	3
-#define STATE_PROMPT			4
-#define STATE_GET_INPUT			5
-#define STATE_PROCESS_ANSWER	6
-#define	STATE_CHECK_ANSWER		7
-#define STATE_REPROMPT			8
-#define STATE_EVALUATE_GAME		9
-#define STATE_SWITCH_USERS		10
-
-// USED IN MODES
-#define SUBMODE_LEARN	1
-#define SUBMODE_PLAY	2
-
-#define SUBMODE_ADD		1
-#define SUBMODE_SUB		2
-#define SUBMODE_MUL		3
-
-#define	LEVEL_EASY		1
-#define LEVEL_MEDIUM	2
-#define LEVEL_HARD		3
-
-
-
-// NOT USED?
-
-//volatile char temp_cnt;
-//volatile bool playing_mp3;
-
- 
 
 #endif /* _GLOBALS_H_ */

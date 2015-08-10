@@ -105,13 +105,13 @@ void md13_generate_op2(){
 void md13_generate_number(){
 	int base = 0;
     switch (level) {
-        case LEVEL_EASY:
+        case EASY:
             base = (score >= 3) ? (60) : (score * 20 + 1);
             operand_1 = random_between(base,base + 20);
             md13_generate_op2();
             break;
 
-        case LEVEL_HARD:
+        case HARD:
 			base = (base < 9500) ? ((score + 1) * 500) : 9500;
             operand_1 = random_between(base, base + 30);
             md13_generate_op2();
@@ -292,33 +292,33 @@ void play_mistake(){
 
 void md13_main(void) {
     switch (next_state) {
-		case STATE_INITIAL:
+		case INITIAL:
             play_welcome();
-            next_state = STATE_CHOOSE_LEVEL;
+            next_state = CHOOSE_LEVEL;
             break;
 
-        case STATE_CHOOSE_LEVEL:
+        case CHOOSE_LEVEL:
             last_dot = create_dialog(MP3_CHOOSE_LEVELS_2,
                                         ( DOT_1 | DOT_2 | CANCEL));
             switch (last_dot) {
                 case '1':
                     log_msg("[MD13] Level 1");
-                    level = LEVEL_EASY;
+                    level = EASY;
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     max_q = EASY_QUES;
                     init_index(max_q);
                     shuffle(max_q, ques_index);
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                     break;
                     
                 case '2':
                     log_msg("[MD13] Level 2");
-                    level = LEVEL_HARD;
+                    level = HARD;
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     max_q = QUES_TYPES;
                     init_index(max_q);
                     shuffle(max_q, ques_index);
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                     break;
                 
                 case CANCEL:
@@ -331,26 +331,26 @@ void md13_main(void) {
             }
             break;
         
-        case STATE_GENERATE_QUESTION:
+        case GENERATE_QUESTION:
             init_array(answer, MAX_ANSWER_NUM);
             init_array(entered, MAX_ANSWER_NUM);
             md13_generate_number();
             md13_generate_answer();
             mistakes = 0;
             log_msg("[Mode 13] num answer: %d answer: %d", num_answer, answer[0]);
-            next_state = STATE_PROMPT;
+            next_state = PROMPT;
             break;
             
-        case STATE_PROMPT:
+        case PROMPT:
 			io_init();
             md13_play_question();
-            next_state = STATE_GET_INPUT;
+            next_state = GET_INPUT;
             break;
             
-        case STATE_GET_INPUT:
+        case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[MD13] User aborted input");
-                next_state = STATE_REPROMPT;
+                next_state = REPROMPT;
                 play_feedback(MP3_HELP_MENU);
                 io_init();
                 break;
@@ -360,19 +360,19 @@ void md13_main(void) {
                 if (input_valid) {
                     play_feedback(MP3_YOU_ANSWERED);
                     play_number(user_answer);
-                    next_state = STATE_CHECK_ANSWER;
+                    next_state = CHECK_ANSWER;
                 }
                 else
                     log_msg("[MD13] IO error");
             }
             break;
             
-        case STATE_CHECK_ANSWER:
+        case CHECK_ANSWER:
             if (place_number(user_answer)) {     // Correct answer
                 log_msg("[MD13] Correct answer");
                 if (!all_entered()) {
                     play_feedback(MP3_GOOD_NEXT);
-                    next_state = STATE_GET_INPUT;
+                    next_state = GET_INPUT;
                 }
                 else {
                     score++;
@@ -381,7 +381,7 @@ void md13_main(void) {
                     play_number(score);
                     play_tada();
 					md13_choose_ques();
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                 }
             }
             else {
@@ -395,16 +395,16 @@ void md13_main(void) {
                     play_feedback(MP3_YOUR_SCORE_IS);
 					play_number(score);
                     md13_choose_ques();
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                 }
                 else {
                     play_mistake();
-					next_state = STATE_PROMPT;
+					next_state = PROMPT;
 				}
             }
             break;
             
-        case STATE_REPROMPT:
+        case REPROMPT:
             last_dot = create_dialog(MP3_HELP_MENU_13,
                                         ENTER_CANCEL | LEFT_RIGHT | DOT_1
                                         | DOT_2 | DOT_3 | DOT_4
@@ -415,14 +415,14 @@ void md13_main(void) {
                     break;
            
                 case LEFT:  // play answer
-                    next_state = STATE_PROMPT;
+                    next_state = PROMPT;
                     io_init();
                     break;
 
                 case RIGHT:
                     md13_play_answer();
                     md13_choose_ques();
-                    next_state = STATE_GENERATE_QUESTION;
+                    next_state = GENERATE_QUESTION;
                     io_init();
                     break;
                     
@@ -430,7 +430,7 @@ void md13_main(void) {
                     play_feedback(MP3_YOU_ANSWERED);
                     md13_play_input(ENTERED);
                     play_feedback(MP3_TRY_AGAIN);
-                    next_state = STATE_GET_INPUT;
+                    next_state = GET_INPUT;
                     io_init();
                     break;
 
@@ -438,7 +438,7 @@ void md13_main(void) {
                 case CANCEL:    // exit input
                     play_feedback(MP3_EXIT_HELP_MENU);
                     play_feedback(MP3_RET_TO_QUESTION);
-                    next_state = STATE_GET_INPUT;
+                    next_state = GET_INPUT;
 					io_init();
                     break;
 					
@@ -453,7 +453,7 @@ void md13_main(void) {
             break;
             
         default:
-            log_msg("[MD13] Error: next_state: %d", next_state);
+            log_msg("Invalid state_t %d", next_state);
             quit_mode();
             break;
     }

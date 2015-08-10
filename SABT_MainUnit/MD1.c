@@ -61,7 +61,7 @@ void md1_reset(void) {
     reset_globals();
     reset_stats();
     used_num_cnt = 0;
-    next_state = STATE_INITIAL;
+    next_state = INITIAL;
 }
 
 /**
@@ -73,40 +73,42 @@ void md1_reset(void) {
 void md1_main(void)
 {
     switch(next_state) {
-        case STATE_INITIAL:
+        case INITIAL:
             play_welcome();
-            next_state = STATE_GENERATE_QUESTION;
+            next_state = GENERATE_QUESTION;
 
-        case STATE_GENERATE_QUESTION:
+        case GENERATE_QUESTION:
             expected_dot = random_number_as_char();
-            next_state = STATE_PROMPT;
+            next_state = PROMPT;
 
-        case STATE_PROMPT:
+        case PROMPT:
             play_direction(MP3_FIND_DOT);
             play_dot(expected_dot);
-            next_state = STATE_GET_INPUT;
+            next_state = GET_INPUT;
             break;
 
-        case STATE_GET_INPUT:
+        case GET_INPUT:
             if (last_dot != 0)
-                next_state = STATE_CHECK_ANSWER;
+                next_state = CHECK_ANSWER;
             break;
 
-        case STATE_CHECK_ANSWER:
+        case CHECK_ANSWER:
             if (last_dot != expected_dot) {
                 play_feedback(MP3_INCORRECT);
                 play_dot(expected_dot);
                 last_dot = 0;
-                next_state = STATE_GET_INPUT;
+                next_state = GET_INPUT;
             }
             else {
                 play_feedback(MP3_CORRECT);
                 play_tada();
                 last_dot = 0;
-                next_state = STATE_GENERATE_QUESTION;
+                next_state = GENERATE_QUESTION;
             }
             break;
         default:
+            log_msg("Invalid state_t %d", next_state);
+            quit_mode();
             break;
     }
 }
@@ -116,20 +118,20 @@ void md1_main(void)
  * @return Void
  */
 void md1_call_mode_yes_answer(void) {
-    next_state = STATE_PROMPT;
+    next_state = PROMPT;
 }
 
 void md1_call_mode_no_answer(void) {}
 
 /**
  * @brief register dot input
- *        Sets the program to STATE_PROC_INPUT
+ *        Sets the program to PROC_INPUT
  * @param this_dot the dot being input
  * @return Void
  */
 void md1_input_dot(char this_dot) {
     last_dot = this_dot;
-    next_state = STATE_CHECK_ANSWER;
+    next_state = CHECK_ANSWER;
 }
 
 /**

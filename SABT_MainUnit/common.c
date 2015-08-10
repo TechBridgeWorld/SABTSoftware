@@ -61,7 +61,7 @@
     last_dot = NO_DOTS;
     submode = level = 0;
     cell = cell_pattern = cell_control = 0;
-    next_state = STATE_INITIAL;
+    next_state = INITIAL;
 }
 
 void reset_stats(){
