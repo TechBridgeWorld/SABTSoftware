@@ -206,10 +206,6 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                             }  
                             else {   //when flag = DELETE
                                 log_msg("Deleting...");
-                                TX_NEWLINE_PC;
-                                usart_transmit_string_to_pc_from_flash(PSTR("Deleting.."));
-                                TX_NEWLINE_PC;
-                                TX_NEWLINE_PC;
                                 first_cluster = (((unsigned long) dir->first_cluster_hi) << 16) | dir->first_cluster_lo;
 
                                 //mark file as 'deleted' in FAT table
@@ -226,29 +222,29 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
                                 //mark all the clusters allocated to the file as 'free'
                                 while (1) {
                                     next_cluster = get_set_next_cluster (first_cluster, GET, 0);
-                                    get_set_next_cluster (first_cluster, SET, 0);
-                                    if (next_cluster > 0x0ffffff6) 
-                                    {usart_transmit_string_to_pc_from_flash(PSTR("File deleted!"));return 0;}
+                                    get_set_next_cluster (first_cluster, SET, 0); {
+                                        log_msg("File deleted!");
+                                        return 0;
+                                    }
                                     first_cluster = next_cluster;
                                 } 
                             }
                         }
                     }
                     else { //when flag = GET_LIST
-                        TX_NEWLINE_PC;
+                        NEWLINE;
                         for (j = 0; j < 11; j++) {
                             if (j == 8)
-                                usart_transmit_byte_to_pc(' ');
-                            usart_transmit_byte_to_pc (dir->name[j]);
+                                log_msg_no_newline(" ");
+                            log_msg_no_newline("%s", dir->name[j]);
                         }
-                        usart_transmit_string_to_pc_from_flash (PSTR("   "));
+                        log_msg_no_newline("   ");
                         if ((dir->attrib != 0x10) && (dir->attrib != 0x08)) {
-                            usart_transmit_string_to_pc_from_flash (PSTR("FILE" ));
-                            usart_transmit_string_to_pc_from_flash (PSTR("   "));
+                            log_msg_no_newline("FILE   ");
                             display_memory (LOW, dir->file_size);
                         }
                         else
-                            usart_transmit_string_to_pc_from_flash ((dir->attrib == 0x10)? PSTR("DIR") : PSTR("ROOT"));
+                            log_msg_no_newline((dir->attrib == 0x10)? "DIR" : "ROOT");
                     }
                 }
             }
@@ -260,7 +256,7 @@ struct dir_Structure* find_files (unsigned char flag, unsigned char *file_name) 
         if (cluster > 0x0ffffff6)
             return 0;
         if (cluster == 0) {
-            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster"));
+            log_msg("Error in getting cluster");
             return 0;
         }
     }
@@ -317,7 +313,7 @@ unsigned char read_file (unsigned char flag, unsigned char *file_name) {
 
         cluster = get_set_next_cluster (cluster, GET, 0);
         if (cluster == 0) {
-            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster"));
+            log_msg("Error in getting cluster");
             return 0;
         }
     }
@@ -344,13 +340,13 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
 
     error = convert_file_name (file_name);    //convert file_name into FAT format
     if (error) {
-        TX_NEWLINE_PC;
+        NEWLINE;
         return 1;
     }
 
     dir = find_files (GET_FILE, file_name);   //get the file location
     if (dir == 0) {
-        TX_NEWLINE_PC;
+        NEWLINE;
         return 2;
     }
 
@@ -376,8 +372,8 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
         }
         cluster = get_set_next_cluster (cluster, GET, 0);
         if (cluster == 0)  {
-            TX_NEWLINE_PC;
-            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
+            NEWLINE;
+            log_msg("Error in getting cluster"); 
             return 3;
         }
     }
@@ -513,7 +509,7 @@ unsigned char play_mp3_file(unsigned char *file_name){
         cluster = get_set_next_cluster (cluster, GET, 0);
         if (cluster == 0) {
             playing_sound = false;
-            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
+            log_msg("Error in getting cluster"); 
             return 0;
         }
     }
@@ -555,7 +551,7 @@ unsigned char play_beep(){
  
         for (iAudioByteCnt = 0 ; iAudioByteCnt < 216 ; iAudioByteCnt ++ ){
             vs1053_write_data(StringOfData[iAudioByteCnt]);    
-            usart_transmit_string_to_pc_from_flash (PSTR("Transmitting Beep"));
+            log_msg("Transmitting Beep");
         }
 
         iAudioByteCnt = 0;    //reset byte count to zero after each beep
@@ -648,7 +644,7 @@ unsigned char read_dict_file()
             if (end_of_file) {
                 done_rd_dict = true;
                 log_msg("read in dictionary");
-                TX_NEWLINE_PC;
+                NEWLINE;
                 return 0;
             }
 
@@ -664,7 +660,7 @@ unsigned char read_dict_file()
         cluster = get_set_next_cluster (cluster, GET, 0);
         curr_dict_cluster = cluster;
         if (cluster == 0) {
-            usart_transmit_string_to_pc_from_flash(PSTR("Error in getting cluster")); 
+            log_msg("Error in getting cluster"); 
             return 0;
         }
     }
@@ -999,7 +995,7 @@ unsigned char convert_dict_file_name (unsigned char *file_name) {
 
     // 1 = BAD_EXTENSION
     if (j > 8) {
-        usart_transmit_string_to_pc_from_flash(PSTR("Invalid file_name.")); 
+        log_msg("Invalid file_name."); 
         return 1;
     }
 
@@ -1154,7 +1150,7 @@ void write_file (unsigned char *file_name) {
         do {
             // Special case when the last character in previous sector was '\r'
             if (sector_end_flag == 1) {
-                usart_transmit_byte_to_pc ('\n');
+                NEWLINE;
                 buffer[i++] = '\n'; // Appending 'Line Feed (LF)' character
                 file_size++;
             }
@@ -1335,8 +1331,8 @@ void memory_statistics (void) {
     total_memory = total_clusters * sector_per_cluster / 1024;
     total_memory *= bytes_per_sector;
 
-    TX_NEWLINE_PC;
-    TX_NEWLINE_PC;
+    NEWLINE;
+    NEWLINE;
 
     // Display total memory
     display_memory (HIGH, total_memory);
@@ -1407,7 +1403,7 @@ void display_memory (unsigned char flag, unsigned long memory) {
 
     if (flag == HIGH)
         memory_string[13] = 'K';
-    usart_transmit_string_to_pc(memory_string);
+    log_msg("%s", memory_string);
 }
 
 
@@ -1471,45 +1467,35 @@ void init_sd_card(bool verbose) {
     if (verbose) {
         init = vs1053_initialize();
 
-        if (init == 0) {
-            usart_transmit_string_to_pc_from_flash(PSTR("VS1053 MP3 chip sucessfully initialized"));
-            TX_NEWLINE_PC;  
-        }
-        else{
-            usart_transmit_string_to_pc_from_flash (PSTR("Error initializing VS1053 - CODE "));
-            usart_transmit_byte_to_pc(init + 64);
-            TX_NEWLINE_PC;
-        }
+        if (init == 0)
+            log_msg("VS1053 MP3 chip sucessfully initialized");
+        else
+            log_msg("Error initializing VS1053 - CODE %d", init + 64);
 
         if (error) {
             if (error == 1) {
-                usart_transmit_string_to_pc_from_flash(PSTR("SD card not detected.."));
-                TX_NEWLINE_PC;
+                log_msg("SD card not detected..");
                 play_beep();  
             }
             
             if (error == 2) 
-                usart_transmit_string_to_pc_from_flash(PSTR("Card Initialization failed.."));
+               log_msg("Card Initialization failed..");
 
             while (1);  //wait here forever if error in SD init   
         }
 
         switch (card_type) {
             case 1:
-                usart_transmit_string_to_pc_from_flash(
-                        PSTR("Standard Capacity Card (Ver 1.x) Detected"));
+                log_msg("Standard Capacity Card (Ver 1.x) Detected");
                 break;
             case 2:
-                usart_transmit_string_to_pc_from_flash(
-                        PSTR("High Capacity Card Detected"));
+                log_msg("High Capacity Card Detected");
                 break;
             case 3:
-                usart_transmit_string_to_pc_from_flash(
-                        PSTR("Standard Capacity Card (Ver 2.x) Detected"));
+                log_msg("Standard Capacity Card (Ver 2.x) Detected");
                 break;
             default:
-                usart_transmit_string_to_pc_from_flash(
-                        PSTR("Unknown SD Card Detected"));
+                log_msg("Unknown SD Card Detected");
                 break; 
         }
 
@@ -1518,16 +1504,12 @@ void init_sd_card(bool verbose) {
 
         error = get_boot_sector_data (); //read boot sector and keep necessary data in global variables
         if (error) {
-            TX_NEWLINE_PC;
-            usart_transmit_string_to_pc_from_flash(
-                    PSTR("FAT32 not found!"));  //FAT32 incompatible drive
+            NEWLINE;
+            log_msg("FAT32 not found!");  //FAT32 incompatible drive
         }
         else {
-            TX_NEWLINE_PC;
-            usart_transmit_string_to_pc_from_flash(
-                    PSTR("FAT32 file system detected..."));
+            log_msg("FAT32 file system detected...");
         }
-        TX_NEWLINE_PC;  
      
     }
     else {

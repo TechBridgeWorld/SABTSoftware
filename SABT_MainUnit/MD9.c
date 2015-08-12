@@ -49,13 +49,13 @@ void md9_generate_question(void) {
         
         
         switch (submode) {
-            case ADDITION:
+            case SUBMODE_ADD:
                 result = operand_1 + operand_2;
                 break;
-            case SUBTRACTION:
+            case SUBMODE_SUBTRACT:
                 result = operand_1 - operand_2;
                 break;
-            case MULTIPLICATION:
+            case SUBMODE_MULTIPLY:
                 result = operand_1 * operand_2;
                 break;
             default:
@@ -71,13 +71,13 @@ void md9_play_question() {
     play_direction(MP3_WRITE_NUMBER_);
     play_number(operand_1);
     switch (submode) {
-        case ADDITION:
+        case SUBMODE_ADD:
             play_direction(MP3_PLUS);
             break;
-        case SUBTRACTION:
+        case SUBMODE_SUBTRACT:
             play_direction(MP3_MINUS);
             break;
-        case MULTIPLICATION:
+        case SUBMODE_MULTIPLY:
             play_direction(MP3_TIMES);
             break;
         default:
@@ -94,7 +94,7 @@ void md9_play_answer(void) {
 }
 
 void md9_main(void) {
-    switch (next_state) {
+    switch (current_state) {
         case INITIAL:
             last_dot = create_dialog(MP3_CHOOSE_LEVELS_3,
                 (DOT_1 | DOT_2 | DOT_3));
@@ -102,20 +102,20 @@ void md9_main(void) {
                 
                 case '1':
                     log_msg("[MD9] Submode: Addition");
-                    submode = ADDITION;
-                    next_state = CHOOSE_LEVEL;
+                    submode = SUBMODE_ADD;
+                    current_state = CHOOSE_LEVEL;
                     break;
 
                 case '2':
                     log_msg("[MD9] Submode: Subtraction");
-                    submode = SUBTRACTION;
-                    next_state = CHOOSE_LEVEL;
+                    submode = SUBMODE_SUBTRACT;
+                    current_state = CHOOSE_LEVEL;
                     break;
 
                 case '3':
                     log_msg("[MD9] Submode: Multiplication");
-                    submode = MULTIPLICATION;
-                    next_state = CHOOSE_LEVEL;
+                    submode = SUBMODE_MULTIPLY;
+                    current_state = CHOOSE_LEVEL;
                     break;
 
                 case CANCEL:
@@ -140,21 +140,21 @@ void md9_main(void) {
                     log_msg("[MD9] Level: 1");
                     level = EASY;
                     play_direction(MP3_INSTRUCTIONS_MATH);
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
                     log_msg("[MD9] Level: 2");
                     level = MEDIUM;
                     play_direction(MP3_INSTRUCTIONS_MATH);
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
 
                 case '3':
                     log_msg("[MD9] Level: 3");
                     level = HARD;
                     play_direction(MP3_INSTRUCTIONS_MATH);
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
 
                 default:
@@ -166,19 +166,19 @@ void md9_main(void) {
 
         case GENERATE_QUESTION:
             md9_generate_question();
-            next_state = PROMPT;
+            current_state = PROMPT;
             break;
 
         case PROMPT:
             md9_play_question();
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
 
         case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[MD12] User aborted input");
                 play_feedback(MP3_HELP_MENU);
-                next_state = REPROMPT;
+                current_state = REPROMPT;
                 io_init();
                 break;
             }
@@ -187,7 +187,7 @@ void md9_main(void) {
                     log_msg("[MD9] User answer: %d", user_answer);
                     play_feedback(MP3_YOU_ANSWERED);
                     play_number(user_answer);
-                    next_state = CHECK_ANSWER;
+                    current_state = CHECK_ANSWER;
                 } else
                     log_msg("[MD9] IO error");
             }
@@ -198,14 +198,14 @@ void md9_main(void) {
                 mistakes = 0;
                 play_feedback(MP3_CORRECT);
                 play_tada();
-                next_state = GENERATE_QUESTION;
+                current_state = GENERATE_QUESTION;
             } else {                        // Wrong answer
                 mistakes++;
                 play_feedback(MP3_CORRECT);
                 if (mistakes >= max_mistakes)
                     md9_play_answer();
                 play_feedback(MP3_TRY_AGAIN);
-                next_state = PROMPT;
+                current_state = PROMPT;
             }
             break;
 
@@ -220,26 +220,26 @@ void md9_main(void) {
                         break;
 
                     case LEFT:
-                        next_state = PROMPT;
+                        current_state = PROMPT;
                         io_init();
                         break;
                     
                     case RIGHT:
                         md9_play_answer();
-                        next_state = GENERATE_QUESTION;
+                        current_state = GENERATE_QUESTION;
                         io_init();
                         break;
 
                     // Skipping question
                     case ENTER:
-                        next_state = GENERATE_QUESTION;
+                        current_state = GENERATE_QUESTION;
                         break;
 
                     // Try again
                     case CANCEL:
                         play_feedback(MP3_EXIT_HELP_MENU);
                         play_feedback(MP3_RET_TO_QUESTION);
-                        next_state = GET_INPUT;
+                        current_state = GET_INPUT;
                         io_init();
                         break;
 
@@ -256,7 +256,7 @@ void md9_main(void) {
             break;
 
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
     }

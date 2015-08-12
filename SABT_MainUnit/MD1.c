@@ -13,43 +13,19 @@
 #include "script_english.h"
 #include "common.h"
 
-char used_number[6] = {0, 0, 0, 0, 0, 0};
+int dots[6];
+int dot_index;
 
-/**
- * @brief based off of the internal timer (TCNT1) - we generate
- *        a psuedo-random number. Turn that into a number from 1 - 6
- *        return the charachter of that number;
- * @return char - charachter representation of a number from 1 - 6
- */
-char random_number_as_char() {  // @todo use library for this
-    int num = timer_rand() % 6;
-    int i;
-
-    //while you are looking at a full section of the array
-    while (used_number[num]) {
-        num = timer_rand() % 6;
+char choose_dot(){
+    if (dot_index == 0) {
+        shuffle(6, dots);
+        for (int i = 0; i < 6; i++)
+            log_msg("Dot %d = %d", i, dots[i]);
     }
-
-    used_number[num] = 1;
-    used_num_cnt ++;
-
-    //if you find that you have used all of the letters, clear both the array and the count
-    if (used_num_cnt == 6) {
-        for (i = 0; i < 6; i ++)
-            used_number[i] = 0;
-        used_num_cnt = 0;
-    }
-
-    //change from range 0-5 to 1-6
-    num += 1;
-
-    // Return the number as a character
-    if (num >= 1 && num <= 6)
-        return '0' + num;
-
-    // Default behavior, could not generate a valid char
-    log_msg("Failed to generate random number!");
-    return '0';
+    char this_dot = dots[dot_index];
+    log_msg("Choosing dot %d = %d", dot_index, this_dot);
+    dot_index = (dot_index + 1) % 6;
+    return this_dot;
 }
 
 /**
@@ -60,8 +36,12 @@ char random_number_as_char() {  // @todo use library for this
 void md1_reset(void) {
     reset_globals();
     reset_stats();
-    used_num_cnt = 0;
-    next_state = INITIAL;
+    for (int i = 0; i < 6; i++) {
+        dots[i] = i + 1;
+        log_msg("Dot %d = %d", i, i + 1);
+    }
+    dot_index = 0;
+    current_state = INITIAL;
 }
 
 /**
@@ -72,42 +52,43 @@ void md1_reset(void) {
  */
 void md1_main(void)
 {
-    switch(next_state) {
+    switch(current_state) {
         case INITIAL:
             play_welcome();
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
 
         case GENERATE_QUESTION:
-            expected_dot = random_number_as_char();
-            next_state = PROMPT;
+            expected_dot = choose_dot();
+            current_state = PROMPT;
 
         case PROMPT:
             play_direction(MP3_FIND_DOT);
             play_dot(expected_dot);
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
 
         case GET_INPUT:
             if (last_dot != 0)
-                next_state = CHECK_ANSWER;
+                current_state = CHECK_ANSWER;
             break;
 
         case CHECK_ANSWER:
-            if (last_dot != expected_dot) {
-                play_feedback(MP3_INCORRECT);
-                play_dot(expected_dot);
-                last_dot = 0;
-                next_state = GET_INPUT;
-            }
-            else {
+            if (last_dot == expected_dot) {
                 play_feedback(MP3_CORRECT);
                 play_tada();
                 last_dot = 0;
-                next_state = GENERATE_QUESTION;
+                current_state = GENERATE_QUESTION;
+            }
+            else {
+                play_feedback(MP3_INCORRECT);
+                play_dot(expected_dot);
+                last_dot = 0;
+                current_state = GET_INPUT;
             }
             break;
+
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
     }
@@ -118,7 +99,7 @@ void md1_main(void)
  * @return Void
  */
 void md1_call_mode_yes_answer(void) {
-    next_state = PROMPT;
+    current_state = PROMPT;
 }
 
 void md1_call_mode_no_answer(void) {}
@@ -131,7 +112,7 @@ void md1_call_mode_no_answer(void) {}
  */
 void md1_input_dot(char this_dot) {
     last_dot = this_dot;
-    next_state = CHECK_ANSWER;
+    current_state = CHECK_ANSWER;
 }
 
 /**

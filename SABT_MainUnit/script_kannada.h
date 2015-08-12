@@ -10,7 +10,7 @@
 #include "datastructures.h"
 #include "script_common.h"
 
-#define SCRIPT_KANNADA_FILESET "KAN_"
+#define SCRIPT_KANNADA_FILESET "k_"
 #define SCRIPT_KANNADA_LENGTH 50
 #define SCRIPT_KANNADA_NUM_LETTERS 49
 

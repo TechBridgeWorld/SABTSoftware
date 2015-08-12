@@ -12,7 +12,7 @@
 #include "script_common.h"
 #include "string.h"
 
-#define SCRIPT_ENGLISH_FILESET "ENG_"
+#define SCRIPT_ENGLISH_FILESET "e_"
 #define SCRIPT_ENGLISH_LENGTH 26 // 26 glyphs
 #define SCRIPT_ENGLISH_NUM_LETTERS 26 // 26 letters
 

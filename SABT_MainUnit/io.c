@@ -5,9 +5,11 @@
  */
 
 #include <stdbool.h>
+#include <stdio.h>
+#include "USART_Keypad.h"
+#include "USART_PC.h"
 #include "io.h"
 #include "common.h"
-#include "globals.h"
 #include "audio.h"
 #include "script_common.h"
 #include "letter_globals.h"
@@ -589,7 +591,7 @@ void io_dialog_reset(void) {
 void io_dialog_error(void) {
     io_dialog_incorrect_tries++;
     play_feedback(MP3_INVALID_PATTERN);
-    if (io_dialog_incorrect_tries >= MAX_INCORRECT_TRIES)
+    if (io_dialog_incorrect_tries >= 3)
         io_dialog_incorrect_tries = -1;
 }
 
@@ -609,7 +611,6 @@ void log_msg(const char* format, ...) {
     va_end( args );
     #endif
 }
-
 
 void log_msg_no_newline(const char* format, ...) {
     va_list args;

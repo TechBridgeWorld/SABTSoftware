@@ -560,13 +560,12 @@ void free_wordlist(wordlist_t* wl) {
 }
 
 /**
- * Find a random number between i and j, inclusive of
- * i but not j. Helper function for shuffle.
+ * Find a random number between i and j, inclusive.
  * @param Ints i and j, delineating the range
- * @return A random int between i and j-1 inclusive.
+ * @return A random int between i and j inclusive.
  */
 int random_between(int i, int j) {
-    int range = j - i;
+    int range = j - i + 1;
     int retval = i + (rand() % range);
     return retval;
 }

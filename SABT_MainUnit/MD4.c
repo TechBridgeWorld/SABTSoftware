@@ -5,6 +5,7 @@
  */
 
 #include "common.h"
+#include "io.h"
 #include "globals.h"
 #include "audio.h"
 #include "script_common.h"
@@ -20,7 +21,7 @@ static bool md_input_ready = false;
 static bool md_input_valid = false;
 
 //Globals
-static char input_word[MAX_WORD_LEN];
+static char input_word[MAX_WORD_LENGTH];
 static char *chosen_word;
 static char mistake_pool[26] = "";
 
@@ -138,12 +139,12 @@ void md4_reset(void) {
 }
 
 void md4_main(void) {   
-    switch (next_state) {
+    switch (current_state) {
         case INITIAL:
             shuffle(dict.num_words, dict.index_array);
             dict.index = 0;
             play_welcome();
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
             break;
             
         case GENERATE_QUESTION:
@@ -151,11 +152,11 @@ void md4_main(void) {
             log_msg("Next word: %s", chosen_word);
             mistakes = 0;
             init_char_arr(mistake_pool, max_mistakes);
-            init_char_arr(input_word, MAX_WORD_LEN);
+            init_char_arr(input_word, MAX_WORD_LENGTH);
             play_direction(MP3_CHOOSE_NUM_OF_HINTS);
             play_mode_audio(MP3_SUBMODE);
 
-            next_state = CHOOSE_LEVEL;
+            current_state = CHOOSE_LEVEL;
             break;
             
         case CHOOSE_LEVEL:
@@ -164,22 +165,22 @@ void md4_main(void) {
             switch (last_dot) {
                     case '1':
                         place_hint(1);
-                        next_state = PROMPT;
+                        current_state = PROMPT;
                         break;
                     case '2':
                         place_hint(2);
-                        next_state = PROMPT;
+                        current_state = PROMPT;
                         break;
                     case '3':
                         place_hint(3);
-                        next_state = PROMPT;
+                        current_state = PROMPT;
                         break;
                     case CANCEL:
                         log_msg("Quitting to main menu.");                    
                         quit_mode();
                         break;
                     case ENTER:
-                        next_state = PROMPT;
+                        current_state = PROMPT;
                         break;
                     default:
                         break;
@@ -191,13 +192,13 @@ void md4_main(void) {
             play_feedback(MP3_SPELLING_SO_FAR);
             play_string(input_word, strlen(chosen_word));
             play_direction(MP3_GUESS_A_LETTER);
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
             
         case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[MD4] User aborted input");
-                next_state = REPROMPT;
+                current_state = REPROMPT;
                 io_init();
                 break;
             }
@@ -205,7 +206,7 @@ void md4_main(void) {
                 if (md_input_valid) {
                     log_msg("[MD4] User answer: %c", entered_letter);
                     play_string(&entered_letter, 1);
-                    next_state = CHECK_ANSWER;
+                    current_state = CHECK_ANSWER;
                 }
                 else
                     log_msg("[MD4] IO error");
@@ -221,9 +222,9 @@ void md4_main(void) {
                     play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
                     play_string(chosen_word, strlen(chosen_word));
                     play_tada();
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                  }
-                 else next_state = PROMPT;
+                 else current_state = PROMPT;
             }
             else {
                 play_feedback(MP3_NO);
@@ -231,7 +232,7 @@ void md4_main(void) {
                     play_feedback(MP3_7_MISTAKES_YOU_MISSED);
                     play_string(chosen_word, strlen(chosen_word));
                     play_direction(MP3_NEW_WORD);
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                 }
                 else {
                     if (is_past_mistake(entered_letter)) 
@@ -241,7 +242,7 @@ void md4_main(void) {
                         mistakes++;
                     }
                     md4_play_mistake();
-                    next_state = PROMPT;
+                    current_state = PROMPT;
                 }
             } 
             break;
@@ -253,18 +254,18 @@ void md4_main(void) {
                 case RIGHT:     // play answer
                     play_feedback(MP3_THE_ANSWER_IS);
                     play_string(chosen_word, strlen(chosen_word));
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     io_init();
                     break;
                     
                 case ENTER:     // skip question
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
                     
                     // Try again
                 case LEFT:
                 case CANCEL:    // try again
-                    next_state = PROMPT;
+                    current_state = PROMPT;
                     io_init();
                     break;
                 
@@ -275,7 +276,7 @@ void md4_main(void) {
             break;
             
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
     }

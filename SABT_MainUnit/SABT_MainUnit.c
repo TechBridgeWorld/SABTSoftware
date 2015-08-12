@@ -7,6 +7,7 @@
  */
 
 #include "globals.h"
+#include "io.h"
 #include "audio.h"
 
 volatile bool timer_interrupt;
@@ -228,10 +229,10 @@ void initialize_system(void) {
     log_msg("Parsing modes...OK");
 
     log_msg("Type info");
-    log_msg("char: %d bytes", sizeof(char));
-    log_msg("int: %d bytes", sizeof(int));
+    log_msg("char:  %d bytes", sizeof(char));
+    log_msg("int:   %d bytes", sizeof(int));
     log_msg("short: %d bytes", sizeof(short));
-    log_msg("long: %d bytes", sizeof(long));
+    log_msg("long:  %d bytes", sizeof(long));
     log_msg("void*: %d bytes", sizeof(void*));
     
     play_system_audio(MP3_MENU);

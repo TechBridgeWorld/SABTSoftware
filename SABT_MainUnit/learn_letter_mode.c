@@ -50,18 +50,16 @@
 
 // State variables
 static char mode_name[5];
-static char user_response = NO_DOTS;
 static bool should_shuffle = false;
 static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
-static lang_type language;
+static language_t language;
 
 void learn_letter_reset(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
     set_mode_globals(new_script, NULL, NULL);
     reset_globals();
     reset_stats();
     strcpy(mode_name, new_mode_fileset);
-    user_response = NO_DOTS;
     language = set_language();
     log_msg("[%s] Mode reset", mode_name);
     max_mistakes = 3;
@@ -115,12 +113,12 @@ void play_wrong() {
 }
 
 void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
-    switch (next_state) {
+    switch (current_state) {
 
         case INITIAL:
             play_welcome();
             play_submode_choice();
-            next_state = CHOOSE_LEVEL;
+            current_state = CHOOSE_LEVEL;
             break;
 
         case CHOOSE_LEVEL:
@@ -129,9 +127,9 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                 case '1':
                     log_msg("[%s] Submode: Learn", mode_name);
                     play_letter_instructions();
-                    submode = LEARN;
+                    submode = SUBMODE_LEARN;
                     unshuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
@@ -139,7 +137,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                     play_letter_instructions();
                     shuffle(SCRIPT_ADDRESS->num_letters, SCRIPT_ADDRESS->letters);
                     should_shuffle = true;
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
 
                 case CANCEL:
@@ -150,7 +148,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                 case ENTER:
                     log_msg("[%s] Re-issuing main menu prompt", mode_name);
                     play_submode_choice();
-                    next_state = CHOOSE_LEVEL;
+                    current_state = CHOOSE_LEVEL;
                     break;
 
                 default:
@@ -163,7 +161,7 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             curr_glyph = get_next_letter(SCRIPT_ADDRESS, should_shuffle);
             log_msg("[%s] State: GENERATE_QUESTION. Next glyph: %s", mode_name, curr_glyph->sound);
             play_next_letter_prompt();
-            next_state = PROMPT;
+            current_state = PROMPT;
             break;
 
 
@@ -171,22 +169,22 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             log_msg("[%s] State: PROMPT.",mode_name);
             play_glyph(curr_glyph);
             switch(submode) {
-                case LEARN:
+                case SUBMODE_LEARN:
                     play_dot_prompt();
                     play_dot_sequence(curr_glyph);
                     break;
 
-                case PLAY:
+                case SUBMODE_PLAY:
                 default:
                     break;
             }
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
 
         case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("[%s] User aborted input", mode_name);
-                next_state = PROMPT;
+                current_state = PROMPT;
                 io_init();
             }
 
@@ -200,14 +198,14 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
             switch (cell_control) {
                 case WITH_ENTER:
                     user_glyph = search_script(SCRIPT_ADDRESS, cell_pattern);
-                    next_state = CHECK_ANSWER;
+                    current_state = CHECK_ANSWER;
                     log_msg("[%s] Checking answer.", mode_name);
                     break;
                 case WITH_LEFT:
-                    next_state = PROMPT;
+                    current_state = PROMPT;
                     break;
                 case WITH_RIGHT:
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                     break;
                 case WITH_CANCEL:
                 default:
@@ -224,16 +222,16 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                     mistakes = 0;
                     log_msg("[%s] User answered correctly", mode_name);
                     play_right();
-                    next_state = GENERATE_QUESTION;
+                    current_state = GENERATE_QUESTION;
                 }
                 else {
                     curr_glyph = curr_glyph->next;
                     play_next_cell_prompt();                    
-                    if (submode == LEARN)
+                    if (submode == SUBMODE_LEARN)
                         play_dot_sequence(curr_glyph);
                     else
                         play_glyph(curr_glyph);
-                    next_state = GET_INPUT;
+                    current_state = GET_INPUT;
                 }
             }
             else {
@@ -241,18 +239,18 @@ void learn_letter_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_
                 log_msg("[%s] User answered incorrectly", mode_name);
                 play_wrong();
                 curr_glyph = get_root(SCRIPT_ADDRESS, curr_glyph);  
-                next_state = PROMPT;
+                current_state = PROMPT;
                 if (mistakes >= max_mistakes) {
                     play_glyph(curr_glyph);
                     play_dot_prompt();
                     play_dot_sequence(curr_glyph);
-                    next_state = GET_INPUT;
+                    current_state = GET_INPUT;
                 }
             }
         break;
 
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
     }

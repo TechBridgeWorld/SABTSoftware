@@ -21,12 +21,12 @@ void md6_reset(void) {
     set_mode_globals(this_script, NULL, NULL);
     reset_globals();
     play_welcome();
-    next_state = GET_INPUT;
+    current_state = GET_INPUT;
     log_msg("[MD6] Mode reset");
 }
 
 void md6_main(void) {
-    switch (next_state) {
+    switch (current_state) {
 
         case GET_INPUT:
             cell = get_cell();
@@ -39,7 +39,7 @@ void md6_main(void) {
             switch (cell_control) {
                 case WITH_ENTER:    // checks validity of letter when enter is pressed
                     this_glyph = search_script(this_script, cell_pattern);
-                    next_state = CHECK_ANSWER;
+                    current_state = CHECK_ANSWER;
                     break;
 
                 case WITH_LEFT:
@@ -55,11 +55,11 @@ void md6_main(void) {
                 play_feedback(MP3_INVALID_PATTERN);
             else
                 play_glyph(this_glyph);
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
 
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
     }

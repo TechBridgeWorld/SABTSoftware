@@ -8,15 +8,12 @@
 #define _DATASTRUCTURES_H_
 
 #include <stdbool.h>
+#include "macros.h"
 
-//@todo move some of these to global?
-#define MAX_WORD_LENGTH     15
+#define MAX_MP3_NAME_LENGTH  7      // 6 + /0
+#define MAX_FILESET_LENGTH   3      // 2 + /0
+#define MAX_WORD_LENGTH    15
 #define MAX_WORDLIST_LENGTH 10
-#define MAX_FILESET_LENGTH    5
-#define MAX_MP3_NAME_LENGTH  5
-
-
-typedef enum {UNIVERSAL, ENGLISH, HINDI, KANNADA} lang_type;
 
 typedef struct glyph glyph_t;
 
@@ -38,7 +35,7 @@ typedef struct cell {
 
 typedef struct letter {
     char name[MAX_MP3_NAME_LENGTH];
-    char lang_enum;
+    language_t lang_enum;
     cell_t* cells;
     int num_cells;
 } letter_t;
@@ -48,7 +45,7 @@ typedef struct word {
     int length_name;
     letter_t* letters;
     int num_letters;
-    char lang_enum;
+    language_t lang_enum;
     int curr_letter;
     int curr_glyph;
 } word_t; 
@@ -56,7 +53,7 @@ typedef struct word {
 typedef struct alphabet {
     letter_t* letters;
     int num_letters;
-    char lang_enum;
+    language_t lang_enum;
     // other info can eventually go in here
 } alphabet_t;
 

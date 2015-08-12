@@ -10,7 +10,7 @@
 #include "datastructures.h"
 #include "script_common.h"
 
-#define SCRIPT_CONTRACTION_FILESET "ENG_" // Followed by 0,1, ..., 6 depending on the pattern used
+#define SCRIPT_CONTRACTION_FILESET "e_" // Followed by 0,1, ..., 6 depending on the pattern used
 #define SCRIPT_CONTRACTION_LENGTH 36 // 10 contraction symbols + 26 english alphabets
 #define SCRIPT_CONTRACTION_PATTERN_LENGTH 7 // 6 glyphs used to form contractions + 0 for single cell contractions
 

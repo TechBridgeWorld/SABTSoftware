@@ -16,7 +16,7 @@
     return ui_current_mode_number;
  }
 
- lang_type set_language() {
+ language_t set_language() {
   if (ui_current_mode_number == 7) {
     log_msg("Language: Hindi\n\r");
     ui_current_language = HINDI;
@@ -59,9 +59,10 @@
     ui_current_language = set_language();
     lang_fileset = get_lang_prefix();
     last_dot = NO_DOTS;
-    submode = level = 0;
+    submode = SUBMODE_NULL;
+    level = DIFFICULTY_NULL;
     cell = cell_pattern = cell_control = 0;
-    next_state = INITIAL;
+    current_state = INITIAL;
 }
 
 void reset_stats(){

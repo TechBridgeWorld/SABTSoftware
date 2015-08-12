@@ -8,6 +8,7 @@
  */
 
 #include "globals.h"
+#include "io.h"
 #ifdef DEBUGMODE
     #include "stubs.h"
 #endif
@@ -28,8 +29,7 @@ void pc_parse_message() {
     switch(message_type) {
         // Send a confirmation that the board received the message
         case PC_CMD_INIT:
-            usart_transmit_string_to_pc_from_flash(PSTR("SABT-v2.1"));
-            TX_NEWLINE_PC;      
+            log_msg("SABT-v2.1");
             break;
             // Modify the current modes
         case PC_CMD_NEWMODES:
@@ -65,12 +65,8 @@ void pc_requests_to_modify_modes_file(void) {
 
     if (replace_the_contents_of_this_file_with(
                 (unsigned char*)modes_file, writing_file_content) == 0) {
-        usart_transmit_string_to_pc_from_flash(PSTR("SABT-OK"));
-        TX_NEWLINE_PC;
+        log_msg("SABT-OK");
     }
     else
-    {
-        usart_transmit_string_to_pc_from_flash(PSTR("SABT-FAIL"));
-        TX_NEWLINE_PC;
-    }
+        log_msg("SABT-FAIL");
 }

@@ -19,6 +19,7 @@
 // Custom libraries
 #include "globals.h"
 #include "audio.h"
+#include "io.h"
 #include "datastructures.h"
 #include "common.h"
 #include "letter_globals.h"
@@ -51,14 +52,14 @@ void play_stats(){
         if (words == 0)
             return;
         mistakes = p1_mistakes;
-        play_direction(MP3_PLAYER_1);
+        play_direction(MP3_submode_playER_1);
     }
     else {
         words = p2_words_spelled;
         if (words == 0)
             return;
         mistakes = p2_mistakes;
-        play_direction(MP3_PLAYER_2);
+        play_direction(MP3_submode_playER_2);
     }
 
     play_feedback(MP3_YOU_HAVE_SPELLED);
@@ -106,7 +107,7 @@ void incorrect_answer() {
         play_feedback(MP3_TRY_AGAIN);
     }
     decrement_word_index(chosen_word);
-    next_state = REPROMPT;
+    current_state = REPROMPT;
 }
 
 void speak_inputted_cell() {
@@ -128,15 +129,14 @@ void md15_reset() {
  * @return Void
  */
 void md15_main() {
-  switch(next_state) {
+  switch(current_state) {
 
     case INITIAL:
         lang_fileset = get_lang_prefix();
         play_welcome();
         play_number(GAMELENGTH);
         play_feedback(MP3_WORDS);
-        next_state = CHOOSE_LEVEL;
-        srand(timer_rand());
+        current_state = CHOOSE_LEVEL;
         break;
 
     case CHOOSE_LEVEL:
@@ -171,7 +171,7 @@ void md15_main() {
 
         print_words_in_list(&md15_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
-        next_state = GENERATE_QUESTION;
+        current_state = GENERATE_QUESTION;
         break;
 
     case GENERATE_QUESTION:
@@ -179,18 +179,18 @@ void md15_main() {
         reset_stats();
         get_next_word_in_wordlist(&md15_dict, &chosen_word);
         log_msg("[MD15] Next word: %s", chosen_word->name);
-        next_state = PROMPT;
+        current_state = PROMPT;
         break;
 
      case PROMPT:
         if (player1_is_current)
-            play_direction(MP3_PLAYER_1);
+            play_direction(MP3_submode_playER_1);
 
         else
-            play_direction(MP3_PLAYER_2);
+            play_direction(MP3_submode_playER_2);
         play_direction(MP3_SPELL_WORD);
         speak_word(chosen_word);
-        next_state = GET_INPUT;
+        current_state = GET_INPUT;
         break;
 
     case GET_INPUT:
@@ -202,17 +202,17 @@ void md15_main() {
         switch (cell_control) {
             case WITH_ENTER:
             user_cell.pattern = cell_pattern;
-            next_state = CHECK_ANSWER;
+            current_state = CHECK_ANSWER;
             log_msg("[MD15] Checking answer");
             break;
 
             case WITH_LEFT:
-            next_state = REPROMPT;
+            current_state = REPROMPT;
             break;
 
             case WITH_RIGHT:
             play_stats();
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
             break;
 
             case WITH_CANCEL:
@@ -228,13 +228,13 @@ void md15_main() {
         if (cell_equals(&curr_cell, &user_cell)) {
             if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
                 correct_answer();
-                next_state = SWITCH_USERS;
+                current_state = SWITCH_USERS;
             }
             else {  // correct but not done
                 play_feedback(MP3_GOOD);
                 play_direction(MP3_NEXT_LETTER);
                 curr_mistakes = 0;
-                next_state = GET_INPUT;
+                current_state = GET_INPUT;
             }
         }
         else
@@ -246,9 +246,9 @@ void md15_main() {
         player1_is_current = !player1_is_current; // switch players
         num_turns++;
         if (num_turns < GAMELENGTH * 2)
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
         else
-            next_state = EVALUATE_GAME;
+            current_state = GAME_OVER;
         break;
 
     case REPROMPT:
@@ -265,10 +265,10 @@ void md15_main() {
             play_feedback(MP3_SPELLING_SO_FAR);
             speak_letters_so_far(chosen_word);
         }
-        next_state = GET_INPUT;
+        current_state = GET_INPUT;
         break;
 
-     case EVALUATE_GAME:
+     case GAME_OVER:
         // a player wins if (s)he spelled more words OR spelled same number of words with fewer mistakes
         if (p1_words_spelled > p2_words_spelled
             || (p1_words_spelled == p2_words_spelled
@@ -292,10 +292,10 @@ void md15_main() {
         play_stats();
         player1_is_current = false;
         play_stats();
-        next_state = CHOOSE_LEVEL;
+        current_state = CHOOSE_LEVEL;
 
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
   }

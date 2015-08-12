@@ -14,7 +14,6 @@
 
 // Custom libraries
 #include "audio.h"
-#include "io.h"
 #include "common.h"
 #include "debug.h"
 #include "script_common.h"

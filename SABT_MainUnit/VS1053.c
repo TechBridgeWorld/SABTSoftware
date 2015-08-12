@@ -7,6 +7,7 @@
  */
 
 #include "globals.h"
+#include "io.h"
 #include "audio.h"
 
 // The volume is controlled by 2 bytes - the MSB controls the left

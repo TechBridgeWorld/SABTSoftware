@@ -11,7 +11,6 @@
 #include "audio.h"
 #include "mp3s.h"
 
-#define MD5_MAX_WORD_LENGTH     10
 #define MAX_MISTAKE             8
 
 // State variables
@@ -19,8 +18,8 @@ static char mistake_pool[MAX_MISTAKE + 1] = "";
 char entered_letter;
 
 // Globals
-char md5_chosen_word[MD5_MAX_WORD_LENGTH + 1];    // Holds the current word being guessed
-char input_word[MD5_MAX_WORD_LENGTH + 1];         // Holds the correctly input letters
+char md5_chosen_word[MAX_WORD_LENGTH + 1];    // Holds the current word being guessed
+char input_word[MAX_WORD_LENGTH + 1];         // Holds the correctly input letters
 int  input_word_index;                 // Used to read out the status of the current input word
 bool is_game_over;
 char expected_dot;
@@ -81,8 +80,8 @@ bool md5_place_letter() {
 void md5_reset(void) {
     reset_globals();
     reset_stats();
-    init_char_arr(md5_chosen_word, MD5_MAX_WORD_LENGTH + 1);
-    init_char_arr(input_word, MD5_MAX_WORD_LENGTH + 1);
+    init_char_arr(md5_chosen_word, MAX_WORD_LENGTH + 1);
+    init_char_arr(input_word, MAX_WORD_LENGTH + 1);
     init_char_arr(mistake_pool, max_mistakes + 1);
     input_word_index = 0;
     is_game_over = false;
@@ -94,7 +93,7 @@ void md5_reset(void) {
  * @return Void
  */
 void md5_main(void) {
-    switch(next_state) {
+    switch(current_state) {
 
         case INITIAL:
 /*            if (!done_rd_dict) {
@@ -105,7 +104,7 @@ void md5_main(void) {
                     read_dict_file();
             } */
             play_welcome();
-            next_state = REQUEST_QUESTION;
+            current_state = REQUEST_QUESTION;
             break;
 
 
@@ -113,7 +112,7 @@ void md5_main(void) {
         case REQUEST_QUESTION:
         if (got_input) {
             got_input = false;
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
         }
         break;
 
@@ -131,13 +130,13 @@ void md5_main(void) {
                     play_feedback(MP3_YOUR_WORD_IS);
                     play_string(md5_chosen_word, strlen(md5_chosen_word));
                     play_mode_audio(MP3_PASS_DEVICE_PRESS_ENTER);
-                    next_state = SWITCH_USERS;
+                    current_state = SWITCH_USERS;
 
    /*             }
                 else { // invalid word; clear variables and try again
                     play_feedback(MP3_WORD_NOT_FOUND);
                     md5_reset();
-                    next_state = REQUEST_QUESTION;
+                    current_state = REQUEST_QUESTION;
                 } */
             }
             
@@ -147,21 +146,21 @@ void md5_main(void) {
                 play_mp3(lang_fileset, letter);
 
                 // reset because too many letters were input
-                if (input_word_index == MD5_MAX_WORD_LENGTH) {
+                if (input_word_index == MAX_WORD_LENGTH) {
                     log_msg("Too many letters inputted!");
                     play_feedback(MP3_TOO_LONG);
                     md5_reset();
-                    next_state = REQUEST_QUESTION;
+                    current_state = REQUEST_QUESTION;
                     break;
                 }
 
                 md5_chosen_word[input_word_index] = entered_letter;  // add letter to chosen_word
                 input_word_index++;
-                next_state = REQUEST_QUESTION;
+                current_state = REQUEST_QUESTION;
             }
             else { // invalid letter
                 play_feedback(MP3_INVALID_PATTERN);
-                next_state = REQUEST_QUESTION;
+                current_state = REQUEST_QUESTION;
             }
             break;
 
@@ -170,18 +169,18 @@ void md5_main(void) {
         case SWITCH_USERS:
             if (got_input) {
                 got_input = false;
-                next_state = PROMPT;
+                current_state = PROMPT;
             }
             break;
 
 
         case PROMPT:
             log_msg("Entering ask for guess state.");
-            play_direction(MP3_PLAYER_2);
+            play_direction(MP3_submode_playER_2);
             play_direction(MP3_YOUR_WORD_IS_NOW);
             play_string(input_word, strlen(md5_chosen_word));
             play_direction(MP3_GUESS_A_LETTER);
-            next_state = GET_INPUT;
+            current_state = GET_INPUT;
             break;
 
 
@@ -190,7 +189,7 @@ void md5_main(void) {
         case GET_INPUT:
             if (got_input) {
                 got_input = false;
-                next_state = PROCESS_ANSWER;
+                current_state = PROCESS_ANSWER;
             }
             break;
 
@@ -200,18 +199,18 @@ void md5_main(void) {
         case PROCESS_ANSWER:
             log_msg("Entering checkans state.");
             if (cell == 0) // nothing entered: repeat word
-                next_state = EVALUATE_GAME;
+                current_state = GAME_OVER;
 
             else if (md5_valid_letter(cell)) { // valid letter: read aloud
                 char buff[7];
                 sprintf(buff, "%c", entered_letter);
                 play_mp3(lang_fileset, buff);  //@todo fix this
-                next_state = CHECK_ANSWER;
+                current_state = CHECK_ANSWER;
             }
             else {
                 play_feedback(MP3_INVALID_PATTERN);
                 mistakes++;
-                next_state = EVALUATE_GAME;
+                current_state = GAME_OVER;
             }
             break;
 
@@ -232,24 +231,24 @@ void md5_main(void) {
                 else
                     play_feedback(MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE);
             }
-            next_state = EVALUATE_GAME;
+            current_state = GAME_OVER;
             break;
 
 
 
 
 
-        case EVALUATE_GAME:
+        case GAME_OVER:
             log_msg("Entering evaluate game state.");
             if (!strncmp(input_word, md5_chosen_word, strlen(md5_chosen_word))) {
                 play_feedback(MP3_YOU_HAVE_GUESSED_THE_WORD);
                 play_tada();
-                next_state = INITIAL;
+                current_state = INITIAL;
             }
             else if (mistakes == max_mistakes) {
                 play_feedback(MP3_7_MISTAKES_YOU_MISSED);
                 play_string(md5_chosen_word, strlen(md5_chosen_word));
-                next_state = INITIAL;
+                current_state = INITIAL;
             }
             else {
                 if (mistakes > 0) {
@@ -260,12 +259,12 @@ void md5_main(void) {
                     else
                         play_feedback(MP3_MISTAKES_REMAINING);
                 }
-                next_state = PROMPT;
+                current_state = PROMPT;
             }
             break;
 
         default:
-            log_msg("Invalid state_t %d", next_state);
+            log_msg("Invalid state_t %d", current_state);
             quit_mode();
             break;
 

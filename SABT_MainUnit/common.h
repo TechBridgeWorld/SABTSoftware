@@ -20,7 +20,7 @@
 
 
 int   get_current_mode();
-lang_type set_language();
+language_t set_language();
 char* get_lang_prefix();
 char* get_mode_prefix();
 void  log_msg(const char* format, ...);

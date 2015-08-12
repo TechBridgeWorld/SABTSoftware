@@ -18,9 +18,9 @@ void pc_control_key_pressed(void);
 
 void init_usart_pc(void);
 unsigned char usart_pc_receive_action(void);
-void usart_transmit_byte_to_pc(unsigned char);
-void usart_transmit_string_to_pc(unsigned char*);
-void usart_transmit_string_to_pc_from_flash(const char*);
+void usart_transmit_byte_to_pc(unsigned char foo);
+void usart_transmit_string_to_pc(unsigned char* foo);
+void usart_transmit_string_to_pc_from_flash(const char* foo);
 
 #endif
 #endif /* _DEBUG_H_ */

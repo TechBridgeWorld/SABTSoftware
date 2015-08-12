@@ -8,6 +8,7 @@
  */
 
 #include "globals.h"
+#include "io.h"
 
 //******************************************************************
 //Function  : to initialize the SD/SDHC card in SPI mode

@@ -11,7 +11,7 @@
  #include "globals.h"
 #include "script_common.h"
 
-#define SCRIPT_HINDI_FILESET "HIN_"
+#define SCRIPT_HINDI_FILESET "h_"
 #define SCRIPT_HINDI_LENGTH 55
 #define SCRIPT_HINDI_NUM_LETTERS 50
 

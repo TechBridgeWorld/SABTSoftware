@@ -90,12 +90,11 @@ void md14_reset() {
  * @return Void
  */
 void md14_main() {
-  switch(next_state) {
+  switch(current_state) {
 
     case INITIAL:
-        srand(timer_rand());
         play_welcome();
-        next_state = CHOOSE_LEVEL;
+        current_state = CHOOSE_LEVEL;
         break;
 
     case CHOOSE_LEVEL:
@@ -127,7 +126,7 @@ void md14_main() {
 
         print_words_in_list(&md14_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
-        next_state = GENERATE_QUESTION;
+        current_state = GENERATE_QUESTION;
         break;
 
     case GENERATE_QUESTION:
@@ -135,13 +134,13 @@ void md14_main() {
         curr_mistakes = 0;
         get_next_word_in_wordlist(&md14_dict, &md14_chosen_word);
         log_msg("[MD14] Next word: %s", md14_chosen_word->name);
-        next_state = PROMPT;
+        current_state = PROMPT;
         break;
 
      case PROMPT:
         play_direction(MP3_SPELL_WORD);
         speak_word(md14_chosen_word);
-        next_state = GET_INPUT;
+        current_state = GET_INPUT;
         break;
 
     case GET_INPUT:
@@ -153,15 +152,15 @@ void md14_main() {
         switch (cell_control) {
             case WITH_ENTER:
             md14_user_cell.pattern = cell_pattern;
-            next_state = CHECK_ANSWER;
+            current_state = CHECK_ANSWER;
             break;
 
             case WITH_LEFT:
-            next_state = REPROMPT;
+            current_state = REPROMPT;
             break;
 
             case WITH_RIGHT:
-            next_state = GENERATE_QUESTION;
+            current_state = GENERATE_QUESTION;
             break;
 
             case WITH_CANCEL:
@@ -178,18 +177,18 @@ void md14_main() {
         if (cell_equals(&md14_curr_cell, &md14_user_cell)) {
             if (md14_chosen_word->curr_letter == md14_chosen_word->num_letters - 1) { // done
                 md14_correct_answer();
-                next_state = GENERATE_QUESTION;
+                current_state = GENERATE_QUESTION;
             }
             else {  // correct but not done
                 play_feedback(MP3_GOOD);
                 play_direction(MP3_NEXT_LETTER);
                 curr_mistakes = 0;
-                next_state = GET_INPUT;
+                current_state = GET_INPUT;
             }
         }
         else {
             md14_incorrect_answer();
-            next_state = REPROMPT;
+            current_state = REPROMPT;
         }
         break;
 
@@ -210,11 +209,11 @@ void md14_main() {
                 play_direction(MP3_NEXT_LETTER);
             }
         }
-        next_state = GET_INPUT;
+        current_state = GET_INPUT;
         break;
 
     default:
-        log_msg("Invalid state_t %d", next_state);
+        log_msg("Invalid state_t %d", current_state);
         quit_mode();
         break;
   }

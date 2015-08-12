@@ -44,7 +44,7 @@ int main() {
 
 
     // test of letter_equals
-    letter_t blank_letter = {" ", UNIVERSAL, &blank_cell, 1};
+    letter_t blank_letter = {" ", LANGUAGE_NULL, &blank_cell, 1};
     letter_t null_letter;
 
 /*  bool same2 = letter_equals(&eng_a, &eng_a);
