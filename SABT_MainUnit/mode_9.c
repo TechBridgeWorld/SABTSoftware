@@ -24,9 +24,6 @@ static bool input_ready = false;
 static bool input_valid = false;
 
 void mode_9_reset(void) {
-    // Global variables
-    reset_globals();
-    reset_stats();
     operand_1 = operand_2 = result = user_answer = -1;
     input_ready = input_valid = false;
     max_mistakes = 3;

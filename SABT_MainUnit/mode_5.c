@@ -78,8 +78,6 @@ bool mode_5_place_letter() {
 
 
 void mode_5_reset(void) {
-    reset_globals();
-    reset_stats();
     init_char_arr(mode_5_chosen_word, MAX_WORD_LENGTH + 1);
     init_char_arr(input_word, MAX_WORD_LENGTH + 1);
     init_char_arr(mistake_pool, max_mistakes + 1);

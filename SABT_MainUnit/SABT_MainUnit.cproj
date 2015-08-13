@@ -80,10 +80,10 @@
     <Compile Include="dictionary.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="learn_letter_mode.c">
+    <Compile Include="mode_letter_game.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="learn_letter_mode.h">
+    <Compile Include="mode_letter_game.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mode_13.c">
@@ -122,10 +122,10 @@
     <Compile Include="script_kannada.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sound_game_mode.c">
+    <Compile Include="mode_sound_game.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sound_game_mode.h">
+    <Compile Include="mode_sound_game.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="USART_Keypad.h">

@@ -6,8 +6,8 @@
  * @author Kory Stiger (kstiger)
  */
 
-#ifndef _mode_3_H_
-#define _mode_3_H_
+#ifndef _MODE_3_H_
+#define _MODE_3_H_
  
 //static char last_dot;                             // char representing last big dot pressed
 // Int array representing the animals that have been used already.
@@ -39,4 +39,4 @@ void mode_3_call_mode_left(void);
 void mode_3_call_mode_right(void);
 
 
-#endif /* _mode_3_H_ */
+#endif

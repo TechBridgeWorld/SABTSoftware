@@ -12,7 +12,7 @@
 #include "letter_globals.h"
 #include "script_common.h"
 #include "script_english.h"
-#include "sound_game_mode.h"
+#include "mode_sound_game.h"
 #include "mp3s.h"
 
 
@@ -24,9 +24,9 @@ const char* noise_sounds[MAX_INDEX + 1] = {"aer", "rai", "bel", "doo", "hor", "a
     "tru", "tra", "sir", "pho", "clo", NULL};
 
 void mode_11_reset(void) {
-    sound_game_reset(noise_list, noise_sounds);
+    mode_sound_game_reset(noise_list, noise_sounds);
 }
 
 void mode_11_main(void) {
-    sound_game_main();
+    mode_sound_game_main();
 }

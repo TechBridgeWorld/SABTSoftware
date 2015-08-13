@@ -1,5 +1,5 @@
 /*
- * @file sound_game_mode.c
+ * @file mode_sound_game.c
  *
  * @brief Shell for "sound game modes" (MD 3,11)
  * @author: Edward Cai
@@ -19,7 +19,7 @@
 #include "letter_globals.h"
 #include "script_common.h"
 #include "script_english.h" 
-#include "sound_game_mode.h"
+#include "mode_sound_game.h"
 
 // Int array representing the animals that have been used already.
 static int sound_sources_used_list[11];
@@ -31,7 +31,6 @@ int length_entered_word;
 // Used to read back the letters in the current word
 int current_word_index;
 static bool scrolled = false;
-char* mode_prefix;
 
 static glyph_t* user_glyph = NULL;      // inputted by user
 static glyph_t* curr_glyph = NULL;      // next letter in sound_source
@@ -93,28 +92,29 @@ int choose_sound_source() {
     return num;
 }
 
-void sound_game_reset(const char** SOUND_SOURCE_LIST, const char** SOUND_LIST) {
-    reset_globals();
-    reset_stats();
+void mode_sound_game_reset(const char** SOUND_SOURCE_LIST, const char** SOUND_LIST) {
     max_mistakes = 6;
     user_glyph = curr_glyph = NULL;
     sound_list = (char**) SOUND_LIST;
     sound_source_list = (char**) SOUND_SOURCE_LIST;
-    current_state = CHOOSE_LEVEL;
     user_word = free_word_old(user_word);
     curr_word = free_word_old(curr_word);
     scrolled = false;
-    log_msg("[Sound game] Mode reset");
-    play_welcome();
-    play_submode_choice();
+    current_state = INITIAL;
 }
 
 /**
  * @brief  Step through the main stages in the code.
  * @return Void
  */
-void sound_game_main() {
+void mode_sound_game_main() {
     switch(current_state) {
+
+        case INITIAL:
+            play_welcome();
+            play_submode_choice();
+            current_state = CHOOSE_LEVEL;
+            break;
 
         case CHOOSE_LEVEL:
             if (io_user_abort == true) {

@@ -7,17 +7,16 @@
 // Standard libraries
 #include <stdbool.h>
 #include <stdio.h>
-#include "learn_letter_mode.h"
+#include "mode_letter_game.h"
 
 
 // Script and fileset parameters
 #include "script_english.h"
-#define SCRIPT_ADDRESS &script_english
 
 void mode_2_reset(void) {
-    learn_letter_reset();
+    mode_letter_game_reset();
 }
 
 void mode_2_main(void) {
-    learn_letter_main();
+    mode_letter_game_main();
 }

@@ -81,8 +81,6 @@ void mode_14_speak_inputted_cell() {
 }
 
 void mode_14_reset() {
-    reset_globals();
-    reset_stats();
 }
 
 /**

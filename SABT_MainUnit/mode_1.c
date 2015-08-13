@@ -33,8 +33,6 @@ char choose_dot(){
  * @return Void
  */
 void mode_1_reset() {
-    reset_globals();
-    reset_stats();
     for (int i = 0; i < 6; i++)
         dots[i] = i + 1;
     dot_index = 0;

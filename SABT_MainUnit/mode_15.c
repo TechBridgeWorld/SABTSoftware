@@ -120,8 +120,6 @@ void speak_inputted_cell() {
 }
 
 void mode_15_reset() {
-    reset_globals();
-    reset_stats();
 }
 
 /**

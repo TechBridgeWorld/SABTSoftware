@@ -9,15 +9,15 @@
 // Standard libraries
 #include <stdbool.h>
 #include <stdio.h>
-#include "learn_letter_mode.h"
+#include "mode_letter_game.h"
 #include "mp3s.h"
 
 #include "script_kannada.h"
 
 void mode_12_reset(void) {
-    learn_letter_reset();
+    mode_letter_game_reset();
 }
 
 void mode_12_main(void) {
-    learn_letter_main();
+    mode_letter_game_main();
 }

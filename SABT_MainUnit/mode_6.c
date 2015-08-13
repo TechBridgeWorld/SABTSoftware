@@ -17,14 +17,14 @@
 static glyph_t *this_glyph = NULL;
 
 void mode_6_reset(void) {
-    reset_globals();
-    play_welcome();
-    current_state = GET_INPUT;
-    log_msg("[mode_6] Mode reset");
 }
 
 void mode_6_main(void) {
     switch (current_state) {
+        case INITIAL:
+            play_welcome();
+            current_state = GET_INPUT;
+            break;
 
         case GET_INPUT:
             cell = get_cell();
@@ -36,6 +36,7 @@ void mode_6_main(void) {
 
             switch (cell_control) {
                 case WITH_ENTER:    // checks validity of letter when enter is pressed
+                    log_msg("Script address = %p", this_script);
                     this_glyph = search_script(this_script, cell_pattern);
                     current_state = CHECK_ANSWER;
                     break;

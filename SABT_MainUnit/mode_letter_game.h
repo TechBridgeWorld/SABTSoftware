@@ -1,12 +1,12 @@
 /**
-* @file learn_letter_mode.h
+* @file mode_letter_game.h
 * @brief Function declarations for the letter-learning modes
 * @author Vivek Nair (viveknair@cmu.edu)
 */ 
 
 
-#ifndef LEARN_LETTER_MODE_H_
-#define LEARN_LETTER_MODE_H_
+#ifndef MODE_LETTER_GAME_H_
+#define MODE_LETTER_GAME_H_
 
 // Standard libraries
 #include <stdbool.h>
@@ -18,7 +18,7 @@
 #include "debug.h"
 #include "script_common.h"
 
-void learn_letter_reset ();
-void learn_letter_main  ();
+void mode_letter_game_reset ();
+void mode_letter_game_main  ();
 
 #endif 

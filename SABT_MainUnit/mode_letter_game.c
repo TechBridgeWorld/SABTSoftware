@@ -1,7 +1,7 @@
 
 
 /*
- * @file learn_letter_mode.c
+ * @file mode_letter_game.c
  *
  * @brief code for helper functions "learning letter modes" (MD 2,7,8,12)
  * @author: Edward Cai
@@ -45,7 +45,7 @@
 #include "globals.h"
 #include "debug.h"
 #include "script_common.h"
-#include "learn_letter_mode.h"
+#include "mode_letter_game.h"
 #include "mp3s.h"
 
 // State variables
@@ -55,10 +55,7 @@ static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
 static language_t language;
 
-void learn_letter_reset() {
-    reset_globals();
-    reset_stats();
-    log_msg("Mode reset");
+void mode_letter_game_reset() {
     max_mistakes = 3;
 }
 
@@ -109,7 +106,7 @@ void play_wrong() {
     }
 }
 
-void learn_letter_main() {
+void mode_letter_game_main() {
     switch (current_state) {
 
         case INITIAL:

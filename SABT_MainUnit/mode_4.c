@@ -128,9 +128,6 @@ void mode_4_play_mistake() {
 
 
 void mode_4_reset(void) {
-    log_msg("*** mode_4 - one player hangman ***");
-    reset_globals();
-    reset_stats();
     md_input_ready = false;
     md_input_valid = false;
     max_mistakes = 8;

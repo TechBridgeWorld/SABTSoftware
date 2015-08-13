@@ -61,11 +61,6 @@ void init_index(int bound){
 }
 
 void mode_13_reset() {
-    log_msg("*** mode_13 - Math Problems ***");
-    
-    // Global variables
-    reset_globals();
-    reset_stats();
     operand_1 = operand_2 = user_answer = -1;
     num_answer = ques_i = max_q = 0;
     input_ready = input_valid = false;
