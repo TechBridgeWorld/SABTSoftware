@@ -241,7 +241,6 @@ void ui_control_key_pressed(void) {
                 if (index_of_current_mode >= 0) {
                     is_a_mode_executing = true;
                     io_init();
-                    set_language();
                     ui_reset_the_current_mode();
                 }
             }

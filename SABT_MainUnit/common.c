@@ -41,7 +41,7 @@ language_t set_language() {
 
  void set_mode_prefix(){
     vsprintf(mode_prefix, "m%s", &current_mode);
-    log_msg("Mode prefix: %s");
+    log_msg("Mode prefix: %s", mode_prefix);
  }
 
  void reset_globals(){
@@ -52,7 +52,6 @@ language_t set_language() {
     level = DIFFICULTY_NULL;
     cell = cell_pattern = cell_control = 0;
     current_state = INITIAL;
-    log_msg("Lang = %d (%s)", mode_language, lang_prefix);
 }
 
 void reset_stats(){

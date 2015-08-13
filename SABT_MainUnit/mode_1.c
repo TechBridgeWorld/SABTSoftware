@@ -22,8 +22,7 @@ char choose_dot(){
         for (int i = 0; i < 6; i++)
             log_msg("Dot %d = %d", i, dots[i]);
     }
-    char this_dot = dots[dot_index];
-    log_msg("Choosing dot %d = %d", dot_index, this_dot);
+    char this_dot = '0' + dots[dot_index];
     dot_index = (dot_index + 1) % 6;
     return this_dot;
 }
@@ -36,6 +35,8 @@ char choose_dot(){
 void mode_1_reset() {
     reset_globals();
     reset_stats();
+    for (int i = 0; i < 6; i++)
+        dots[i] = i + 1;
     dot_index = 0;
 }
 
@@ -77,9 +78,8 @@ void mode_1_main()
             }
             else {
                 play_feedback(MP3_INCORRECT);
-                play_dot(expected_dot);
                 last_dot = 0;
-                current_state = GET_INPUT;
+                current_state = PROMPT;
             }
             break;
 

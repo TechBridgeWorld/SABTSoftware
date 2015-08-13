@@ -581,7 +581,7 @@ int random_between(int i, int j) {
 void shuffle(int len, int* int_array) {
     int random_i, temp;
     for (int i = 0; i < len; i++) {
-        random_i = random_between(i, len);
+        random_i = random_between(i, len - 1);
         temp = int_array[i];
         int_array[i] = int_array[random_i];
         int_array[random_i] = temp;
