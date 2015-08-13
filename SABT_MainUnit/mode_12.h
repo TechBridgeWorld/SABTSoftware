@@ -7,7 +7,7 @@
 #ifndef _mode_12_H_
 #define _mode_12_H_
 
-void mode_12_main(void);
-void mode_12_reset(void);
+void mode_12_main();
+void mode_12_reset();
 
 #endif /* _mode_12_H_ */

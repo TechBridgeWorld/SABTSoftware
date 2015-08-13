@@ -13,9 +13,9 @@
 #include "script_digits.h"
 
 void mode_8_reset(void) {
-    learn_letter_reset(&script_digits, NULL, NULL);
+    learn_letter_reset();
 }
 
 void mode_8_main(void) {
-    learn_letter_main(&script_digits, NULL, NULL);
+    learn_letter_main();
 }

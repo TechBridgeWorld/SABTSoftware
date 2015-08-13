@@ -33,15 +33,10 @@ char choose_dot(){
  *        Should be useful for error handling
  * @return Void
  */
-void mode_1_reset(void) {
+void mode_1_reset() {
     reset_globals();
     reset_stats();
-    for (int i = 0; i < 6; i++) {
-        dots[i] = i + 1;
-        log_msg("Dot %d = %d", i, i + 1);
-    }
     dot_index = 0;
-    current_state = INITIAL;
 }
 
 /**
@@ -50,7 +45,7 @@ void mode_1_reset(void) {
  * whether they pressed the correct dot
  * @return Void
  */
-void mode_1_main(void)
+void mode_1_main()
 {
     switch(current_state) {
         case INITIAL:
@@ -68,6 +63,7 @@ void mode_1_main(void)
             break;
 
         case GET_INPUT:
+            last_dot = get_dot();
             if (last_dot != 0)
                 current_state = CHECK_ANSWER;
             break;
@@ -93,31 +89,3 @@ void mode_1_main(void)
             break;
     }
 }
-
-/**
- * @brief in mode 1, enter button just replays the current prompt
- * @return Void
- */
-void mode_1_call_mode_yes_answer(void) {
-    current_state = PROMPT;
-}
-
-void mode_1_call_mode_no_answer(void) {}
-
-/**
- * @brief register dot input
- *        Sets the program to PROC_INPUT
- * @param this_dot the dot being input
- * @return Void
- */
-void mode_1_input_dot(char this_dot) {
-    last_dot = this_dot;
-    current_state = CHECK_ANSWER;
-}
-
-/**
- * @brief register cell input
- * @param this_cell the cell being input
- * @return void
- */
-void mode_1_input_cell(char this_cell) {}

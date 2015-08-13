@@ -129,7 +129,6 @@ void mode_4_play_mistake() {
 
 void mode_4_reset(void) {
     log_msg("*** mode_4 - one player hangman ***");
-    set_mode_globals(&script_english, NULL, NULL);
     reset_globals();
     reset_stats();
     md_input_ready = false;

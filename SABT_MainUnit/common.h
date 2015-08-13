@@ -19,12 +19,10 @@
 #define MINUS_ONE_MOD(X, BOUND) ((X - 1 < 0) ? (BOUND - 1) : (X - 1))
 
 
-int   get_current_mode();
 language_t set_language();
-char* get_lang_prefix();
 char* get_mode_prefix();
 void  log_msg(const char* format, ...);
-void  set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset);
+void  set_mode_globals(script_t* new_script, char* new_lang_prefix, char* new_mode_fileset);
 void  reset_globals();
 void  reset_stats();
 int   timer_rand(void);

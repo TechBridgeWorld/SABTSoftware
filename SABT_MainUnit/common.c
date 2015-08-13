@@ -9,60 +9,50 @@
 #include "audio.h"
 #include "common.h"
 #include "script_common.h"
+#include "script_hindi.h"
+#include "script_kannada.h"
+#include "script_english.h"
+#include "script_digits.h"
 #include "datastructures.h"
 #include "mode_15.h"
 
- int get_current_mode(){
-    return ui_current_mode_number;
- }
-
- language_t set_language() {
-  if (ui_current_mode_number == 7) {
-    log_msg("Language: Hindi\n\r");
-    ui_current_language = HINDI;
+language_t set_language() {
+  if (current_mode == 7) {
+    mode_language = HINDI;
+    lang_prefix = "h_";
+    this_script = &script_hindi;
   }
-  else if (ui_current_mode_number == 12) {
-    log_msg("Language: Kannada\n\r");
-    ui_current_language = KANNADA;
+  else if (current_mode == 12) {
+    mode_language = KANNADA;
+    lang_prefix = "k_";
+    this_script = &script_kannada;
   }
   else {
-    log_msg("Language: English\n\r");
-    ui_current_language = ENGLISH;
+    mode_language = ENGLISH;
+    lang_prefix = "e_";
+    if (current_mode == 8)
+        this_script = &script_digits;
+    else
+        this_script = &script_english;
   }
-  return ui_current_language;
+  log_msg("Language: %s", lang_prefix);
+  return mode_language;
 }
 
- char* get_lang_prefix(){
-    switch (ui_current_language) {
-        case HINDI:
-            return "h_"; // @warning: in some cases the Hindi mode just uses English
-        case KANNADA:
-            return "k_";
-        case ENGLISH:
-            return "e_";
-        default:
-            log_msg("No language currently set.\n\r");
-            return NULL;
-    }
- }
-
- char* get_mode_prefix(){
-    static char mode_prefix[4];
-    mode_prefix[0] = 'M';
-    mode_prefix[1] = get_current_mode();
-    mode_prefix[2] = '_';
-    mode_prefix[3] = '\n';
-    return mode_prefix;
+ void set_mode_prefix(){
+    vsprintf(mode_prefix, "m%s", &current_mode);
+    log_msg("Mode prefix: %s");
  }
 
  void reset_globals(){
-    ui_current_language = set_language();
-    lang_fileset = get_lang_prefix();
+    set_language();
+    set_mode_prefix();
     last_dot = NO_DOTS;
     submode = SUBMODE_NULL;
     level = DIFFICULTY_NULL;
     cell = cell_pattern = cell_control = 0;
     current_state = INITIAL;
+    log_msg("Lang = %d (%s)", mode_language, lang_prefix);
 }
 
 void reset_stats(){
@@ -75,10 +65,8 @@ void reset_stats(){
 * @param char* - Pointer to mode fileset string
 * @return void
 */
-void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
+void set_mode_globals(script_t* new_script, char* new_lang_prefix, char* new_mode_fileset) {
     lang_script = new_script;
-    lang_fileset = new_lang_fileset;
-    mode_fileset = new_mode_fileset;
     new_script->index = -1;
 }
 
@@ -112,12 +100,12 @@ char add_dot(char bits, char dot) {
  */
 void quit_mode(void) {
     // @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. RETEST THIS. 
-    if (ui_current_mode_number == 15) {
+    if (current_mode == 15) {
         log_msg("Freeing dictionary.");
         free_wordlist(&mode_15_dict);
     }
-    ui_is_mode_selected = false;
-    ui_current_mode_index = -1;
+    is_a_mode_executing = false;
+    index_of_current_mode = -1;
     play_system_audio(MP3_MM);
 }
 

@@ -12,7 +12,7 @@
 #include "mp3s.h"
 
 extern bool playlist_empty;
-extern char* lang_fileset;
+extern char* lang_prefix;
 extern char* mode_fileset;
 
 

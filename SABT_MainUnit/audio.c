@@ -35,12 +35,6 @@ static char playlist[MAX_PLAYLIST_SIZE][MAX_FILENAME_SIZE];
 static short playlist_size = 0;
 static short playlist_index = 0;
 
-/** Set via set_mode_globals() in each mode so that audio library
-    does not have to be constantly passed filesets */
-char* lang_fileset = NULL;
-char* mode_fileset = NULL;
-
-
 /**
  *  @brief Tries to queue the requested MP3 file to the playlist
  *  @param char* fileset - (optional) Pointer to fileset
@@ -160,7 +154,7 @@ void play_dot(char dot) {
             break;
     }
     sprintf(dotname, "dot_%c", dot);
-    play_mp3(get_lang_prefix(), dotname);
+    play_mp3(lang_prefix, dotname);
 }
 
 /**
@@ -170,7 +164,7 @@ void play_dot(char dot) {
  */
 void play_glyph(glyph_t *this_glyph) {
     if (this_glyph != NULL)
-        play_mp3(get_lang_prefix(), this_glyph->sound);
+        play_mp3(lang_prefix, this_glyph->sound);
 }
 
 /**
@@ -194,7 +188,7 @@ void play_word(word_node_t *this_word) {
  */
 void play_pattern(unsigned char pattern) {
     if (pattern == 0) {
-        play_mp3(get_lang_prefix(), MP3_BLANK); // won't work for Hindi?
+        play_mp3(lang_prefix, MP3_BLANK); // won't work for Hindi?
         return;
     }
     char dot[2];
@@ -227,11 +221,11 @@ void play_dot_sequence(glyph_t *this_glyph) {
             log_msg("[Audio] Playing next pattern: %s",
                 this_glyph->next->sound);
             // play "ENTER" so user knows to press enter btwn multiple-cell letters
-            play_mp3(get_lang_prefix(), MP3_DOT_E);
+            play_mp3(lang_prefix, MP3_DOT_E);
             play_dot_sequence(this_glyph->next);
         }
     } else
-        play_mp3(get_lang_prefix(), MP3_INVALID_PATTERN);
+        play_mp3(lang_prefix, MP3_INVALID_PATTERN);
 }
 
 /** 
@@ -249,13 +243,13 @@ void play_number(long number) {
 
     // If number is just 0, play #0 and return
     if (number == 0) {
-        play_mp3(get_lang_prefix(), MP3_ZERO);
+        play_mp3(lang_prefix, MP3_ZERO);
         return;
     }
 
     if (number < 0) {
         // Say "Negative" and take absolute value
-        play_mp3(get_lang_prefix(), MP3_NEGATIVE);
+        play_mp3(lang_prefix, MP3_NEGATIVE);
         number = 0 - number;
     }
 
@@ -272,7 +266,7 @@ void play_number(long number) {
 
             switch (digits) {
                 case PLACE_ONES:
-                    play_mp3(get_lang_prefix(), mp3);
+                    play_mp3(lang_prefix, mp3);
                     break;
 
                 case PLACE_TENS:
@@ -280,23 +274,23 @@ void play_number(long number) {
                         // If teen, play teen and return immediately
                         curr_digit = number;
                         sprintf(mp3, "#%d", curr_digit);
-                        play_mp3(get_lang_prefix(), mp3);
+                        play_mp3(lang_prefix, mp3);
                         return;
                     } else {
                         // Is a multiple of ten
                         sprintf(mp3, "#%d0", curr_digit);
-                        play_mp3(get_lang_prefix(), mp3);
+                        play_mp3(lang_prefix, mp3);
                     }
                     break;
 
                 case PLACE_HUNDREDS:
-                    play_mp3(get_lang_prefix(), mp3);
-                    play_mp3(get_lang_prefix(), MP3_HUNDRED);
+                    play_mp3(lang_prefix, mp3);
+                    play_mp3(lang_prefix, MP3_HUNDRED);
                     break;
                 
                 case PLACE_THOUSANDS:
-                    play_mp3(get_lang_prefix(),mp3);
-                    play_mp3(get_lang_prefix(), MP3_THOUSAND);
+                    play_mp3(lang_prefix,mp3);
+                    play_mp3(lang_prefix, MP3_THOUSAND);
                     break;
                     
                 case PLACE_TEN_THOUSANDS:
@@ -305,19 +299,19 @@ void play_number(long number) {
                         number -= curr_digit * ten_to_the(digits - 2);
                         digits -= 2;
                         sprintf(mp3, "#%d", curr_digit);
-                        play_mp3(get_lang_prefix(), mp3);
+                        play_mp3(lang_prefix, mp3);
                     }
                     else {
                         // Is a multiple of ten
                         sprintf(mp3, "#%d0", curr_digit);
-                        play_mp3(get_lang_prefix(), mp3);
+                        play_mp3(lang_prefix, mp3);
                         number -= curr_digit * ten_to_the(digits - 1);
                         digits--;
                         curr_digit = number / ten_to_the(digits - 1);
                         sprintf(mp3, "#%d", curr_digit);
-                        play_mp3(get_lang_prefix(), mp3);
+                        play_mp3(lang_prefix, mp3);
                     }
-                    play_mp3(get_lang_prefix(), MP3_THOUSAND);
+                    play_mp3(lang_prefix, MP3_THOUSAND);
                     break;
                     
                 default:
@@ -371,9 +365,9 @@ void play_string(char* word, int word_len){
 
 // Plays the mode's welcome mp3 (m#_welc.mp3)
 void play_welcome() {
-    log_msg("Welcome to mode %d", ui_current_mode_number);
+    log_msg("Welcome to mode %d", current_mode);
     char md[5];
-    sprintf(md, "m%d_", ui_current_mode_number);
+    sprintf(md, "m%d_", current_mode);
     play_mp3(md, MP3_WELCOME);
 }
 
@@ -381,7 +375,7 @@ void play_welcome() {
 void play_submode_choice() {
     log_msg("Playing submode choice.");
     char md[5];
-    sprintf(md, "m%d_", ui_current_mode_number);
+    sprintf(md, "m%d_", current_mode);
     play_mp3(md, MP3_SUBMODE);
 }
 
@@ -408,6 +402,6 @@ void play_system_audio(char* dir) {
 // Plays mode-specific audio (m#_<dir>.mp3)
 void play_mode_audio(char* dir) {
     char md[5];
-    sprintf(md, "m%d_", ui_current_mode_number);
+    sprintf(md, "m%d_", current_mode);
     play_mp3(md, dir);
 }

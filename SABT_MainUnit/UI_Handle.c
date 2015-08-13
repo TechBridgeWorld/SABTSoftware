@@ -9,7 +9,7 @@
  */
 
 #include "globals.h"
-#include "Modes.h"
+#include "modes.h"
 #include "audio.h"
 #include "common.h"
 #include "io.h"
@@ -109,9 +109,9 @@ void ui_check_modes(void) {
     }
     NEWLINE;
 
-    ui_is_mode_selected = false;
-    ui_current_mode_index = -1;
-    ui_current_mode_number = -1;
+    is_a_mode_executing = false;
+    index_of_current_mode = -1;
+    current_mode = -1;
 }
 
 /**
@@ -235,11 +235,11 @@ void ui_control_key_pressed(void) {
         
         case UI_CMD_ENT1: // Enter a mode
             io_dot = ENTER;
-            if (ui_is_mode_selected)  // then this is a YES command in the mode
+            if (is_a_mode_executing)  // then this is a YES command in the mode
                 ui_call_mode_yes_answer();
             else {        // Then this command is to select the mode
-                if (ui_current_mode_index >= 0) {
-                    ui_is_mode_selected = true;
+                if (index_of_current_mode >= 0) {
+                    is_a_mode_executing = true;
                     io_init();
                     set_language();
                     ui_reset_the_current_mode();
@@ -266,7 +266,7 @@ void ui_control_key_pressed(void) {
                 return;
             }
 
-            else if (ui_is_mode_selected) {   // this is a NO answer to mode
+            else if (is_a_mode_executing) {   // this is a NO answer to mode
                 log_msg("[UI] Short CANCEL detected, calling mode NO function");
                 ui_call_mode_no_answer();
             }
@@ -276,12 +276,12 @@ void ui_control_key_pressed(void) {
         
         case UI_CMD_MFOR: // Move forward in list of modes
             io_dot = RIGHT;
-            if (ui_is_mode_selected)
+            if (is_a_mode_executing)
                 ui_call_mode_right();
             else {
-                //ui_current_mode_index = (ui_current_mode_index + 1) % number_of_modes;
-                ui_current_mode_index = ui_current_mode_index + 1 > number_of_modes - 1 ? 0 : ui_current_mode_index + 1;
-                ui_current_mode_number = ui_modes[ui_current_mode_index];
+                //index_of_current_mode = (index_of_current_mode + 1) % number_of_modes;
+                index_of_current_mode = index_of_current_mode + 1 > number_of_modes - 1 ? 0 : index_of_current_mode + 1;
+                current_mode = ui_modes[index_of_current_mode];
                 vs1053_skip_play = true;
                 ui_play_intro_current_mode();
             }
@@ -289,11 +289,11 @@ void ui_control_key_pressed(void) {
         
         case UI_CMD_MREV: // Move backwards in list of modes
             io_dot = LEFT;
-            if (ui_is_mode_selected)
+            if (is_a_mode_executing)
                 ui_call_mode_left();
             else {
-                ui_current_mode_index = ui_current_mode_index - 1 < 0 ? number_of_modes - 1 : ui_current_mode_index - 1;
-                ui_current_mode_number = ui_modes[ui_current_mode_index];
+                index_of_current_mode = index_of_current_mode - 1 < 0 ? number_of_modes - 1 : index_of_current_mode - 1;
+                current_mode = ui_modes[index_of_current_mode];
                 vs1053_skip_play = true;
                 ui_play_intro_current_mode();
             }
@@ -320,7 +320,7 @@ void ui_control_key_pressed(void) {
  */
 void ui_play_intro_current_mode(void) {
     char filename[5];
-    sprintf(filename, "m%d", ui_current_mode_number);
+    sprintf(filename, "m%d", current_mode);
     play_mp3("",filename);
 }
 
@@ -330,16 +330,8 @@ void ui_play_intro_current_mode(void) {
  * @todo: use function pointers instead for this!
  */
 void ui_call_mode_yes_answer(void) {
-    switch(ui_current_mode_number) {
-        case 1:
-            mode_1_call_mode_yes_answer();
-            break;
-        case 10:
-            mode_10_call_mode_yes_answer();
-            break;
-        default:
-            break;
-    }
+    if (current_mode == 10)
+        mode_10_call_mode_yes_answer();
 }
 
 /**
@@ -347,16 +339,8 @@ void ui_call_mode_yes_answer(void) {
  * @return Void
  */
 void ui_call_mode_no_answer(void) {
-    switch(ui_current_mode_number) {
-        case 1:
-            mode_1_call_mode_no_answer();
-            break;
-        case 10:
+    if (current_mode == 10)
             mode_10_call_mode_no_answer();
-            break;
-        default:
-            break;
-    }
 }
 
 /**
@@ -364,11 +348,8 @@ void ui_call_mode_no_answer(void) {
  * @return Void
  */
 void ui_input_dot_to_current_mode(char this_dot) {
-    if (ui_is_mode_selected) {
-        switch(ui_current_mode_number) {
-            case 1:
-                mode_1_input_dot(this_dot);
-                break;
+    if (is_a_mode_executing) {
+        switch(current_mode) {
             case 5:
                 mode_5_input_dot(this_dot);
                 break;
@@ -389,11 +370,8 @@ void ui_input_dot_to_current_mode(char this_dot) {
  */
 void ui_input_cell_to_current_mode(char this_cell)
 {
-    if (ui_is_mode_selected) {
-        switch(ui_current_mode_number) {
-            case 1:
-                mode_1_input_cell(this_cell);
-                break;
+    if (is_a_mode_executing) {
+        switch(current_mode) {
             case 5:
                 mode_5_input_cell(this_cell);
                 break;
@@ -409,13 +387,13 @@ void ui_input_cell_to_current_mode(char this_cell)
 }
 
 /**
- * @brief   Decides which of the three UI modes to go into based on ui_current_mode_number
+ * @brief   Decides which of the three UI modes to go into based on current_mode
  * @return  Void
  */
 void ui_run_main_of_current_mode(void) {
 
-    if (ui_is_mode_selected){
-        switch(ui_current_mode_number) {
+    if (is_a_mode_executing){
+        switch(current_mode) {
             case 1:
                 mode_1_main();
                 break;
@@ -473,8 +451,8 @@ void ui_run_main_of_current_mode(void) {
  * @return Void
  */
 void ui_reset_the_current_mode(void) {
-    if (ui_is_mode_selected) {
-        switch(ui_current_mode_number) {
+    if (is_a_mode_executing) {
+        switch(current_mode) {
             case 1:
                 mode_1_reset();
                 break;
@@ -534,7 +512,7 @@ void ui_reset_the_current_mode(void) {
  * @return void
  */
 void ui_call_mode_left(void) {
-    switch (ui_current_mode_number) {
+    switch (current_mode) {
         case 10:
             mode_10_call_mode_left();
             break;
@@ -549,7 +527,7 @@ void ui_call_mode_left(void) {
  * @return void
  */
 void ui_call_mode_right(void) {
-    switch (ui_current_mode_number) {
+    switch (current_mode) {
         case 10:
             mode_10_call_mode_right();
             break;  

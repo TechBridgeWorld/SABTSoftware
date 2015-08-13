@@ -26,15 +26,15 @@ static glyph_t* g2;
 static char cell1_pattern;
 static char cell2_pattern;
 
-void mode_10_main(void) {
+void mode_10_main() {
 
  switch(current_state) {
     case mode_10_INITIAL:
         play_welcome();
         play_submode_choice();
     game_mode = 0;
-    lang_fileset = script_eng_contraction.fileset;
-    log_msg(lang_fileset);
+    lang_prefix = script_eng_contraction.fileset;
+    log_msg(lang_prefix);
     current_state = mode_10_SELECT_MODE; 
     got_input = false;
     break;
@@ -214,7 +214,7 @@ void mode_10_main(void) {
     }
 }
 
-void mode_10_reset(void) {
+void mode_10_reset() {
     game_mode = 0;
     word_num_inset = 0;
     set = 0;

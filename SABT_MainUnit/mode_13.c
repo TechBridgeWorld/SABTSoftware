@@ -60,11 +60,10 @@ void init_index(int bound){
         ques_index[i] = i;
 }
 
-void mode_13_reset(void) {
+void mode_13_reset() {
     log_msg("*** mode_13 - Math Problems ***");
     
     // Global variables
-    set_mode_globals(&script_digits, NULL, NULL);
     reset_globals();
     reset_stats();
     operand_1 = operand_2 = user_answer = -1;
@@ -290,7 +289,7 @@ void play_mistake(){
         play_feedback(MP3_MISTAKES_REMAINING);
 }
 
-void mode_13_main(void) {
+void mode_13_main() {
     switch (current_state) {
 		case INITIAL:
             play_welcome();
@@ -355,7 +354,7 @@ void mode_13_main(void) {
                 io_init();
                 break;
             }
-			set_mode_globals(&script_digits, NULL, NULL);
+		//	set_mode_globals(&script_digits, NULL, NULL); Why would we reset the script here???
              if (get_number(&input_valid, &user_answer)) {
                 if (input_valid) {
                     play_feedback(MP3_YOU_ANSWERED);

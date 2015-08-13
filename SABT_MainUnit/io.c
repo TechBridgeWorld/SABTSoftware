@@ -214,7 +214,7 @@ bool get_line(void) {
             this way */
         // RIGHT - Select prev cell
         case WITH_RIGHT:
-            play_mp3(lang_fileset, MP3_PREV_CELL);
+            play_mp3(lang_prefix, MP3_PREV_CELL);
             io_line_prev_cell();
             if (!pattern)
                 play_pattern(io_line[io_line_cell_index]);
@@ -225,7 +225,7 @@ bool get_line(void) {
             this way */
         // LEFT - Select next cell
         case WITH_LEFT:
-            play_mp3(lang_fileset, MP3_NEXT_CELL);
+            play_mp3(lang_prefix, MP3_NEXT_CELL);
             io_line_next_cell();
             if (!pattern)
                 play_pattern(io_line[io_line_cell_index]);
@@ -430,7 +430,7 @@ void io_line_next_cell(void) {
     if (io_line_cell_index + 2 < MAX_BUF_SIZE)
         io_line_cell_index++;
     else
-        play_mp3(lang_fileset, MP3_LAST_CELL);
+        play_mp3(lang_prefix, MP3_LAST_CELL);
 }
 
 /**
@@ -443,7 +443,7 @@ void io_line_prev_cell(void) {
     if (io_line_cell_index > 0)
         io_line_cell_index--;
     else
-        play_mp3(lang_fileset, MP3_FIRST_CELL);
+        play_mp3(lang_prefix, MP3_FIRST_CELL);
 }
 
 /**

@@ -37,8 +37,6 @@ static glyph_t* user_glyph = NULL;      // inputted by user
 static glyph_t* curr_glyph = NULL;      // next letter in sound_source
 static word_node_t* user_word = NULL;   // word as it is being inputted
 static word_node_t* curr_word = NULL;   // entire word
-static script_t* this_script = &script_english;
-
 
 char **sound_source_list;
 char **sound_list;
@@ -95,12 +93,9 @@ int choose_sound_source() {
     return num;
 }
 
-void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET, 
-                      const char** SOUND_SOURCE_LIST, const char** SOUND_LIST) {
-    set_mode_globals(SCRIPT_ADDRESS, LANG_FILESET, MODE_FILESET);
+void sound_game_reset(const char** SOUND_SOURCE_LIST, const char** SOUND_LIST) {
     reset_globals();
     reset_stats();
-    mode_prefix = get_mode_prefix();
     max_mistakes = 6;
     user_glyph = curr_glyph = NULL;
     sound_list = (char**) SOUND_LIST;
@@ -118,29 +113,29 @@ void sound_game_reset(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_F
  * @brief  Step through the main stages in the code.
  * @return Void
  */
-void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FILESET) {
+void sound_game_main() {
     switch(current_state) {
 
         case CHOOSE_LEVEL:
             if (io_user_abort == true) {
-                log_msg("[%s] Quitting to main menu", mode_prefix);
+                log_msg("Quitting to main menu");
                 quit_mode();
                 io_init();
             }
             switch(create_dialog(NULL, DOT_1 | DOT_2 | ENTER_CANCEL)) {
 
                 case '1':
-                    log_msg("[%s] Submode: Learn", mode_prefix);
+                    log_msg("Submode: Learn");
                     submode = SUBMODE_LEARN;
                     current_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
-                    log_msg("[%s] Submode: Play", mode_prefix);
+                    log_msg("Submode: Play");
                     submode = SUBMODE_PLAY;
                     current_state = GENERATE_QUESTION;
                 case CANCEL:
-                    log_msg("[%s] Quitting to main menu.", mode_prefix);                
+                    log_msg("Quitting to main menu");                
                     quit_mode();
                     break;
 
@@ -187,7 +182,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
 
         case GET_INPUT:
             if (io_user_abort == true) {
-                log_msg("[%s] User aborted input", mode_prefix);
+                log_msg("User aborted input");
                 play_mp3(mode_prefix, MP3_SKIP_THIS);
                 current_state = REPROMPT;
                 io_init();
@@ -201,7 +196,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                 case WITH_ENTER:
                     user_glyph = search_script(this_script, cell_pattern);
                     current_state = CHECK_ANSWER;
-                    log_msg("[%s] Checking answer", mode_prefix);
+                    log_msg("Checking answer");
                     break;
                 case WITH_LEFT:
                     current_state = PROMPT;
@@ -254,7 +249,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
             else { // incorrect input
                 play_glyph(user_glyph);
                 mistakes++;
-                log_msg("[%s] User answered incorrectly", mode_prefix);
+                log_msg("User answered incorrectly");
                 play_feedback(MP3_NO);
                 play_feedback(MP3_TRY_AGAIN);
                 play_word(user_word);
@@ -279,13 +274,13 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                     break;
 
                 case CANCEL:
-                    log_msg("[%s] Reissuing prompt", mode_prefix);
+                    log_msg("Reissuing prompt");
                     current_state = PROMPT;
                     scrolled = false;
                     break;
 
                 case ENTER:
-                    log_msg("[%s] Skipping sound_source", mode_prefix);
+                    log_msg("Skipping sound_source");
                     if (scrolled)
                         current_state = PROMPT;
                     else
@@ -294,7 +289,7 @@ void sound_game_main(script_t* SCRIPT_ADDRESS, char* LANG_FILESET, char* MODE_FI
                     break;
 
                 case RIGHT: case LEFT:
-                    log_msg("[%s] Next sound_source", mode_prefix);
+                    log_msg("Next sound_source");
                     length_entered_word = 0;
                     current_word_index = 0;
                     sound_source = sound_source_list[choose_sound_source()];

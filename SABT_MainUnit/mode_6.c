@@ -14,11 +14,9 @@
 /* Change these for new script */
 #include "script_english.h"
 
-static script_t* this_script = &script_english;
 static glyph_t *this_glyph = NULL;
 
 void mode_6_reset(void) {
-    set_mode_globals(this_script, NULL, NULL);
     reset_globals();
     play_welcome();
     current_state = GET_INPUT;

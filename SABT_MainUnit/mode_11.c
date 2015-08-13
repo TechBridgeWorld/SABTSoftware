@@ -13,9 +13,8 @@
 #include "script_common.h"
 #include "script_english.h"
 #include "sound_game_mode.h"
- #include "mp3s.h"
+#include "mp3s.h"
 
-#define SCRIPT_ADDRESS &script_english
 
 
 const char *noise_list[MAX_INDEX + 1] = {"aeroplane", "rain", "bell", "doorbell", "horn", "auto",
@@ -25,9 +24,9 @@ const char* noise_sounds[MAX_INDEX + 1] = {"aer", "rai", "bel", "doo", "hor", "a
     "tru", "tra", "sir", "pho", "clo", NULL};
 
 void mode_11_reset(void) {
-    sound_game_reset(SCRIPT_ADDRESS, NULL, NULL, noise_list, noise_sounds);
+    sound_game_reset(noise_list, noise_sounds);
 }
 
 void mode_11_main(void) {
-    sound_game_main(SCRIPT_ADDRESS, NULL, NULL);
+    sound_game_main();
 }

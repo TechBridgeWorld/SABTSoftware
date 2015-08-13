@@ -26,9 +26,9 @@ const char* animal_sounds[MAX_INDEX + 1] = {"bee","cam","cat","cow","dog","hor",
     "hye","pig","roo","she","zeb", NULL};
 
 void mode_3_reset(void) {
-    sound_game_reset(&script_english, NULL, NULL, animal_list, animal_sounds);
+    sound_game_reset(animal_list, animal_sounds);
 }
 
 void mode_3_main(void) {
-    sound_game_main(&script_english, NULL, NULL);
+    sound_game_main();
 }

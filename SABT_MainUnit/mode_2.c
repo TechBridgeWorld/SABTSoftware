@@ -15,9 +15,9 @@
 #define SCRIPT_ADDRESS &script_english
 
 void mode_2_reset(void) {
-    learn_letter_reset(&script_english, NULL, NULL);
+    learn_letter_reset();
 }
 
 void mode_2_main(void) {
-    learn_letter_main(&script_english, NULL, NULL);
+    learn_letter_main();
 }

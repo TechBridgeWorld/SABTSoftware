@@ -25,7 +25,6 @@ static bool input_valid = false;
 
 void mode_9_reset(void) {
     // Global variables
-    set_mode_globals(&script_digits, NULL, NULL);
     reset_globals();
     reset_stats();
     operand_1 = operand_2 = result = user_answer = -1;

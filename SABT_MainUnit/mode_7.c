@@ -14,9 +14,9 @@
 
 
 void mode_7_reset(void) {
-    learn_letter_reset(&script_hindi, NULL, NULL);
+    learn_letter_reset();
 }
 
 void mode_7_main(void) {
-    learn_letter_main(&script_hindi, NULL, NULL);
+    learn_letter_main();
 }

@@ -38,8 +38,10 @@
 // reset_statsso that the values are reset to their defaults when each mode is begun.
 // @todo Reset stats when a mode is started, not manually in each mode?
 
-language_t ui_current_language;		// an enum designating current language, so correct feedback mp3s are played
-char* lang_fileset;					// the prefix string of that language, e.g. "e_". @todo Needn't be global
+script_t* this_script;			// pointer to the appropriate script
+language_t mode_language;		// an enum designating current language, so correct feedback mp3s are played
+char* lang_prefix;				// the prefix string of that language, e.g. "e_".
+char* mode_prefix;				// the prefix string of the current mode, e.g. "m15_" for mode 15
 
 unsigned char last_dot;			// the last dot pressed
 unsigned char cell;				// bitmap representing the entire cell + control button last pressed
@@ -72,9 +74,9 @@ extern bool io_user_abort;
 unsigned short number_of_modes;
 unsigned short ui_modes[MAX_NUMBER_OF_MODES];
 
-bool ui_is_mode_selected;
-char ui_current_mode_number; // this is the current mode; e.g., if mode_4 is running, this will be 4
-int  ui_current_mode_index;
+bool is_a_mode_executing;
+char current_mode; // this is the current mode; e.g., if mode_4 is running, this will be 4
+int  index_of_current_mode;
 
 
 
