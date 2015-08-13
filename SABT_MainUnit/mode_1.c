@@ -1,5 +1,5 @@
 /**
- * @file MD1.c
+ * @file mode_1.c
  * @brief Mode 1 code - Dot Practice
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
@@ -7,7 +7,7 @@
  */
 
 #include "globals.h"
-#include "MD1.h"
+#include "mode_1.h"
 #include "audio.h"
 #include "script_common.h"
 #include "script_english.h"
@@ -33,7 +33,7 @@ char choose_dot(){
  *        Should be useful for error handling
  * @return Void
  */
-void md1_reset(void) {
+void mode_1_reset(void) {
     reset_globals();
     reset_stats();
     for (int i = 0; i < 6; i++) {
@@ -50,7 +50,7 @@ void md1_reset(void) {
  * whether they pressed the correct dot
  * @return Void
  */
-void md1_main(void)
+void mode_1_main(void)
 {
     switch(current_state) {
         case INITIAL:
@@ -98,11 +98,11 @@ void md1_main(void)
  * @brief in mode 1, enter button just replays the current prompt
  * @return Void
  */
-void md1_call_mode_yes_answer(void) {
+void mode_1_call_mode_yes_answer(void) {
     current_state = PROMPT;
 }
 
-void md1_call_mode_no_answer(void) {}
+void mode_1_call_mode_no_answer(void) {}
 
 /**
  * @brief register dot input
@@ -110,7 +110,7 @@ void md1_call_mode_no_answer(void) {}
  * @param this_dot the dot being input
  * @return Void
  */
-void md1_input_dot(char this_dot) {
+void mode_1_input_dot(char this_dot) {
     last_dot = this_dot;
     current_state = CHECK_ANSWER;
 }
@@ -120,4 +120,4 @@ void md1_input_dot(char this_dot) {
  * @param this_cell the cell being input
  * @return void
  */
-void md1_input_cell(char this_cell) {}
+void mode_1_input_cell(char this_cell) {}

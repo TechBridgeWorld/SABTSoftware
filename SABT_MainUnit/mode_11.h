@@ -1,11 +1,11 @@
 /**
- * @file MD11.h
+ * @file mode_11.h
  * @brief definitions for mode 11
  * @author Poornima Kaniarasu (pkaniara)
  */
 
-#ifndef _MD11_H_
-#define _MD11_H_
+#ifndef _mode_11_H_
+#define _mode_11_H_
 
 // Int array representing the noises that have been used already.
 int noises_used_list[11];
@@ -25,15 +25,15 @@ bool got_input;
 //mode selected or not
 
 
-void md11_main(void);
-void md11_reset(void);
-void md11_call_mode_yes_answer(void);
-void md11_call_mode_no_answer(void);
+void mode_11_main(void);
+void mode_11_reset(void);
+void mode_11_call_mode_yes_answer(void);
+void mode_11_call_mode_no_answer(void);
 
-void md11_input_dot(char thisDot);
-void md11_input_cell(char this_cell);
-void md11_call_mode_left(void);
-void md11_call_mode_right(void);
+void mode_11_input_dot(char thisDot);
+void mode_11_input_cell(char this_cell);
+void mode_11_call_mode_left(void);
+void mode_11_call_mode_right(void);
 
 
-#endif /* _MD11_H_ */
+#endif /* _mode_11_H_ */

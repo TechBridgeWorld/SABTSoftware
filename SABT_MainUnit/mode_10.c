@@ -1,5 +1,5 @@
 /**
- * @file MD10.c
+ * @file mode_10.c
  * @brief Mode 10 code - Learn and practice contracted Braille
  * @author Poornima Kaniarasu (pkaniara)
  */
@@ -26,23 +26,23 @@ static glyph_t* g2;
 static char cell1_pattern;
 static char cell2_pattern;
 
-void md10_main(void) {
+void mode_10_main(void) {
 
  switch(current_state) {
-    case MD10_INITIAL:
+    case mode_10_INITIAL:
         play_welcome();
         play_submode_choice();
     game_mode = 0;
     lang_fileset = script_eng_contraction.fileset;
     log_msg(lang_fileset);
-    current_state = MD10_SELECT_MODE; 
+    current_state = mode_10_SELECT_MODE; 
     got_input = false;
     break;
 
-    case MD10_SELECT_MODE:
+    case mode_10_SELECT_MODE:
         break;
  
-    case MD10_INIT:
+    case mode_10_INIT:
         switch(game_mode){
             case 0:
                 break;
@@ -55,12 +55,12 @@ void md10_main(void) {
                 play_direction(MP3_UNDER_DEVEL);
                 break;
             }
-        current_state = MD10_REQUEST_WRITE;
+        current_state = mode_10_REQUEST_WRITE;
         break;
 
-    case MD10_REQUEST_WRITE:
+    case mode_10_REQUEST_WRITE:
         play_direction(MP3_PLEASE_WRITE);
-        current_state = MD10_REQUEST_INPUT;
+        current_state = mode_10_REQUEST_INPUT;
         if (word_num_inset == 36) {
             set = set + 1;
             word_num_inset = 0;
@@ -69,7 +69,7 @@ void md10_main(void) {
             word_num_inset = word_num_inset + 1;
         break;
 
-    case MD10_REQUEST_INPUT:
+    case mode_10_REQUEST_INPUT:
       switch(game_mode){
         case 0:
             // to write <word><set>_<num> please press
@@ -93,7 +93,7 @@ void md10_main(void) {
             play_mp3(NULL, fname);
             play_direction(MP3_PRESS_DOTS);
                     
-            current_state = MD10_SPELL_PATTERN;
+            current_state = mode_10_SPELL_PATTERN;
             break;
 
         case 1: // not yet implemented
@@ -103,7 +103,7 @@ void md10_main(void) {
       }
       break;
 
-    case MD10_SPELL_PATTERN:
+    case mode_10_SPELL_PATTERN:
         if (fname[1] != '0'){
             g1 = &contraction_pattern[CHARTOINT(fname[0])];   // Stores the preceding pattern for the cell
             play_dot_sequence(g1);
@@ -117,13 +117,13 @@ void md10_main(void) {
             sym = CHARTOINT(fname[4]);          // Stores the alphabet/symbol glyph
         g2 = &contraction_glyphs[sym-1];
         play_dot_sequence(g2);
-        current_state = MD10_CELL1;
+        current_state = mode_10_CELL1;
         io_init();
         break;
         
-    case MD10_CELL1:
+    case mode_10_CELL1:
         if (!g1) {
-            current_state = MD10_CELL2;
+            current_state = mode_10_CELL2;
             break;
         }
         cell = get_cell();
@@ -134,12 +134,12 @@ void md10_main(void) {
         switch (cell_control) {
             case WITH_ENTER:
                 log_msg("ENTER");
-                current_state = MD10_CHECK;          
+                current_state = mode_10_CHECK;          
                 break;
             case WITH_LEFT:
                 log_msg("LEFT");
                 play_direction(MP3_NEXT_CELL);
-                current_state = MD10_CELL2;
+                current_state = mode_10_CELL2;
                 break;
             case WITH_RIGHT:
                 log_msg("RIGHT");
@@ -153,7 +153,7 @@ void md10_main(void) {
         break;
 
     
-    case MD10_CELL2:      
+    case mode_10_CELL2:      
         cell = get_cell();
         cell2_pattern = GET_CELL_PATTERN(cell);
         cell_control = GET_CELL_CONTROL(cell);
@@ -164,7 +164,7 @@ void md10_main(void) {
         switch (cell_control) {
             case WITH_ENTER:
                 log_msg("ENTER");
-                current_state = MD10_CHECK;          
+                current_state = mode_10_CHECK;          
                 break;
         case WITH_LEFT:
             log_msg("LEFT");
@@ -181,7 +181,7 @@ void md10_main(void) {
                 play_mp3(MP3_ENGLISH, MP3_BLANK);
                 cell1_pattern = NO_DOTS;
                 cell2_pattern = NO_DOTS;
-                current_state = MD10_CELL1;
+                current_state = mode_10_CELL1;
           }       
           break;
 
@@ -191,18 +191,18 @@ void md10_main(void) {
         }
         break;
 
-    case MD10_CHECK:
+    case mode_10_CHECK:
         if (g1==NULL || cell1_pattern == g1->pattern) {
             if (cell2_pattern == g2->pattern) {
                 play_feedback(MP3_GOOD);
-                current_state = MD10_REQUEST_WRITE;
+                current_state = mode_10_REQUEST_WRITE;
             }
             else {
                 play_feedback(MP3_NO);
                 play_feedback(MP3_TRY_AGAIN);
                 cell1_pattern = NO_DOTS;
                 cell2_pattern = NO_DOTS;
-                current_state = MD10_REQUEST_INPUT;
+                current_state = mode_10_REQUEST_INPUT;
             }
         }        
         break;
@@ -214,52 +214,52 @@ void md10_main(void) {
     }
 }
 
-void md10_reset(void) {
+void mode_10_reset(void) {
     game_mode = 0;
     word_num_inset = 0;
     set = 0;
-    current_state = MD10_INITIAL;
+    current_state = mode_10_INITIAL;
     cell1_pattern = NO_DOTS;
     cell2_pattern = NO_DOTS;
     g1 = NULL;
     g2 = NULL;
 }
 
-void md10_call_mode_yes_answer(void) {
-    if (current_state == MD10_SELECT_MODE)
-        current_state = MD10_INIT;
+void mode_10_call_mode_yes_answer(void) {
+    if (current_state == mode_10_SELECT_MODE)
+        current_state = mode_10_INIT;
 }
 
-void md10_call_mode_no_answer(void) {   
-    md10_reset(); // Pressing CANCEL exits to submode menu
+void mode_10_call_mode_no_answer(void) {   
+    mode_10_reset(); // Pressing CANCEL exits to submode menu
 }
 
-void md10_input_dot(char this_dot) {
+void mode_10_input_dot(char this_dot) {
     last_dot = this_dot;
     play_requested_dot(this_dot); 
 }
 
-void md10_input_cell(char this_cell) {
+void mode_10_input_cell(char this_cell) {
     if (last_dot != 0) {
         cell = this_cell;
         got_input = true;
     }
 }
 
-void md10_call_mode_left() {
-    if (current_state == MD10_SELECT_MODE) {
+void mode_10_call_mode_left() {
+    if (current_state == mode_10_SELECT_MODE) {
         game_mode += 1;
         if (game_mode > NUM_SUB_MODES-1)
             game_mode = 0;
-        play_mp3("MD10", sub_mode[game_mode]);  // @todo what are these?
+        play_mp3("mode_10", sub_mode[game_mode]);  // @todo what are these?
     }       
 }
 
-void md10_call_mode_right() {
-    if (current_state == MD10_SELECT_MODE) {
+void mode_10_call_mode_right() {
+    if (current_state == mode_10_SELECT_MODE) {
         game_mode -= 1;
         if (game_mode < 0)
             game_mode = NUM_SUB_MODES-1;
-        play_mp3("MD10", sub_mode[game_mode]);
+        play_mp3("mode_10", sub_mode[game_mode]);
     }
 }

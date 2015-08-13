@@ -1,5 +1,5 @@
 /**
-* @file MD7.c
+* @file mode_7.c
 * @brief Code for mode 7 - Hindi Braille Practice
 * @author Vivek Nair (viveknair@cmu.edu)
 */
@@ -13,10 +13,10 @@
 #include "script_hindi.h"
 
 
-void md7_reset(void) {
+void mode_7_reset(void) {
     learn_letter_reset(&script_hindi, NULL, NULL);
 }
 
-void md7_main(void) {
+void mode_7_main(void) {
     learn_letter_main(&script_hindi, NULL, NULL);
 }

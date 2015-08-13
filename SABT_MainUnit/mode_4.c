@@ -1,5 +1,5 @@
 /**
- * @file MD4.c
+ * @file mode_4.c
  * @brief Code for mode 4 - One player Hangman
  * @author Kory Stiger (kstiger) Susan Zuo(tzuo)
  */
@@ -116,7 +116,7 @@ bool is_past_mistake(char entered_letter) {
     return false;
 }
 
-void md4_play_mistake() {
+void mode_4_play_mistake() {
     play_feedback(MP3_YOU_HAVE);
     play_number(max_mistakes - mistakes);
     if (max_mistakes - mistakes == 1)
@@ -127,8 +127,8 @@ void md4_play_mistake() {
 
 
 
-void md4_reset(void) {
-    log_msg("*** MD4 - one player hangman ***");
+void mode_4_reset(void) {
+    log_msg("*** mode_4 - one player hangman ***");
     set_mode_globals(&script_english, NULL, NULL);
     reset_globals();
     reset_stats();
@@ -138,7 +138,7 @@ void md4_reset(void) {
 
 }
 
-void md4_main(void) {   
+void mode_4_main(void) {   
     switch (current_state) {
         case INITIAL:
             shuffle(dict.num_words, dict.index_array);
@@ -197,19 +197,19 @@ void md4_main(void) {
             
         case GET_INPUT:
             if (io_user_abort == true) {
-                log_msg("[MD4] User aborted input");
+                log_msg("[mode_4] User aborted input");
                 current_state = REPROMPT;
                 io_init();
                 break;
             }
             if (get_character(&md_input_valid, &entered_letter)) {
                 if (md_input_valid) {
-                    log_msg("[MD4] User answer: %c", entered_letter);
+                    log_msg("[mode_4] User answer: %c", entered_letter);
                     play_string(&entered_letter, 1);
                     current_state = CHECK_ANSWER;
                 }
                 else
-                    log_msg("[MD4] IO error");
+                    log_msg("[mode_4] IO error");
             }
             break;
             
@@ -241,7 +241,7 @@ void md4_main(void) {
                         mistake_pool[mistakes] = entered_letter;
                         mistakes++;
                     }
-                    md4_play_mistake();
+                    mode_4_play_mistake();
                     current_state = PROMPT;
                 }
             } 

@@ -1,5 +1,5 @@
 /**
-* @file MD2.c
+* @file mode_2.c
 * @brief Code for mode 2 - English Braille Practice
 * @author Vivek Nair (viveknair@cmu.edu)
 */
@@ -14,10 +14,10 @@
 #include "script_english.h"
 #define SCRIPT_ADDRESS &script_english
 
-void md2_reset(void) {
+void mode_2_reset(void) {
     learn_letter_reset(&script_english, NULL, NULL);
 }
 
-void md2_main(void) {
+void mode_2_main(void) {
     learn_letter_main(&script_english, NULL, NULL);
 }

@@ -1,5 +1,5 @@
 /**
- * @file md11.c
+ * @file mode_11.c
  * @brief Mode 11 code - Everyday Noises Game
  * @author Poornima Kaniarasu (pkaniara)
  */
@@ -24,10 +24,10 @@ const char *noise_list[MAX_INDEX + 1] = {"aeroplane", "rain", "bell", "doorbell"
 const char* noise_sounds[MAX_INDEX + 1] = {"aer", "rai", "bel", "doo", "hor", "aut",
     "tru", "tra", "sir", "pho", "clo", NULL};
 
-void md11_reset(void) {
+void mode_11_reset(void) {
     sound_game_reset(SCRIPT_ADDRESS, NULL, NULL, noise_list, noise_sounds);
 }
 
-void md11_main(void) {
+void mode_11_main(void) {
     sound_game_main(SCRIPT_ADDRESS, NULL, NULL);
 }

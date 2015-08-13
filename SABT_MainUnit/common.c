@@ -10,7 +10,7 @@
 #include "common.h"
 #include "script_common.h"
 #include "datastructures.h"
-#include "MD15.h"
+#include "mode_15.h"
 
  int get_current_mode(){
     return ui_current_mode_number;
@@ -114,7 +114,7 @@ void quit_mode(void) {
     // @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. RETEST THIS. 
     if (ui_current_mode_number == 15) {
         log_msg("Freeing dictionary.");
-        free_wordlist(&md15_dict);
+        free_wordlist(&mode_15_dict);
     }
     ui_is_mode_selected = false;
     ui_current_mode_index = -1;

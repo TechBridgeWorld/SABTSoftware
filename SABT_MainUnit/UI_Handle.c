@@ -332,10 +332,10 @@ void ui_play_intro_current_mode(void) {
 void ui_call_mode_yes_answer(void) {
     switch(ui_current_mode_number) {
         case 1:
-            md1_call_mode_yes_answer();
+            mode_1_call_mode_yes_answer();
             break;
         case 10:
-            md10_call_mode_yes_answer();
+            mode_10_call_mode_yes_answer();
             break;
         default:
             break;
@@ -349,10 +349,10 @@ void ui_call_mode_yes_answer(void) {
 void ui_call_mode_no_answer(void) {
     switch(ui_current_mode_number) {
         case 1:
-            md1_call_mode_no_answer();
+            mode_1_call_mode_no_answer();
             break;
         case 10:
-            md10_call_mode_no_answer();
+            mode_10_call_mode_no_answer();
             break;
         default:
             break;
@@ -367,13 +367,13 @@ void ui_input_dot_to_current_mode(char this_dot) {
     if (ui_is_mode_selected) {
         switch(ui_current_mode_number) {
             case 1:
-                md1_input_dot(this_dot);
+                mode_1_input_dot(this_dot);
                 break;
             case 5:
-                md5_input_dot(this_dot);
+                mode_5_input_dot(this_dot);
                 break;
             case 10:
-                md10_input_dot(this_dot);
+                mode_10_input_dot(this_dot);
                 break;
             default:
                 break;
@@ -392,13 +392,13 @@ void ui_input_cell_to_current_mode(char this_cell)
     if (ui_is_mode_selected) {
         switch(ui_current_mode_number) {
             case 1:
-                md1_input_cell(this_cell);
+                mode_1_input_cell(this_cell);
                 break;
             case 5:
-                md5_input_cell(this_cell);
+                mode_5_input_cell(this_cell);
                 break;
             case 10:
-                md10_input_cell(this_cell);
+                mode_10_input_cell(this_cell);
                 break;
             default:
                 break;
@@ -417,49 +417,49 @@ void ui_run_main_of_current_mode(void) {
     if (ui_is_mode_selected){
         switch(ui_current_mode_number) {
             case 1:
-                md1_main();
+                mode_1_main();
                 break;
             case 2:
-                md2_main();
+                mode_2_main();
                 break;
             case 3:
-                md3_main();
+                mode_3_main();
                 break;
             case 4:
-                md4_main();
+                mode_4_main();
                 break;
             case 5:
-                md5_main();
+                mode_5_main();
                 break;
             case 6:
-                md6_main();
+                mode_6_main();
                 break;
             case 7:
-                md7_main();
+                mode_7_main();
                 break;
             case 8:
-                md8_main();
+                mode_8_main();
                 break;
             case 9:
-                md9_main();
+                mode_9_main();
                 break;
             case 10:
-                md10_main();
+                mode_10_main();
                 break;
             case 11:
-                md11_main();
+                mode_11_main();
                 break;
             case 12:
-                md12_main();
+                mode_12_main();
                 break;
             case 13:
-                md13_main();
+                mode_13_main();
                 break;
             case 14:
-                md14_main();
+                mode_14_main();
                 break;
             case 15:
-                md15_main();
+                mode_15_main();
                 break;
 
             default:
@@ -476,49 +476,49 @@ void ui_reset_the_current_mode(void) {
     if (ui_is_mode_selected) {
         switch(ui_current_mode_number) {
             case 1:
-                md1_reset();
+                mode_1_reset();
                 break;
             case 2:
-                md2_reset();
+                mode_2_reset();
                 break;
             case 3:
-                md3_reset();
+                mode_3_reset();
                 break;
             case 4:
-                md4_reset();
+                mode_4_reset();
                 break;
             case 5:
-                md5_reset();
+                mode_5_reset();
                 break;
             case 6:
-                md6_reset();
+                mode_6_reset();
                 break;
             case 7:
-                md7_reset();
+                mode_7_reset();
                 break;
             case 8:
-                md8_reset();
+                mode_8_reset();
                 break;
             case 9:
-                md9_reset();
+                mode_9_reset();
                 break;
             case 10:
-                md10_reset();  
+                mode_10_reset();  
                 break;
             case 11:
-                md11_reset();  
+                mode_11_reset();  
                 break;
             case 12:
-                md12_reset();
+                mode_12_reset();
                 break;
             case 13:
-                md13_reset();
+                mode_13_reset();
                 break;
             case 14:
-                md14_reset();
+                mode_14_reset();
                 break;
             case 15:
-                md15_reset();
+                mode_15_reset();
                 break;
 
             default:
@@ -536,7 +536,7 @@ void ui_reset_the_current_mode(void) {
 void ui_call_mode_left(void) {
     switch (ui_current_mode_number) {
         case 10:
-            md10_call_mode_left();
+            mode_10_call_mode_left();
             break;
         default:
             break;
@@ -551,7 +551,7 @@ void ui_call_mode_left(void) {
 void ui_call_mode_right(void) {
     switch (ui_current_mode_number) {
         case 10:
-            md10_call_mode_right();
+            mode_10_call_mode_right();
             break;  
         default:
             break;

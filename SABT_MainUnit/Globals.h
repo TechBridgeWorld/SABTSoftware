@@ -73,7 +73,7 @@ unsigned short number_of_modes;
 unsigned short ui_modes[MAX_NUMBER_OF_MODES];
 
 bool ui_is_mode_selected;
-char ui_current_mode_number; // this is the current mode; e.g., if MD4 is running, this will be 4
+char ui_current_mode_number; // this is the current mode; e.g., if mode_4 is running, this will be 4
 int  ui_current_mode_index;
 
 

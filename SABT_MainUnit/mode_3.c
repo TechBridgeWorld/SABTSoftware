@@ -1,5 +1,5 @@
 /**
- * @file MD3.c
+ * @file mode_3.c
  * @brief Mode 3 code - Animal Game
  * @author Nick LaGrow (nlagrow)
  * @author Alex Etling (petling)
@@ -15,7 +15,7 @@
 #include "letter_globals.h"
 #include "script_common.h"
 #include "script_english.h" 
-#include "MD3.h"
+#include "mode_3.h"
 #include "sound_game_mode.h"
  #include "mp3s.h"
 
@@ -25,10 +25,10 @@ const char *animal_list[MAX_INDEX + 1] = {"bee", "camel", "cat", "cow", "dog", "
 const char* animal_sounds[MAX_INDEX + 1] = {"bee","cam","cat","cow","dog","hor",
     "hye","pig","roo","she","zeb", NULL};
 
-void md3_reset(void) {
+void mode_3_reset(void) {
     sound_game_reset(&script_english, NULL, NULL, animal_list, animal_sounds);
 }
 
-void md3_main(void) {
+void mode_3_main(void) {
     sound_game_main(&script_english, NULL, NULL);
 }

@@ -104,8 +104,8 @@
 
 
 // players, for player modes
-#define MP3_submode_playER_1        "playr1"    // Player 1:
-#define MP3_submode_playER_2        "playr2"    // Player 2:
+#define MP3_PLAYER_1        "playr1"    // Player 1:
+#define MP3_PLAYER_2        "playr2"    // Player 2:
 
 // Next/previous cell/letter/word
 #define MP3_FIRST_CELL      "frstcl"    // First cell:

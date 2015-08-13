@@ -1,19 +1,19 @@
 /*
- * @file MD15.h
+ * @file mode_15.h
  *
  * @brief Function declarations for mode 15, spelling bee
  * @author: Marjorie Carlson (marjorie@cmu.edu)
  */ 
 
-#ifndef MD15_MODE_H_
-#define MD15_MODE_H_
+#ifndef mode_15_MODE_H_
+#define mode_15_MODE_H_
 
 #include "datastructures.h"
 
-extern wordlist_t md15_dict;
+extern wordlist_t mode_15_dict;
 
-void md15_main();
-void md15_reset();
+void mode_15_main();
+void mode_15_reset();
 
 #endif
 

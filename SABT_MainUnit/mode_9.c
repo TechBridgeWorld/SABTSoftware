@@ -1,5 +1,5 @@
 /**
- * @file MD9.c
+ * @file mode_9.c
  * @brief Code for mode 9 - Maths Practice
  * @author Vivek Nair (viveknair@cmu.edu)
  */
@@ -23,7 +23,7 @@ static int user_answer = -1;
 static bool input_ready = false;
 static bool input_valid = false;
 
-void md9_reset(void) {
+void mode_9_reset(void) {
     // Global variables
     set_mode_globals(&script_digits, NULL, NULL);
     reset_globals();
@@ -33,7 +33,7 @@ void md9_reset(void) {
     max_mistakes = 3;
 }
 
-void md9_generate_question(void) {
+void mode_9_generate_question(void) {
     
     // Sets bound for result
     int bound = 1;
@@ -42,10 +42,10 @@ void md9_generate_question(void) {
 
     do {
         operand_1 = timer_rand() % bound;
-        log_msg("[MD9] Operand 1: %d", operand_1);
+        log_msg("[mode_9] Operand 1: %d", operand_1);
         
         operand_2 = timer_rand() % bound;
-        log_msg("[MD9] Operand 2: %d", operand_2);
+        log_msg("[mode_9] Operand 2: %d", operand_2);
         
         
         switch (submode) {
@@ -59,15 +59,15 @@ void md9_generate_question(void) {
                 result = operand_1 * operand_2;
                 break;
             default:
-                log_msg("[MD9] Error: submode: %c", submode);
+                log_msg("[mode_9] Error: submode: %c", submode);
                 quit_mode();
                 break;
         }
     } while (!(result > 0 && result < bound));
-    log_msg("[MD9] Result: %d", result);
+    log_msg("[mode_9] Result: %d", result);
 }
 
-void md9_play_question() {
+void mode_9_play_question() {
     play_direction(MP3_WRITE_NUMBER_);
     play_number(operand_1);
     switch (submode) {
@@ -81,19 +81,19 @@ void md9_play_question() {
             play_direction(MP3_TIMES);
             break;
         default:
-            log_msg("[MD9] Error: submode: %c", submode);
+            log_msg("[mode_9] Error: submode: %c", submode);
             quit_mode();
             break;
     }
     play_number(operand_2);
 }
 
-void md9_play_answer(void) {
+void mode_9_play_answer(void) {
     play_feedback(MP3_THE_ANSWER_IS);
     play_number(result);
 }
 
-void md9_main(void) {
+void mode_9_main(void) {
     switch (current_state) {
         case INITIAL:
             last_dot = create_dialog(MP3_CHOOSE_LEVELS_3,
@@ -101,19 +101,19 @@ void md9_main(void) {
             switch (last_dot) {
                 
                 case '1':
-                    log_msg("[MD9] Submode: Addition");
+                    log_msg("[mode_9] Submode: Addition");
                     submode = SUBMODE_ADD;
                     current_state = CHOOSE_LEVEL;
                     break;
 
                 case '2':
-                    log_msg("[MD9] Submode: Subtraction");
+                    log_msg("[mode_9] Submode: Subtraction");
                     submode = SUBMODE_SUBTRACT;
                     current_state = CHOOSE_LEVEL;
                     break;
 
                 case '3':
-                    log_msg("[MD9] Submode: Multiplication");
+                    log_msg("[mode_9] Submode: Multiplication");
                     submode = SUBMODE_MULTIPLY;
                     current_state = CHOOSE_LEVEL;
                     break;
@@ -137,46 +137,46 @@ void md9_main(void) {
                     break;
 
                 case '1':
-                    log_msg("[MD9] Level: 1");
+                    log_msg("[mode_9] Level: 1");
                     level = EASY;
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     current_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
-                    log_msg("[MD9] Level: 2");
+                    log_msg("[mode_9] Level: 2");
                     level = MEDIUM;
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     current_state = GENERATE_QUESTION;
                     break;
 
                 case '3':
-                    log_msg("[MD9] Level: 3");
+                    log_msg("[mode_9] Level: 3");
                     level = HARD;
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     current_state = GENERATE_QUESTION;
                     break;
 
                 default:
-                    log_msg("[MD9] Error: last_dot: %c", last_dot);
+                    log_msg("[mode_9] Error: last_dot: %c", last_dot);
                     quit_mode();
                     break;
             }
             break;
 
         case GENERATE_QUESTION:
-            md9_generate_question();
+            mode_9_generate_question();
             current_state = PROMPT;
             break;
 
         case PROMPT:
-            md9_play_question();
+            mode_9_play_question();
             current_state = GET_INPUT;
             break;
 
         case GET_INPUT:
             if (io_user_abort == true) {
-                log_msg("[MD12] User aborted input");
+                log_msg("[mode_12] User aborted input");
                 play_feedback(MP3_HELP_MENU);
                 current_state = REPROMPT;
                 io_init();
@@ -184,12 +184,12 @@ void md9_main(void) {
             }
             if (get_number(&input_valid, &user_answer)) {
                 if (input_valid) {
-                    log_msg("[MD9] User answer: %d", user_answer);
+                    log_msg("[mode_9] User answer: %d", user_answer);
                     play_feedback(MP3_YOU_ANSWERED);
                     play_number(user_answer);
                     current_state = CHECK_ANSWER;
                 } else
-                    log_msg("[MD9] IO error");
+                    log_msg("[mode_9] IO error");
             }
             break;
 
@@ -203,7 +203,7 @@ void md9_main(void) {
                 mistakes++;
                 play_feedback(MP3_CORRECT);
                 if (mistakes >= max_mistakes)
-                    md9_play_answer();
+                    mode_9_play_answer();
                 play_feedback(MP3_TRY_AGAIN);
                 current_state = PROMPT;
             }
@@ -225,7 +225,7 @@ void md9_main(void) {
                         break;
                     
                     case RIGHT:
-                        md9_play_answer();
+                        mode_9_play_answer();
                         current_state = GENERATE_QUESTION;
                         io_init();
                         break;

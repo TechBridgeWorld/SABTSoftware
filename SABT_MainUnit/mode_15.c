@@ -1,5 +1,5 @@
 /*
- * @file MD15.c
+ * @file mode_15.c
  *
  * @brief Mode 15: two-player spelling bee
  * @author: Marjorie Carlson (marjorie@cmu.edu)
@@ -38,7 +38,7 @@ int p2_words_spelled = 0;
 int p1_mistakes = 0;
 int p2_mistakes = 0;
 
-wordlist_t md15_dict;
+wordlist_t mode_15_dict;
 word_t* chosen_word;
 
 static cell_t user_cell;
@@ -119,7 +119,7 @@ void speak_inputted_cell() {
         play_mp3(lang_fileset,letter_name);
 }
 
-void md15_reset() {
+void mode_15_reset() {
     reset_globals();
     reset_stats();
 }
@@ -128,7 +128,7 @@ void md15_reset() {
  * @brief  Step through the main stages in the code.
  * @return Void
  */
-void md15_main() {
+void mode_15_main() {
   switch(current_state) {
 
     case INITIAL:
@@ -147,17 +147,17 @@ void md15_main() {
         switch (last_dot) {
             case '1':
                 play_direction(MP3_EASY_MODE);
-                strings_to_wordlist(easy, ARRAYLEN(easy), &md15_dict);
+                strings_to_wordlist(easy, ARRAYLEN(easy), &mode_15_dict);
                 break;
 
             case '2':
                 play_direction(MP3_MEDIUM_MODE);
-                strings_to_wordlist(medium, ARRAYLEN(medium), &md15_dict);
+                strings_to_wordlist(medium, ARRAYLEN(medium), &mode_15_dict);
                 break;
 
             case '3':
                 play_direction(MP3_HARD_MODE);
-                strings_to_wordlist(hard, ARRAYLEN(hard), &md15_dict);
+                strings_to_wordlist(hard, ARRAYLEN(hard), &mode_15_dict);
                 break;
 
             case CANCEL:
@@ -169,7 +169,7 @@ void md15_main() {
                 break;
         }
 
-        print_words_in_list(&md15_dict);
+        print_words_in_list(&mode_15_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
         current_state = GENERATE_QUESTION;
         break;
@@ -177,8 +177,8 @@ void md15_main() {
     case GENERATE_QUESTION:
         reset_globals();
         reset_stats();
-        get_next_word_in_wordlist(&md15_dict, &chosen_word);
-        log_msg("[MD15] Next word: %s", chosen_word->name);
+        get_next_word_in_wordlist(&mode_15_dict, &chosen_word);
+        log_msg("[mode_15] Next word: %s", chosen_word->name);
         current_state = PROMPT;
         break;
 
@@ -203,7 +203,7 @@ void md15_main() {
             case WITH_ENTER:
             user_cell.pattern = cell_pattern;
             current_state = CHECK_ANSWER;
-            log_msg("[MD15] Checking answer");
+            log_msg("[mode_15] Checking answer");
             break;
 
             case WITH_LEFT:

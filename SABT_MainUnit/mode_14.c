@@ -1,5 +1,5 @@
 /*
- * @file MD14.c
+ * @file mode_14.c
  *
  * @brief Mode 14: spelling practice
  * @author: Marjorie Carlson (marjorie@cmu.edu)
@@ -23,14 +23,14 @@
 #include "dictionary.h"
 #include "vocab.h"
 #include "mp3s.h"
-wordlist_t md14_dict;
-word_t* md14_chosen_word;
+wordlist_t mode_14_dict;
+word_t* mode_14_chosen_word;
 
-static cell_t md14_user_cell;
-static cell_t md14_curr_cell;
+static cell_t mode_14_user_cell;
+static cell_t mode_14_curr_cell;
 
 
-void md14_play_stats(){
+void mode_14_play_stats(){
     if (score == 0)
         return;
     play_feedback(MP3_YOU_HAVE_SPELLED);
@@ -54,33 +54,33 @@ void md14_play_stats(){
     }
 }
 
-void md14_correct_answer() {
+void mode_14_correct_answer() {
     play_feedback(MP3_CORRECT);
-    speak_letters_in_word(md14_chosen_word);
-    speak_word(md14_chosen_word);
+    speak_letters_in_word(mode_14_chosen_word);
+    speak_word(mode_14_chosen_word);
     play_tada();
     score++;
-    md14_play_stats();
+    mode_14_play_stats();
     reset_globals();
     reset_stats();
 }
 
-void md14_incorrect_answer() {
+void mode_14_incorrect_answer() {
     play_feedback(MP3_NO);
     play_feedback(MP3_TRY_AGAIN);
 
-    decrement_word_index(md14_chosen_word);
+    decrement_word_index(mode_14_chosen_word);
     curr_mistakes++;
     mistakes++;
 }
 
-void md14_speak_inputted_cell() {
+void mode_14_speak_inputted_cell() {
     cell_t this_cell = {cell};
     char* letter_name = get_eng_letter_name_by_cell(&this_cell);
     play_mp3(lang_fileset, letter_name);
 }
 
-void md14_reset() {
+void mode_14_reset() {
     reset_globals();
     reset_stats();
 }
@@ -89,7 +89,7 @@ void md14_reset() {
  * @brief  Step through the main stages in the code.
  * @return Void
  */
-void md14_main() {
+void mode_14_main() {
   switch(current_state) {
 
     case INITIAL:
@@ -102,17 +102,17 @@ void md14_main() {
         switch (last_dot) {
             case '1':
                 play_direction(MP3_EASY_MODE);
-                strings_to_wordlist(easy, ARRAYLEN(easy), &md14_dict);
+                strings_to_wordlist(easy, ARRAYLEN(easy), &mode_14_dict);
                 break;
 
             case '2':
                 play_direction(MP3_MEDIUM_MODE);
-                strings_to_wordlist(medium, ARRAYLEN(medium), &md14_dict);
+                strings_to_wordlist(medium, ARRAYLEN(medium), &mode_14_dict);
                 break;
 
             case '3':
                 play_direction(MP3_HARD_MODE);
-                strings_to_wordlist(hard, ARRAYLEN(hard), &md14_dict);
+                strings_to_wordlist(hard, ARRAYLEN(hard), &mode_14_dict);
                 break;
 
             case CANCEL:
@@ -124,7 +124,7 @@ void md14_main() {
                 break;
         }
 
-        print_words_in_list(&md14_dict);
+        print_words_in_list(&mode_14_dict);
         play_direction(MP3_INSTRUCTIONS_WORD);
         current_state = GENERATE_QUESTION;
         break;
@@ -132,14 +132,14 @@ void md14_main() {
     case GENERATE_QUESTION:
         reset_globals();
         curr_mistakes = 0;
-        get_next_word_in_wordlist(&md14_dict, &md14_chosen_word);
-        log_msg("[MD14] Next word: %s", md14_chosen_word->name);
+        get_next_word_in_wordlist(&mode_14_dict, &mode_14_chosen_word);
+        log_msg("[mode_14] Next word: %s", mode_14_chosen_word->name);
         current_state = PROMPT;
         break;
 
      case PROMPT:
         play_direction(MP3_SPELL_WORD);
-        speak_word(md14_chosen_word);
+        speak_word(mode_14_chosen_word);
         current_state = GET_INPUT;
         break;
 
@@ -151,7 +151,7 @@ void md14_main() {
         cell_control = GET_CELL_CONTROL(cell);
         switch (cell_control) {
             case WITH_ENTER:
-            md14_user_cell.pattern = cell_pattern;
+            mode_14_user_cell.pattern = cell_pattern;
             current_state = CHECK_ANSWER;
             break;
 
@@ -169,14 +169,14 @@ void md14_main() {
         break;
 
     case CHECK_ANSWER:
-        md14_speak_inputted_cell();
-        get_next_cell_in_word(md14_chosen_word, &md14_curr_cell);
-        log_msg("Target cell: %x, inputted cell: %x.", md14_curr_cell.pattern, md14_user_cell.pattern);
+        mode_14_speak_inputted_cell();
+        get_next_cell_in_word(mode_14_chosen_word, &mode_14_curr_cell);
+        log_msg("Target cell: %x, inputted cell: %x.", mode_14_curr_cell.pattern, mode_14_user_cell.pattern);
         
 
-        if (cell_equals(&md14_curr_cell, &md14_user_cell)) {
-            if (md14_chosen_word->curr_letter == md14_chosen_word->num_letters - 1) { // done
-                md14_correct_answer();
+        if (cell_equals(&mode_14_curr_cell, &mode_14_user_cell)) {
+            if (mode_14_chosen_word->curr_letter == mode_14_chosen_word->num_letters - 1) { // done
+                mode_14_correct_answer();
                 current_state = GENERATE_QUESTION;
             }
             else {  // correct but not done
@@ -187,7 +187,7 @@ void md14_main() {
             }
         }
         else {
-            md14_incorrect_answer();
+            mode_14_incorrect_answer();
             current_state = REPROMPT;
         }
         break;
@@ -195,17 +195,17 @@ void md14_main() {
     case REPROMPT:
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
-            char* letter_name = get_eng_letter_name_by_cell(&md14_curr_cell);
+            char* letter_name = get_eng_letter_name_by_cell(&mode_14_curr_cell);
             play_mp3(lang_fileset, letter_name);
             if (curr_mistakes >= max_mistakes + 1)
-                play_pattern(md14_curr_cell.pattern);
+                play_pattern(mode_14_curr_cell.pattern);
         }
         else {
             play_direction(MP3_SPELL_WORD);
-            speak_word(md14_chosen_word);
-            if (md14_chosen_word->curr_glyph > -1) { // not at beginning of word
+            speak_word(mode_14_chosen_word);
+            if (mode_14_chosen_word->curr_glyph > -1) { // not at beginning of word
                 play_feedback(MP3_SPELLING_SO_FAR);
-                speak_letters_so_far(md14_chosen_word);
+                speak_letters_so_far(mode_14_chosen_word);
                 play_direction(MP3_NEXT_LETTER);
             }
         }

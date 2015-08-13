@@ -1,6 +1,6 @@
 /**
-* @file MD7.h
-* @brief Function declarations for mode 7 - Hindi practice
+* @file learn_letter_mode.h
+* @brief Function declarations for the letter-learning modes
 * @author Vivek Nair (viveknair@cmu.edu)
 */ 
 

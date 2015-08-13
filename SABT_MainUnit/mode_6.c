@@ -1,5 +1,5 @@
 /**
- * @file MD6.c
+ * @file mode_6.c
  * @brief  Mode 6 code - Free Play
  * @author Vivek Nair (viveknair@cmu.edu)
  */
@@ -8,7 +8,7 @@
 #include "audio.h"
 #include "common.h"
 #include "script_common.h"
-#include "MD6.h"
+#include "mode_6.h"
 #include "mp3s.h"
 
 /* Change these for new script */
@@ -17,15 +17,15 @@
 static script_t* this_script = &script_english;
 static glyph_t *this_glyph = NULL;
 
-void md6_reset(void) {
+void mode_6_reset(void) {
     set_mode_globals(this_script, NULL, NULL);
     reset_globals();
     play_welcome();
     current_state = GET_INPUT;
-    log_msg("[MD6] Mode reset");
+    log_msg("[mode_6] Mode reset");
 }
 
-void md6_main(void) {
+void mode_6_main(void) {
     switch (current_state) {
 
         case GET_INPUT:
