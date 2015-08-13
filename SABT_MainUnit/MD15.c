@@ -52,14 +52,14 @@ void play_stats(){
         if (words == 0)
             return;
         mistakes = p1_mistakes;
-        play_direction(MP3_submode_playER_1);
+        play_direction(MP3_PLAYER_1);
     }
     else {
         words = p2_words_spelled;
         if (words == 0)
             return;
         mistakes = p2_mistakes;
-        play_direction(MP3_submode_playER_2);
+        play_direction(MP3_PLAYER_2);
     }
 
     play_feedback(MP3_YOU_HAVE_SPELLED);
@@ -184,10 +184,10 @@ void md15_main() {
 
      case PROMPT:
         if (player1_is_current)
-            play_direction(MP3_submode_playER_1);
+            play_direction(MP3_PLAYER_1);
 
         else
-            play_direction(MP3_submode_playER_2);
+            play_direction(MP3_PLAYER_2);
         play_direction(MP3_SPELL_WORD);
         speak_word(chosen_word);
         current_state = GET_INPUT;
