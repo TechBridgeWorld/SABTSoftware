@@ -31,12 +31,12 @@
 * @return Void; prints output.
 * @remark Tested. (Language-agnostic.)
 */
-void print_cell_pattern(cell_t* cell){
-    if (cell->pattern) {
+void print_cell_pattern(cell_t cell){
+    if (cell) {
         char binary[7]; 
         int counter = 0;
         for (int i = 32; i > 0; i >>= 1) {
-            binary[counter] =(cell->pattern & i) ? '1' : '0';
+            binary[counter] =(cell & i) ? '1' : '0';
             counter++;
         }
         binary[6] = '\0';
@@ -44,25 +44,6 @@ void print_cell_pattern(cell_t* cell){
     }
     else
         log_msg("Blank cell");
-}
-
-/**
-* Determine whether two cells are equal.
-* @param Pointers to the two cells.
-* @return Boolean; true if equal, false if unequal OR >=1 cell is null.
-* @remark Tested. (Language-agnostic.)
-*/
-bool cell_equals(cell_t* cell1, cell_t* cell2) {
-    if (cell1 == NULL || cell2 == NULL) {
-        log_msg("Null cell pointer!");
-        return false;
-    }
-
-    log_msg_no_newline("Cell 1: ");
-    print_cell_pattern(cell1);
-    log_msg_no_newline("Cell 2: ");
-    print_cell_pattern(cell2);
-    return (cell1->pattern == cell2->pattern);
 }
 
 /**
@@ -103,7 +84,7 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
     }
     else { // iterate through cells; if any are different, return false
         for (int i = 0; i < letter1->num_cells; i++) {
-            if (!(cell_equals(&(letter1->cells[i]), &(letter2->cells[i]))))
+            if (!(letter1->cells[i] == letter2->cells[i]))
                 return false;
         }
         return true;
@@ -135,12 +116,12 @@ letter_t* get_eng_letter_by_char(char c){
     return NULL;
 }
 
-char* get_eng_letter_name_by_cell(cell_t* cell) {
+char* get_eng_letter_name_by_cell(cell_t cell) {
     for (int i = 0; i < english_plus_cap.num_letters; i++){
-        if (cell_equals(cell, &english_plus_cap.letters[i].cells[0]))
+        if (cell == english_plus_cap.letters[i].cells[0])
             return english_plus_cap.letters[i].name;
     }
-    log_msg("GET_ENG_LETTER_BY_CELL FAILED: '%x' DID NOT MATCH ANY LETTERS.", cell->pattern);
+    log_msg("GET_ENG_LETTER_BY_CELL FAILED: '%x' DID NOT MATCH ANY LETTERS.", cell);
     return "INVP";
 }
 
@@ -296,10 +277,10 @@ void decrement_word_index(word_t* word) {
 * @return Void; function returns pointer in next_cell.
 * @remark Tested lightly in English.
 */
-void get_next_cell_in_word(word_t* word, cell_t* next_cell) {
+cell_t get_next_cell_in_word(word_t* word) {
     increment_word_index(word);
     letter_t this_letter = word->letters[word->curr_letter];
-    *next_cell = this_letter.cells[word->curr_glyph];
+    return this_letter.cells[word->curr_glyph];
 }
 
 char* get_next_letter_name(word_t* word) {

@@ -87,9 +87,9 @@ script_t script_hindi = {
 
 // new stuff
 
-cell_t hin_a =    {DOT_1};
-cell_t hin_i =    {DOT_2 | DOT_4};
-cell_t shra_cells[3] = {{DOT_5}, {DOT_1 | DOT_4 | DOT_6}, {DOT_1 | DOT_2 | DOT_3 | DOT_5}};
+cell_t hin_a =    DOT_1;
+cell_t hin_i =    DOT_2 | DOT_4;
+cell_t shra_cells[3] = {DOT_5, DOT_1 | DOT_4 | DOT_6, DOT_1 | DOT_2 | DOT_3 | DOT_5};
 
 #define HIN_LETTER_A {"a", HINDI, &hin_a, 1}
 #define HIN_LETTER_SHRA {"shra", HINDI, shra_cells, 3}

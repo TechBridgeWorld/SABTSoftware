@@ -28,15 +28,12 @@ struct glyph {
 // @todo: pack structs
 // @todo: work out which structs should be globals (e.g. current_word?)
 
-//@todo: typedef pattern as cell instead of making a struct
-typedef struct cell {
-    char pattern;           /* 0bxxxxxx 6-bit pattern Braille representation */
-} cell_t;
+typedef unsigned char cell_t;   // holds a 6-bit bitfield representing one braille cell
 
 typedef struct letter {
     char name[MAX_MP3_NAME_LENGTH];
     language_t lang_enum;
-    cell_t* cells;
+    cell_t* cells; // an array of cells in that letter. In most cases, this will only be one cell.
     int num_cells;
 } letter_t;
 
@@ -94,14 +91,13 @@ typedef struct word_node {
 // @todo Remove the ones that should only be helper functions
 
 // Cell functions
-void  print_cell_pattern(cell_t* cell);
-bool  cell_equals(cell_t* cell1, cell_t* cell2);
+void  print_cell_pattern(cell_t cell);
 bool  glyph_equals(glyph_t* g1, glyph_t* g2); // deprecated
 
 // Letter functions
 bool  letter_equals(letter_t* letter1, letter_t* letter2);
 letter_t* get_eng_letter_by_char(char c);
-char* get_eng_letter_name_by_cell(cell_t* cell);
+char* get_eng_letter_name_by_cell(cell_t cell);
 void  print_letter(letter_t* letter);
 
 // Word functions
@@ -109,7 +105,7 @@ int   parse_string_into_eng_word(char* string, word_t* word);
 void  word_to_cell_array(word_t* word, cell_t* arr);
 void  decrement_word_index(word_t* word);
 void  increment_word_index(word_t* word);
-void  get_next_cell_in_word(word_t* word, cell_t* next_cell);
+cell_t get_next_cell_in_word(word_t* word);
 char* get_next_letter_name(word_t* word);
 char* get_lang(word_t* word);
 void  print_word(word_t* word);

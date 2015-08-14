@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "VS1053.h"
+#include "vs1053.h"
 #include "datastructures.h"
 #include "globals.h"
 #include "common.h"
 #include "io.h"
 #include "script_common.h"
-#include "FAT32.h"
+#include "fat32.h"
 #include "mp3s.h"
 #include "audio.h"
 
@@ -72,32 +72,6 @@ bool play_mp3(char* fileset, char* mp3) {
 }
 
 
-
-/**
- * @brief Plays a specified amount of slience
- * @param int milliseconds - Length of slience in milliseconds
- *   currently can be 250, 500, 750 or 1000
- * @return void
- */
-void play_silence(int milliseconds) {
-    switch (milliseconds) {
-        case 250:
-            play_mp3(MP3_SYSTEM,"s025");
-            break;
-        case 500:
-            play_mp3(MP3_SYSTEM,"s050");
-            break;
-        case 750:
-            play_mp3(MP3_SYSTEM,"s075");
-            break;
-        case 1000:
-            play_mp3(MP3_SYSTEM,"s100");
-            break;
-        default:
-            break;
-    }
-}
-
 /**
 * @brief Clears MP3 playlist
 * @param void
@@ -131,32 +105,8 @@ void play_next_mp3(void) {
         clear_playlist();
 }
 
-/**
- * @brief Queues dot sound file
- * @param char* fileset - Language fileset for dot numbers
- * @param char dot - Dot to play
- * @return void
- */
-void play_dot(char dot) {
-    char dotname[6];
-    switch (dot) {
-        case '1': case '2': case '3': case '4': case '5': case '6':
-            break;
-        case ENTER:
-            dot = 'e';
-            break;
-        case CANCEL:
-            dot = 'c';
-            break;
-        case LEFT: case RIGHT: case NO_DOTS:
-            return;
-        default:
-            log_msg("[Audio] Invalid dot: %c", dot);
-            break;
-    }
-    sprintf(dotname, "dot_%c", dot);
-    play_lang_audio(dotname);
-}
+
+//////// @todo: eliminate these
 
 /**
  * @brief Play sound file corresponding to an glyph, checks for NULL arg
@@ -187,11 +137,13 @@ void play_word(word_node_t *this_word) {
  * @param char pattern - Bit pattern to play
  * @return void
  */
-void play_pattern(unsigned char pattern) {
+void play_cell(cell_t pattern) {
     if (pattern == 0) {
         play_lang_audio(MP3_BLANK); // won't work for Hindi?
         return;
     }
+
+    // iterate through the six dots in the cell/six bools in the bitfield
     char dot[2];
     for (int i = 0; pattern != 0; i++, pattern = pattern >> 1) {
         if (pattern & 0x01) {
@@ -214,7 +166,7 @@ void play_dot_sequence(glyph_t *this_glyph) {
     char pattern; 
     if (this_glyph != NULL) {
         pattern = this_glyph->pattern;
-        play_pattern(pattern);
+        play_cell(pattern);
 
         // for multi-cell letters
         if (this_glyph->next != NULL) {
@@ -425,3 +377,54 @@ void play_tada() {
     play_mp3(MP3_SYSTEM, MP3_TADA);
 }
 
+/**
+ * @brief Plays a specified amount of slience
+ * @param int milliseconds - Length of slience in milliseconds
+ *   currently can be 250, 500, 750 or 1000
+ * @return void
+ */
+void play_silence(int milliseconds) {
+    switch (milliseconds) {
+        case 250:
+            play_system_audio("s025");
+            break;
+        case 500:
+            play_system_audio("s050");
+            break;
+        case 750:
+            play_system_audio("s075");
+            break;
+        case 1000:
+            play_system_audio("s100");
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * @brief Queues dot sound file
+ * @param char* fileset - Language fileset for dot numbers
+ * @param char dot - Dot to play
+ * @return void
+ */
+void play_dot(char dot) {
+    char dotname[6];
+    switch (dot) {
+        case '1': case '2': case '3': case '4': case '5': case '6':
+            break;
+        case ENTER:
+            dot = 'e';
+            break;
+        case CANCEL:
+            dot = 'c';
+            break;
+        case LEFT: case RIGHT: case NO_DOTS:
+            return;
+        default:
+            log_msg("[Audio] Invalid dot: %c", dot);
+            break;
+    }
+    sprintf(dotname, "dot_%c", dot);
+    play_lang_audio(dotname);
+}

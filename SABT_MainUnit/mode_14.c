@@ -26,7 +26,6 @@
 wordlist_t mode_14_dict;
 word_t* mode_14_chosen_word;
 
-static cell_t mode_14_user_cell;
 static cell_t mode_14_curr_cell;
 
 
@@ -75,8 +74,8 @@ void mode_14_incorrect_answer() {
 }
 
 void mode_14_speak_inputted_cell() {
-    cell_t this_cell = {cell};
-    char* letter_name = get_eng_letter_name_by_cell(&this_cell);
+    cell_t this_cell = cell;
+    char* letter_name = get_eng_letter_name_by_cell(this_cell);
     play_lang_audio(letter_name);
 }
 
@@ -149,7 +148,6 @@ void mode_14_main() {
         cell_control = GET_CELL_CONTROL(cell);
         switch (cell_control) {
             case WITH_ENTER:
-            mode_14_user_cell.pattern = cell_pattern;
             current_state = CHECK_ANSWER;
             break;
 
@@ -168,11 +166,11 @@ void mode_14_main() {
 
     case CHECK_ANSWER:
         mode_14_speak_inputted_cell();
-        get_next_cell_in_word(mode_14_chosen_word, &mode_14_curr_cell);
-        log_msg("Target cell: %x, inputted cell: %x.", mode_14_curr_cell.pattern, mode_14_user_cell.pattern);
+        mode_14_curr_cell = get_next_cell_in_word(mode_14_chosen_word);
+        log_msg("Target cell: %x, inputted cell: %x.", mode_14_curr_cell, cell_pattern);
         
 
-        if (cell_equals(&mode_14_curr_cell, &mode_14_user_cell)) {
+        if (cell_pattern == mode_14_curr_cell) {
             if (mode_14_chosen_word->curr_letter == mode_14_chosen_word->num_letters - 1) { // done
                 mode_14_correct_answer();
                 current_state = GENERATE_QUESTION;
@@ -193,10 +191,10 @@ void mode_14_main() {
     case REPROMPT:
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
-            char* letter_name = get_eng_letter_name_by_cell(&mode_14_curr_cell);
+            char* letter_name = get_eng_letter_name_by_cell(mode_14_curr_cell);
             play_lang_audio(letter_name);
             if (curr_mistakes >= max_mistakes + 1)
-                play_pattern(mode_14_curr_cell.pattern);
+                play_cell(mode_14_curr_cell);
         }
         else {
             play_direction(MP3_SPELL_WORD);

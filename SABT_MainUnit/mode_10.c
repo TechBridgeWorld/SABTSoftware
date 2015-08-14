@@ -171,7 +171,7 @@ void mode_10_main() {
             log_msg("RIGHT");
             if (cell2_pattern && g1) {     
                 play_mode_audio(MP3_CELL_1); 
-                play_pattern((unsigned char)cell1_pattern);
+                play_cell((unsigned char)cell1_pattern);
                 play_mode_audio(MP3_CELL_2); 
                 cell2_pattern = NO_DOTS;
             }

@@ -32,14 +32,14 @@ int main() {
 
     printf("%s\n", get_eng_letter_name_by_cell(&a_cell));
 
-    // test of cell_equals
-    bool same1 = cell_equals(&a_cell, &a_cell);
-    bool diff1 = !cell_equals(&a_cell, &b_cell);
-    bool cognate1 = cell_equals(&a_cell, &hin_a_cell);
-    bool empty1 = !cell_equals(&a_cell, &blank_cell);
-    bool bothempty1 = cell_equals(&blank_cell, &blank_cell);
-    bool notinitialized1 = !cell_equals(&a_cell, &null_cell);
-    printf("Cell_equals %s.\n\n", (same1 && diff1 && cognate1 &&
+    // test of cell equality
+    bool same1 = a_cell == a_cell;
+    bool diff1 = a_cell == b_cell;
+    bool cognate1 = a_cell == hin_a_cell;
+    bool empty1 = a_cell == blank_cell;
+    bool bothempty1 = blank_cell == blank_cell;
+    bool notinitialized1 = a_cell == null_cell;
+    printf("Cell equality %s.\n\n", (same1 && diff1 && cognate1 &&
             empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
 
 

@@ -217,7 +217,7 @@ bool get_line(void) {
             play_direction(MP3_PREV_CELL);
             io_line_prev_cell();
             if (!pattern)
-                play_pattern(io_line[io_line_cell_index]);
+                play_cell(io_line[io_line_cell_index]);
             return false;
             break;
 
@@ -228,7 +228,7 @@ bool get_line(void) {
             play_direction(MP3_NEXT_CELL);
             io_line_next_cell();
             if (!pattern)
-                play_pattern(io_line[io_line_cell_index]);
+                play_cell(io_line[io_line_cell_index]);
             return false;
             break;
 

@@ -41,7 +41,6 @@ int p2_mistakes = 0;
 wordlist_t mode_15_dict;
 word_t* chosen_word;
 
-static cell_t user_cell;
 static cell_t curr_cell;
 
 void play_stats(){
@@ -101,8 +100,8 @@ void incorrect_answer() {
     else
         p2_mistakes++;
 
-    cell_t this_cell = {cell_pattern};
-    if (get_eng_letter_name_by_cell(&this_cell) != NULL) { //INVP may already have said "try again"
+    cell_t this_cell = cell_pattern;
+    if (get_eng_letter_name_by_cell(this_cell) != NULL) { //INVP may already have said "try again"
         play_feedback(MP3_NO);
         play_feedback(MP3_TRY_AGAIN);
     }
@@ -111,8 +110,8 @@ void incorrect_answer() {
 }
 
 void speak_inputted_cell() {
-    cell_t this_cell = {cell_pattern};
-    char* letter_name = get_eng_letter_name_by_cell(&this_cell);
+    cell_t this_cell = cell_pattern;
+    char* letter_name = get_eng_letter_name_by_cell(this_cell);
     if (letter_name == NULL)
         play_feedback(MP3_INVALID_PATTERN);
     else
@@ -198,7 +197,6 @@ void mode_15_main() {
         cell_control = GET_CELL_CONTROL(cell);
         switch (cell_control) {
             case WITH_ENTER:
-            user_cell.pattern = cell_pattern;
             current_state = CHECK_ANSWER;
             log_msg("[mode_15] Checking answer");
             break;
@@ -219,10 +217,10 @@ void mode_15_main() {
 
     case CHECK_ANSWER:
         speak_inputted_cell();
-        get_next_cell_in_word(chosen_word, &curr_cell);
-        log_msg("Target cell: %x, inputted cell: %x.", curr_cell.pattern, user_cell.pattern);
-        
-        if (cell_equals(&curr_cell, &user_cell)) {
+        curr_cell = get_next_cell_in_word(chosen_word);
+        log_msg("Target cell: %x, inputted cell: %x.", curr_cell, cell_pattern);
+
+        if (cell_pattern == curr_cell) {
             if (chosen_word->curr_letter == chosen_word->num_letters - 1) { // done
                 correct_answer();
                 current_state = SWITCH_USERS;
@@ -252,10 +250,10 @@ void mode_15_main() {
         speak_word(chosen_word);
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
-            char* letter_name = get_eng_letter_name_by_cell(&curr_cell);
+            char* letter_name = get_eng_letter_name_by_cell(curr_cell);
             play_lang_audio(letter_name);
             if (curr_mistakes >= max_mistakes + 1)
-                play_pattern(curr_cell.pattern);
+                play_cell(curr_cell);
         }
 
         else if (chosen_word->curr_glyph > -1) { // not at beginning of word
