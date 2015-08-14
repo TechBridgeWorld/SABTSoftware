@@ -20,9 +20,7 @@
 
 
 language_t set_language();
-char* get_mode_prefix();
 void  log_msg(const char* format, ...);
-void  set_mode_globals(script_t* new_script, char* new_lang_prefix, char* new_mode_fileset);
 void  reset_globals();
 void  reset_stats();
 int   timer_rand(void);

@@ -116,7 +116,7 @@ void speak_inputted_cell() {
     if (letter_name == NULL)
         play_feedback(MP3_INVALID_PATTERN);
     else
-        play_mp3(lang_prefix,letter_name);
+        play_lang_audio(letter_name);
 }
 
 void mode_15_reset() {
@@ -253,7 +253,7 @@ void mode_15_main() {
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
             char* letter_name = get_eng_letter_name_by_cell(&curr_cell);
-            play_mp3(lang_prefix, letter_name);
+            play_lang_audio(letter_name);
             if (curr_mistakes >= max_mistakes + 1)
                 play_pattern(curr_cell.pattern);
         }

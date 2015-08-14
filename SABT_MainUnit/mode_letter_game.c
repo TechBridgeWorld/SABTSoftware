@@ -49,46 +49,44 @@
 #include "mp3s.h"
 
 // State variables
-static char mode_name[5];
 static bool should_shuffle = false;
 static glyph_t* curr_glyph = NULL;
 static glyph_t* user_glyph = NULL;
-static language_t language;
 
 void mode_letter_game_reset() {
     max_mistakes = 3;
 }
 
 void play_letter_instructions() {
-    if (language == KANNADA)
+    if (mode_language == KANNADA)
         play_direction(MP3_INSTRUCTIONS_KANNADA);
     else
         play_direction(MP3_INSTRUCTIONS_LETTER);
 }
 
 void play_next_letter_prompt() {
-    if (language == KANNADA)
+    if (mode_language == KANNADA)
         play_direction(MP3_NEXT_LETTER_K);
     else
         play_direction(MP3_NEXT_LETTER);
 }
 
 void play_dot_prompt() {
-    if (language == KANNADA)
+    if (mode_language == KANNADA)
         play_direction(MP3_PRESS_DOTS_K);
     else
         play_direction(MP3_PRESS_DOTS);
 }
 
 void play_next_cell_prompt() {
-    if (language == KANNADA)
+    if (mode_language == KANNADA)
         play_direction(MP3_NEXT_CELL_K);
     else
         play_direction(MP3_NEXT_CELL);
 }
 
 void play_right() {
-    if (language == KANNADA)
+    if (mode_language == KANNADA)
         play_feedback(MP3_CORRECT_K);
     else
         play_feedback(MP3_CORRECT);
@@ -96,7 +94,7 @@ void play_right() {
 }
 
 void play_wrong() {
-    if (language == KANNADA) {
+    if (mode_language == KANNADA) {
         play_feedback(MP3_INCORRECT_K);
         play_feedback(MP3_TRY_AGAIN_K);
     }
@@ -153,14 +151,13 @@ void mode_letter_game_main() {
 
         case GENERATE_QUESTION:
             curr_glyph = get_next_letter(this_script, should_shuffle);
-            log_msg("State: GENERATE_QUESTION. Next glyph: %s", mode_name, curr_glyph->sound);
+            log_msg("Next glyph: %s", curr_glyph->sound);
             play_next_letter_prompt();
             current_state = PROMPT;
             break;
 
 
         case PROMPT:
-            log_msg("State: PROMPT.",mode_name);
             play_glyph(curr_glyph);
             switch(submode) {
                 case SUBMODE_LEARN:
@@ -193,7 +190,6 @@ void mode_letter_game_main() {
                 case WITH_ENTER:
                     user_glyph = search_script(this_script, cell_pattern);
                     current_state = CHECK_ANSWER;
-                    log_msg("Checking answer.");
                     break;
                 case WITH_LEFT:
                     current_state = PROMPT;
@@ -209,8 +205,6 @@ void mode_letter_game_main() {
             break;
 
         case CHECK_ANSWER:
-            log_msg("State: CHECK_ANSWER");
-            
             if (glyph_equals(curr_glyph, user_glyph)) {
                 if (curr_glyph -> next == NULL) {
                     mistakes = 0;

@@ -33,8 +33,6 @@ void mode_10_main() {
         play_welcome();
         play_submode_choice();
     game_mode = 0;
-    lang_prefix = script_eng_contraction.fileset;
-    log_msg(lang_prefix);
     current_state = mode_10_SELECT_MODE; 
     got_input = false;
     break;
@@ -143,7 +141,7 @@ void mode_10_main() {
                 break;
             case WITH_RIGHT:
                 log_msg("RIGHT");
-                play_mp3(MP3_ENGLISH, MP3_BLANK);
+                play_lang_audio(MP3_BLANK);
                 cell1_pattern = NO_DOTS;        
                 break;
             case WITH_CANCEL:
@@ -178,7 +176,7 @@ void mode_10_main() {
                 cell2_pattern = NO_DOTS;
             }
             else {
-                play_mp3(MP3_ENGLISH, MP3_BLANK);
+                play_lang_audio(MP3_BLANK);
                 cell1_pattern = NO_DOTS;
                 cell2_pattern = NO_DOTS;
                 current_state = mode_10_CELL1;

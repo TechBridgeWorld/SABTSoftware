@@ -349,7 +349,6 @@ void mode_13_main() {
                 io_init();
                 break;
             }
-		//	set_mode_globals(&script_digits, NULL, NULL); Why would we reset the script here???
              if (get_number(&input_valid, &user_answer)) {
                 if (input_valid) {
                     play_feedback(MP3_YOU_ANSWERED);

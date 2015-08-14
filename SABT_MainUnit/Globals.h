@@ -40,8 +40,7 @@
 
 script_t* this_script;			// pointer to the appropriate script
 language_t mode_language;		// an enum designating current language, so correct feedback mp3s are played
-char* lang_prefix;				// the prefix string of that language, e.g. "e_".
-char* mode_prefix;				// the prefix string of the current mode, e.g. "m15_" for mode 15
+char* lang_name;				// the user-readable name of the current language, e.g. "English"
 
 unsigned char last_dot;			// the last dot pressed
 unsigned char cell;				// bitmap representing the entire cell + control button last pressed

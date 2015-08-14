@@ -77,7 +77,7 @@ void mode_14_incorrect_answer() {
 void mode_14_speak_inputted_cell() {
     cell_t this_cell = {cell};
     char* letter_name = get_eng_letter_name_by_cell(&this_cell);
-    play_mp3(lang_prefix, letter_name);
+    play_lang_audio(letter_name);
 }
 
 void mode_14_reset() {
@@ -194,7 +194,7 @@ void mode_14_main() {
         if (curr_mistakes >= max_mistakes) {
             play_direction(MP3_PLEASE_PRESS);
             char* letter_name = get_eng_letter_name_by_cell(&mode_14_curr_cell);
-            play_mp3(lang_prefix, letter_name);
+            play_lang_audio(letter_name);
             if (curr_mistakes >= max_mistakes + 1)
                 play_pattern(mode_14_curr_cell.pattern);
         }

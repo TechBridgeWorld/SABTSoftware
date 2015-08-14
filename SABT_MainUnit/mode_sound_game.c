@@ -46,7 +46,7 @@ char **sound_list;
 * @param bool name - true if name requeste, false if sound requested
 * @return void
 */
-void play_sound(char* MODE_FILESET, char* sound_source, bool name) {
+void play_sound(char* sound_source, bool name) {
     char filename[5];
     for (int i = 0; i < MAX_INDEX; i++) {
         if (strcmp(sound_source, sound_source_list[i]) == 0) {
@@ -55,7 +55,7 @@ void play_sound(char* MODE_FILESET, char* sound_source, bool name) {
                 sprintf(filename, "N%s", sound_list[i]);
             else
                 sprintf(filename, "S%s", sound_list[i]);
-            play_mp3(MODE_FILESET, filename);
+            play_mode_audio(filename);
         }
     }
 }
@@ -73,7 +73,7 @@ int choose_sound_source() {
     int num = timer_rand() % MAX_INDEX;
     int i;
 
-    while (sound_sources_used_list[num])
+    while (sound_sources_used_list[num])  // keep picking random numbers till it's an unused one
         num = timer_rand() % MAX_INDEX;
 
     sound_sources_used_list[num] = 1;
@@ -163,13 +163,13 @@ void mode_sound_game_main() {
         case PROMPT:
             switch(submode) {
                 case SUBMODE_LEARN:
-                    play_mp3(mode_prefix, MP3_SPELL_WORD_BY_NAME);
-                    play_sound(mode_prefix, sound_source, true);
+                    play_mode_audio(MP3_SPELL_WORD_BY_NAME);
+                    play_sound(sound_source, true);
                     break;
                 
                 case SUBMODE_PLAY:
-                    play_mp3(mode_prefix, MP3_SPELL_WORD_BY_SOUND);
-                    play_sound(mode_prefix, sound_source, false);
+                    play_mode_audio(MP3_SPELL_WORD_BY_SOUND);
+                    play_sound(sound_source, false);
                     break;
             
                 default:
@@ -183,7 +183,7 @@ void mode_sound_game_main() {
         case GET_INPUT:
             if (io_user_abort == true) {
                 log_msg("User aborted input");
-                play_mp3(mode_prefix, MP3_SKIP_THIS);
+                play_mode_audio(MP3_SKIP_THIS);
                 current_state = REPROMPT;
                 io_init();
             }
@@ -202,7 +202,7 @@ void mode_sound_game_main() {
                     current_state = PROMPT;
                     break;
                 case WITH_RIGHT:
-                    play_mp3(mode_prefix, MP3_SKIP_THIS);
+                    play_mode_audio(MP3_SKIP_THIS);
                     current_state = REPROMPT;
                     break;
                 case WITH_CANCEL:
@@ -229,14 +229,14 @@ void mode_sound_game_main() {
                     play_feedback(MP3_NICE_WORK);
                     switch (submode){
                         case SUBMODE_LEARN:
-                            play_sound(mode_prefix, sound_source, true);
+                            play_sound(sound_source, true);
                             play_direction(MP3_SAYS);
-                            play_sound(mode_prefix, sound_source, false);
+                            play_sound(sound_source, false);
                             break;
                         
                         case SUBMODE_PLAY:
                             play_word(user_word);
-                            play_sound(mode_prefix, sound_source, true);
+                            play_sound(sound_source, true);
 
                         default:
                             log_msg("Invalid submode_t %d", submode);
@@ -253,7 +253,7 @@ void mode_sound_game_main() {
                 play_feedback(MP3_NO);
                 play_feedback(MP3_TRY_AGAIN);
                 play_word(user_word);
-                if (mistakes == (max_mistakes / 2)) {
+                if (mistakes >= (max_mistakes / 2)) {
                     play_direction(MP3_PLEASE_WRITE);
                     play_glyph(curr_glyph);
                     if (mistakes >= max_mistakes) { // done with attempts
@@ -296,11 +296,11 @@ void mode_sound_game_main() {
                     user_word = NULL;
                     switch(submode) {
                         case SUBMODE_LEARN:
-                            play_sound(mode_prefix, sound_source, true);
+                            play_sound(sound_source, true);
                             break;
 
                         case SUBMODE_PLAY:
-                            play_sound(mode_prefix, sound_source, false);
+                            play_sound(sound_source, false);
                             break;
                         
 

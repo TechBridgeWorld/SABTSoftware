@@ -92,13 +92,13 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
     for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
         curr_glyph = &(curr_script->glyphs[glyph_index]);
         if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
-            log_msg("Search%s: %s (0x%x)",curr_script->fileset, curr_glyph->sound, curr_glyph->pattern);
+            log_msg("Searching %s: %s (0x%x)", lang_name, curr_glyph->sound, curr_glyph->pattern);
             return curr_glyph;
         }
     }
 
     // If nothing matches, return NULL
-    log_msg("[Script] Glyph match not found: 0x%x", pattern);    
+    log_msg("[Script] Glyph match not found in %s language: 0x%x", lang_name, pattern);    
     return NULL;
 }
 

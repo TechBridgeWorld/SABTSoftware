@@ -19,34 +19,29 @@
 language_t set_language() {
   if (current_mode == 7) {
     mode_language = HINDI;
-    lang_prefix = "h_";
+    lang_name = "HINDI";
     this_script = &script_hindi;
   }
   else if (current_mode == 12) {
     mode_language = KANNADA;
-    lang_prefix = "k_";
+    lang_name = "KANNADA";
     this_script = &script_kannada;
   }
   else {
     mode_language = ENGLISH;
-    lang_prefix = "e_";
+    lang_name = "ENGLISH";
     if (current_mode == 8)
         this_script = &script_digits;
     else
         this_script = &script_english;
   }
-  log_msg("Language: %s", lang_prefix);
+  this_script->index = -1;
+  log_msg("Language: %s", lang_name);
   return mode_language;
 }
 
- void set_mode_prefix(){
-    vsprintf(mode_prefix, "m%s", &current_mode);
-    log_msg("Mode prefix: %s", mode_prefix);
- }
-
  void reset_globals(){
     set_language();
-    set_mode_prefix();
     last_dot = NO_DOTS;
     submode = SUBMODE_NULL;
     level = DIFFICULTY_NULL;
@@ -56,17 +51,6 @@ language_t set_language() {
 
 void reset_stats(){
     score = mistakes = curr_mistakes = 0;
-}
-
-/**
-* @brief Sets script globals for a new language
-* @param script_t* - Pointer to new script
-* @param char* - Pointer to mode fileset string
-* @return void
-*/
-void set_mode_globals(script_t* new_script, char* new_lang_prefix, char* new_mode_fileset) {
-    lang_script = new_script;
-    new_script->index = -1;
 }
 
 /**

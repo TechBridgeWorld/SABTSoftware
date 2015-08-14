@@ -141,7 +141,7 @@ void mode_5_main(void) {
             else if (mode_5_valid_letter(cell)) { // letter valid; word not complete
                 log_msg("Letter %c entered.", entered_letter);
                 char letter[2] = {entered_letter, '\0'};
-                play_mp3(lang_prefix, letter);
+                play_lang_audio(letter);
 
                 // reset because too many letters were input
                 if (input_word_index == MAX_WORD_LENGTH) {
@@ -202,7 +202,7 @@ void mode_5_main(void) {
             else if (mode_5_valid_letter(cell)) { // valid letter: read aloud
                 char buff[7];
                 sprintf(buff, "%c", entered_letter);
-                play_mp3(lang_prefix, buff);  //@todo fix this
+                play_lang_audio(buff);  //@todo fix this
                 current_state = CHECK_ANSWER;
             }
             else {
