@@ -1,7 +1,5 @@
 #include "script_english.h"
 
-#define NUM_ENG_LETTERS 26
-
 glyph_t english_glyphs[SCRIPT_ENGLISH_LENGTH] = {
     {ENG_A, "A", NULL, NULL},
     {ENG_B, "B", NULL, NULL},
@@ -49,107 +47,70 @@ script_t script_english = {
 
 // NEW STUFF
 
-cell_t a = DOT_1;
-cell_t b = DOT_1 | DOT_2;
-cell_t c = DOT_1 | DOT_4;
-cell_t d = DOT_1 | DOT_4 | DOT_5;
-cell_t e = DOT_1 | DOT_5;
-cell_t f = DOT_1 | DOT_2 | DOT_4;
-cell_t g = DOT_1 | DOT_2 | DOT_4 | DOT_5;
-cell_t h = DOT_1 | DOT_2 | DOT_5;
-cell_t i = DOT_2 | DOT_4;
-cell_t j = DOT_2 | DOT_4 | DOT_5;
-cell_t k = DOT_1 | DOT_3;
-cell_t l = DOT_1 | DOT_2 | DOT_3;
-cell_t m = DOT_1 | DOT_3 | DOT_4;
-cell_t n = DOT_1 | DOT_3 | DOT_4 | DOT_5;
-cell_t o = DOT_1 | DOT_3 | DOT_5;
-cell_t p = DOT_1 | DOT_2 | DOT_3 | DOT_4;
-cell_t q = DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5;
-cell_t r = DOT_1 | DOT_2 | DOT_3 | DOT_5;
-cell_t s = DOT_2 | DOT_3 | DOT_4;
-cell_t t = DOT_2 | DOT_3 | DOT_4 | DOT_5;
-cell_t u = DOT_1 | DOT_3 | DOT_6;
-cell_t v = DOT_1 | DOT_2 | DOT_3 | DOT_6;
-cell_t w = DOT_2 | DOT_4 | DOT_5 | DOT_6;
-cell_t x = DOT_1 | DOT_3 | DOT_4 | DOT_6;
-cell_t y = DOT_1 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
-cell_t z = DOT_1 | DOT_3 | DOT_5 | DOT_6;
-cell_t capital = DOT_6;
+cell_t a_cell = DOT_1;
+cell_t b_cell = DOT_1 | DOT_2;
+cell_t c_cell = DOT_1 | DOT_4;
+cell_t d_cell = DOT_1 | DOT_4 | DOT_5;
+cell_t e_cell = DOT_1 | DOT_5;
+cell_t f_cell = DOT_1 | DOT_2 | DOT_4;
+cell_t g_cell = DOT_1 | DOT_2 | DOT_4 | DOT_5;
+cell_t h_cell = DOT_1 | DOT_2 | DOT_5;
+cell_t i_cell = DOT_2 | DOT_4;
+cell_t j_cell = DOT_2 | DOT_4 | DOT_5;
+cell_t k_cell = DOT_1 | DOT_3;
+cell_t l_cell = DOT_1 | DOT_2 | DOT_3;
+cell_t m_cell = DOT_1 | DOT_3 | DOT_4;
+cell_t n_cell = DOT_1 | DOT_3 | DOT_4 | DOT_5;
+cell_t o_cell = DOT_1 | DOT_3 | DOT_5;
+cell_t p_cell = DOT_1 | DOT_2 | DOT_3 | DOT_4;
+cell_t q_cell = DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5;
+cell_t r_cell = DOT_1 | DOT_2 | DOT_3 | DOT_5;
+cell_t s_cell = DOT_2 | DOT_3 | DOT_4;
+cell_t t_cell = DOT_2 | DOT_3 | DOT_4 | DOT_5;
+cell_t u_cell = DOT_1 | DOT_3 | DOT_6;
+cell_t v_cell = DOT_1 | DOT_2 | DOT_3 | DOT_6;
+cell_t w_cell = DOT_2 | DOT_4 | DOT_5 | DOT_6;
+cell_t x_cell = DOT_1 | DOT_3 | DOT_4 | DOT_6;
+cell_t y_cell = DOT_1 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
+cell_t z_cell = DOT_1 | DOT_3 | DOT_5 | DOT_6;
+cell_t cap_cell = DOT_6;
 
-#define ENG_LETTER_A {"a", ENGLISH, &a, 1}
-#define ENG_LETTER_B {"b", ENGLISH, &b, 1}
-#define ENG_LETTER_C {"c", ENGLISH, &c, 1}
-#define ENG_LETTER_D {"d", ENGLISH, &d, 1}
-#define ENG_LETTER_E {"e", ENGLISH, &e, 1}
-#define ENG_LETTER_F {"f", ENGLISH, &f, 1}
-#define ENG_LETTER_G {"g", ENGLISH, &g, 1}
-#define ENG_LETTER_H {"h", ENGLISH, &h, 1}
-#define ENG_LETTER_I {"i", ENGLISH, &i, 1}
-#define ENG_LETTER_J {"j", ENGLISH, &j, 1}
-#define ENG_LETTER_K {"k", ENGLISH, &k, 1}
-#define ENG_LETTER_L {"l", ENGLISH, &l, 1}
-#define ENG_LETTER_M {"m", ENGLISH, &m, 1}
-#define ENG_LETTER_N {"n", ENGLISH, &n, 1}
-#define ENG_LETTER_O {"o", ENGLISH, &o, 1}
-#define ENG_LETTER_P {"p", ENGLISH, &p, 1}
-#define ENG_LETTER_Q {"q", ENGLISH, &q, 1}
-#define ENG_LETTER_R {"r", ENGLISH, &r, 1}
-#define ENG_LETTER_S {"s", ENGLISH, &s, 1}
-#define ENG_LETTER_T {"t", ENGLISH, &t, 1}
-#define ENG_LETTER_U {"u", ENGLISH, &u, 1}
-#define ENG_LETTER_V {"v", ENGLISH, &v, 1}
-#define ENG_LETTER_W {"w", ENGLISH, &w, 1}
-#define ENG_LETTER_X {"x", ENGLISH, &x, 1}
-#define ENG_LETTER_Y {"y", ENGLISH, &y, 1}
-#define ENG_LETTER_Z {"z", ENGLISH, &z, 1}
-#define ENG_CAPITAL  {"cap", ENGLISH, &capital, 1}
+#define ENGL_A {&a_cell, 1, "a", ENGLISH}
+#define ENGL_B {&b_cell, 1, "b", ENGLISH}
+#define ENGL_C {&c_cell, 1, "c", ENGLISH}
+#define ENGL_D {&d_cell, 1, "d", ENGLISH}
+#define ENGL_E {&e_cell, 1, "e", ENGLISH}
+#define ENGL_F {&f_cell, 1, "f", ENGLISH}
+#define ENGL_G {&g_cell, 1, "g", ENGLISH}
+#define ENGL_H {&h_cell, 1, "h", ENGLISH}
+#define ENGL_I {&i_cell, 1, "i", ENGLISH}
+#define ENGL_J {&j_cell, 1, "j", ENGLISH}
+#define ENGL_K {&k_cell, 1, "k", ENGLISH}
+#define ENGL_L {&l_cell, 1, "l", ENGLISH}
+#define ENGL_M {&m_cell, 1, "m", ENGLISH}
+#define ENGL_N {&n_cell, 1, "n", ENGLISH}
+#define ENGL_O {&o_cell, 1, "o", ENGLISH}
+#define ENGL_P {&p_cell, 1, "p", ENGLISH}
+#define ENGL_Q {&q_cell, 1, "q", ENGLISH}
+#define ENGL_R {&r_cell, 1, "r", ENGLISH}
+#define ENGL_S {&s_cell, 1, "s", ENGLISH}
+#define ENGL_T {&t_cell, 1, "t", ENGLISH}
+#define ENGL_U {&u_cell, 1, "u", ENGLISH}
+#define ENGL_V {&v_cell, 1, "v", ENGLISH}
+#define ENGL_W {&w_cell, 1, "w", ENGLISH}
+#define ENGL_X {&x_cell, 1, "x", ENGLISH}
+#define ENGL_Y {&y_cell, 1, "y", ENGLISH}
+#define ENGL_Z {&z_cell, 1, "z", ENGLISH}
+#define ENGL_CAP {&cap_cell, 1, "capital", ENGLISH}
 
-letter_t eng_a = ENG_LETTER_A;
-letter_t eng_b = ENG_LETTER_B;
-letter_t eng_c = ENG_LETTER_C;
-letter_t eng_d = ENG_LETTER_D;
-letter_t eng_e = ENG_LETTER_E;
-letter_t eng_f = ENG_LETTER_F;
-letter_t eng_g = ENG_LETTER_G;
-letter_t eng_h = ENG_LETTER_H;
-letter_t eng_i = ENG_LETTER_I;
-letter_t eng_j = ENG_LETTER_J;
-letter_t eng_k = ENG_LETTER_K;
-letter_t eng_l = ENG_LETTER_L;
-letter_t eng_m = ENG_LETTER_M;
-letter_t eng_n = ENG_LETTER_N;
-letter_t eng_o = ENG_LETTER_O;
-letter_t eng_p = ENG_LETTER_P;
-letter_t eng_q = ENG_LETTER_Q;
-letter_t eng_r = ENG_LETTER_R;
-letter_t eng_s = ENG_LETTER_S;
-letter_t eng_t = ENG_LETTER_T;
-letter_t eng_u = ENG_LETTER_U;
-letter_t eng_v = ENG_LETTER_V;
-letter_t eng_w = ENG_LETTER_W;
-letter_t eng_x = ENG_LETTER_X;
-letter_t eng_y = ENG_LETTER_Y;
-letter_t eng_z = ENG_LETTER_Z;
-letter_t eng_capital = ENG_CAPITAL;
+letter_t eng_cap = ENGL_CAP;
 
-letter_t all_letters[26] = {ENG_LETTER_A, ENG_LETTER_B,
-    ENG_LETTER_C, ENG_LETTER_D, ENG_LETTER_E, ENG_LETTER_F,
-    ENG_LETTER_G, ENG_LETTER_H, ENG_LETTER_I, ENG_LETTER_J,
-    ENG_LETTER_K, ENG_LETTER_L, ENG_LETTER_M, ENG_LETTER_N,
-    ENG_LETTER_O, ENG_LETTER_P, ENG_LETTER_Q, ENG_LETTER_R,
-    ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
-    ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z };
+letter_t all_english_letters[27] = { ENGL_A, ENGL_B,
+    ENGL_C, ENGL_D, ENGL_E, ENGL_F, ENGL_G, ENGL_H,
+    ENGL_I, ENGL_J, ENGL_K, ENGL_L, ENGL_M, ENGL_N,
+    ENGL_O, ENGL_P, ENGL_Q, ENGL_R, ENGL_S, ENGL_T,
+    ENGL_U, ENGL_V, ENGL_W, ENGL_X, ENGL_Y, ENGL_Z,
+    ENGL_CAP };
 
-letter_t all_letters_plus_cap[27] = {ENG_LETTER_A, ENG_LETTER_B,
-    ENG_LETTER_C, ENG_LETTER_D, ENG_LETTER_E, ENG_LETTER_F,
-    ENG_LETTER_G, ENG_LETTER_H, ENG_LETTER_I, ENG_LETTER_J,
-    ENG_LETTER_K, ENG_LETTER_L, ENG_LETTER_M, ENG_LETTER_N,
-    ENG_LETTER_O, ENG_LETTER_P, ENG_LETTER_Q, ENG_LETTER_R,
-    ENG_LETTER_S, ENG_LETTER_T, ENG_LETTER_U, ENG_LETTER_V,
-    ENG_LETTER_W, ENG_LETTER_X, ENG_LETTER_Y, ENG_LETTER_Z,
-    ENG_CAPITAL };
-
-
-alphabet_t english_alphabet = {all_letters, 26};
-alphabet_t english_plus_cap = {all_letters_plus_cap, 27};
+alphabet_t english_alphabet = {all_english_letters, 26, ENGLISH};
+alphabet_t english_plus_cap = {all_english_letters, 27, ENGLISH};

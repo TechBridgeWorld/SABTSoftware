@@ -91,9 +91,9 @@ cell_t hin_a =    DOT_1;
 cell_t hin_i =    DOT_2 | DOT_4;
 cell_t shra_cells[3] = {DOT_5, DOT_1 | DOT_4 | DOT_6, DOT_1 | DOT_2 | DOT_3 | DOT_5};
 
-#define HIN_LETTER_A {"a", HINDI, &hin_a, 1}
-#define HIN_LETTER_SHRA {"shra", HINDI, shra_cells, 3}
-#define HIN_LETTER_I {"i", HINDI, &hin_i, 1}
+#define HIN_LETTER_A {&hin_a, 1, "a", HINDI, }
+#define HIN_LETTER_SHRA {shra_cells, 3, "shra", HINDI, }
+#define HIN_LETTER_I {&hin_i, 1, "i", HINDI, }
 
 letter_t hindi_a    = HIN_LETTER_A;
 letter_t hindi_shra = HIN_LETTER_SHRA;

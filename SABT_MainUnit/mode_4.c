@@ -55,7 +55,7 @@ bool place_letter() {
 void choose_next_word() {
     int num_words = dict.num_words;
     if (dict.index >= num_words - 1) {
-        shuffle(num_words, dict.index_array);
+        shuffle(dict.index_array, num_words);
         dict.index = 0;
     }
     chosen_word = dict.words[dict.index_array[dict.index]];
@@ -77,7 +77,7 @@ void place_hint(int num_hint){
     int index_arr[chosen_word_len];
     int hint_i;
     init_index_arr(index_arr, chosen_word_len);
-    shuffle(chosen_word_len, index_arr);
+    shuffle(index_arr, chosen_word_len);
     for (int i = 0; i < num_hint; i++){
         hint_i = index_arr[i];
         input_word[hint_i] = chosen_word[hint_i];
@@ -137,7 +137,7 @@ void mode_4_reset(void) {
 void mode_4_main(void) {   
     switch (current_state) {
         case INITIAL:
-            shuffle(dict.num_words, dict.index_array);
+            shuffle(dict.index_array, dict.num_words);
             dict.index = 0;
             play_welcome();
             current_state = GENERATE_QUESTION;

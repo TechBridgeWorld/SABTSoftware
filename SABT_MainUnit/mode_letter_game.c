@@ -120,14 +120,14 @@ void mode_letter_game_main() {
                     log_msg("Submode: Learn");
                     play_letter_instructions();
                     submode = SUBMODE_LEARN;
-                    unshuffle(this_script->num_letters, this_script->letters);
+                    sort(this_script->letters, this_script->num_letters);
                     current_state = GENERATE_QUESTION;
                     break;
 
                 case '2':
                     log_msg("Submode: Play");
                     play_letter_instructions();
-                    shuffle(this_script->num_letters, this_script->letters);
+                    shuffle(this_script->letters, this_script->num_letters);
                     should_shuffle = true;
                     current_state = GENERATE_QUESTION;
                     break;

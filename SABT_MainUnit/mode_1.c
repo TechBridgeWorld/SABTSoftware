@@ -18,7 +18,7 @@ int dot_index;
 
 char choose_dot(){
     if (dot_index == 0) {
-        shuffle(6, dots);
+        shuffle(dots, 6);
         for (int i = 0; i < 6; i++)
             log_msg("Dot %d = %d", i, dots[i]);
     }

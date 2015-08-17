@@ -78,7 +78,7 @@ bool letter_equals(letter_t* letter1, letter_t* letter2) {
 
     // not equal if one doesn't exist; if of different langs; if of different lengths
     if ((letter1 == NULL || letter2 == NULL)
-        | (letter1->lang_enum != letter2->lang_enum)
+        | (letter1->language_of_origin != letter2->language_of_origin)
         | (letter1->num_cells != letter2->num_cells)) {
         return false;
     }
@@ -149,8 +149,8 @@ void print_letter(letter_t* letter){
 void initialize_english_word(char* string, letter_t* letter_array, int num_letters, word_t* word) {
     strcpy(word->name, string);
     word->letters = letter_array;
-    word->length_name = word->num_letters = num_letters;
-    word->lang_enum = ENGLISH;
+    word->num_letters = num_letters;
+    word->language_of_origin = ENGLISH;
     word->curr_letter = 0;
     word->curr_glyph = -1;
 }
@@ -192,7 +192,7 @@ int parse_string_into_eng_word(char* string, word_t* word) {
     // the ith letter of the string goes into the i+1th index of the array.
     int letter_index = 0;
     if (is_capitalized) {
-        letters_in_word[0] = eng_capital;
+        letters_in_word[0] = eng_cap;
         letter_index = 1;
     }
 
@@ -212,11 +212,10 @@ int parse_string_into_eng_word(char* string, word_t* word) {
     }
 
     word->letters = letters_in_word;
-    word->length_name = strlen(string); // length of English representation of word
     word->num_letters = num_cells;      // length of Braille representation of word
     word->curr_letter = 0;
     word->curr_glyph = -1;
-    word->lang_enum = ENGLISH;
+    word->language_of_origin = ENGLISH;
     return 1;
 }
 
@@ -316,7 +315,7 @@ void print_word(word_t* word) {
 * @remark Tested in English.
 */
 char* get_lang(word_t* word){
-    switch (word->lang_enum) {
+    switch (word->language_of_origin) {
         case ENGLISH:
             return "e_";
         case HINDI:
@@ -342,8 +341,12 @@ char* get_lang(word_t* word){
 */
 void speak_word(word_t* word) {
     char mp3name[7];
-    sprintf(mp3name, "%s", word->name);
-    if (word->length_name > 6) {
+    snprintf(mp3name, 7, "%s", word->name);
+
+    // if they're not identical, the word was truncated. Add an "0" at
+    // the end. This is a placeholder -- eventually we'll have to keep
+    // track of multiple words with the same first 5 letters.
+    if (mp3name != word->name) {
         mp3name[5] = '0';
         mp3name[6] = '\0';
     }
@@ -412,19 +415,19 @@ void initialize_wordlist(word_t* words, int num_words, wordlist_t* list) {
         return;
     }
     list->num_words = (num_words < MAX_WORDLIST_LENGTH) ? num_words : MAX_WORDLIST_LENGTH;
-    int* order = (int*) malloc(num_words*sizeof(int));
-    list->index = 0;
+    int* order_of_words = (int*) malloc(num_words * sizeof(int));
+    list->index_into_order = 0;
     list->words = words;
-    list->order = order;
+    list->order_of_words = order_of_words;
     for (int i = 0; i < MAX_WORDLIST_LENGTH; i++) {
         if (i < list->num_words) {
-            list->order[i] = i;
+            list->order_of_words[i] = i;
         }
         else {
-            list->order[i] = -1;
+            list->order_of_words[i] = -1;
         }
     }
-    shuffle(num_words, list->order);
+    shuffle(list->order_of_words, num_words);
     log_msg("Wordlist initialized. Num_words = %d.", num_words);
 }
 
@@ -474,7 +477,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
         for (int i = 0; i < num_strings; i++) {
             indices[i] = i;
         }
-        shuffle(num_strings, indices);
+        shuffle(indices, num_strings);
 
         // get MAX_WORDLIST_LENGTH of the strings, in random order
         // iterate through words; parse strings into it; increment string index each time,
@@ -505,7 +508,7 @@ void strings_to_wordlist(char** strings, int num_strings, wordlist_t* list) {
 */
 void print_words_in_list(wordlist_t* wl) {
     for (int i = 0; i < wl->num_words; i++)
-        print_word(&wl->words[wl->order[i]]);
+        print_word(&wl->words[wl->order_of_words[i]]);
 }
 
 /**
@@ -515,13 +518,13 @@ void print_words_in_list(wordlist_t* wl) {
 * @remark Tested lightly in English.
 */
 void get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word) {
-    if (wl->index == 0) // if at beginning of list, reshuffle
-        shuffle(wl->num_words, wl->order);
+    if (wl->index_into_order == 0) // if at beginning of list, reshuffle
+        shuffle(wl->order_of_words, wl->num_words);
 
-    int randomized_index = wl->order[wl->index];
+    int randomized_index = wl->order_of_words[wl->index_into_order];
     *next_word = &(wl->words[randomized_index]); // added indirection to iterate in randomized order
 
-    wl->index = (wl->index + 1) % wl->num_words; // increment index, reset if necessary
+    wl->index_into_order = (wl->index_into_order + 1) % wl->num_words; // increment index, reset if necessary
 }
 
 /**
@@ -537,7 +540,7 @@ void free_wordlist(wordlist_t* wl) {
         free_word(&wl->words[i]);
     }
     free(wl->words);
-    free(wl->order);
+    free(wl->order_of_words);
 }
 
 /**
@@ -559,7 +562,7 @@ int random_between(int i, int j) {
 * @remark Consider implementing a "shuffle wordlist"
 * function.
 */
-void shuffle(int len, int* int_array) {
+void shuffle(int* int_array, int len) {
     int random_i, temp;
     for (int i = 0; i < len; i++) {
         random_i = random_between(i, len - 1);
@@ -577,15 +580,16 @@ void shuffle(int len, int* int_array) {
 * @remark Consider implementing an "unshuffle
 * wordlist" function.
 */
-void unshuffle(int len, int* int_array) {
+void sort(int* int_array, int len) {
+    int temp;
     for (int i = 0; i < len; i++) {
         int min = i;
-        for (int j = i+1; j < len; j++) {
+        for (int j = i + 1; j < len; j++) {
             if (int_array[j] < int_array[min])
                 min = j;
         }
         if (i != min) {
-            int temp = int_array[i];
+            temp = int_array[i];
             int_array[i] = int_array[min];
             int_array[min] = temp;
         }

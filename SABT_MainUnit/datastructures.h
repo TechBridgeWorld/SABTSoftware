@@ -28,37 +28,46 @@ struct glyph {
 // @todo: pack structs
 // @todo: work out which structs should be globals (e.g. current_word?)
 
-typedef unsigned char cell_t;   // holds a 6-bit bitfield representing one braille cell
+typedef unsigned char cell_t;    // holds a 6-bit bitfield representing one braille cell
 
 typedef struct letter {
-    char name[MAX_MP3_NAME_LENGTH];
-    language_t lang_enum;
-    cell_t* cells; // an array of cells in that letter. In most cases, this will only be one cell.
-    int num_cells;
+    cell_t*    cells; // an array of cells in that letter. In most cases, this will only be one cell.
+    uint8_t    num_cells;
+
+    char       name[MAX_MP3_NAME_LENGTH];
+    language_t language_of_origin;
 } letter_t;
 
 typedef struct word {
-    char name[MAX_WORD_LENGTH];
-    int length_name;
-    letter_t* letters;
-    int num_letters;
-    language_t lang_enum;
-    int curr_letter;
-    int curr_glyph;
-} word_t; 
+    letter_t*  letters;
+    uint8_t    num_letters;
+    // curr_letter and curr_glyph are indices used when checking input against
+    // the currently selected word. The next cell we're expecting from the user
+    // is word->letters[curr_letter][curr_glyph].
+    uint8_t   curr_letter;
+    uint8_t   curr_glyph; 
+    char       name[MAX_WORD_LENGTH];
+    language_t language_of_origin;
+} word_t;
 
 typedef struct alphabet {
-    letter_t* letters;
-    int num_letters;
-    language_t lang_enum;
-    // other info can eventually go in here
+    letter_t*  letters;
+    uint8_t    num_letters;
+    language_t language_of_origin;
+    // other info can eventually go in here, like whether capitalization occurs
+    // or what numbers to use. (Currently, numbers must be considered a separate
+    // alphabet.)
 } alphabet_t;
 
+// a wordlist is shufflable. The word array doesn't change, but a second array
+// of 8-bit ints is kept, called "order", which consists of indices into words.
+// to shuffle the wordlist, "order" is shuffled. It can then be iterated through,
+// using index, to 
 typedef struct wordlist {
-    word_t* words;
-    int* order;
-    int num_words;
-    int index;
+    word_t*  words;
+    int* order_of_words;
+    int  num_words;
+    int  index_into_order;
 } wordlist_t;
 
 // Structure representing a script (alphabet) - deprecated
@@ -122,7 +131,7 @@ void  get_next_word_in_wordlist(wordlist_t* wl, word_t** next_word);
 void  free_wordlist(wordlist_t* wl);
 
 int   random_between(int i, int j);
-void  shuffle(int len, int* int_array);
-void  unshuffle(int len, int* int_array);
+void  shuffle(int* int_array, int len);
+void  sort(int* int_array, int len);
 
 #endif /* _DATASTRUCTURES_H_ */

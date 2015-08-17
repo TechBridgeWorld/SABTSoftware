@@ -28,7 +28,7 @@ glyph_t blank_cell = {
 };
 
 /**
-* @brief Resets the alphabet and reshuffles or unshuffles
+* @brief Resets the alphabet and reshuffles or sorts
 * it as needed.
 * @param the alphabet's script struct and a bool indicating
 * whether it should be shuffled (i.e., we're in "practice" mode)
@@ -38,7 +38,7 @@ glyph_t blank_cell = {
 void reset_script_queue(script_t* script, bool should_shuffle) {
     script->index = -1;
     if (should_shuffle)
-        shuffle(script->num_letters, script->letters);
+        shuffle(script->letters, script->num_letters);
 }
 
 /**
@@ -178,7 +178,7 @@ glyph_t* get_next_letter(script_t* script, bool should_shuffle) {
     if (script->index >= script->num_letters) {
         script->index = 0;
         if (should_shuffle)
-            shuffle(script->num_letters, script->letters);
+            shuffle(script->letters, script->num_letters);
     }
 
     // return the first glyph of the script->index'th letter

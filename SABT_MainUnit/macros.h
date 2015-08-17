@@ -94,5 +94,6 @@ typedef enum {
 	KANNADA
 } language_t;
 
+typedef unsigned char uint8_t;   // used to store counts and other tiny integers
 
 #endif

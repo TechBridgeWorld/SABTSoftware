@@ -38,6 +38,8 @@
 // reset_statsso that the values are reset to their defaults when each mode is begun.
 // @todo Reset stats when a mode is started, not manually in each mode?
 
+// these three keep track of the alphabet currently in use. script is used by old modes. mode_language will
+// eventually be replaced by the language_of_origin in the current alphabet_t.
 script_t* this_script;			// pointer to the appropriate script
 language_t mode_language;		// an enum designating current language, so correct feedback mp3s are played
 char* lang_name;				// the user-readable name of the current language, e.g. "English"

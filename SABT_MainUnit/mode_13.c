@@ -266,7 +266,7 @@ bool all_entered() {
 
 void mode_13_choose_ques() {
     if (ques_i == max_q) {
-        shuffle(max_q, ques_index);
+        shuffle(ques_index, max_q);
         ques_i = 0;
     }
     question = ques_index[ques_i];
@@ -301,7 +301,7 @@ void mode_13_main() {
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     max_q = EASY_QUES;
                     init_index(max_q);
-                    shuffle(max_q, ques_index);
+                    shuffle(ques_index, max_q);
                     current_state = GENERATE_QUESTION;
                     break;
                     
@@ -311,7 +311,7 @@ void mode_13_main() {
                     play_direction(MP3_INSTRUCTIONS_MATH);
                     max_q = QUES_TYPES;
                     init_index(max_q);
-                    shuffle(max_q, ques_index);
+                    shuffle(ques_index, max_q);
                     current_state = GENERATE_QUESTION;
                     break;
                 
