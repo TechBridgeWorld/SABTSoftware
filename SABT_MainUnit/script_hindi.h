@@ -82,10 +82,6 @@
 #define HIN_SHRA_2          0b101001
 #define HIN_SHRA_3          0b010111
 
-extern letter_t hindi_a;
-extern letter_t hindi_shra;
-extern letter_t hindi_i;
-
 extern script_t script_hindi;
 
 #endif /* _SCRIPT_HINDI_H_ */
