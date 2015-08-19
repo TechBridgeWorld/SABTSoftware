@@ -8,8 +8,15 @@
 #define _COMMON_H_
 
 #include "datastructures.h"
-
+ #include "usart_pc.h"
 // Handy common macros
+
+#define SENDBYTE(msg) \
+  usart_transmit_byte_to_pc((unsigned char)msg)
+
+#define NEWLINE	\
+  log_msg("\n\r");
+
 
 #define ARRAYLEN(x)  (sizeof(x) / sizeof((x)[0]))
 #define CHARTOINT(c)     ((c) - '0')

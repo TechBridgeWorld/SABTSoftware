@@ -131,7 +131,6 @@ void mode_4_reset(void) {
     md_input_ready = false;
     md_input_valid = false;
     max_mistakes = 8;
-
 }
 
 void mode_4_main(void) {   
@@ -150,8 +149,6 @@ void mode_4_main(void) {
             init_char_arr(mistake_pool, max_mistakes);
             init_char_arr(input_word, MAX_WORD_LENGTH);
             play_direction(MP3_CHOOSE_NUM_OF_HINTS);
-            play_mode_audio(MP3_SUBMODE);
-
             current_state = CHOOSE_LEVEL;
             break;
             

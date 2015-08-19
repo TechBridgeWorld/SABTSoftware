@@ -206,14 +206,16 @@ cell_t shra_cells[3]	= {ABBREV, SHA, RA};
 #define HIND_RA 	{&ra_cell, 1, "ra", HINDI}
 #define HIND_LA 	{&la_cell, 1, "la", HINDI}
 #define HIND_VA 	{&va_cell, 1, "va", HINDI}
-#define HIND_SHA 	{&sha_cell, 1, "sha", HINDI}
 
+#define HIND_SHA 	{&sha_cell, 1, "sha", HINDI}
 #define HIND_SHHA 	{&shha_cell, 1, "shha", HINDI}
 #define HIND_SA 	{&sa_cell, 1, "sa", HINDI}
 #define HIND_HA 	{&ha_cell, 1, "ha", HINDI}
+
+// A few of the combination consonants.
+// This is not an exhaustive list.
 #define HIND_KSHA 	{&ksha_cell, 1, "ksha", HINDI}
 #define HIND_TRA 	{tra_cells, 3, "tra", HINDI}
-
 #define HIND_JNA 	{&jna_cell, 1, "jna", HINDI}
 #define HIND_SHRA 	{shra_cells, 3, "shra", HINDI}
 #define HIND_RU		{ru_cells, 2, "ru", HINDI}
@@ -227,8 +229,8 @@ letter_t hindi_letters[50] = {
 	HIND_TTA, HIND_TTHA, HIND_DDA, HIND_DDHA, HIND_GNA,
 	HIND_TA, HIND_THA, HIND_DA, HIND_DHA, HIND_NA,
 	HIND_PA, HIND_PHA, HIND_BA, HIND_BHA, HIND_MA,
-    HIND_YA, HIND_RA, HIND_LA, HIND_VA, HIND_SHA,
-    HIND_SHHA, HIND_SA, HIND_HA, HIND_KSHA, HIND_TRA,
-    HIND_JNA, HIND_SHRA, HIND_RU };
+    HIND_YA, HIND_RA, HIND_LA, HIND_VA,
+    HIND_SHA, HIND_SHHA, HIND_SA, HIND_HA,
+    HIND_KSHA, HIND_TRA, HIND_JNA, HIND_SHRA, HIND_RU };
 
 alphabet_t hindi_alphabet = {hindi_letters, 50, HINDI};

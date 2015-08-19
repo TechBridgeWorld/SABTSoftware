@@ -8,10 +8,8 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-
-#ifndef _DATASTRUCTURES_H_
-	typedef struct glyph glyph_t;
-#endif
+#include <stdbool.h>
+#include "macros.h"
 
 // Basic IO functions
 void io_init(void);

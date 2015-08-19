@@ -10,6 +10,7 @@
 #include "script_common.h"
 #include "mode_6.h"
 #include "mp3s.h"
+#include "io.h"
 
 /* Change these for new script */
 #include "script_english.h"

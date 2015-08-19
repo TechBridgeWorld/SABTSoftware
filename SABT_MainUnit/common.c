@@ -83,10 +83,10 @@ char add_dot(char bits, char dot) {
  */
 void quit_mode(void) {
     // @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. RETEST THIS. 
-    if (current_mode == 15) {
+/*    if (current_mode == 15) {
         log_msg("Freeing dictionary.");
         free_wordlist(&mode_15_dict);
-    }
+    } */
     is_a_mode_executing = false;
     index_of_current_mode = -1;
     play_system_audio(MP3_MM);

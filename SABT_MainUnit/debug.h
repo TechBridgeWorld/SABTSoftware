@@ -10,12 +10,6 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-#include "usart_pc.h"
-
-#define SENDBYTE(msg) \
-  usart_transmit_byte_to_pc((unsigned char)msg)
-
-#define NEWLINE	\
-  log_msg("\n\r");
+char get_cell(void);
 
 #endif /* _DEBUG_H_ */

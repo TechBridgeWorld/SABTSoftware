@@ -12,6 +12,7 @@
 
 #include "globals.h"
 #include "ui_handle.h"
+#include "common.h"
 
 #ifdef DEBUGMODE
     #include <unistd.h>
@@ -391,8 +392,7 @@ unsigned char read_and_retrieve_file_contents(unsigned char *file_name, unsigned
  *                         return 2 on error converting file_name
  */
 unsigned char play_mp3_file(unsigned char *file_name){
-    #ifdef DEBUGMODE
-    #else
+    #ifndef DEBUGMODE
     struct dir_Structure *dir;
     unsigned long cluster, byteCounter = 0, file_size, first_sector;
     unsigned int k,iCntForSingleAudioWrite;

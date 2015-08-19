@@ -67,8 +67,7 @@ void io_dialog_reset(void);
 void io_dialog_error(void);
 
 
-#ifdef DEBUGMODE
-#else
+#ifndef DEBUGMODE
 
 // ******************************
 // ********** Basic IO **********

@@ -32,7 +32,6 @@
 #include "datastructures.h"
 #include "debug.h"
 
-
 // These values are stored globally for the sake of efficiency, and are modified and
 // used by the modes. The reset function of each mode should call reset_globals and
 // reset_statsso that the values are reset to their defaults when each mode is begun.

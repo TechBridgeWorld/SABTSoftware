@@ -14,9 +14,19 @@ SABT/
 documentation
 .vagrant
 SABT_MainUnit/default/*
-SABT_MainUnit/test
-SABT_MainUnit/Makefile
+SABT_MainUnit/debug
 UserInterface(Primary)/default/*
 Reference/share_fold_mac (vboxsrv) (F) - Shortcut.lnk
 avr-libc*
 *~
+SABT_MainUnit/doxygen-config
+
+SABT_MainUnit/Makefile_complicated
+
+SABT_MainUnit/Makefile-big
+
+SABT_MainUnit/Makefile-old
+
+*.bak
+
+*.sublime-workspace

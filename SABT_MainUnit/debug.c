@@ -1,4 +1,19 @@
 #include <stdio.h>
+
+char new_cell;
+
+char get_cell(void) {
+    return new_cell;
+}
+
+int main(){
+    printf("Debug running!\n");
+
+
+}
+
+
+/*
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
@@ -10,44 +25,55 @@
 int main() {
     time_t t;
     srand((unsigned) time(&t));
-    cell_t a_cell, b_cell, c_cell, hin_a_cell, all_cell, blank_cell, null_cell;
-    a_cell.pattern = DOT_1;
-    b_cell.pattern = DOT_1 | DOT_2;
-    hin_a_cell.pattern = DOT_1;
-    all_cell.pattern = DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
-    blank_cell.pattern = NO_DOTS;
+    cell_t a_cell = DOT_1;
+    cell_t b_cell = DOT_1 | DOT_2;
+    cell_t hin_a_cell = DOT_1;
+    cell_t i_cell = DOT_2 | DOT_5;
+    cell_t all_cell = DOT_1 | DOT_2 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
+    cell_t blank_cell = NO_DOTS;
+    cell_t also_blank = NO_DOTS;
+    cell_t null_cell;
 
     // test of print_cell_pattern
     printf("0b000001 =? ");
-    print_cell_pattern(&a_cell);
+    print_cell_pattern(a_cell);
     printf("0b000011 =? ");
-    print_cell_pattern(&b_cell);
+    print_cell_pattern(b_cell);
     printf("0b111111 =? ");
-    print_cell_pattern(&all_cell);
+    print_cell_pattern(all_cell);
     printf("Blank cell =? ");
-    print_cell_pattern(&blank_cell);
+    print_cell_pattern(blank_cell);
     printf("[?] =? ");
-    print_cell_pattern(&null_cell);
+    print_cell_pattern(null_cell);
     printf("Compare above to test print_cell_pattern.\n\n");
 
-    printf("%s\n", get_eng_letter_name_by_cell(&a_cell));
+    printf("%s\n", get_eng_letter_name_by_cell(a_cell));
 
     // test of cell equality
-    bool same1 = a_cell == a_cell;
     bool diff1 = a_cell == b_cell;
     bool cognate1 = a_cell == hin_a_cell;
     bool empty1 = a_cell == blank_cell;
-    bool bothempty1 = blank_cell == blank_cell;
+    bool bothempty1 = blank_cell == also_blank;
     bool notinitialized1 = a_cell == null_cell;
-    printf("Cell equality %s.\n\n", (same1 && diff1 && cognate1 &&
+    printf("Cell equality %s.\n\n", (diff1 && cognate1 &&
             empty1 && bothempty1 && notinitialized1) ? "works" : "IS BROKEN");
 
 
     // test of letter_equals
-    letter_t blank_letter = {" ", LANGUAGE_NULL, &blank_cell, 1};
+    #define ABBREV      DOT_5
+    #define RA          DOT_1 | DOT_2 | DOT_3 | DOT_5
+    #define SHA         DOT_1 | DOT_4 | DOT_6
+    cell_t shra_cells[3]    = {ABBREV, SHA, RA};
+    letter_t hindi_shra = {shra_cells, 3, "shra", HINDI};
+
+    letter_t eng_a = {&a_cell, 1, "a", ENGLISH};
+    letter_t eng_b = {&b_cell, 1, "b", ENGLISH};
+    letter_t hindi_a = {&a_cell, 1, "a", HINDI};
+    letter_t hindi_i = {&i_cell, 1, "i", HINDI};
+    letter_t blank_letter = {&blank_cell, 1, " ", LANGUAGE_NULL,};
     letter_t null_letter;
 
-/*  bool same2 = letter_equals(&eng_a, &eng_a);
+    bool same2 = letter_equals(&eng_a, &eng_a);
     bool samehin = letter_equals(&hindi_shra, &hindi_shra);
     bool diff2 = !letter_equals(&eng_a, &eng_b);
     bool cognate2 = !letter_equals(&eng_a, &hindi_a);
@@ -67,7 +93,7 @@ int main() {
     printf(" ");
     print_letter(&hindi_shra);
 
-    printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zaz a shra.'\n\n"); */
+    printf("\nGet_eng_letter_by_char and print_letter work if the above reads 'zaz a shra.'\n\n");
 
     // test of parse_string_into_eng_word
     word_t goat, ox, chicken, myname, blank, notchars, funnycap, quitelong, verylong;
@@ -84,7 +110,7 @@ int main() {
 
     // test of print_word;
     letter_t sri_letters[2] = {hindi_shra, hindi_i};
-    word_t sri = {"sri", 2,  sri_letters, 2, HINDI, 0, -1};
+    word_t sri = {sri_letters, 2, 0, -1, "sri", HINDI};
     print_word(&goat);
     print_word(&ox);
     print_word(&chicken);
@@ -97,7 +123,6 @@ int main() {
     print_word(&quitelong);
     print_word(&verylong);
 
-/*
     //test of word_to_cell_array
     cell_t goat_array[4];
     cell_t sri_array[4];
@@ -155,10 +180,10 @@ int main() {
         get_next_word_in_wordlist(&wl, &curr_word);
         printf("%s\n", curr_word->name);
     }
-    printf("get_next_word_in_wordlist works if the three animals now appear in ~3 orders.\n\n"); */
+    printf("get_next_word_in_wordlist works if the three animals now appear in ~3 orders.\n\n");
 
     // test of strings_to_wordlist
-/*  char* small[1] = {"hi"};
+  char* small[1] = {"hi"};
     char* animal_strings[3] = {"dog", "cat", "mouse"};
     char* too_long_empty[22] = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
                                 "1", "1", "1", "1", "1", "1", "1", "1", "1"};
@@ -180,7 +205,7 @@ int main() {
     print_words_in_list(&primates);
     print_words_in_list(&pets);
     print_words_in_list(&bools);
-*/
+
     char* easy_words[70] = {"air", "bog", "bud", "bug", "day", "den", "dew", "dig", "dry", "fly", "fog", "log", "low", "oil", "raw", "rot", "sap", "sun", "web", "wet", "fit", "top", "sea", "gas", "ray", "cave", "damp", "dirt", "drip", "drop", "dump", "east", "edge", "fall", "fern", "hive", "hole", "lake", "leaf", "mist", "mold", "nest", "pond", "rain", "rest", "ripe", "rock", "root", "salt", "soil", "stem", "tide", "tree", "weed", "west", "wind", "wood", "melt", "bite", "path", "wash", "mass", "hill", "lava", "life", "seed", "star", "moon", "fast", "slow"};
     char* med_words[77] = {"adapt", "blade", "bloom", "brook", "cloud", "cycle", "fresh", "grass", "humid", "marsh", "night", "ocean", "plant", "river", "stone", "trash", "waste", "water", "ridge", "earth", "north", "south", "cliff", "gorge", "sleep", "moist", "steam", "coast", "sting", "renew", "flood", "erupt", "under", "joint", "float", "force", "repel", "solid", "larva", "orbit", "light", "sound", "absorb", "Arctic", "branch", "spring", "canopy", "canyon", "desert", "flower", "forest", "fungus", "growth", "insect", "mammal", "planet", "pollen", "stream", "system", "tundra", "valley", "ground", "winter", "summer", "rotten", "fossil", "nature", "matter", "energy", "record", "liquid", "motion", "sprout", "season", "magnet", "zigzag", "living"};
 
@@ -200,7 +225,7 @@ int main() {
 //      printf("%d, %d, %d\n", random_between(0,1), random_between(5,10), random_between(0,1000));
  //     printf("Should contain random numbers between 0 & 1, 5 & 10, 0 & 1000.\n");
 
-    /* test of shuffle
+    test of shuffle
     int bar[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     shuffle(10, bar);
     for (int i = 0; i < 10; i++)
@@ -223,7 +248,7 @@ int main() {
     for (int i = 0; i < 10; i++)
         if (bar[i] != i)
             unshuffle_worked = false;
-    printf("Unshuffle %s.\n\n", unshuffle_worked ? "works" : "IS BROKEN"); */
+    printf("Unshuffle %s.\n\n", unshuffle_worked ? "works" : "IS BROKEN");
 
 
-}
+} */

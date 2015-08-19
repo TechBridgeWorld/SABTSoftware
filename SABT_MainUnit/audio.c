@@ -97,7 +97,9 @@ void play_next_mp3(void) {
     }
 
     log_msg("[Audio] Playing: %s", playlist[playlist_index]);
+    #ifndef DEBUGMODE
     play_mp3_file((unsigned char*)playlist[playlist_index]);
+    #endif
     playlist_index++;
 
     //If playlist is now empty, reset variables 

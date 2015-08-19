@@ -15,8 +15,6 @@
 #define MAX_WORD_LENGTH    15
 #define MAX_WORDLIST_LENGTH 10
 
-typedef struct glyph glyph_t;
-
 // Stores information about single glyph; used to build scripts
 struct glyph {
     char pattern;           /* 0bxxxxxx 6-bit pattern Braille representation */
@@ -38,14 +36,14 @@ typedef struct letter {
     language_t language_of_origin;
 } letter_t;
 
-typedef struct word {
+typedef struct word {  // @todo Pack this
     letter_t*  letters;
     uint8_t    num_letters;
     // curr_letter and curr_glyph are indices used when checking input against
     // the currently selected word. The next cell we're expecting from the user
     // is word->letters[curr_letter][curr_glyph].
-    uint8_t   curr_letter;
-    uint8_t   curr_glyph; 
+    int        curr_letter;
+    int        curr_glyph; 
     char       name[MAX_WORD_LENGTH];
     language_t language_of_origin;
 } word_t;

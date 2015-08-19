@@ -11,6 +11,8 @@
 #define F_CPU			8000000UL
 #define MAX_BUF_SIZE    256
 
+typedef struct glyph glyph_t; // forward declaration of glyph_t in datastructures.h.
+
 
  // The six dots of the braille tutor. Letters can be created by logical-oring these together;
 // e.g., 'b' is {DOT_1 | DOT_2}.
