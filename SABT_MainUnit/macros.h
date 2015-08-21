@@ -56,6 +56,7 @@ typedef struct glyph glyph_t; // forward declaration of glyph_t in datastructure
 // One state is executed in each iteration through the SABT's main loop.
 typedef enum {
 	INITIAL,
+	CHOOSE_SUBMODE,
 	CHOOSE_LEVEL,
 	REQUEST_QUESTION,
 	GENERATE_QUESTION,
@@ -65,7 +66,7 @@ typedef enum {
 	CHECK_ANSWER,
 	REPROMPT,
 	GAME_OVER,
-	SWITCH_USERS
+	SWITCH_USERS,
 } state_t;
 
 // Some modes can operate in various submodes. submode_t enumerates every possible submode.

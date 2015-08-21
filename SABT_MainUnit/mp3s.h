@@ -206,12 +206,9 @@
 #define MP3_YOU_HAVE_MADE_THE_SAME_MISTAKE "sammst"    // You have made the same mistake.
 
 
-#define MP3_YOUR_SCORE_IS           "SCOR"    // Your current score is:
-#define MP3_NUM_MISSED              "MISS"    // You missed:
-#define MP3_MULT_MISTAKES           "MLFT"    // mistakes remaining.
-#define MP3_ONE_MISTAKE             "MONE"    // mistake remaining.
-#define MP3_NO_ANSWER_SO_FAR        "NOCO"    // No correct answer entered so far.
-#define MP3_NEXT                    "NXTN"    // Enter the next number.
+#define MP3_YOUR_SCORE_IS           "score"    // Your current score is:
+#define MP3_NUM_MISSED              "umissd"    // You missed:
+#define MP3_NO_ANSWER_SO_FAR        "nocorr"    // No correct answer entered so far.
 
 
 // Game over
@@ -279,10 +276,10 @@
 #define MP3_EIGHTY      "#80"
 #define MP3_NINE        "#9"
 #define MP3_NINETY      "#90"
-#define MP3_HUNDRED     "hundr"
-#define MP3_NEGATIVE    "negtv"
-#define MP3_NUM_SIGN    "numsn"
-#define MP3_THOUSAND    "thous"
+#define MP3_HUNDRED     "#hundr"
+#define MP3_NEGATIVE    "#negtv"
+#define MP3_NUM_SIGN    "#numsn"
+#define MP3_THOUSAND    "#thous"
 
 
 

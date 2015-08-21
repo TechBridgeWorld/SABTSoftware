@@ -92,7 +92,12 @@ void mode_9_play_answer(void) {
 void mode_9_main(void) {
     switch (current_state) {
         case INITIAL:
-            last_dot = create_dialog(MP3_CHOOSE_LEVELS_3,
+            play_mode_audio(MP3_SUBMODE);
+            current_state = CHOOSE_SUBMODE;
+            break;
+
+        case CHOOSE_SUBMODE:
+            last_dot = create_dialog(NULL,
                 (DOT_1 | DOT_2 | DOT_3));
             switch (last_dot) {
                 
@@ -197,7 +202,7 @@ void mode_9_main(void) {
                 current_state = GENERATE_QUESTION;
             } else {                        // Wrong answer
                 mistakes++;
-                play_feedback(MP3_CORRECT);
+                play_feedback(MP3_INCORRECT);
                 if (mistakes >= max_mistakes)
                     mode_9_play_answer();
                 play_feedback(MP3_TRY_AGAIN);

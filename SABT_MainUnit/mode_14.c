@@ -73,13 +73,8 @@ void mode_14_incorrect_answer() {
     mistakes++;
 }
 
-void mode_14_speak_inputted_cell() {
-    cell_t this_cell = cell;
-    char* letter_name = get_eng_letter_name_by_cell(this_cell);
-    play_lang_audio(letter_name);
-}
-
 void mode_14_reset() {
+    max_mistakes = 3;
 }
 
 /**
@@ -100,16 +95,19 @@ void mode_14_main() {
             case '1':
                 play_direction(MP3_EASY_MODE);
                 strings_to_wordlist(easy, ARRAYLEN(easy), &mode_14_dict);
+                current_state = GENERATE_QUESTION;
                 break;
 
             case '2':
                 play_direction(MP3_MEDIUM_MODE);
                 strings_to_wordlist(medium, ARRAYLEN(medium), &mode_14_dict);
+                current_state = GENERATE_QUESTION;
                 break;
 
             case '3':
                 play_direction(MP3_HARD_MODE);
                 strings_to_wordlist(hard, ARRAYLEN(hard), &mode_14_dict);
+                current_state = GENERATE_QUESTION;
                 break;
 
             case CANCEL:
@@ -119,15 +117,12 @@ void mode_14_main() {
 
             default:
                 break;
-        }
-
-        print_words_in_list(&mode_14_dict);
-        play_direction(MP3_INSTRUCTIONS_WORD);
-        current_state = GENERATE_QUESTION;
+        }        
         break;
 
     case GENERATE_QUESTION:
-        reset_globals();
+        print_words_in_list(&mode_14_dict);
+        play_direction(MP3_INSTRUCTIONS_WORD);
         curr_mistakes = 0;
         get_next_word_in_wordlist(&mode_14_dict, &mode_14_chosen_word);
         log_msg("[mode_14] Next word: %s", mode_14_chosen_word->name);
@@ -165,7 +160,6 @@ void mode_14_main() {
         break;
 
     case CHECK_ANSWER:
-        mode_14_speak_inputted_cell();
         mode_14_curr_cell = get_next_cell_in_word(mode_14_chosen_word);
         log_msg("Target cell: %x, inputted cell: %x.", mode_14_curr_cell, cell_pattern);
         

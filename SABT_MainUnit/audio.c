@@ -276,7 +276,7 @@ void play_number(long number) {
         }
         else {
             if (!played_and) {
-                play_mp3(MP3_WELCOME, MP3_AND);
+                play_feedback(MP3_AND);
                 played_and = true;
             }
         }

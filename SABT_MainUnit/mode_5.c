@@ -127,7 +127,7 @@ void mode_5_main(void) {
 
                     play_feedback(MP3_YOUR_WORD_IS);
                     play_string(mode_5_chosen_word, strlen(mode_5_chosen_word));
-                    play_mode_audio(MP3_PASS_DEVICE_PRESS_ENTER);
+                    play_feedback(MP3_PASS_DEVICE_PRESS_ENTER);
                     current_state = SWITCH_USERS;
 
    /*             }
@@ -175,7 +175,7 @@ void mode_5_main(void) {
         case PROMPT:
             log_msg("Entering ask for guess state.");
             play_direction(MP3_PLAYER_2);
-            play_direction(MP3_YOUR_WORD_IS_NOW);
+            play_feedback(MP3_YOUR_WORD_IS_NOW);
             play_string(input_word, strlen(mode_5_chosen_word));
             play_direction(MP3_GUESS_A_LETTER);
             current_state = GET_INPUT;
