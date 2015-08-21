@@ -16,6 +16,8 @@
 #include "datastructures.h"
 #include "mode_15.h"
 
+letter_t blank_letter = { &no_cell, 0, "NULL", LANGUAGE_NULL };
+
 language_t set_language() {
   if (current_mode == 7) {
     mode_language = HINDI;
@@ -46,6 +48,7 @@ language_t set_language() {
     submode = SUBMODE_NULL;
     level = DIFFICULTY_NULL;
     cell = cell_pattern = cell_control = 0;
+    this_letter = blank_letter;
     current_state = INITIAL;
 }
 

@@ -134,6 +134,8 @@ void mode_sound_game_main() {
                     log_msg("Submode: Play");
                     submode = SUBMODE_PLAY;
                     current_state = GENERATE_QUESTION;
+                    break;
+                    
                 case CANCEL:
                     log_msg("Quitting to main menu");                
                     quit_mode();

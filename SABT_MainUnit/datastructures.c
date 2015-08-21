@@ -132,7 +132,7 @@ char* get_eng_letter_name_by_cell(cell_t cell) {
 * remark Tested in English and Hindi.
 */
 void print_letter(letter_t* letter){
-    log_msg("%s", letter->name);
+    log_msg_no_newline("%s", letter->name);
 }
 
 /*******************

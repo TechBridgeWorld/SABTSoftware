@@ -45,6 +45,11 @@
 #define ENG_Y 0b111101
 #define ENG_Z 0b110101
 
+cell_t  a_cell, b_cell, c_cell, d_cell, e_cell, f_cell, g_cell,
+h_cell, i_cell, j_cell, k_cell, l_cell, m_cell, n_cell, o_cell,
+p_cell, q_cell, r_cell, s_cell, t_cell, u_cell, v_cell, w_cell,
+x_cell, y_cell, z_cell, cap_cell, no_cell;
+
 extern letter_t eng_cap;
 extern script_t script_english;
 extern alphabet_t english_alphabet;

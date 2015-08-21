@@ -9,6 +9,7 @@
 #include "USART_Keypad.h"
 #include "USART_PC.h"
 #include "io.h"
+#include "globals.h"
 #include "common.h"
 #include "audio.h"
 #include "script_common.h"
@@ -490,7 +491,7 @@ bool io_convert_line(void) {
         if (io_line[line_index] == END_OF_TEXT)
             break;
         
-        curr_glyph = get_glyph(lang_script, io_line, &line_index);
+        curr_glyph = get_glyph(this_script, io_line, &line_index);
         if (curr_glyph == NULL)
             return false;
         else {

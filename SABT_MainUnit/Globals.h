@@ -47,6 +47,7 @@ unsigned char last_dot;			// the last dot pressed
 unsigned char cell;				// bitmap representing the entire cell + control button last pressed
 unsigned char cell_pattern;		// bitmap representing the braille cell itself -- the last six bits of cell
 unsigned char cell_control;		// bitmap representing control button pressed -- the first two bits of the cell
+letter_t this_letter;
 
 // these keep track of the state, submode and difficulty level selected in the current mode.
 state_t 	 current_state;

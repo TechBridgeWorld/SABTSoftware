@@ -11,7 +11,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-extern script_t* lang_script;
 extern script_t script_common;
 
 void reset_script_queue(script_t* script, bool should_shuffle);

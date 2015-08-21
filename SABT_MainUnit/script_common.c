@@ -17,9 +17,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-
-script_t* lang_script = NULL;
-
 glyph_t blank_cell = {
     0x00,
     MP3_BLANK,
@@ -52,7 +49,6 @@ void reset_script_queue(script_t* script, bool should_shuffle) {
 glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
     int curr_pattern = patterns[*index];
     glyph_t* curr_glyph;
-
     // Return if EOT
     if (curr_pattern == END_OF_TEXT) {
         log_msg("[IO] Current pattern is EOT; returning NULL");
@@ -65,8 +61,9 @@ glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
     }
 
     // If no match found in script, return NULL
+    log_msg("Looking for pattern 0x%x in script %s", curr_pattern, script->fileset);
     curr_glyph = search_script(script, curr_pattern);
-    if (curr_glyph == NULL) {
+    if (curr_glyph == NULL) { // if not a letter, see if it's a number
         curr_glyph = search_script(&script_digits, curr_pattern);
         if (curr_glyph == NULL) {
             log_msg("[IO] Matching glyph not found; returning NULL");
@@ -92,7 +89,7 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
     for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
         curr_glyph = &(curr_script->glyphs[glyph_index]);
         if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
-            log_msg("Searching %s: %s (0x%x)", lang_name, curr_glyph->sound, curr_glyph->pattern);
+            log_msg("Found letter %s (0x%x) in %s language", curr_glyph->sound, curr_glyph->pattern, lang_name);
             return curr_glyph;
         }
     }

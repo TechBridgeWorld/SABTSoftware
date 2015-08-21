@@ -74,6 +74,7 @@ cell_t x_cell = DOT_1 | DOT_3 | DOT_4 | DOT_6;
 cell_t y_cell = DOT_1 | DOT_3 | DOT_4 | DOT_5 | DOT_6;
 cell_t z_cell = DOT_1 | DOT_3 | DOT_5 | DOT_6;
 cell_t cap_cell = DOT_6;
+cell_t no_cell = NO_DOTS;
 
 #define ENGL_A {&a_cell, 1, "a", ENGLISH}
 #define ENGL_B {&b_cell, 1, "b", ENGLISH}
