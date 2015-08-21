@@ -1,3 +1,5 @@
+THIS IS OUT OF DATE. MERGE WITH SUSAN'S UPDATES + UPDATE WITH MARJORIE'S INFO.
+
 # Modes
 
 The SABT offers modularity of functionality in the form of modes, that can be toggled on or off without recompiling the code. All modes developed for the SABT get programmed on the flash memory, but only select modes enabled via MODES.DAT on the SD card are made available to the end user.
