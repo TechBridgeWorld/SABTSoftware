@@ -6,7 +6,7 @@
  * @author Nick LaGrow (nlagrow)
  */
 
-#include "Globals.h"
+#include "globals.h"
 
 bool usart_ui_header_received, usart_ui_length_received;
 unsigned char usart_ui_prefix[3];
@@ -18,17 +18,16 @@ unsigned char usart_ui_received_payload_len;
  * @brief Initializes the baud communication over USART.
  * @return Void
  */
-void init_usart_keypad(void)
-{
-  UCSR1B = 0x00; //disable while setting baud rate
-  UCSR1A = 0x00;
-  UCSR1C = 0x06;
-  UBRR1L = 0x19; //set baud rate lo
-  UBRR1H = 0x00; //set baud rate hi 19,200 baud with 8MHz clock
-  UCSR1B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
-  usart_ui_length_received = false;
-  usart_ui_header_received = false;
-  usart_ui_message_ready = false;
+void init_usart_keypad(void) {
+    UCSR1B = 0x00; //disable while setting baud rate
+    UCSR1A = 0x00;
+    UCSR1C = 0x06;
+    UBRR1L = 0x19; //set baud rate lo
+    UBRR1H = 0x00; //set baud rate hi 19,200 baud with 8MHz clock
+    UCSR1B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
+    usart_ui_length_received = false;
+    usart_ui_header_received = false;
+    usart_ui_message_ready = false;
 }
 
 
@@ -41,61 +40,53 @@ void init_usart_keypad(void)
  * @ref  tech_report.pdf
  * @return Void
  */
-void usart_keypad_receive_action(void)
-{
+void usart_keypad_receive_action(void) {
 
-  usart_keypad_data_ready = false;
+    usart_keypad_data_ready = false;
 
-  // If no header has been found, build it
-  if(!usart_ui_header_received)
-  {
-    usart_ui_prefix[2] = usart_keypad_received_data;
-    usart_ui_prefix[0] = usart_ui_prefix[1];
-    usart_ui_prefix[1] = usart_ui_prefix[2];
+    // If no header has been found, build it
+    if (!usart_ui_header_received) {
+        usart_ui_prefix[2] = usart_keypad_received_data;
+        usart_ui_prefix[0] = usart_ui_prefix[1];
+        usart_ui_prefix[1] = usart_ui_prefix[2];
 
-    if((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I'))
-    {
-      usart_ui_header_received = true;
-      usart_ui_received_packet[0] = usart_ui_prefix[0];
-      usart_ui_received_packet[1] = usart_ui_prefix[1];
-      usart_ui_receive_msgcnt = 2;
-      usart_ui_length_received = false;
+        if ((usart_ui_prefix[0] == 'U') && (usart_ui_prefix[1] == 'I')) {
+            usart_ui_header_received = true;
+            usart_ui_received_packet[0] = usart_ui_prefix[0];
+            usart_ui_received_packet[1] = usart_ui_prefix[1];
+            usart_ui_receive_msgcnt = 2;
+            usart_ui_length_received = false;
+        }
     }
-  }
-  // Get the length of the payload
-  else if(!usart_ui_length_received)
-  {
-    if(usart_ui_receive_msgcnt == 2)
-    {
-      usart_ui_received_payload_len = usart_keypad_received_data;
-      usart_ui_received_packet[2] = usart_keypad_received_data;
-      usart_ui_length_received = true;
-      usart_ui_receive_msgcnt++;
+    // Get the length of the payload
+    else if (!usart_ui_length_received) {
+        if (usart_ui_receive_msgcnt == 2) {
+            usart_ui_received_payload_len = usart_keypad_received_data;
+            usart_ui_received_packet[2] = usart_keypad_received_data;
+            usart_ui_length_received = true;
+            usart_ui_receive_msgcnt++;
+        }
+        else {
+            usart_ui_header_received = false;
+        }
     }
-    else
-    {
-      usart_ui_header_received = false;
-    }
-  }
-  // Build the actual message
-  else
-  {
-    usart_ui_received_packet[usart_ui_receive_msgcnt++] = usart_keypad_received_data;
+    // Build the actual message
+    else {
+        usart_ui_received_packet[usart_ui_receive_msgcnt++] = usart_keypad_received_data;
 
-    if (usart_ui_receive_msgcnt >= 19) {
-      usart_ui_message_ready = false;
-      usart_ui_header_received = false;
-      usart_ui_length_received = false;
-    }
+        if (usart_ui_receive_msgcnt >= 19) {
+            usart_ui_message_ready = false;
+            usart_ui_header_received = false;
+            usart_ui_length_received = false;
+        }
 
-    // Full message has been received
-    if(usart_ui_receive_msgcnt == usart_ui_received_payload_len) 
-    {
-      usart_ui_message_ready = true;
-      usart_ui_header_received = false;
-      usart_ui_length_received = false;
+        // Full message has been received
+        if (usart_ui_receive_msgcnt == usart_ui_received_payload_len) {
+            usart_ui_message_ready = true;
+            usart_ui_header_received = false;
+            usart_ui_length_received = false;
+        }
     }
-  }
 }
 
 /**
@@ -103,10 +94,9 @@ void usart_keypad_receive_action(void)
  * @param data - unsigned char, byte to transmit to UI
  * @return Void
  */
-void usart_transmit_byte_to_keypad(unsigned char data)
-{
-  while (!(UCSR1A & (1<<UDRE1)));   // Wait for empty transmit buffer
-  UDR1 = data;                      // Start transmition
+void usart_transmit_byte_to_keypad(unsigned char data) {
+    while (!(UCSR1A & (1<<UDRE1)));   // Wait for empty transmit buffer
+    UDR1 = data;                      // Start transmition
 }
 
 /**
@@ -114,10 +104,9 @@ void usart_transmit_byte_to_keypad(unsigned char data)
  * @param string - char*, String to transmit to UI
  * @return Void
  */
-void usart_transmit_string_to_keypad_from_flash(char* string)
-{
-  while (pgm_read_byte(&(*string)))
-    usart_transmit_byte_to_keypad(pgm_read_byte(&(*string++)));
+void usart_transmit_string_to_keypad_from_flash(char* string) {
+    while (pgm_read_byte(&(*string)))
+        usart_transmit_byte_to_keypad(pgm_read_byte(&(*string++)));
 }
 
 /**
@@ -125,8 +114,7 @@ void usart_transmit_string_to_keypad_from_flash(char* string)
  * @param string - char*, String to transmit to UI
  * @return Void
  */
-void usart_transmit_string_to_keypad(unsigned char* string)
-{
-  while (*string)
-    usart_transmit_byte_to_keypad(*string++);
+void usart_transmit_string_to_keypad(unsigned char* string) {
+    while (*string)
+        usart_transmit_byte_to_keypad(*string++);
 }

@@ -6,7 +6,7 @@
  * @author Kory Stiger (kstiger)
  */
 
-#include "Globals.h"
+#include "globals.h"
 #include "io.h"
 
 bool usart_pc_header_received, usart_pc_length_received;
@@ -19,12 +19,12 @@ unsigned char usart_pc_receive_msgcnt;
  * @return Void
  */
 void init_usart_pc(void) {
-  UCSR0B = 0x00; //disable while setting baud rate
-  UCSR0A = 0x00;
-  UCSR0C = 0x06;
-  UBRR0L = 0x19;
-  UBRR0H = 0x00; //set baud rate to 19,200 with 8MHz clock
-  UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
+    UCSR0B = 0x00; //disable while setting baud rate
+    UCSR0A = 0x00;
+    UCSR0C = 0x06;
+    UBRR0L = 0x19;
+    UBRR0H = 0x00; //set baud rate to 19,200 with 8MHz clock
+    UCSR0B = 0x98; //RXCIE1=1, RXEN1=1, TXEN1=1
 }
 
 /**
@@ -34,56 +34,50 @@ void init_usart_pc(void) {
  * @ref  tech_report.pdf
  * @return always 0?
  */
-unsigned char usart_pc_receive_action(void)
-{
-  usart_pc_data_ready = false;
+unsigned char usart_pc_receive_action(void) {
+    usart_pc_data_ready = false;
 
-  message_count++;
+    message_count++;
 
-  // Received an entire line; process it
-  if(usart_pc_received_data == CARR_RETURN)
-  {
-    message_count = 0;
-    if(!valid_message)
-    {
-      valid_message = true;
-      log_msg("SABT - IMPROPER HEADER TYPE, MUST USE PC!\r\n");
+    // Received an entire line; process it
+    if (usart_pc_received_data == CARR_RETURN) {
+        message_count = 0;
+        if (!valid_message) {
+            valid_message = true;
+            log_msg("SABT - IMPROPER HEADER TYPE, MUST USE PC!");
+        }
     }
-  }
 
-  // if header not yet received, build it
-  if(!usart_pc_header_received)
-  {
-    usart_pc_prefix[2] = usart_pc_received_data;
-    usart_pc_prefix[0] = usart_pc_prefix[1];
-    usart_pc_prefix[1] = usart_pc_prefix[2];
+    // if header not yet received, build it
+    if (!usart_pc_header_received)
+    {
+        usart_pc_prefix[2] = usart_pc_received_data;
+        usart_pc_prefix[0] = usart_pc_prefix[1];
+        usart_pc_prefix[1] = usart_pc_prefix[2];
 
-    if((usart_pc_prefix[0]=='P') && (usart_pc_prefix[1]=='C') && (message_count == 2))
-    {
-      usart_pc_header_received = true;
-      usart_pc_received_packet[0] = usart_pc_prefix[0];
-      usart_pc_received_packet[1] = usart_pc_prefix[1];
-      usart_pc_receive_msgcnt = 2;
+        if ((usart_pc_prefix[0]=='P') && (usart_pc_prefix[1]=='C') && (message_count == 2))
+        {
+            usart_pc_header_received = true;
+            usart_pc_received_packet[0] = usart_pc_prefix[0];
+            usart_pc_received_packet[1] = usart_pc_prefix[1];
+            usart_pc_receive_msgcnt = 2;
+        }
+        else if (((usart_pc_prefix[0] != 'P') || (usart_pc_prefix[1] != 'C')) &&
+                (message_count == 2)) {
+            valid_message = false;
+        }
     }
-    else if(((usart_pc_prefix[0] != 'P') || (usart_pc_prefix[1] != 'C')) &&
-        (message_count == 2))
-    {
-      valid_message = false;
+    else {
+        // If carraige return found --> end of the command
+        if (usart_pc_received_data == CARR_RETURN) {
+            usart_received_payload_len = usart_pc_receive_msgcnt;
+            usart_pc_message_ready = true;
+            usart_pc_header_received = false;
+        }
+        usart_pc_received_packet[usart_pc_receive_msgcnt++] = usart_pc_received_data;
     }
-  }
-  else
-  {
-    // If carraige return found --> end of the command
-    if(usart_pc_received_data == CARR_RETURN)
-    {
-      usart_received_payload_len = usart_pc_receive_msgcnt;
-      usart_pc_message_ready = true;
-      usart_pc_header_received = false;
-    }
-    usart_pc_received_packet[usart_pc_receive_msgcnt++] = usart_pc_received_data;
-  }
 
-  return 0;
+    return 0;
 }
 
 /**
@@ -91,10 +85,9 @@ unsigned char usart_pc_receive_action(void)
  * @param data contains the byte that needs to be sent
  * return Void
  */
-void usart_transmit_byte_to_pc(unsigned char data)
-{
-  while (!(UCSR0A & (1<<UDRE0)));   // Loop until the data register is empty
-  UDR0 = data;                      // Transmit one byte of data
+void usart_transmit_byte_to_pc(unsigned char data) {
+    while (!(UCSR0A & (1<<UDRE0)));   // Loop until the data register is empty
+    UDR0 = data;                      // Transmit one byte of data
 }
 
 /** 
@@ -102,10 +95,9 @@ void usart_transmit_byte_to_pc(unsigned char data)
  * @param str_data   String     Contains message to be sent to PC
  * @return Void
  */
-void usart_transmit_string_to_pc_from_flash(const char* str_data)
-{
-  while (pgm_read_byte(&(*str_data)))
-    usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));
+void usart_transmit_string_to_pc_from_flash(const char* str_data) {
+    while (pgm_read_byte(&(*str_data)))
+        usart_transmit_byte_to_pc(pgm_read_byte(&(*str_data++)));
 }
 
 /**
@@ -114,9 +106,8 @@ void usart_transmit_string_to_pc_from_flash(const char* str_data)
  * @return Void
  * TODO: does this method send null terminator?
  */
-void usart_transmit_string_to_pc(unsigned char* str_data)
-{
-  while (*str_data)
-    usart_transmit_byte_to_pc(*str_data++);
-  usart_transmit_byte_to_pc(0);
+void usart_transmit_string_to_pc(unsigned char* str_data) {
+    while (*str_data)
+        usart_transmit_byte_to_pc(*str_data++);
+    usart_transmit_byte_to_pc(0);
 }

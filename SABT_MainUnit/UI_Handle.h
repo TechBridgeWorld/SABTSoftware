@@ -21,10 +21,6 @@
 #define UI_CMD_VOLU 5
 #define UI_CMD_VOLD 6
 
-bool ui_is_mode_selected;
-char ui_current_mode_number;
-int ui_current_mode_index;
-
 //Dealing with the user data
 void ui_check_modes(void);
 uint16_t ui_calculate_crc(unsigned char* message);

@@ -1,0 +1,79 @@
+TO DO LIST - UPDATED BY MARJORIE CARLSON, 21 AUGUST 2015.
+
+TINY TASKS
+* Fix vocab mp3 playback. (Currently, the word "valley" will try to play "v_valle0.mp3" instead of "v_valley.mp3".)
+* Standardize what users are told when it tells them which letter is next. "Please press" or "please spell"?
+* Figure out why the everyday noises game ends up calling search_script twice on each letter?
+* Remove the weird "next cell" stuff from the control keys in hangman.
+* Double check that "speak_word" is still working without a string length.
+* Standardize choose_sound_source in mode_sound_game.
+* Combine io_init with my reset.
+
+MEDIUM TASKS
+* Comment & document better.
+* Update the "adding modes" text file.
+* Standardize "choose random element" functions across modes.
+* "Randomizing" functions always put things in the same order, suggesting that they are not being seeded properly. (For example, every time you start dot mode, it will play 264351 in the first round, 451362 in the second round...)
+* Merge the three different types of dictionaries.
+* Free words/dictionaries -- currently mode 15 has a memory leak. :-(
+* Convert all modes to new data structure; eliminate "glyph" and "script."
+* Write a more general "take in and validate input" function that modes can call.
+* Clean up unnecessary #includes.
+* Use function pointers to register modes' reset and main functions, instead of the switch statement from hell.
+
+BIG TASKS
+* When quit to main menu, keeps playing queued mp3s. Should stop current mp3, clear queue.
+* WRITE TESTING SUITE OMG
+* Implement a better algorithm for teaching letters.
+* The 2013 team suggested user logging so the device can personalize levels to the student.
+
+TINY TASKS/QUESTIONS FOR LATER
+* Record d_mdmed.mp3
+* Shouldn't "learn numbers" mode include the number symbol?
+* Consider adding "you STILL have x mistakes remaining" for subsequent correct entries. Otherwise it kind of sounds like you've made another mistake.
+* Is there a good reason for the mode names to be numbers?
+* Can "press dots 1" become "press dot 1"?
+* Should free play allow punctuation, numbers?
+
+
+
+
+TO DO LIST FROM BEFORE -- BIG TASKS
+
+One major bug on the SABT has been random system crashes on button presses. This was usually being dealt with by restarting the device. Preliminary investigation suggests that the bug originates from the USART communication between the primary interface board and the MCU. A temporary fix has been implemented in the form of CRC checks on packets received checked against a checksum sent as the last 2 bytes of the packet and also buffer overflow protection for the packet buffer. A permanent fix would involve implementing byte level parity checks and a two-way communication protocol to ensure dependable packet delivery. Currently, the end user may need to press a key more than once if a CRC fails since there is no way for the interface board to ascertain if a packet is to be resent.
+
+Runtime mode file parsing is currently broken. Ideally, the SABT should read MODES.DAT from the SD card and parse its contents to enable modes. This allows modes to be enabled and disabled without reprogramming the device. However, for some reason, it was not able to handle more than 7 modes. A rewrite of the relevant functions also did not help. So, currently, dynamic mode configuration is disabled in favour of a static configuration that is hard-coded into ui_handle.c’s check_modes() function.
+
+In digitalIO.c, in the Primary Board's code base, we use a function called delay().  The reason for this is that we are sending two things in a row in this function. If the delay() function is not used, both transfers will not work.  Look to fix the use of this.
+
+At the end of the dictionary file, you must have a line of ++++++++, so that the dictionary parser knows where to stop.
+
+Volume sound files are not of uniform volume. Some are louder and some are softer then others. Look to standardize these sound files or even change them based off of User testing. 
+
+Dictionary is currently read in all at once before any sound files are played. Each time through the loop a number of dictionary nodes are read in.  This number is stored in the value CLUSTERS_PER_RUN which is set to 60 currently.  The value is set in the header file FAT32.h.
+
+
+FUTURE DEVELOPMENT WRITEUP FROM BEFORE
+
+Older modes (MD1,3,4,5,11) need to be standardized. They don't use the standard IO library, audio libraries or script libraries. There's loads of code redundancy in those modes.
+
+There's scaffolding in place for word and sentence entry in the IO library. Don't know if it makes sense to develop those for the primary interface board with only one cell. Might make more sense to develop those for the intermediate and advanced boards.
+
+It makes sense to make the animal game into a template like MD2 or something so that we can add general libraries of words to teach in a similar way. Might even be a SD card configurable option.
+
+Look to create a blank game, that responds to values in a file on the SD card. The idea is that we cannot infinitely add new games to the main board, due to lack of memory.  What we need instead is a blank FSM that can read controls from an SD card file to move through states, store values, and play sound files.  Would allow for app development community. 
+
+User logging is a feature that the needs assessment team on iSTEP 2013 strongly advocated for. This would consist of two possible major components: a way for users to log in with a Braille code and a logging module that logs modes used, time spent on modes and progression through modes over time. For higher level modes, it is useful to log in-mode performance data as well.
+IO standardisation is not complete. Hangman and 2 player hangman do not adhere to any of the other modes yet. re: IO library re: README.io
+
+The Intermediate and Advanced user interface boards need to be developed in their entirety.
+
+Users have expressed interest in two different voices - one for input and one for output. This would involve recording one voice (preferably masculine) for all of the prompts and instructions given by the device, and a second voice (ideally feminine) to echo user input. For example, The instructions for Letter Practice and the letter prompts should be in the first voice, while the voice echoing the dot input should be the second voice.
+
+Users have expressed interest in a mode that serves as a reference for how to write each letter. In other words, this mode would be Letter Practice without any user input - it would just read out how to form each letter. This could potentially be done by using the mode select buttons to scroll between letters instead of reading out eery letter.
+
+Sentence writing practice - This could be a feature especially for the Intermediate and Advanced boards which have slate rows.
+
+One player hangman could be set up to use a random word from the entire dictionary as opposed to the fixed current list we provide.
+
+Contractions mode needs further development, left with a skeleton implementation not covering all contraction patterns (The rule sheet and documentation would give more detail on what to be implemented)

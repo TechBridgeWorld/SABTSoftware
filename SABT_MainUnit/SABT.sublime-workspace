@@ -1,0 +1,722 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"au",
+				"AU"
+			],
+			[
+				"DOT",
+				"DOT_6"
+			],
+			[
+				"d",
+				"do	Do While Loop"
+			],
+			[
+				"curr",
+				"curr_cell"
+			],
+			[
+				"mode_",
+				"mode_number"
+			],
+			[
+				"word",
+				"word_num_inset"
+			],
+			[
+				"ENG_Y",
+				"ENG_Y"
+			],
+			[
+				"MAX",
+				"MAX_INCORRECT_GUESS"
+			],
+			[
+				"mode",
+				"MODE_FILESET"
+			],
+			[
+				"english",
+				"english_alphabet"
+			],
+			[
+				"md15_p1",
+				"md15_p1_total_mistakes"
+			],
+			[
+				"play",
+				"player1_is_current"
+			],
+			[
+				"MD15_STATE_G",
+				"MD15_STATE_GAMEOVER"
+			],
+			[
+				"M",
+				"MODE_FILESET"
+			],
+			[
+				"md15",
+				"md15_curr_mistakes"
+			],
+			[
+				"player",
+				"player1_is_current"
+			],
+			[
+				"random_",
+				"randomized_index"
+			],
+			[
+				"md14_mis",
+				"md14_total_mistakes"
+			],
+			[
+				"incorrec",
+				"incorrect_answer"
+			],
+			[
+				"correct",
+				"correct_answer"
+			],
+			[
+				"md14_",
+				"md14_words_spelled"
+			],
+			[
+				"lang",
+				"lang_enum"
+			],
+			[
+				"get",
+				"get_lang"
+			],
+			[
+				"array",
+				"array_index"
+			],
+			[
+				"num_",
+				"num_cells"
+			],
+			[
+				"num",
+				"num_letters"
+			],
+			[
+				"a",
+				"a"
+			],
+			[
+				"w",
+				"w"
+			],
+			[
+				"X",
+				"X"
+			],
+			[
+				"B",
+				"B"
+			],
+			[
+				"c",
+				"c"
+			],
+			[
+				"G",
+				"G"
+			],
+			[
+				"STATE",
+				"STATE_GENQUES"
+			],
+			[
+				"MP3_N",
+				"MP3_NEW_GAME"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/debug.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/Makefile",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_4.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_hindi.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_4.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_14.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_english.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/macros.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/globals.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/datastructures.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/datastructures.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/io.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/io.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/SABT_MainUnit.lss",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/SABT_MainUnit.map",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/fat32.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/vs1053.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_kannada.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_hindi.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_english.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/audio.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/audio.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_15.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_10.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_common.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/script_common.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_letter_game.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_1.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_13.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/foo.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mp3s.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_sound_game.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_6.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/common.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/common.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_5.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_2.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_12.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_9.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_11.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_3.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/sound_game_mode.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_3.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_11.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_3.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/sound_game_mode.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/sound_game_mode.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/learn_letter_mode.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/makedep.mk",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/Makefile",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_12.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_2.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_7.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/mode_8.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/learn_letter_mode.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/learn_letter_mode.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_7.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_8.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/sabt.sublime-workspace",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/SABT_MainUnit.cproj",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_8.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_9.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/ui_handle.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_12.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_13.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_1.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/letter_globals.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_10.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/modes.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md15.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md1.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md10.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md1.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md10.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md15.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md2.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md2.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md3.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md3.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/Globals.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md4.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md4.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md5.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md5.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md6.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md6.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md7.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md7.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md8.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md8.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/sd_routines.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md9.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md13.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md9.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/UI_Handle.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD5.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD3.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD14.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD11.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD10.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md14.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md14.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md12.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md13.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md12.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md11.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/md11.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD12.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/usart_pc.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD1.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/SABT.sublime-project",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/MD4.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/MD5.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_11.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/default/MD13.d",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/MD15.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/MD1.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/UI_Handle.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_14.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_15.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_2.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_5.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_6.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/mode_7.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/sabt_mainunit.cproj",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/dictionary.h",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/dictionary.c",
+		"/Users/marjorie/SABTSoftware/SABT_MainUnit/MD15.h"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"",
+			"script_hindi.c",
+			"untitled",
+			"",
+			"script_english.c",
+			"*.h",
+			"*.c",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"foo.c",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"learn_letter_mode.c",
+			"sound_game_mode.c",
+			"",
+			"mode_10.c",
+			"",
+			"Makefile",
+			"",
+			"*.h",
+			"*.c",
+			"*.h",
+			"*.c",
+			"*.h",
+			"*.c",
+			"*.h",
+			"*.c",
+			"*.h",
+			"*.c",
+			"*.sublime-workspace",
+			"*.cproj",
+			"*.h",
+			"*.c",
+			"*.c *.h",
+			"-*.d -*.ss -*.mk",
+			"-*.d",
+			"-*.o -*.d",
+			"",
+			"modes.h",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"<open folders>",
+			"MD4.c",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"",
+			"MD15.c",
+			"",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"",
+			"USART_PC.c,/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"USART_PC.c",
+			"",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"",
+			"SABT_MainUnit.c",
+			"",
+			"/Users/marjorie/SABTSoftware/SABT_MainUnit",
+			"",
+			"MD5_STATE_MENU",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"get_eng_letter",
+			"get_eng",
+			"get_eng_letter_by_char",
+			"uint8_t",
+			"ENGLISH",
+			"ENGL_",
+			"shuffle",
+			"ENGL",
+			"extern cell_t",
+			"_cell 1",
+			"NUM_ENG",
+			"cap",
+			"ENG_",
+			"cell_t",
+			"shuffle",
+			"eng_capital",
+			"english_cap",
+			"CAP",
+			"eng_cap",
+			"ENGLISH};",
+			"ENG_{",
+			"letter_t eng_. = ",
+			"._cell",
+			"{1}._cell",
+			".{1}_cell",
+			"._cell",
+			"&.,",
+			"_cell\"",
+			"_cell",
+			"cell_t .",
+			";;",
+			", 1, \"\", ENGLISH}",
+			"&(2), 1, \"(1)\", ENGLISH",
+			"&(2), 1, \"(1\"), ENGLISH",
+			"\".\", ENGLISH, &., 1",
+			"\")(.)\", ENGLISH< &(.), 1",
+			"\")(\\c)\", ENGLISH< &(\\c), 1",
+			"\")(\\l)\", ENGLISH< &(\\l), 1",
+			"\")(\\w)\", ENGLISH< &(\\w), 1",
+			"int",
+			"->order",
+			"order",
+			"shuffle",
+			"shuffleso",
+			"shuffle",
+			"alphabet",
+			"unshuffle",
+			"shuffle",
+			"word->length",
+			"dict",
+			"14_dict",
+			"lang_enum",
+			"play_pattern",
+			"play_dot",
+			"char",
+			"get_eng",
+			"get_next_cell_in_word",
+			"curr_cell",
+			"cell_t",
+			"}",
+			"{",
+			"pattern",
+			"user_cell",
+			"pattern",
+			"get_next_cell",
+			"equals",
+			"pattern",
+			"cell.",
+			"cell",
+			"cell_t",
+			"play_mp3",
+			"set_globe",
+			"play_mp3",
+			"play_lang_audio",
+			"prefix",
+			"play_mp3(lang_prefix,",
+			"play_mp3(lang_prefix, ",
+			"prefix",
+			"play_sound",
+			"play_mp3",
+			"lang_prefix",
+			"play_mp3",
+			"play_mode_audio",
+			"mode_prefix",
+			"audio",
+			"play_mp3",
+			"play_direction",
+			"play_mp3",
+			"mp3",
+			"mode",
+			"log_msg",
+			"language",
+			"langugage",
+			"get_language_prefix",
+			"Searching",
+			"mode_sound_",
+			"letter_game",
+			"sound_game",
+			"learn_letter_mode",
+			"sound_game_mode",
+			"reset",
+			"shuffle",
+			"i+1",
+			"i + 1",
+			"i+ + 1",
+			"Language:",
+			"main(",
+			"main",
+			"script",
+			"this_script",
+			", mode_name);",
+			"[%s] ",
+			"SCRIPT_ADDRESS",
+			"this_script",
+			"[%s] ",
+			", mode_prefix);",
+			"mode_prefix",
+			"lang_prefix",
+			"input_dot_to_current",
+			"input_dot",
+			"lang_prefix",
+			"get_lang_prefix()",
+			"get_current_mode",
+			"reset_globals",
+			"FIND_DOT",
+			"last_dot",
+			"play_dot",
+			"a_mode"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"get_eng_letter_by_name",
+			"int",
+			"HINDI",
+			"HIND_",
+			"ENG",
+			"cell_t",
+			"_cell, 1",
+			"ENGL_",
+			"extern cell_t",
+			"ENGLISH}",
+			"ENG_ {",
+			"#define ENG_${1}",
+			"$_CELL",
+			"${1}_CELL",
+			"$1_CELL",
+			"$+_CELL",
+			"$._CELL",
+			"$1_CELL",
+			"$&_CELL",
+			"&$1_cell",
+			"\"",
+			"cell_t $1_cell",
+			"",
+			"cell_t $1_cell",
+			";",
+			"&, 1, \"\", ENGLISH};",
+			", 1, \"\", ENGLISH",
+			"&\\(2), 1, \"\\(1)\", ENGLISH",
+			"&\\2, 1, \"\\1\", ENGLISH",
+			"&\\1, 1, \"\\1\", ENGLISH",
+			"language_of_origin",
+			"play_cell",
+			"",
+			"play_lang_audio(",
+			"mode_letter_game",
+			"mode_sound_game",
+			");",
+			"",
+			"this_script",
+			"",
+			");",
+			"lang_prefix",
+			"is_a_mode_executing",
+			"lang_prefix",
+			"mode_language",
+			"index_of_current_mode",
+			"current_mode",
+			"CHOOSE_SUBMODE",
+			"INIT",
+			"CHECK_ANSWER",
+			"CELL_2",
+			"CELL_1",
+			"GAME_OVER",
+			"GET_INPUT",
+			"PROMPT",
+			"GET_INPUT",
+			"PROMPT",
+			"CHOOSE_LEVEL",
+			"INITIAL",
+			"mode_",
+			"mode_9",
+			"mode_8",
+			"mode_7",
+			"mode_6",
+			"mode_5",
+			"mode_4",
+			"mode_3",
+			"mode_2",
+			"mode_1",
+			"mode_",
+			"mode_15",
+			"mode_14",
+			"mode_13",
+			"mode_11",
+			"mode_12",
+			"mode_11",
+			"mode_10",
+			"PLAYER",
+			"mode_",
+			"mode_(.*)\\.",
+			"mode_",
+			"is_a_mode_executing",
+			"index_of_current_mode",
+			"current_mode",
+			"PLAYER",
+			"md4_dict",
+			"PLAYER",
+			"is_a_mode_executing",
+			"index_of_current_mode",
+			"current_mode",
+			"mode_language",
+			"MP3_CHOOSE_LEVEL",
+			"MP3_EASY",
+			"MP3_MEDIUM",
+			"MP3_HARD",
+			"EASY_QUES",
+			"MP3_ENGLISH",
+			"mp3_ENGLISH",
+			"PLAYLIST",
+			"MAX_WORD_LENGTH",
+			"current_state",
+			"INITIALIZES",
+			"difficulty_medium",
+			"difficulty_hard",
+			"difficulty_easy",
+			"difficulty_null",
+			"submode_multiply",
+			"submode_subtract",
+			"submode_add",
+			"submode_play",
+			"submode_learn",
+			"submode_null",
+			"state_switch_users",
+			"state_game_over",
+			"state_reprompt",
+			"state_check_answer",
+			"state_process_answer",
+			"state_get_input",
+			"state_prompt",
+			"state_generate_question",
+			"state_request_question",
+			"state_choose_level",
+			"state_initial",
+			"NEWLINE",
+			"DOT_",
+			"md15_dict",
+			"cell",
+			"last_dot"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"debug.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

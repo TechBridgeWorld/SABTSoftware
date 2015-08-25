@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -15,7 +15,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <avrtool/>
+    <avrtool />
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -80,28 +80,31 @@
     <Compile Include="dictionary.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="learn_letter_mode.c">
+    <Compile Include="mode_letter_game.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="learn_letter_mode.h">
+    <Compile Include="mode_letter_game.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD13.c">
+    <Compile Include="mode_13.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD13.h">
+    <Compile Include="mode_13.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD14.c">
+    <Compile Include="mode_14.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD14.h">
+    <Compile Include="mode_14.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD15.c">
+    <Compile Include="mode_15.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD15.h">
+    <Compile Include="mode_15.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mp3s.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="script_digits.c">
@@ -119,10 +122,10 @@
     <Compile Include="script_kannada.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sound_game_mode.c">
+    <Compile Include="mode_sound_game.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sound_game_mode.h">
+    <Compile Include="mode_sound_game.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="USART_Keypad.h">
@@ -155,16 +158,16 @@
     <Compile Include="Globals.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD1.h">
+    <Compile Include="mode_1.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD2.h">
+    <Compile Include="mode_2.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Modes.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD3.h">
+    <Compile Include="mode_3.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="PC_Handle.h">
@@ -173,13 +176,13 @@
     <Compile Include="letter_globals.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD4.h">
+    <Compile Include="mode_4.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD5.h">
+    <Compile Include="mode_5.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD6.h">
+    <Compile Include="mode_6.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="audio.h">
@@ -188,7 +191,7 @@
     <Compile Include="script_common.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD7.h">
+    <Compile Include="mode_7.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="common.h">
@@ -200,10 +203,10 @@
     <Compile Include="script_english.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD8.h">
+    <Compile Include="mode_8.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD9.h">
+    <Compile Include="mode_9.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="io.h">
@@ -212,13 +215,13 @@
     <Compile Include="script_kannada.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD10.h">
+    <Compile Include="mode_10.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD12.h">
+    <Compile Include="mode_12.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD11.h">
+    <Compile Include="mode_11.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="script_digits.h">
@@ -267,17 +270,17 @@
       <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
       </CustomCompilationSetting>
     </Compile>
-    <Compile Include="MD1.c">
+    <Compile Include="mode_1.c">
       <SubType>compile</SubType>
       <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
       </CustomCompilationSetting>
     </Compile>
-    <Compile Include="MD2.c">
+    <Compile Include="mode_2.c">
       <SubType>compile</SubType>
       <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
       </CustomCompilationSetting>
     </Compile>
-    <Compile Include="MD3.c">
+    <Compile Include="mode_3.c">
       <SubType>compile</SubType>
       <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
       </CustomCompilationSetting>
@@ -287,13 +290,13 @@
       <CustomCompilationSetting Condition="'$(Configuration)' == 'default'">
       </CustomCompilationSetting>
     </Compile>
-    <Compile Include="MD4.c">
+    <Compile Include="mode_4.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD5.c">
+    <Compile Include="mode_5.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD6.c">
+    <Compile Include="mode_6.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="audio.c">
@@ -302,28 +305,28 @@
     <Compile Include="script_common.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD7.c">
+    <Compile Include="mode_7.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="common.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD8.c">
+    <Compile Include="mode_8.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD9.c">
+    <Compile Include="mode_9.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="io.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD10.c">
+    <Compile Include="mode_10.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD12.c">
+    <Compile Include="mode_12.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MD11.c">
+    <Compile Include="mode_11.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="letter_globals.c">

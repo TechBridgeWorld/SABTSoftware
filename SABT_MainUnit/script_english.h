@@ -8,10 +8,11 @@
 #define _SCRIPT_ENGLISH_H_
 
 #include "datastructures.h"
+#include "globals.h"
 #include "script_common.h"
 #include "string.h"
 
-#define SCRIPT_ENGLISH_FILESET "ENG_"
+#define SCRIPT_ENGLISH_FILESET "e_"
 #define SCRIPT_ENGLISH_LENGTH 26 // 26 glyphs
 #define SCRIPT_ENGLISH_NUM_LETTERS 26 // 26 letters
 
@@ -44,35 +45,12 @@
 #define ENG_Y 0b111101
 #define ENG_Z 0b110101
 
-// new stuff
-extern letter_t eng_a;
-extern letter_t eng_b;
-extern letter_t eng_c;
-extern letter_t eng_d;
-extern letter_t eng_e;
-extern letter_t eng_f;
-extern letter_t eng_g;
-extern letter_t eng_h;
-extern letter_t eng_i;
-extern letter_t eng_j;
-extern letter_t eng_k;
-extern letter_t eng_l;
-extern letter_t eng_m;
-extern letter_t eng_n;
-extern letter_t eng_o;
-extern letter_t eng_p;
-extern letter_t eng_q;
-extern letter_t eng_r;
-extern letter_t eng_s;
-extern letter_t eng_t;
-extern letter_t eng_u;
-extern letter_t eng_v;
-extern letter_t eng_w;
-extern letter_t eng_x;
-extern letter_t eng_y;
-extern letter_t eng_z;
-extern letter_t eng_capital;
+cell_t  a_cell, b_cell, c_cell, d_cell, e_cell, f_cell, g_cell,
+h_cell, i_cell, j_cell, k_cell, l_cell, m_cell, n_cell, o_cell,
+p_cell, q_cell, r_cell, s_cell, t_cell, u_cell, v_cell, w_cell,
+x_cell, y_cell, z_cell, cap_cell, no_cell;
 
+extern letter_t eng_cap;
 extern script_t script_english;
 extern alphabet_t english_alphabet;
 extern alphabet_t english_plus_cap;

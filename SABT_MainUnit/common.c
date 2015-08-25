@@ -9,21 +9,51 @@
 #include "audio.h"
 #include "common.h"
 #include "script_common.h"
+#include "script_hindi.h"
+#include "script_kannada.h"
+#include "script_english.h"
+#include "script_digits.h"
 #include "datastructures.h"
-#include "MD15.h"
+#include "mode_15.h"
 
+letter_t blank_letter = { &no_cell, 0, "NULL", LANGUAGE_NULL };
 
-/**
-* @brief Sets script globals for a new language
-* @param script_t* - Pointer to new script
-* @param char* - Pointer to mode fileset string
-* @return void
-*/
-void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mode_fileset) {
-	lang_script = new_script;
-	lang_fileset = new_lang_fileset;
-	mode_fileset = new_mode_fileset;
-	new_script->index = -1;
+language_t set_language() {
+  if (current_mode == 7) {
+    mode_language = HINDI;
+    lang_name = "HINDI";
+    this_script = &script_hindi;
+  }
+  else if (current_mode == 12) {
+    mode_language = KANNADA;
+    lang_name = "KANNADA";
+    this_script = &script_kannada;
+  }
+  else {
+    mode_language = ENGLISH;
+    lang_name = "ENGLISH";
+    if (current_mode == 8)
+        this_script = &script_digits;
+    else
+        this_script = &script_english;
+  }
+  this_script->index = -1;
+  log_msg("Language: %s", lang_name);
+  return mode_language;
+}
+
+ void reset_globals(){
+    set_language();
+    last_dot = NO_DOTS;
+    submode = SUBMODE_NULL;
+    level = DIFFICULTY_NULL;
+    cell = cell_pattern = cell_control = 0;
+    this_letter = blank_letter;
+    current_state = INITIAL;
+}
+
+void reset_stats(){
+    score = mistakes = curr_mistakes = 0;
 }
 
 /**
@@ -32,7 +62,11 @@ void set_mode_globals(script_t* new_script, char* new_lang_fileset, char* new_mo
  * @return int - Pseudo-random value
  */
 int timer_rand(void) {
-	return TCNT1 * 53;
+    #ifdef DEBUGMODE
+        return rand();
+    #else
+        return TCNT1 * 53;
+    #endif
 }
 
 /**
@@ -42,7 +76,7 @@ int timer_rand(void) {
  * @return char - New bit pattern
  */
 char add_dot(char bits, char dot) {
-	return (bits | 1 << (CHARTOINT(dot) - 1));
+    return (bits | 1 << (CHARTOINT(dot) - 1));
 }
 
 /**
@@ -51,15 +85,14 @@ char add_dot(char bits, char dot) {
  * @return void
  */
 void quit_mode(void) {
-	// @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. FIX THIS. 
-	if (ui_current_mode_index == 15) {
-		log_msg("Freeing dictionary.");
-		NEWLINE;
-		free_wordlist(&md15_dict);
-	}
-	ui_is_mode_selected = false;
-	ui_current_mode_index = -1;
-  play_mp3("SYS_","MM");
+    // @todo HACK TO FREE MEMORY MALLOCED IN MODE 15. RETEST THIS. 
+/*    if (current_mode == 15) {
+        log_msg("Freeing dictionary.");
+        free_wordlist(&mode_15_dict);
+    } */
+    is_a_mode_executing = false;
+    index_of_current_mode = -1;
+    play_system_audio(MP3_MM);
 }
 
 /**
@@ -68,17 +101,16 @@ void quit_mode(void) {
 * @return int - 10^n
 */
 long ten_to_the(int n) {
-	int res = 1;
-	if (n < 0) {
-		return 0;
-	} else {
-		while (n > 0) {
-			res *= 10;
-			n--;
-
-		}
-		return res;
-	}
+    int res = 1;
+    if (n < 0)
+        return 0;
+    else {
+        while (n > 0) {
+            res *= 10;
+            n--;
+        }
+        return res;
+    }
 }
 
 /**
@@ -87,30 +119,27 @@ long ten_to_the(int n) {
 * @return int - Number of digits
 */
 int get_num_of_digits(long number) {
-	if (number < 0) {
-		number = -number;
-	}
-	int digits = 0;
-	while (number != 0) {
-		number = number / 10;
-		digits++;
-	}
-	return digits;
+    if (number < 0)
+        number = -number;
+    int digits = 0;
+    while (number != 0) {
+        number = number / 10;
+        digits++;
+    }
+    return digits;
 }
 
 /**
- * @brief  Given a char, in last_cell, play the corresponding number
+ * @brief  Given a char, in cell, play the corresponding number
  *         sound file
- *			NOTE: Deprecated
+ *          NOTE: Deprecated
  * @return Void
  */
 
-void play_requested_dot(char play_dot)
-{
-  // This will hold formatted file to access
-  char req_mp3[10];
-  sprintf((char*)req_mp3, "dot_%c", play_dot);
-  play_mp3(NULL,req_mp3);
+void play_requested_dot(char play_dot) {
+    char req_mp3[10];
+    sprintf((char*)req_mp3, "dot_%c", play_dot);
+    play_mp3(NULL,req_mp3);
 }
 
 

@@ -17,18 +17,15 @@
 #include <stdbool.h>
 #include <string.h>
 
-
-script_t* lang_script = NULL;
-
 glyph_t blank_cell = {
-	0x00,
-	MP3_BLANK,
-	NULL,
-	NULL
+    0x00,
+    MP3_BLANK,
+    NULL,
+    NULL
 };
 
 /**
-* @brief Resets the alphabet and reshuffles or unshuffles
+* @brief Resets the alphabet and reshuffles or sorts
 * it as needed.
 * @param the alphabet's script struct and a bool indicating
 * whether it should be shuffled (i.e., we're in "practice" mode)
@@ -36,83 +33,70 @@ glyph_t blank_cell = {
 * @return void
 */
 void reset_script_queue(script_t* script, bool should_shuffle) {
-	script->index = -1;
-	if (should_shuffle)
-		shuffle(script->num_letters, script->letters);
+    script->index = -1;
+    if (should_shuffle)
+        shuffle(script->letters, script->num_letters);
 }
 
 /**
 * @brief Pattern matches from a string of patterns to a glyph by traversing
-*	the script provided
+*   the script provided
 * @param script_t* script - Pointer to script to search in
 * @param char* pattern - Pointer to pattern array to search for
 * @param int* index - Index to update as parsing continues
 * @return glyph_t* - Pointer to glyph, NULL if not found
 */
 glyph_t* get_glyph(script_t* script, char* patterns, int* index) {
-	char curr_pattern = patterns[*index];
-	glyph_t* curr_glyph;
-    
-	//log_msg("[IO] Searching current pattern: 0x%x in %s", curr_pattern, script->fileset);
-    //log_msg("[IO] Searching current pattern: 0x%x", curr_pattern);
-    //NEWLINE;
-	//
-	
-	// Return if EOT
-	if (curr_pattern == END_OF_TEXT) {
-		log_msg("[IO] Current pattern is EOT; returning NULL");
-		NEWLINE;
-		return NULL;
-	}
+    int curr_pattern = patterns[*index];
+    glyph_t* curr_glyph;
+    // Return if EOT
+    if (curr_pattern == END_OF_TEXT) {
+        log_msg("[IO] Current pattern is EOT; returning NULL");
+        return NULL;
+    }
 
-	if (curr_pattern == 0x00) {
-		log_msg("[IO] Blank cell");
-		NEWLINE;
-		return &blank_cell;
-	}
+    if (curr_pattern == 0x00) {
+        log_msg("[IO] Blank cell");
+        return &blank_cell;
+    }
 
-	// If no match found in script, return NULL
-	curr_glyph = search_script(script, curr_pattern);
-	if (curr_glyph == NULL) {
-		curr_glyph = search_script(&script_digits, curr_pattern);
-		if (curr_glyph == NULL) {
-			log_msg("[IO] Matching glyph not found; returning NULL");
-			NEWLINE;
-			return NULL;
-		}
-	}
-    //log_msg("[IO] No subscript; returning glyph");
-    //NEWLINE;
+    // If no match found in script, return NULL
+    log_msg("Looking for pattern 0x%x in script %s", curr_pattern, script->fileset);
+    curr_glyph = search_script(script, curr_pattern);
+    if (curr_glyph == NULL) { // if not a letter, see if it's a number
+        curr_glyph = search_script(&script_digits, curr_pattern);
+        if (curr_glyph == NULL) {
+            log_msg("[IO] Matching glyph not found; returning NULL");
+            return NULL;
+        }
+    }
     return curr_glyph;
 }
 
 /**
  * @brief Finds an glyph from based on a cell pattern, checks language script
  * and then the common script if no match found in language
- * @param	script_t* script - Script to look in
+ * @param   script_t* script - Script to look in
  * @param char pattern - Cell pattern to look for
  * @return glyph_t* - Corresponding to glyph it found, NULL if not found
  */
 glyph_t* search_script(script_t* curr_script, char pattern) {
-	glyph_t* curr_glyph = NULL;
-	int index_bound = 0;
-	index_bound = curr_script->length;
+    glyph_t* curr_glyph = NULL;
+    int index_bound = 0;
+    index_bound = curr_script->length;
 
-	// Search through array of glyphs
-	for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
-		curr_glyph = &(curr_script->glyphs[glyph_index]);
-		if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
-            log_msg("Search%s: %s (0x%x)",curr_script->fileset, curr_glyph->sound, curr_glyph->pattern);
-            NEWLINE;            
-			return curr_glyph;
-		}
-	}
+    // Search through array of glyphs
+    for (int glyph_index = 0; glyph_index < index_bound; glyph_index++) {
+        curr_glyph = &(curr_script->glyphs[glyph_index]);
+        if ((curr_glyph != NULL) && (curr_glyph->pattern == pattern)) {
+            log_msg("Found letter %s (0x%x) in %s language", curr_glyph->sound, curr_glyph->pattern, lang_name);
+            return curr_glyph;
+        }
+    }
 
-	// If nothing matches, return NULL
-	log_msg("[Script] Glyph match not found: 0x%x", pattern);
-	NEWLINE;
-	
-	return NULL;
+    // If nothing matches, return NULL
+    log_msg("[Script] Glyph match not found in %s language: 0x%x", lang_name, pattern);    
+    return NULL;
 }
 
 /**
@@ -122,30 +106,29 @@ glyph_t* search_script(script_t* curr_script, char pattern) {
 * @return word_node_t* - curr_word with added_glyph added
 */
 word_node_t* add_glyph_to_word(word_node_t* curr_word, glyph_t* added_glyph) {
-	word_node_t* new_word_node = malloc(sizeof(word_node_t));
-	new_word_node->data = added_glyph; 
-	new_word_node->next = NULL;
-	if (added_glyph == NULL) return NULL;
-	if (curr_word == NULL) { 
-		return new_word_node;
-	} else {
-		word_node_t* next_word_node = curr_word;
-		while (next_word_node->next != NULL){
-			next_word_node = next_word_node->next;
-		}
-		next_word_node->next = new_word_node;
-		return curr_word;
-	}
+    word_node_t* new_word_node = malloc(sizeof(word_node_t));
+    new_word_node->data = added_glyph; 
+    new_word_node->next = NULL;
+    if (added_glyph == NULL) return NULL;
+    if (curr_word == NULL)
+        return new_word_node;
+    else {
+        word_node_t* next_word_node = curr_word;
+        while (next_word_node->next != NULL)
+            next_word_node = next_word_node->next;
+        next_word_node->next = new_word_node;
+        return curr_word;
+    }
 }
 
 word_node_t* free_word_old(word_node_t* this_word) {
-	word_node_t* curr_node;
-	while (this_word!= NULL) {
-		curr_node = this_word;
-		this_word = this_word->next;
-		free(curr_node);
-	}
-	return NULL;
+    word_node_t* curr_node;
+    while (this_word!= NULL) {
+        curr_node = this_word;
+        this_word = this_word->next;
+        free(curr_node);
+    }
+    return NULL;
 }
 
 
@@ -157,8 +140,8 @@ word_node_t* free_word_old(word_node_t* this_word) {
  * @return glyph_t* - pointer to first glyph in the linked list
  */
 glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
-	int index = curr_script->letters[curr_script->index];
-	return &(curr_script->glyphs[index]);
+    int index = curr_script->letters[curr_script->index];
+    return &(curr_script->glyphs[index]);
 }
 
 /**
@@ -168,13 +151,13 @@ glyph_t* get_root(script_t* curr_script, glyph_t* curr_glyph) {
  * @return word_node_t* - pointer to first word_node in the linked list representing word
  */
 word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
-	word_node_t* curr_word = NULL;
-	glyph_t* curr_glyph = NULL;
-	for (int i = 0; i < strlen(word); i++) {
-		curr_glyph = search_script(curr_script,get_bits_from_letter(word[i]));
-		curr_word = add_glyph_to_word(curr_word,curr_glyph);
-	}
-	return curr_word;
+    word_node_t* curr_word = NULL;
+    glyph_t* curr_glyph = NULL;
+    for (int i = 0; i < strlen(word); i++) {
+        curr_glyph = search_script(curr_script,get_bits_from_letter(word[i]));
+        curr_word = add_glyph_to_word(curr_word,curr_glyph);
+    }
+    return curr_word;
 }
 
 /**
@@ -184,19 +167,19 @@ word_node_t* word_to_glyph_word(script_t* curr_script, char* word) {
 * @glyph_t* - Pointer to the first glyph in the next letter
 */
 glyph_t* get_next_letter(script_t* script, bool should_shuffle) {
-	// increment the index
-	script->index++;
+    // increment the index
+    script->index++;
 
-	// if we're out of letters, reset index and
-	// shuffle as needed
-	if (script->index >= script->num_letters) {
-		script->index = 0;
-		if (should_shuffle)
-			shuffle(script->num_letters, script->letters);
-	}
+    // if we're out of letters, reset index and
+    // shuffle as needed
+    if (script->index >= script->num_letters) {
+        script->index = 0;
+        if (should_shuffle)
+            shuffle(script->letters, script->num_letters);
+    }
 
-	// return the first glyph of the script->index'th letter
-	return &(script->glyphs[script->letters[script->index]]);
+    // return the first glyph of the script->index'th letter
+    return &(script->glyphs[script->letters[script->index]]);
 }
 
 /**
@@ -206,17 +189,17 @@ glyph_t* get_next_letter(script_t* script, bool should_shuffle) {
 * NB: this is not currently used.
 */
 glyph_t* get_prev_letter(script_t* script) {
-	// decrement the index
-	script->index--;
+    // decrement the index
+    script->index--;
 
-	// if we're already at the beginning, reset index
-	// to end. Don't shuffle since they presumably
-	// want to repeat what they did.
-	if (script->index < 0)
-		script->index = script->num_letters - 1;
-	
-	// return the first glyph of the script->index'th letter
-	return &(script->glyphs[script->letters[script->index]]);
+    // if we're already at the beginning, reset index
+    // to end. Don't shuffle since they presumably
+    // want to repeat what they did.
+    if (script->index < 0)
+        script->index = script->num_letters - 1;
+    
+    // return the first glyph of the script->index'th letter
+    return &(script->glyphs[script->letters[script->index]]);
 }
 
 
@@ -226,17 +209,15 @@ glyph_t* get_prev_letter(script_t* script) {
 * @return bool - true if a number, false otherwise
 */
 bool is_number(glyph_t* curr_glyph) {
-	if (curr_glyph == NULL)
-		return false;
-	switch (curr_glyph->pattern) {
-		case NUM1: case NUM2: case NUM3: case NUM4: case NUM5: case NUM6:
-		case NUM7: case NUM8: case NUM9: case NUM0:
-			return true;
-			break;
-		default:
-			return false;
-			break;
-	}
+    if (curr_glyph == NULL)
+        return false;
+    switch (curr_glyph->pattern) {
+        case NUM1: case NUM2: case NUM3: case NUM4: case NUM5: case NUM6:
+        case NUM7: case NUM8: case NUM9: case NUM0:
+            return true;
+        default:
+            return false;
+    }
 }
 
 /**
@@ -245,35 +226,34 @@ bool is_number(glyph_t* curr_glyph) {
 * @return int - 0-9 for valid digit, -1 otherwise
 */
 int get_digit(glyph_t* curr_glyph) {
-	if (curr_glyph == NULL)
-		return -1;
-	if (!is_number(curr_glyph)) {
-		return -1;
-	}
+    if (curr_glyph == NULL)
+        return -1;
+    if (!is_number(curr_glyph))
+        return -1;
 
-	switch(curr_glyph->pattern) {
-		case NUM1: return 1; break;
-		case NUM2: return 2; break;
-		case NUM3: return 3; break;
-		case NUM4: return 4; break;
-		case NUM5: return 5; break;
-		case NUM6: return 6; break;
-		case NUM7: return 7; break;
-		case NUM8: return 8; break;
-		case NUM9: return 9; break;
-		case NUM0: return 0; break;
-		default: return -1; break;
-	}
+    switch(curr_glyph->pattern) {
+        case NUM1: return 1;
+        case NUM2: return 2;
+        case NUM3: return 3;
+        case NUM4: return 4;
+        case NUM5: return 5;
+        case NUM6: return 6;
+        case NUM7: return 7;
+        case NUM8: return 8;
+        case NUM9: return 9;
+        case NUM0: return 0;
+        default:   return -1;
+    }
 }
 
 /**
 * @brief Checks to see if a glyph is BLANK
 * @param glyph_t* - Pointer to check
-* @return bool - true if BLANk, false otherwise
+* @return bool - true if BLANK, false otherwise
 */
 bool is_blank(glyph_t* curr_glyph) {
-	if (curr_glyph == NULL)
-		return false;
-	else
-		return (curr_glyph->pattern == 0x00);
+    if (curr_glyph == NULL)
+        return false;
+    else
+        return (curr_glyph->pattern == 0x00);
 }
